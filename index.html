@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>IELTS Writing Task 2 — Self-Study Portal</title>
+
+  <!-- React 18 + ReactDOM + Babel (all via CDN, GitHub Pages friendly) -->
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+  <script crossorigin src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.4/babel.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #f3f4f6;
+      --panel: #ffffff;
+      --border: #d9dde3;
+      --border-strong: #b8bfc9;
+      --text: #1b2330;
+      --muted: #5b6675;
+      --faint: #8a94a3;
+      --navy: #1f3a5f;
+      --navy-dark: #162b47;
+      --accent: #2f6fdb;
+      --accent-soft: #e8f0fd;
+      --green: #1f8a4c;
+      --green-soft: #e6f5ec;
+      --red: #c62828;
+      --red-soft: #fdecec;
+      --amber: #b45309;
+      --amber-soft: #fff4e0;
+      --radius: 8px;
+      --shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.10);
+      --font-ui: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      --font-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+      --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body {
+      font-family: var(--font-ui);
+      color: var(--text);
+      background: var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+    #root { height: 100%; }
+
+    /* ---------- App shell ---------- */
+    .app {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      min-height: 100vh;
+    }
+
+    .topbar {
+      background: var(--navy);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      height: 56px;
+      flex-shrink: 0;
+      border-bottom: 3px solid var(--navy-dark);
+    }
+    .topbar .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+    .topbar .brand .badge {
+      background: rgba(255,255,255,0.14);
+      border: 1px solid rgba(255,255,255,0.28);
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .topbar .meta {
+      font-size: 13px;
+      opacity: 0.85;
+      display: flex;
+      gap: 18px;
+    }
+
+    .student-field {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+    }
+    .student-field input {
+      font: inherit; font-size: 13px; font-weight: 500; text-transform: none; letter-spacing: 0;
+      width: 150px; padding: 5px 9px; border-radius: 5px;
+      border: 1px solid rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.12); color: #fff; outline: none;
+    }
+    .student-field input::placeholder { color: rgba(255,255,255,0.55); }
+    .student-field input:focus { background: rgba(255,255,255,0.2); border-color: #fff; }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(340px, 38%) 1fr;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .pane {
+      min-height: 0;
+      overflow-y: auto;
+      padding: 20px;
+    }
+    .pane.left {
+      border-right: 1px solid var(--border);
+      background: #eef0f3;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .pane.right {
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* ---------- Cards ---------- */
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .card-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin: 0;
+    }
+    .card-body { padding: 16px; }
+
+    /* ---------- Mission dashboard ---------- */
+    .progress-line {
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .task-list { list-style: none; margin: 0; padding: 0; }
+    .task-item {
+      width: 100%;
+      text-align: left;
+      background: transparent;
+      border: 0;
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      display: grid;
+      grid-template-columns: 28px 1fr auto;
+      gap: 12px;
+      align-items: center;
+      cursor: pointer;
+      font: inherit;
+      color: inherit;
+    }
+    .task-item:last-child { border-bottom: 0; }
+    .task-item:hover { background: #f7f9fc; }
+    .task-item.active {
+      background: var(--accent-soft);
+      box-shadow: inset 3px 0 0 var(--accent);
+    }
+    .task-status {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--border-strong);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 12px;
+      color: #fff;
+    }
+    .task-status.done { background: var(--green); border-color: var(--green); }
+    .task-status.draft { border-color: var(--amber); }
+    .task-status.draft::after {
+      content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--amber);
+    }
+    .task-id { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+    .task-type { font-size: 14px; font-weight: 600; }
+    .task-tag {
+      font-size: 11px; font-weight: 600;
+      color: var(--navy);
+      background: #e6ecf5;
+      border-radius: 4px;
+      padding: 3px 7px;
+    }
+
+    /* ---------- Prompt ---------- */
+    .prompt-text {
+      font-family: var(--font-serif);
+      font-size: 17px;
+      line-height: 1.6;
+      margin: 0;
+    }
+    .prompt-instructions {
+      margin: 14px 0 0;
+      padding: 10px 12px;
+      background: #f7f8fa;
+      border-left: 3px solid var(--navy);
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+    .chip {
+      font-size: 11px; font-weight: 600;
+      padding: 3px 8px; border-radius: 999px;
+      background: #eef2f7; color: var(--navy);
+      border: 1px solid #d5deea;
+    }
+
+    /* ---------- Collapsible ---------- */
+    .collapse-btn {
+      width: 100%;
+      display: flex; align-items: center; justify-content: space-between;
+      background: transparent; border: 0; padding: 12px 16px;
+      font: inherit; color: inherit; cursor: pointer;
+    }
+    .collapse-btn .chev {
+      display: inline-block;
+      transition: transform 0.18s ease;
+      color: var(--faint);
+      font-size: 12px;
+    }
+    .collapse-btn .chev.open { transform: rotate(90deg); }
+    .vocab-list { list-style: none; margin: 0; padding: 0 16px 8px; }
+    .vocab-item {
+      padding: 10px 0;
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3px;
+    }
+    .vocab-word {
+      font-family: var(--font-serif);
+      font-weight: 600;
+      font-size: 15px;
+    }
+    .vocab-def { font-size: 13px; color: var(--muted); line-height: 1.45; }
+    .grammar-box {
+      margin: 0 16px 16px;
+      padding: 10px 12px;
+      background: var(--amber-soft);
+      border: 1px solid #f3dcb0;
+      border-radius: 6px;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .grammar-box strong { color: var(--amber); }
+
+    /* ---------- Writing arena ---------- */
+    .arena-head {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+    }
+    .arena-head h2 {
+      margin: 0; font-size: 18px; font-weight: 700; color: var(--navy);
+    }
+    .timer-block {
+      display: flex; align-items: center; gap: 12px;
+    }
+    .timer {
+      font-family: var(--font-mono);
+      font-size: 28px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 6px;
+      background: #fff;
+      border: 1px solid var(--border-strong);
+      color: var(--navy);
+      min-width: 118px;
+      text-align: center;
+      letter-spacing: 0.04em;
+    }
+    .timer.warning {
+      color: var(--red);
+      border-color: var(--red);
+      background: var(--red-soft);
+      animation: pulse 1s ease-in-out infinite;
+    }
+    .timer.expired {
+      color: #fff;
+      background: var(--red);
+      border-color: var(--red);
+      animation: none;
+    }
+    @keyframes pulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(198, 40, 40, 0.25); }
+      50%      { box-shadow: 0 0 0 6px rgba(198, 40, 40, 0); }
+    }
+
+    .btn {
+      font: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 6px;
+      border: 1px solid var(--border-strong);
+      background: #fff;
+      color: var(--text);
+      cursor: pointer;
+      transition: background 0.12s ease, border-color 0.12s ease;
+    }
+    .btn:hover { background: #f4f6f9; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn.primary { background: var(--navy); border-color: var(--navy); color: #fff; }
+    .btn.primary:hover { background: var(--navy-dark); }
+    .btn.success { background: var(--green); border-color: var(--green); color: #fff; }
+    .btn.success:hover { background: #17703d; }
+    .btn.ghost { background: transparent; }
+
+    .editor-card {
+      display: flex; flex-direction: column;
+      flex: 1; min-height: 360px;
+    }
+    .editor-card .card-body {
+      display: flex; flex-direction: column; flex: 1; padding: 0;
+    }
+    textarea.essay {
+      flex: 1;
+      width: 100%;
+      min-height: 320px;
+      resize: vertical;
+      border: 0;
+      outline: none;
+      padding: 20px 22px;
+      font-family: var(--font-serif);
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text);
+      background: #fff;
+      border-radius: 0 0 var(--radius) var(--radius);
+    }
+    textarea.essay::placeholder { color: var(--faint); }
+    textarea.essay:disabled { background: #fafbfc; color: var(--muted); }
+
+    .status-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap;
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+      background: #fafbfc;
+      font-size: 13px;
+      color: var(--muted);
+      border-radius: 0 0 var(--radius) var(--radius);
+    }
+    .wordcount { font-weight: 600; color: var(--text); }
+    .wordcount.low { color: var(--amber); }
+    .wordcount.ok { color: var(--green); }
+    .save-state { font-size: 12px; color: var(--faint); }
+
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* ---------- Review / model answer ---------- */
+    .banner {
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: 14px;
+      line-height: 1.5;
+      border: 1px solid;
+    }
+    .banner.success { background: var(--green-soft); border-color: #b7e2c6; color: #14532d; }
+    .banner.danger  { background: var(--red-soft);   border-color: #f3b8b8; color: #7f1d1d; }
+    .banner.info    { background: var(--accent-soft); border-color: #c4d7f7; color: #1e3a8a; }
+
+    .model-answer {
+      font-family: var(--font-serif);
+      font-size: 16px;
+      line-height: 1.75;
+      margin: 0;
+      white-space: pre-wrap;
+    }
+    .review-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    .review-grid .card { min-height: 0; }
+    .essay-readonly {
+      font-family: var(--font-serif);
+      font-size: 15px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      margin: 0;
+      color: var(--text);
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .stat {
+      background: #f7f8fa;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 10px 12px;
+    }
+    .stat .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+    .stat .value { font-size: 20px; font-weight: 700; margin-top: 2px; font-family: var(--font-mono); }
+
+    .lock-note {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; color: var(--faint);
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 900px) {
+      .split { grid-template-columns: 1fr; }
+      .pane.left { border-right: 0; border-bottom: 1px solid var(--border); }
+      .review-grid { grid-template-columns: 1fr; }
+      .topbar .meta { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel" data-presets="react">
+    const { useState, useEffect, useRef, useMemo, useCallback } = React;
+
+    /* =========================================================
+       DATA — injected JSON payload
+       ========================================================= */
+    const DATA = {
+      "tasks": [
+        {
+          "id": "T2-001",
+          "type": "Discussion & Opinion",
+          "prompt": "Some people believe that artificial intelligence will eventually replace human teachers in the classroom. Others think that human teachers will always be essential. Discuss both views and give your own opinion.",
+          "cefr_target": "C1",
+          "model_answer_band_8": "While the integration of artificial intelligence into educational frameworks has prompted speculation regarding the obsolescence of human educators, it is highly improbable that technology will entirely supplant them. This essay will examine the computational efficiency of AI alongside the irreplaceable socio-emotional pedagogy provided by human teachers, arguing that the latter remains indispensable...",
+          "c1_c2_vocabulary": [
+            { "word": "obsolescence", "definition": "The process of becoming obsolete or outdated." },
+            { "word": "supplant", "definition": "To supersede and replace." },
+            { "word": "indispensable", "definition": "Absolutely necessary." }
+          ],
+          "grammar_focus": "Nominalization (e.g., 'integration of AI' instead of 'integrating AI') and passive structures."
+        },
+        {
+          "id": "T2-002",
+          "type": "Opinion",
+          "prompt": "Some governments are considering banning access to social media for teenagers under the age of 16 to protect their mental health. To what extent do you agree or disagree with this proposal?",
+          "cefr_target": "B2",
+          "model_answer_band_8": "The proliferation of social media has raised significant concerns regarding the psychological well-being of adolescents. Consequently, legislative proposals to restrict platform access for individuals under sixteen have gained traction. While I acknowledge the developmental risks associated with unregulated digital consumption, I fundamentally disagree with implementing a blanket ban, as it fails to address the root causes of digital dependency and deprives youth of vital digital literacy skills. Rather than enforcing prohibitive measures, educational institutions and guardians should foster responsible engagement...",
+          "c1_c2_vocabulary": [
+            {"word": "proliferation", "definition": "Rapid increase in numbers or a large number of something."},
+            {"word": "adolescents", "definition": "Young people in the process of developing from children into adults."},
+            {"word": "prohibitive", "definition": "Forbidding or restricting something."}
+          ],
+          "grammar_focus": "Emphasis techniques and conditional structures (e.g., 'Rather than enforcing...')."
+        },
+        {
+          "id": "T2-003",
+          "type": "Advantages & Disadvantages",
+          "prompt": "Artificial intelligence is increasingly being utilized across various professions, from medicine to accounting. Do the advantages of integrating AI into the workplace outweigh the disadvantages?",
+          "cefr_target": "C1",
+          "model_answer_band_8": "The integration of algorithmic systems into professional sectors has fundamentally transformed operational paradigms, encompassing fields ranging from healthcare diagnostics to financial auditing. While the widespread adoption of artificial intelligence introduces legitimate anxieties concerning workforce displacement, I argue that the advantages—namely enhanced precision and the automation of redundant tasks—substantially outweigh the drawbacks. The primary detriment is the potential obsolescence of certain administrative roles, which necessitates urgent policy interventions regarding vocational retraining...",
+          "c1_c2_vocabulary": [
+            {"word": "paradigms", "definition": "A typical example, pattern, or model of something."},
+            {"word": "displacement", "definition": "The forced removal of people from their current roles or locations."},
+            {"word": "vocational", "definition": "Relating to an occupation or employment."}
+          ],
+          "grammar_focus": "Passive voice mastery (e.g., 'is increasingly being utilized') and complex comparative structures."
+        },
+        {
+          "id": "T2-004",
+          "type": "Causes & Solutions",
+          "prompt": "Despite growing awareness of global warming, carbon emissions continue to rise in many developing and developed nations. What are the primary causes of this continued increase, and what viable solutions can governments implement?",
+          "cefr_target": "C2",
+          "model_answer_band_8": "The relentless escalation of greenhouse gas emissions remains a critical planetary crisis, persisting despite widespread apprehension regarding climate change. This phenomenon is primarily driven by the systemic reliance on fossil fuels for industrial expansion and the infrastructural inertia of global supply chains. To mitigate this trajectory, state interventions must transcend superficial policy pledges. The most efficacious solutions mandate the implementation of aggressive carbon pricing mechanisms and the state-subsidized acceleration of renewable energy grids...",
+          "c1_c2_vocabulary": [
+            {"word": "escalation", "definition": "A rapid increase or rise."},
+            {"word": "inertia", "definition": "A tendency to do nothing or to remain unchanged."},
+            {"word": "efficacious", "definition": "Successful in producing a desired or intended result; effective."}
+          ],
+          "grammar_focus": "Advanced nominalization (e.g., 'escalation of emissions', 'infrastructural inertia') and causative verbs."
+        }
+      ]
+    };
+
+    /* =========================================================
+       CONSTANTS & STORAGE HELPERS
+       ========================================================= */
+    const TIME_LIMIT_SECONDS = 40 * 60;
+    const WARNING_SECONDS = 5 * 60;
+    const MIN_WORDS = 250;
+    const STORAGE_PREFIX = "ielts_t2_portal_v1";
+
+    /* ---- Mission-Control telemetry (Google Apps Script) ----
+       Paste your Web App /exec URL here. Leave as-is to run offline. */
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx1D4XcF6LY82OjMyZr40J7DIo2jjEI2IyfaSoKTSSHtV-1bYnJSrpCAY9uXjlcyE51/exec";
+
+    const submitToDashboard = async (payload) => {
+      if (!SCRIPT_URL || SCRIPT_URL.startsWith("PASTE_")) {
+        throw new Error("SCRIPT_URL is not configured.");
+      }
+      // text/plain + no custom headers = a "simple request", so the browser
+      // skips the CORS preflight that Apps Script cannot answer.
+      const res = await fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "cors",
+        redirect: "follow",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error(`Dashboard responded ${res.status}`);
+      const data = await res.json();
+      if (!data.ok) throw new Error(data.error || "Dashboard rejected the submission.");
+      return data;
+    };
+
+    const storage = {
+      get(key, fallback) {
+        try {
+          const raw = localStorage.getItem(`${STORAGE_PREFIX}:${key}`);
+          return raw === null ? fallback : JSON.parse(raw);
+        } catch (e) {
+          return fallback;
+        }
+      },
+      set(key, value) {
+        try {
+          localStorage.setItem(`${STORAGE_PREFIX}:${key}`, JSON.stringify(value));
+          return true;
+        } catch (e) {
+          return false;
+        }
+      },
+      remove(key) {
+        try { localStorage.removeItem(`${STORAGE_PREFIX}:${key}`); } catch (e) {}
+      }
+    };
+
+    const countWords = (text) => {
+      const trimmed = text.trim();
+      if (!trimmed) return 0;
+      return trimmed.split(/\s+/).length;
+    };
+
+    const formatTime = (totalSeconds) => {
+      const s = Math.max(0, totalSeconds);
+      const m = Math.floor(s / 60);
+      const r = s % 60;
+      return `${String(m).padStart(2, "0")}:${String(r).padStart(2, "0")}`;
+    };
+
+    /* =========================================================
+       TIMER HOOK — 40-minute countdown
+       ========================================================= */
+    function useCountdown(limitSeconds, resetKey) {
+      const [remaining, setRemaining] = useState(limitSeconds);
+      const [running, setRunning] = useState(false);
+      const intervalRef = useRef(null);
+
+      // Reset whenever the task changes
+      useEffect(() => {
+        setRemaining(limitSeconds);
+        setRunning(false);
+      }, [resetKey, limitSeconds]);
+
+      useEffect(() => {
+        if (!running) return undefined;
+        intervalRef.current = setInterval(() => {
+          setRemaining((prev) => {
+            if (prev <= 1) {
+              clearInterval(intervalRef.current);
+              setRunning(false);
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
+        return () => clearInterval(intervalRef.current);
+      }, [running]);
+
+      const start = useCallback(() => { if (remaining > 0) setRunning(true); }, [remaining]);
+      const pause = useCallback(() => setRunning(false), []);
+      const reset = useCallback(() => { setRunning(false); setRemaining(limitSeconds); }, [limitSeconds]);
+
+      return {
+        remaining,
+        running,
+        expired: remaining === 0,
+        warning: remaining > 0 && remaining <= WARNING_SECONDS,
+        elapsed: limitSeconds - remaining,
+        start, pause, reset
+      };
+    }
+
+    /* =========================================================
+       LEFT PANE COMPONENTS
+       ========================================================= */
+    function MissionDashboard({ tasks, activeId, completed, drafts, onSelect }) {
+      const doneCount = tasks.filter((t) => completed[t.id]).length;
+      return (
+        <section className="card" aria-label="Mission Dashboard">
+          <div className="card-head">
+            <h2 className="card-title">Mission Dashboard</h2>
+            <span className="progress-line">{doneCount} / {tasks.length} completed</span>
+          </div>
+          <ul className="task-list">
+            {tasks.map((task) => {
+              const isDone = !!completed[task.id];
+              const hasDraft = !isDone && !!(drafts[task.id] && drafts[task.id].trim());
+              return (
+                <li key={task.id}>
+                  <button
+                    type="button"
+                    className={`task-item ${task.id === activeId ? "active" : ""}`}
+                    onClick={() => onSelect(task.id)}
+                    aria-current={task.id === activeId ? "true" : undefined}
+                  >
+                    <span
+                      className={`task-status ${isDone ? "done" : hasDraft ? "draft" : ""}`}
+                      title={isDone ? "Completed" : hasDraft ? "Draft in progress" : "Not started"}
+                    >
+                      {isDone ? "✓" : ""}
+                    </span>
+                    <span>
+                      <div className="task-id">{task.id}</div>
+                      <div className="task-type">{task.type}</div>
+                    </span>
+                    <span className="task-tag">{task.cefr_target}</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      );
+    }
+
+    function PromptCard({ task }) {
+      return (
+        <section className="card" aria-label="Essay prompt">
+          <div className="card-head">
+            <h2 className="card-title">Writing Task 2</h2>
+            <span className="progress-line">Target: {task.cefr_target}</span>
+          </div>
+          <div className="card-body">
+            <div className="chips">
+              <span className="chip">{task.type}</span>
+              <span className="chip">{task.id}</span>
+            </div>
+            <p className="prompt-text">{task.prompt}</p>
+            <p className="prompt-instructions">
+              You should spend about 40 minutes on this task. Write at least {MIN_WORDS} words.
+              Give reasons for your answer and include any relevant examples from your own
+              knowledge or experience.
+            </p>
+          </div>
+        </section>
+      );
+    }
+
+    function VocabularySidebar({ task }) {
+      const [open, setOpen] = useState(true);
+      const panelId = `vocab-${task.id}`;
+      return (
+        <section className="card" aria-label="C1–C2 vocabulary reference">
+          <button
+            type="button"
+            className="collapse-btn"
+            onClick={() => setOpen((o) => !o)}
+            aria-expanded={open}
+            aria-controls={panelId}
+          >
+            <span className="card-title">
+              C1–C2 Vocabulary Reference ({task.c1_c2_vocabulary.length})
+            </span>
+            <span className={`chev ${open ? "open" : ""}`}>▶</span>
+          </button>
+          {open && (
+            <div id={panelId}>
+              <ul className="vocab-list">
+                {task.c1_c2_vocabulary.map((v) => (
+                  <li key={v.word} className="vocab-item">
+                    <span className="vocab-word">{v.word}</span>
+                    <span className="vocab-def">{v.definition}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="grammar-box">
+                <strong>Grammar focus:</strong> {task.grammar_focus}
+              </div>
+            </div>
+          )}
+        </section>
+      );
+    }
+
+    /* =========================================================
+       RIGHT PANE — WRITING ARENA
+       ========================================================= */
+    function WritingArena({ task, draft, onDraftChange, saveState, isCompleted, completedInfo, onSubmit, onRevise, isSubmitting, syncError, studentId }) {
+      const timer = useCountdown(TIME_LIMIT_SECONDS, task.id);
+      const [showReview, setShowReview] = useState(isCompleted);
+      const textareaRef = useRef(null);
+
+      // When switching tasks, show review only if that task is already completed
+      useEffect(() => { setShowReview(isCompleted); }, [task.id, isCompleted]);
+
+      const wordCount = useMemo(() => countWords(draft), [draft]);
+
+      // Start the clock automatically on the first keystroke
+      const handleChange = (e) => {
+        if (!timer.running && !timer.expired && !showReview) timer.start();
+        onDraftChange(e.target.value);
+      };
+
+      const handleSubmit = async () => {
+        timer.pause();
+        const ok = await onSubmit(task.id, timer.elapsed, wordCount);
+        if (ok) setShowReview(true);   // model answer unlocks only after a 200 OK
+      };
+
+      const handleRevise = () => {
+        onRevise(task.id);
+        setShowReview(false);
+        setTimeout(() => textareaRef.current && textareaRef.current.focus(), 0);
+      };
+
+      const timerClass = `timer ${timer.expired ? "expired" : timer.warning ? "warning" : ""}`;
+      const wcClass = `wordcount ${wordCount === 0 ? "" : wordCount < MIN_WORDS ? "low" : "ok"}`;
+
+      return (
+        <React.Fragment>
+          <div className="arena-head">
+            <h2>Writing Arena</h2>
+            <div className="timer-block">
+              <span className={timerClass} role="timer" aria-live="polite" aria-label="Time remaining">
+                {formatTime(timer.remaining)}
+              </span>
+              {!showReview && (
+                <div className="actions">
+                  {timer.running
+                    ? <button type="button" className="btn" onClick={timer.pause}>Pause</button>
+                    : <button type="button" className="btn" onClick={timer.start} disabled={timer.expired}>
+                        {timer.elapsed > 0 ? "Resume" : "Start"}
+                      </button>}
+                  <button type="button" className="btn ghost" onClick={timer.reset}>Reset</button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {timer.expired && !showReview && (
+            <div className="banner danger">
+              <strong>Time is up.</strong> In the real test your paper would be collected now.
+              Submit to review the Band 8 model answer, or keep writing for practice.
+            </div>
+          )}
+          {syncError && !showReview && (
+            <div className="banner danger">
+              <strong>Could not sync to the dashboard.</strong> {syncError} Your draft is still
+              saved in this browser — check your connection and try again.
+            </div>
+          )}
+          {!studentId.trim() && !showReview && (
+            <div className="banner info">
+              Enter your <strong>Student ID</strong> in the top bar before submitting.
+            </div>
+          )}
+          {timer.warning && !showReview && (
+            <div className="banner danger">
+              <strong>Five minutes remaining.</strong> Finish your conclusion and proofread.
+            </div>
+          )}
+
+          {!showReview ? (
+            <React.Fragment>
+              <section className="card editor-card" aria-label="Essay editor">
+                <div className="card-head">
+                  <h2 className="card-title">Your Response</h2>
+                  <span className="lock-note">
+                    Model answer unlocks after you submit
+                  </span>
+                </div>
+                <div className="card-body">
+                  <textarea
+                    ref={textareaRef}
+                    className="essay"
+                    value={draft}
+                    onChange={handleChange}
+                    placeholder="Begin your essay here. The timer starts with your first keystroke."
+                    spellCheck="false"
+                    aria-label="Essay text"
+                  />
+                  <div className="status-bar">
+                    <span>
+                      Words: <span className={wcClass}>{wordCount}</span>
+                      <span style={{ marginLeft: 6 }}>/ {MIN_WORDS} minimum</span>
+                    </span>
+                    <span className="save-state">{saveState}</span>
+                  </div>
+                </div>
+              </section>
+
+              <div className="actions" style={{ justifyContent: "flex-end" }}>
+                <button
+                  type="button"
+                  className="btn success"
+                  onClick={handleSubmit}
+                  disabled={wordCount === 0 || isSubmitting || !studentId.trim()}
+                  title={
+                    wordCount === 0 ? "Write something before submitting"
+                    : !studentId.trim() ? "Enter your Student ID in the top bar first"
+                    : ""
+                  }
+                >
+                  {isSubmitting ? "Syncing to Dashboard…" : "Submit / Review"}
+                </button>
+              </div>
+            </React.Fragment>
+          ) : (
+            <ReviewPanel
+              task={task}
+              draft={draft}
+              wordCount={wordCount}
+              elapsed={completedInfo && typeof completedInfo.elapsed === "number" ? completedInfo.elapsed : timer.elapsed}
+              onRevise={handleRevise}
+            />
+          )}
+        </React.Fragment>
+      );
+    }
+
+    function ReviewPanel({ task, draft, wordCount, elapsed, onRevise }) {
+      return (
+        <React.Fragment>
+          <div className="banner success">
+            <strong>Task {task.id} submitted and marked complete.</strong> Compare your response
+            with the Band 8 model answer below. Look for the target vocabulary and the grammar focus
+            in the model.
+          </div>
+
+          <div className="stats">
+            <div className="stat">
+              <div className="label">Word count</div>
+              <div className="value">{wordCount}</div>
+            </div>
+            <div className="stat">
+              <div className="label">Time used</div>
+              <div className="value">{formatTime(elapsed)}</div>
+            </div>
+            <div className="stat">
+              <div className="label">Length check</div>
+              <div className="value" style={{ color: wordCount >= MIN_WORDS ? "var(--green)" : "var(--amber)" }}>
+                {wordCount >= MIN_WORDS ? "PASS" : "SHORT"}
+              </div>
+            </div>
+          </div>
+
+          <div className="review-grid">
+            <section className="card" aria-label="Your essay">
+              <div className="card-head"><h2 className="card-title">Your Essay</h2></div>
+              <div className="card-body">
+                <p className="essay-readonly">{draft || "(empty)"}</p>
+              </div>
+            </section>
+            <section className="card" aria-label="Band 8 model answer">
+              <div className="card-head">
+                <h2 className="card-title">Model Answer — Band 8</h2>
+                <span className="task-tag">{task.cefr_target}</span>
+              </div>
+              <div className="card-body">
+                <p className="model-answer">{task.model_answer_band_8}</p>
+              </div>
+            </section>
+          </div>
+
+          <div className="actions" style={{ justifyContent: "flex-end" }}>
+            <button type="button" className="btn primary" onClick={onRevise}>
+              Revise Essay
+            </button>
+          </div>
+        </React.Fragment>
+      );
+    }
+
+    /* =========================================================
+       ROOT APP — state + localStorage persistence
+       ========================================================= */
+    function App() {
+      const tasks = DATA.tasks;
+
+      const [activeId, setActiveId] = useState(() => {
+        const saved = storage.get("activeTask", null);
+        return tasks.some((t) => t.id === saved) ? saved : tasks[0].id;
+      });
+      const [drafts, setDrafts] = useState(() => storage.get("drafts", {}));
+      const [completed, setCompleted] = useState(() => storage.get("completed", {}));
+      const [saveState, setSaveState] = useState("Draft autosaves to this browser");
+      const [studentId, setStudentId] = useState(() => storage.get("studentId", ""));
+      const [isSubmitting, setIsSubmitting] = useState(false);
+      const [syncError, setSyncError] = useState("");
+      const saveTimerRef = useRef(null);
+
+      const activeTask = tasks.find((t) => t.id === activeId) || tasks[0];
+
+      // Persist active task
+      useEffect(() => { storage.set("activeTask", activeId); }, [activeId]);
+
+      // Persist student identity
+      useEffect(() => { storage.set("studentId", studentId); }, [studentId]);
+
+      // Persist completion map immediately
+      useEffect(() => { storage.set("completed", completed); }, [completed]);
+
+      // Debounced draft persistence
+      useEffect(() => {
+        clearTimeout(saveTimerRef.current);
+        setSaveState("Saving…");
+        saveTimerRef.current = setTimeout(() => {
+          const ok = storage.set("drafts", drafts);
+          setSaveState(ok ? `Saved ${new Date().toLocaleTimeString()}` : "Could not save (storage unavailable)");
+        }, 400);
+        return () => clearTimeout(saveTimerRef.current);
+      }, [drafts]);
+
+      const handleDraftChange = (value) => {
+        setDrafts((prev) => ({ ...prev, [activeId]: value }));
+      };
+
+      const handleSubmit = async (taskId, elapsed, wordCount) => {
+        const task = tasks.find((t) => t.id === taskId);
+        const essayDraft = drafts[taskId] || "";
+        storage.set("drafts", drafts); // flush draft before the network round-trip
+        setSyncError("");
+        setIsSubmitting(true);
+        try {
+          const result = await submitToDashboard({
+            studentId: studentId.trim(),
+            taskId,
+            cefrTarget: task ? task.cefr_target : "",
+            wordCount,
+            elapsedTime: elapsed,
+            essayDraft,
+            userAgent: navigator.userAgent
+          });
+          setCompleted((prev) => ({
+            ...prev,
+            [taskId]: { done: true, elapsed, submittedAt: Date.now(), synced: true, row: result.row || null }
+          }));
+          return true;
+        } catch (err) {
+          setSyncError(err.message || "Unknown error.");
+          return false;
+        } finally {
+          setIsSubmitting(false);
+        }
+      };
+
+      const handleRevise = (taskId) => {
+        setCompleted((prev) => {
+          const next = { ...prev };
+          delete next[taskId];
+          return next;
+        });
+      };
+
+      const handleResetProgress = () => {
+        setDrafts({});
+        setCompleted({});
+        storage.remove("drafts");
+        storage.remove("completed");
+      };
+
+      const doneCount = tasks.filter((t) => completed[t.id]).length;
+
+      return (
+        <div className="app">
+          <header className="topbar">
+            <div className="brand">
+              <span className="badge">IELTS</span>
+              <span>Academic Writing Task 2 — Self-Study Portal</span>
+            </div>
+            <div className="meta">
+              <label className="student-field">
+                <span>Student ID</span>
+                <input
+                  type="text"
+                  value={studentId}
+                  onChange={(e) => setStudentId(e.target.value)}
+                  placeholder="e.g. M.5/1 No.12"
+                  maxLength={40}
+                  aria-label="Student ID or class"
+                  spellCheck="false"
+                />
+              </label>
+              <span>Progress: {doneCount}/{tasks.length}</span>
+              <span>Time limit: 40 min</span>
+              <button
+                type="button"
+                className="btn ghost"
+                style={{ color: "#fff", borderColor: "rgba(255,255,255,0.35)", padding: "4px 10px" }}
+                onClick={handleResetProgress}
+              >
+                Reset progress
+              </button>
+            </div>
+          </header>
+
+          <main className="split">
+            <aside className="pane left">
+              <MissionDashboard
+                tasks={tasks}
+                activeId={activeId}
+                completed={completed}
+                drafts={drafts}
+                onSelect={setActiveId}
+              />
+              <PromptCard task={activeTask} />
+              <VocabularySidebar task={activeTask} />
+            </aside>
+
+            <section className="pane right">
+              <WritingArena
+                key={activeTask.id}
+                task={activeTask}
+                draft={drafts[activeTask.id] || ""}
+                onDraftChange={handleDraftChange}
+                saveState={saveState}
+                isCompleted={!!completed[activeTask.id]}
+                completedInfo={completed[activeTask.id]}
+                onSubmit={handleSubmit}
+                onRevise={handleRevise}
+                isSubmitting={isSubmitting}
+                syncError={syncError}
+                studentId={studentId}
+              />
+            </section>
+          </main>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
