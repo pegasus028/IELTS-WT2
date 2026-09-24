@@ -1,0 +1,258 @@
+/* POSITION CONTROL — topic-11.js · Module 11 Accuracy */
+(function () {
+  var T = window.CONTENT.TOPICS;
+  T.push({
+    id: 'm11', n: 11, code: 'Module 11', name: 'Accuracy', art: 'chip', cefr: 'B1–C1',
+    blurb: 'Six error families cost most Thai learners their Band 7: articles, plurals, agreement, punctuation, word form and spelling.',
+    levels: [{
+      id: 'm11l1', n: 1, name: 'Accuracy', cefr: 'B1–C1', blurb: 'Find the one error in a sentence, name its family, fix it. Error-free sentences are the 7→8 grammar gate.',
+      subs: [
+        /* ------------------------------------------------------------ s1 */
+        { id: 'm11s1', name: 'Articles and plurals', cefr: 'B1',
+          theory: {
+            key: 'THE government of a country, THE environment, A ban then THE ban, and no article before cars or pollution in general. Advice, research, information, equipment and knowledge never take -s.',
+            body: [
+              '<p>Thai has no articles, so every English article is a decision a Thai writer has to make on purpose. Three rules cover almost every essay sentence. <strong>One</strong>: a singular countable noun cannot stand alone. <em>Government should act</em> needs <em>the government</em>; <em>council introduced ban</em> needs <em>the council introduced a ban</em>. <strong>Two</strong>: <em>a</em> for the first mention, <em>the</em> for every mention after it. <em>The council introduced <u>a</u> ban on cars, and <u>the</u> ban cut pollution within a year.</em> <strong>Three</strong>: no article before a plural or an uncountable noun used in general. <em>Cars cause pollution</em>, not <em>the cars cause the pollution</em>, unless you mean particular cars and particular pollution already named.</p>',
+              '<p>Some nouns take <em>the</em> because there is only one of them or because the sentence says which one. <em>The environment, the economy, the government of Thailand, the justice system, the internet</em>. A noun followed by an <em>of</em>-phrase is nearly always specified: <em>the privacy <u>of</u> ordinary people, the number <u>of</u> cars, the cost <u>of</u> housing, the removal <u>of</u> sugary drinks</em>. Missing <em>the</em> in front of an <em>of</em>-phrase is the most common article error in nominalised sentences, which is exactly the kind of sentence Module 08 taught you to write. When you build a noun phrase with <em>of</em>, put <em>the</em> at the front by default and remove it only if the head noun is plural and general.</p>',
+              '<p><strong>Countability</strong> is the second family. Countable nouns take <em>-s</em> in the plural and need an article or a number in the singular: <em>many benefits, several countries, a device, three measures</em>. Uncountable nouns have no plural and no <em>a</em>: <em>advice, research, information, equipment, knowledge, evidence, progress, homework, traffic, pollution</em>. <em>Many advices</em>, <em>recent researches</em>, <em>more informations</em> and <em>new equipments</em> are the four errors the examiner sees most from this cohort. To count them, add a counting noun: <em>a piece of advice, a body of research, a source of information, an item of equipment</em>. And because the noun is singular, its verb is singular: <em>recent research <u>links</u></em>, <em>this evidence <u>shows</u></em>.</p>',
+              '<p>Article and plural errors rarely stop the reader understanding you, which is why students ignore them; but the Band 7 descriptor asks for "frequent error-free sentences" and Band 8 for "the majority of sentences error-free", and a missing <em>the</em> makes a sentence not error-free just as surely as a broken conditional does. The routine: in the five checking minutes, read once looking only at nouns. For each singular countable noun, is there an article or a determiner? For each <em>of</em>-phrase, is there a <em>the</em> at the front? For each <em>-s</em>, is the noun really countable? Three questions, one pass, and the most frequent error family in the class disappears.</p>'
+            ],
+            simple: [
+              '<p>A singular countable noun needs an article: the government, a ban. First mention "a", then "the": a ban → the ban. No article for general plurals and uncountables: cars cause pollution.</p>',
+              '<p>Use "the" before a noun with "of": the privacy of ordinary people, the number of cars, the cost of housing. Also: the environment, the economy, the government of Thailand.</p>',
+              '<p>Never add -s to advice, research, information, equipment, knowledge, evidence, progress. Their verbs are singular: research links, evidence shows.</p>'
+            ],
+            examples: [
+              { s: 'The council introduced a ban on cars in the old town, and the ban cut pollution within a year.', g: 'First mention "a ban", second mention "the ban". Same noun, two articles.' },
+              { s: '<s>The cars produce most of the smog over Bangkok.</s> → Cars produce most of the smog over Bangkok.', g: 'Cars in general: no article. "The smog over Bangkok" is specified by its phrase, so it keeps "the".' },
+              { s: '<s>Teachers give many advices about exams.</s> → Teachers give much advice about exams.', g: 'Advice is uncountable: no -s, and "much" not "many". To count it: several pieces of advice.' },
+              { s: 'The privacy of ordinary people matters more than a small fall in petty crime.', g: '"The privacy of …": the of-phrase specifies the noun, so "the" goes in front.' }
+            ]
+          },
+          items: [
+            { id: 'm11s1q1', type: 'spot', tag: 'gra-article', level: 'B1', prompt: 'p-city-flooding',
+  hint: 'Which noun is specified by the phrase after it, and what should stand in front of such a noun?',
+              stem: 'Tap the chunk with the article error.',
+              words: ['Government of Thailand', 'has spent', 'billions of baht', 'on flood defences', 'since 2011.'], answer: 0,
+              fix: 'The government of Thailand',
+              why: '"Government" is a singular countable noun and it is specified by "of Thailand", so it needs "the". The same pattern gives the government of a country, the economy of Japan, the privacy of ordinary people: a noun with an of-phrase takes "the".' },
+            { id: 'm11s1q2', type: 'spot', tag: 'gra-article', level: 'B1', prompt: 'p-cars-city',
+  hint: 'The first mention of a noun and every later mention take different articles. Which mention is wrong?',
+              stem: 'The same noun appears twice. Tap the chunk where the article is wrong.',
+              words: ['The council', 'introduced a ban', 'on cars', 'in the old town,', 'and a ban', 'cut pollution', 'within a year.'], answer: 4,
+              fix: 'and the ban',
+              why: 'First mention takes "a": "introduced a ban". Every later mention of the same ban takes "the", because the reader now knows which ban. "And a ban cut pollution" tells the reader a different ban did it.' },
+            { id: 'm11s1q3', type: 'spot', tag: 'gra-article', level: 'B1', prompt: 'p-cars-city',
+  hint: 'Is the sentence about particular vehicles already named, or about vehicles in general?',
+              stem: 'Tap the chunk with an article that should not be there.',
+              words: ['The cars', 'produce', 'most of the smog', 'that hangs over', 'Bangkok', 'in the dry season.'], answer: 0,
+              fix: 'Cars',
+              why: 'A plural noun used in general takes no article: cars, governments, students. "The cars" would mean particular cars already named. Compare "the smog that hangs over Bangkok", which keeps "the" because the clause says which smog.' },
+            { id: 'm11s1q4', type: 'spot', tag: 'gra-plural', level: 'B1', prompt: 'p-teen-sleep',
+  hint: 'One noun here can never be counted; check the word before it as well as its ending.',
+              stem: 'Tap the chunk with the countability error.',
+              words: ['Teachers give', 'students', 'many advices', 'about exams', 'but little', 'about sleep.'], answer: 2,
+              fix: 'much advice',
+              why: '"Advice" is uncountable: no plural -s and no "many". Use "much advice" or "a great deal of advice", and to count it, "several pieces of advice". The sentence already uses "little about sleep", which is the uncountable form; make both halves agree.' },
+            { id: 'm11s1q5', type: 'spot', tag: 'gra-plural', level: 'B2', prompt: 'p-teen-sleep',
+  hint: 'One noun here can never take -s, and its verb has to change with it.',
+              stem: 'Tap the chunk with the countability error. Watch the verb.',
+              words: ['Recent researches link', 'late bedtimes', 'to poor concentration', 'in the first lesson', 'of the day.'], answer: 0,
+              fix: 'Recent research links',
+              why: '"Research" is uncountable, so it has no -s, and because it is singular its verb takes -s: "research links". One countability error usually brings an agreement error with it, so fix the noun and then check the verb.' },
+            { id: 'm11s1q6', type: 'choose', tag: 'gra-plural', level: 'B1', prompt: 'p-online-learning',
+  hint: 'Two nouns: one can be counted, one cannot. Which sentence gets both right?',
+              stem: 'Which sentence is correct?',
+              options: ['Schools need more equipments for online lessons.', 'Schools need more equipment for online lesson.', 'Schools need more equipment for online lessons.'], answer: 2,
+              why: '"Equipment" is uncountable and never takes -s; "lesson" is countable, so "online lessons" in general needs the plural. The first sentence adds an -s that does not exist and the second removes one that is needed. Countability decides both.' },
+            { id: 'm11s1q7', type: 'spot', tag: 'gra-article', level: 'B2', prompt: 'p-tourism',
+  hint: 'One noun names a thing there is only one of; such nouns always carry an article.',
+              stem: 'Tap the chunk with a missing article.',
+              words: ['Tourism', 'brings money', 'to Phuket,', 'but it damages', 'environment', 'along the coast.'], answer: 4,
+              fix: 'the environment',
+              why: '"The environment" always takes "the", like the economy, the internet and the justice system: there is only one, and the reader knows which. "Tourism" and "money" are uncountable and general, so they correctly have no article.' }
+          ] },
+
+        /* ------------------------------------------------------------ s2 */
+        { id: 'm11s2', name: 'Agreement, punctuation, word form', cefr: 'B2',
+          theory: {
+            key: 'Match the verb to the head noun, put a comma after an opener and never between two full sentences, use capitals for countries and languages, and choose the right member of the word family.',
+            body: [
+              '<p><strong>Agreement.</strong> The verb agrees with the head noun of the subject, not with the noun nearest to it. <em>A minimum wage that rises every year <u>helps</u> low-paid workers</em>: the head is <em>wage</em>, and <em>that rises every year</em> hangs from it. <em>The main cause of flooding in Bangkok <u>is</u> the concrete surfaces</em>: the head is <em>cause</em>, singular, even though the complement is plural. <em>The number of</em> is singular; <em>a number of</em> is plural. <em>Everyone, each, every, nobody</em> are singular. <em>Air pollution</em> is uncountable and singular. When the subject is longer than five words, put a finger on its head noun before you write the verb, as Module 08 taught.</p>',
+              '<p><strong>Punctuation.</strong> Three habits carry most of the marks. First, a comma after an opening phrase or linker: <em>In Thailand, … · However, … · Although the tax is unpopular, …</em>. Second, no <strong>comma splice</strong>: two full sentences cannot be joined by a comma alone. <em>Cashless payment is convenient, it also leaves a record</em> needs a full stop, a semicolon or a joining word: <em>… is convenient, <u>but</u> it also leaves a record</em>. Third, no comma between a subject and its verb, however long the subject is: <em>Students who attend tutoring centres every evening <s>,</s> sleep less.</em> Capital letters are part of punctuation too: countries, cities, nationalities and languages take a capital: <em>Thailand, Bangkok, Thai, English, Chinese</em>.</p>',
+              '<p><strong>Word form.</strong> Every essay word is a family, and the wrong member is a visible error. <em>Economy</em> (noun) → <em>economic</em> (adjective: to do with the economy) → <em>economical</em> (adjective: cheap to run) → <em>economically</em> (adverb). <em>Benefit</em> (noun and verb) → <em>beneficial</em> (adjective). <em>Succeed</em> (verb) → <em>success</em> (noun) → <em>successful</em> (adjective) → <em>successfully</em> (adverb). <em>Environment</em> → <em>environmental</em>. <em>Society</em> → <em>social</em>. <em>Health</em> → <em>healthy</em>. The test is the slot: after <em>the … of</em> you need a noun; before a noun you need an adjective; after <em>is</em> describing a subject you need an adjective. <em>Tutoring is <s>benefit</s></em> → <em>beneficial</em>; <em>the <s>successful</s> of the scheme</em> → <em>the success</em>.</p>',
+              '<p><strong>Spelling.</strong> Computer-delivered IELTS has no spell-check, and a misspelt kit word is the cheapest error in the test. The ten to know cold: <em>government</em> (not goverment), <em>environment</em> (not enviroment), <em>benefit</em>, <em>argument</em> (no e after the u), <em>necessary</em> (one c, two s), <em>separate</em> (a in the middle), <em>definitely</em> (no a), <em>which</em>, <em>their</em> (not thier), <em>receive</em>. Keep a personal list of the ten words you misspell in your own essays; they will be different from your neighbour\'s, and they repeat. All three families here, agreement, punctuation and word form, together with spelling, are found in the same five-minute check: one read for verbs, one for commas and capitals, one for word endings.</p>'
+            ],
+            simple: [
+              '<p>Agreement: find the head noun of the subject and match the verb to it. "A wage that rises every year helps workers." The number of = singular; everyone, each, every = singular.</p>',
+              '<p>Punctuation: comma after an opener (In Thailand, / However,). Never join two full sentences with only a comma: use a full stop, a semicolon or "but / and / so". Capitals for Thailand, Bangkok, Thai, English.</p>',
+              '<p>Word form: economic (about the economy) vs economical (cheap); benefit (noun) vs beneficial (adjective); success (noun) vs successful (adjective). Spelling: government, environment, argument, necessary, separate, definitely, which, their.</p>'
+            ],
+            examples: [
+              { s: 'In Thailand, most students attend tutoring centres after school and at weekends.', g: 'Comma after the opening phrase. The reader sees where the sentence proper begins.' },
+              { s: '<s>Cashless payment is convenient, it also leaves a record of every purchase.</s> → Cashless payment is convenient, but it also leaves a record of every purchase.', g: 'A comma splice repaired with "but". A semicolon or a full stop would also work.' },
+              { s: '<s>Tourism is the largest economical activity in Phuket.</s> → Tourism is the largest economic activity in Phuket.', g: 'Economical means cheap to run. The adjective for the economy is economic.' },
+              { s: 'A minimum wage that rises every year helps low-paid workers keep up with prices.', g: 'Head noun "wage", singular, so "helps". The relative clause between them does not change the verb.' }
+            ]
+          },
+          items: [
+            { id: 'm11s2q1', type: 'spot', tag: 'gra-punctuation', level: 'B1', prompt: 'p-private-tutoring',
+  hint: 'Where does the opening phrase end and the main clause begin? Something should mark that boundary.',
+              stem: 'Tap the chunk that needs a comma.',
+              words: ['In Thailand', 'most students', 'attend', 'tutoring centres', 'after school', 'and at weekends.'], answer: 0,
+              fix: 'In Thailand,',
+              why: 'An opening phrase is separated from the main clause by a comma: "In Thailand, most students …". The same goes for linkers and clauses at the front: "However, …", "Although the fees are high, …". Without the comma the reader has to find the subject twice.' },
+            { id: 'm11s2q2', type: 'spot', tag: 'gra-punctuation', level: 'B2', prompt: 'p-cashless',
+              stem: 'Two full sentences are joined by a comma alone. Tap the chunk and repair it.',
+              words: ['Cashless payment', 'is convenient, it also', 'leaves a record', 'of every purchase', 'that banks can see.'], answer: 1,
+              fix: 'is convenient, but it also',
+              why: 'A comma cannot join two complete sentences; that is a comma splice. Add a joining word ("but", "and", "so"), change the comma to a semicolon, or make two sentences. A comma splice is one of the two punctuation errors examiners see at once.' },
+            { id: 'm11s2q3', type: 'spot', tag: 'gra-agreement', level: 'B2', prompt: 'p-minimum-wage',
+              stem: 'Tap the verb that does not agree with the head noun of its subject.',
+              words: ['A minimum wage', 'that rises', 'every year', 'help', 'low-paid workers', 'keep up with prices.'], answer: 3,
+              fix: 'helps',
+              why: 'The subject is "a minimum wage", singular; "that rises every year" is a relative clause hanging from it. The verb of the main clause must agree with "wage": helps. Find the head noun, skip the clause, then choose the verb.' },
+            { id: 'm11s2q4', type: 'spot', tag: 'gra-word-form', level: 'B2', prompt: 'p-tourism',
+  hint: 'Two adjectives from the same family look alike; one of them means "cheap to run".',
+              stem: 'Tap the chunk with the wrong member of the word family.',
+              words: ['Tourism is', 'the largest', 'economical activity', 'in Phuket,', 'employing', 'thousands of people.'], answer: 2,
+              fix: 'economic activity',
+              why: '"Economical" means cheap to run, as in an economical car. The adjective that means "to do with the economy" is "economic": economic activity, economic growth, economic benefits. One letter, two words, and the examiner records the wrong one as an error.' },
+            { id: 'm11s2q5', type: 'spot', tag: 'gra-punctuation', level: 'B1', prompt: 'p-early-languages',
+              stem: 'Tap the chunk with a missing capital letter.',
+              words: ['Many students', 'in thailand', 'learn Chinese', 'as a third language', 'after English.'], answer: 1,
+              fix: 'in Thailand',
+              why: 'Countries, cities, nationalities and languages take a capital letter: Thailand, Bangkok, Thai, Chinese, English. The sentence capitalises the two languages correctly and forgets the country. A capital is a punctuation mark the examiner cannot miss.' },
+            { id: 'm11s2q6', type: 'choose', tag: 'gra-word-form', level: 'B2', prompt: 'p-private-tutoring',
+  hint: 'After "is", describing the subject, which part of speech does the slot need?',
+              stem: 'Choose the right form: "Private tutoring is ___ for exam results but costly for families."',
+              options: ['benefit', 'beneficial', 'benefits', 'beneficially'], answer: 1,
+              why: 'After "is", describing the subject, the slot needs an adjective: beneficial. "Benefit" is the noun and verb, "benefits" its plural, "beneficially" the adverb. Learn the family in a column: benefit, beneficial, beneficially, beneficiary.' },
+            { id: 'm11s2q7', type: 'spot', tag: 'lr-spelling', level: 'B1', prompt: 'p-city-flooding',
+  hint: 'Say the verb each noun comes from, then check every letter of the noun against it.',
+              stem: 'Tap the misspelt chunk.',
+              words: ['The goverment', 'should separate', 'the drains', 'for rainwater', 'from those', 'for sewage.'], answer: 0,
+              fix: 'The government',
+              why: 'Govern + ment: the n stays. "Government" and "environment" are the two kit words most often misspelt by this cohort, and both lose the same letter. "Separate", also in this sentence, is spelt correctly: a in the middle.' }
+          ] },
+
+        /* ------------------------------------------------------------ s3 */
+        { id: 'm11s3', name: 'Error auction', cefr: 'B2',
+          theory: {
+            key: 'Six families: article, plural, agreement, punctuation, word form, spelling. Find the one error, name its family, fix it. Naming the family is what makes the fix stick.',
+            body: [
+              '<p>The error auction is the proofreading game of this module. Each sentence contains exactly one error from one of the <strong>six families</strong>: <strong>article</strong> (a / the / nothing), <strong>plural</strong> (countable or not, -s or not), <strong>agreement</strong> (verb matches the head noun), <strong>punctuation</strong> (commas, splices, capitals), <strong>word form</strong> (the right member of the family) and <strong>spelling</strong>. Your job is to find the error, say which family it belongs to, and give the corrected chunk. The family matters because each family has its own check: an article error is found by looking at nouns, an agreement error by looking at verbs, a splice by looking at commas. If you can name the family, you know where to look next time.</p>',
+              '<p>Some errors look like two families at once, and the auction settles which. <em>More informations</em> is a <strong>plural</strong> error, not a spelling error: the letters are right but the noun is uncountable. <em>Recent researches link</em> is a plural error that produces an agreement error; fix the noun and the verb follows. <em>The number of scams have risen</em> is <strong>agreement</strong>: the head is <em>number</em>. <em>The environment benefits</em> is <strong>word form</strong>: a noun sitting where an adjective belongs. <em>Tutoring is expensive, many families pay for it anyway</em> is <strong>punctuation</strong>: a comma splice. <em>Air pollution in Bangkok are worse</em> is agreement: <em>pollution</em> is uncountable and singular, however many places it covers.</p>',
+              '<p>The auction also teaches you your <strong>personal top three</strong>. After ten sentences, count which families you missed. Most students in this cohort find that two families account for most of their errors, usually articles and agreement, sometimes plurals and spelling. Those two families are your five-minute check on exam day: you do not have time to read for everything, but you can read once for nouns and once for verbs. The Band 8 descriptor asks for "the majority of sentences error-free", and the fastest route there is not to learn more grammar but to stop making the two errors you already make.</p>',
+              '<p>Finally, a rule about risk. When you are unsure whether a sentence is right, the safest fix is usually the plainer sentence: a shorter subject whose head noun you can see, a full stop instead of a comma you are not sure about, the plain word whose form you know instead of the rare one whose form you guess. Module 09 said it for complex structures and it is true for accuracy generally: a correct simple sentence outscores a faulty complex one. The auction trains your eye; the exam rewards you for using it on your own writing in the last five minutes.</p>'
+            ],
+            simple: [
+              '<p>Six families of error: article, plural, agreement, punctuation, word form, spelling. Each sentence in this level has one error. Find it, name the family, fix it.</p>',
+              '<p>"More informations" = plural (information is uncountable). "The number of scams have" = agreement (head noun: number). "The environment benefits" = word form (should be environmental). "It is expensive, many pay" = punctuation (comma splice).</p>',
+              '<p>Find your own top two families and check for those first in the last five minutes. Stopping your two usual errors is faster than learning new grammar.</p>'
+            ],
+            examples: [
+              { s: '<s>Schools should give students more informations about online fraud.</s> → more information', g: 'Plural family: information is uncountable. Not a spelling error; the letters are fine.' },
+              { s: '<s>The number of online scams have risen sharply.</s> → has risen', g: 'Agreement family: the head noun is "number", singular.' },
+              { s: '<s>Free buses would be expensive, but the environment benefits would justify the cost.</s> → the environmental benefits', g: 'Word-form family: a noun (environment) is sitting in an adjective slot.' },
+              { s: '<s>Tutoring is expensive, many families pay for it anyway.</s> → Tutoring is expensive, but many families pay for it anyway.', g: 'Punctuation family: a comma splice, repaired with "but".' }
+            ]
+          },
+          items: [
+            { id: 'm11s3q1', type: 'spot', tag: 'gra-article', level: 'C1', prompt: 'p-cctv-everywhere',
+  hint: 'Read each noun and ask whether the words after it say which one is meant.',
+              stem: 'One error, one family. Tap the chunk with the error.',
+              words: ['Although', 'cameras reduce theft', 'in stations,', 'they raise', 'serious questions', 'about privacy', 'of ordinary people.'], answer: 5,
+              fix: 'about the privacy',
+              why: 'Article family. "Privacy" on its own is uncountable and general, but "privacy of ordinary people" is specified by its of-phrase, so it takes "the": the privacy of ordinary people. A noun followed by "of" nearly always needs "the" in front.' },
+            { id: 'm11s3q2', type: 'choose', tag: 'gra-agreement', level: 'B2', prompt: 'p-online-scams',
+  hint: 'Check the families in turn: articles, -s endings, the verb against its subject, and the commas.',
+              stem: '"The number of online scams have risen sharply since 2020." Which family does the error belong to?',
+              options: ['Article', 'Plural', 'Punctuation', 'Agreement'], answer: 3,
+              why: 'Agreement: the head noun of the subject is "number", singular, so the verb must be "has risen". "Scams" is correctly plural, the articles are right and there is no punctuation problem. Find the head noun, then match the verb.' },
+            { id: 'm11s3q3', type: 'spot', tag: 'gra-word-form', level: 'B2', prompt: 'p-free-transport',
+  hint: 'Look at the slot directly before a noun: which part of speech belongs there?',
+              stem: 'One error, one family. Tap the chunk with the error.',
+              words: ['Free buses', 'would be expensive,', 'but the environment benefits', 'would justify', 'the cost.'], answer: 2,
+              fix: 'but the environmental benefits',
+              why: 'Word-form family. Before the noun "benefits" the slot needs an adjective: environmental. "Environment" is the noun. Note the comma before "but" is correct: it joins two full clauses with a conjunction, so there is no splice.' },
+            { id: 'm11s3q4', type: 'spot', tag: 'lr-spelling', level: 'B1', prompt: 'p-youth-unemployment',
+  hint: 'Read each short word letter by letter; one common kit word has lost a letter.',
+              stem: 'One error, one family. Tap the chunk with the error.',
+              words: ['Graduates', 'often lack', 'the practical skills', 'wich employers', 'need most.'], answer: 3,
+              fix: 'which employers',
+              why: 'Spelling family: which, with an h after the w. "Which", "their" and "definitely" are the three short kit words most often misspelt, and the computer test will not underline them for you.' },
+            { id: 'm11s3q5', type: 'choose', tag: 'gra-punctuation', level: 'B2', prompt: 'p-private-tutoring',
+  hint: 'Check the families in turn: each verb against its subject, each word form, each article, and what joins the two halves.',
+              stem: '"Tutoring is expensive, many families pay for it anyway." Which family does the error belong to?',
+              options: ['Punctuation', 'Agreement', 'Word form', 'Article'], answer: 0,
+              why: 'Punctuation: a comma splice. "Tutoring is expensive" and "many families pay for it anyway" are both full sentences, and a comma alone cannot join them. Add "but", use a semicolon, or make two sentences. Every verb agrees and every word form is right.' },
+            { id: 'm11s3q6', type: 'spot', tag: 'gra-agreement', level: 'B2', prompt: 'p-city-flooding',
+  hint: 'Find the subject of the sentence, then its verb; ignore the noun that comes after the verb.',
+              stem: 'One error, one family. Tap the chunk with the error.',
+              words: ['The main cause', 'of flooding', 'in Bangkok', 'are', 'the concrete surfaces', 'that replace soil.'], answer: 3,
+              fix: 'is',
+              why: 'Agreement family. The subject is "the main cause", singular; the verb agrees with the subject, not with the plural complement "surfaces" after it. "The main cause … is the concrete surfaces" is correct even though it looks unbalanced.' },
+            { id: 'm11s3q7', type: 'choose', tag: 'gra-plural', level: 'B2', prompt: 'p-online-scams',
+  hint: 'Look closely at the noun "informations" and decide what kind of rule it breaks.',
+              stem: '"Schools should give students more informations about online fraud." Which family does the error belong to?',
+              options: ['Agreement', 'Article', 'Plural', 'Spelling'], answer: 2,
+              why: 'Plural family, not spelling: the letters of "informations" are fine, but "information" is uncountable and never takes -s. The fix is "more information". Naming the family correctly tells you what to check next time: countability, not the dictionary.' }
+          ] }
+      ],
+
+      /* ------------------------------------------------------------ check */
+      check: { id: 'm11ck', name: 'Systems Check', items: [
+        { id: 'm11ckq1', type: 'spot', tag: 'gra-article', level: 'B1', prompt: 'p-tourism',
+  hint: 'A noun mentioned a second time takes a different article from its first mention.',
+          stem: 'The same noun appears twice. Tap the chunk where the article is wrong.',
+          words: ['Several islands', 'have introduced', 'a visitor fee,', 'and a fee', 'pays for', 'beach cleaning.'], answer: 3,
+          fix: 'and the fee',
+          why: 'First mention "a visitor fee", second mention "the fee": the reader now knows which fee. "And a fee pays" introduces a new, unnamed fee. The a → the rule is the simplest article rule and the one most often forgotten under time pressure.' },
+        { id: 'm11ckq2', type: 'spot', tag: 'gra-plural', level: 'B1', prompt: 'p-online-learning',
+  hint: 'One noun in the sentence can never be counted, however many items there are.',
+          stem: 'Tap the chunk with the countability error.',
+          words: ['Schools that teach online', 'need', 'new equipments', 'and training', 'for every teacher', 'in the building.'], answer: 2,
+          fix: 'new equipment',
+          why: '"Equipment" is uncountable: no -s, ever. To count it, say "items of equipment" or "several devices". "Training" in the same sentence is also uncountable and is correctly written without -s.' },
+        { id: 'm11ckq3', type: 'spot', tag: 'gra-agreement', level: 'B2', prompt: 'p-minimum-wage',
+  hint: 'Find the subject of the main verb; is it singular or plural, whatever number of people it refers to?',
+          stem: 'Tap the verb that does not agree with its subject.',
+          words: ['Everyone', 'who works', 'in the gig economy', 'need', 'some protection', 'against a sudden loss of income.'], answer: 3,
+          fix: 'needs',
+          why: '"Everyone" is always singular, like each, every and nobody, however many people it covers. The relative clause "who works in the gig economy" already shows the singular verb; the main verb must match it: needs.' },
+        { id: 'm11ckq4', type: 'spot', tag: 'gra-punctuation', level: 'B1', prompt: 'p-cashless',
+  hint: 'The first word is a linker; think about how a linker is separated from the sentence it introduces.',
+          stem: 'Tap the chunk that needs a comma.',
+          words: ['However', 'the elderly', 'cannot always', 'use a phone', 'to pay', 'for their shopping.'], answer: 0,
+          fix: 'However,',
+          why: 'A linker at the front of a sentence is followed by a comma: "However, …", "In addition, …", "As a result, …". Without it, "However the elderly" reads as "in whatever way the elderly", and the sentence loses its contrast for a moment.' },
+        { id: 'm11ckq5', type: 'choose', tag: 'gra-word-form', level: 'B2', prompt: 'p-free-transport',
+  hint: 'After "The" and before "of", which part of speech does the slot need?',
+          stem: 'Choose the right form: "The ___ of a free-bus scheme depends on how it is funded."',
+          options: ['success', 'succeed', 'successful', 'successfully'], answer: 0,
+          why: '"The ___ of" is a noun slot: success. "Succeed" is the verb, "successful" the adjective, "successfully" the adverb. The examiner reads "the successful of" as a grammar error, not a slip, so learn the four forms as a column.' },
+        { id: 'm11ckq6', type: 'spot', tag: 'lr-spelling', level: 'B2', prompt: 'p-private-tutoring',
+  hint: 'Say the verb each noun comes from and check the spelling of the noun against it.',
+          stem: 'Tap the misspelt chunk.',
+          words: ['The strongest arguement', 'against private tutoring', 'is', 'that it widens', 'the gap', 'between rich and poor students.'], answer: 0,
+          fix: 'The strongest argument',
+          why: 'Argue loses its e before -ment: argument. It is one of the ten kit words to know cold, with government, environment, necessary, separate, definitely, which and their. A misspelt kit word in the first line of a paragraph is the first thing the examiner sees.' },
+        { id: 'm11ckq7', type: 'choose', tag: 'gra-agreement', level: 'B2', prompt: 'p-cars-city',
+  hint: 'Check each family: the article before the subject, the noun\'s ending, the word forms, and the verb against its subject.',
+          stem: '"Air pollution in Bangkok are worse in the dry season." Which family does the error belong to?',
+          options: ['Plural', 'Agreement', 'Article', 'Word form'], answer: 1,
+          why: 'Agreement: "pollution" is uncountable and therefore singular, so the verb is "is". "In Bangkok" hangs from the subject and does not make it plural. There is no missing article, because pollution in general takes none.' },
+        { id: 'm11ckq8', type: 'rewrite', tag: 'lr-spelling', level: 'C1', prompt: 'p-online-scams',
+          stem: 'Rewrite with every error fixed: spelling, countability and register. Keep the meaning.',
+          given: 'The goverment should give more informations to kids about online fraud, it is definately necesary.',
+          must: [['government'], ['information'], ['children', 'young people', 'teenagers', 'adolescents', 'students']],
+          ban: ['goverment', 'informations', 'kids', 'definately', 'necesary'],
+          minWords: 8, maxWords: 30, praise: 'Spelling, countability, register and the splice all repaired. An error-free sentence.',
+          _good: 'The government should definitely give young people more information about online fraud.',
+          _bad: 'The goverment should give more informations to kids about online fraud, it is definately necesary.',
+          why: 'Five repairs: goverment → government, informations → information (uncountable), kids → young people, definately → definitely, necesary → necessary, and the comma splice becomes one sentence or two. Each belongs to a family, and each family has its own check.' }
+      ] }
+    }]
+  });
+})();
