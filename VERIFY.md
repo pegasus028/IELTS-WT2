@@ -8,3 +8,5 @@
 6. LevelUp: after pasting the hand-off snippet, submit a practice essay, press "Send to LevelUp for marking" and confirm the prompt and essay boxes are filled.
 7. Content rule: no item, prompt or model may reproduce a real IELTS paper or a published model essay. Prompts are original.
 8. Students see their own bands only — never a class rank. Teacher marks stay hidden until released.
+9. Template Lab: `node tools/lab-validate.js` prints `OK`; `node tools/gs-test.js` prints `all Lab.gs checks passed`; `python3 tools/lab-smoke.py` and `python3 tools/lab-smoke.py --mock` print `console errors: 0` with no horizontal overflow at 375 px.
+10. Template Lab live check after deploying `Lab.gs`: the Lab's status pill reads "AI coach online". Coach one line and one variable, finish a run and confirm a band appears and a row lands in `LabTemplates` and `LabAttempts`.

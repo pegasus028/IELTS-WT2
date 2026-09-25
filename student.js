@@ -48,6 +48,14 @@
   }
   var syncSoon = (function () { var t; return function () { clearTimeout(t); t = setTimeout(sync, 10000); }; })();
   api.onModeChange = function () {};
+  /* What the Template Lab (lab.js) may use from this console. */
+  window.PCHost = {
+    get p() { return S.p; },
+    sync: sync, syncSoon: syncSoon, toast: toast, modal: modal, esc: esc, tier: tier,
+    celebrate: function (b, rest) { celebrate(b, rest); },
+    paintHeader: function () { if (S.p) paintHeader(); },
+    show: function (v) { show(v); }
+  };
   setInterval(function () {
     if (!S.p) return;
     if (api.mode !== 'cloud') api.retryCloud();
@@ -182,9 +190,10 @@
   }
 
   /* --------------------------------------------------------------- views */
-  var VIEWS = ['plan', 'map', 'play', 'bootcamp', 'bootrun', 'writer', 'write', 'template', 'models', 'faults', 'record', 'settings', 'live'];
+  var VIEWS = ['plan', 'map', 'play', 'bootcamp', 'bootrun', 'writer', 'write', 'template', 'lab', 'models', 'faults', 'record', 'settings', 'live'];
   function show(v) {
     clearTimeout(S.celebrateTimer);
+    if (v !== 'lab' && window.Lab) window.Lab.leave();
     $('#modal-slot').innerHTML = '';
     VIEWS.forEach(function (x) { $('#view-' + x).classList.toggle('hidden', x !== v); });
     document.querySelectorAll('.nav button[data-view]').forEach(function (b) { b.classList.toggle('on', b.dataset.view === v || (v === 'write' && b.dataset.view === 'writer') || (v === 'play' && b.dataset.view === 'map') || (v === 'bootrun' && b.dataset.view === 'bootcamp')); });
@@ -193,6 +202,7 @@
     if (v === 'plan') { paintPlan(); api.assignments('list').then(function (r) { var list = (r && r.assignments) || []; if (JSON.stringify(list) !== JSON.stringify(S.assignments)) { S.assignments = list; if (!$('#view-plan').classList.contains('hidden')) { paintPlan(); paintHeader(); } } }); }
     if (v === 'writer') paintWriter();
     if (v === 'template') paintTemplate();
+    if (v === 'lab' && window.Lab) window.Lab.mount($('#view-lab'), window.PCHost);
     if (v === 'models') paintModels();
     if (v === 'faults') paintFaults();
     if (v === 'record') paintRecord();

@@ -1126,7 +1126,7 @@
     var earned = [];
     C.BADGES.forEach(function (b) {
       if (p.badges.indexOf(b.id) >= 0) return;
-      var t = BADGE_TESTS[b.id];
+      var t = BADGE_TESTS[b.id] || b.test; /* modules such as the Template Lab bring their own test */
       if (t && t(p)) { p.badges.push(b.id); earned.push(b); }
     });
     return earned;

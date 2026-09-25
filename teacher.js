@@ -188,6 +188,16 @@
       h += '<details class="disc" open><summary>Reports<span class="count">' + reps.length + ' written · ' + reps.filter(function (r) { return !r.released; }).length + ' unreleased</span></summary><div class="disc-body" style="padding-top:10px">';
       h += reps.length ? '<div class="replist">' + reps.map(function (r) { var pr = PR.get(r.promptId) || {}, b = bandsOf(r); return '<button class="rep" data-open="' + esc(r.id) + '"><span class="rep-t"><span class="rep-n">' + esc(pr.title || r.promptId) + '</span><span class="rep-s">' + esc(String(r.ts).slice(0, 10) + ' · ' + typeName(r.type) + ' · ' + r.words + ' w · ' + mmss(r.seconds || 0) + ' · ' + (r.uiMode || '') + ' · ' + (r.kind || 'practice') + ' · ' + ((r.preflight || {}).bad || 0) + ' red · ' + (r.released ? 'released' : r.teacher ? 'marked, not released' : r.ai ? 'AI estimate' : 'unmarked')) + '</span></span><span class="rep-b">' + (b ? fmtBand(b.overall) : '—') + '</span></button>'; }).join('') + '</div>' : '<p class="tiny">No reports yet.</p>';
       h += '<div style="margin-top:10px"><button class="btn sm" id="d-assign">Set an essay for ' + esc(p.displayName || id) + '</button> <button class="btn sm" id="d-print">Print report card</button></div></div></details>';
+      /* Template Lab: lab.js keeps a summary on the progress object; the full
+         blueprints, essays and coaching are in the LabTemplates / LabAttempts tabs. */
+      var lab = p.lab;
+      if (lab && (lab.points || lab.runs || lab.templatesComplete)) {
+        var pcs = lab.pcts || {};
+        h += '<details class="disc"><summary>Template Lab<span class="count">' + (lab.points || 0) + ' pts · ' + (lab.runs || 0) + ' runs · best band ' + (lab.bestBand != null ? fmtBand(lab.bestBand) : '—') + '</span></summary><div class="disc-body" style="padding-top:10px">' +
+          '<table class="roster" style="min-width:0"><thead><tr><th>Template share</th><th>Runs</th><th>Average band</th><th>Best band</th></tr></thead><tbody>' +
+          ['60', '50', '40', '30'].map(function (k) { var x = pcs[k] || {}; return '<tr><td>' + k + '%</td><td>' + (x.n || 0) + '</td><td>' + (x.rated ? fmtBand(x.sum / x.rated) : '—') + '</td><td>' + (x.best != null ? fmtBand(x.best) : '—') + '</td></tr>'; }).join('') +
+          '</tbody></table><p class="tiny" style="margin-top:8px">' + (lab.templatesComplete || 0) + ' blueprint(s) saved. Every line, essay and piece of coaching is in the LabTemplates and LabAttempts tabs of the class sheet.</p></div></details>';
+      }
       /* diagnosis */
       h += '<details class="disc" open><summary>Teaching focus<span class="count">' + weak.length + ' areas</span></summary><div class="disc-body">';
       if (!weak.length) h += '<p class="tiny" style="padding-top:10px">No error pattern yet. Once this student has answered twenty or so questions, the weak areas appear here with reteach notes and activities.</p>';

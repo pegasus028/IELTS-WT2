@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="theme.css?v=1">
+<link rel="stylesheet" href="lab.css?v=1">
 <style>
 /* ======================= STUDENT CONSOLE ============================== */
 .wrap{max-width:960px;margin:0 auto;padding-inline:16px}
@@ -439,6 +440,7 @@ body{padding-top:var(--ribbon-h)}
       <button data-view="bootcamp">Bootcamp</button>
       <button data-view="writer">Writer</button>
       <button data-view="template">Template</button>
+      <button data-view="lab">Template Lab</button>
       <button data-view="models">Models</button>
       <button data-view="faults">Fault list<span id="nav-faults"></span></button>
       <button data-view="record">Record<span id="nav-record"></span></button>
@@ -455,6 +457,7 @@ body{padding-top:var(--ribbon-h)}
     <section id="view-writer" class="hidden"></section>
     <section id="view-write" class="hidden"></section>
     <section id="view-template" class="hidden"></section>
+    <section id="view-lab" class="hidden"></section>
     <section id="view-models" class="hidden"></section>
     <section id="view-faults" class="hidden"></section>
     <section id="view-record" class="hidden"></section>
@@ -480,6 +483,7 @@ body{padding-top:var(--ribbon-h)}
 <script src="prompts.js?v=1"></script>
 <script src="prompts-2.js?v=1"></script>
 <script src="template.js?v=1"></script>
+<script src="lab-content.js?v=1"></script>
 <script src="models.js?v=1"></script>
 <script src="mocks.js?v=1"></script>
 <script src="topic-00.js?v=1"></script>
@@ -498,8 +502,9 @@ body{padding-top:var(--ribbon-h)}
 <script src="topic-13.js?v=1"></script>
 <script src="writer.js?v=1"></script>
 <script src="bootcamp.js?v=1"></script>
-<script src="engine.js?v=1"></script>
+<script src="engine.js?v=2"></script>
 <script src="api.js?v=1"></script>
-<script src="student.js?v=1"></script>
+<script src="lab.js?v=1"></script>
+<script src="student.js?v=2"></script>
 </body>
 </html>
