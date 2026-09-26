@@ -365,6 +365,52 @@ main{padding-block:22px 72px}
 body{padding-top:var(--ribbon-h)}
 #screen-login{min-height:calc(100vh - var(--ribbon-h))}
 @media print{.ribbon,.bar,.nav,#toast-slot,#modal-slot{display:none !important}body{background:#fff}}
+
+/* ---- module media: podcast and video ----------------------------------- */
+.sys-res{display:flex;flex-wrap:wrap;gap:7px;padding:0 16px 14px}
+.res{display:inline-flex;align-items:center;gap:7px;padding:7px 13px;border-radius:99px;border:1px solid var(--rule);background:var(--surface);color:var(--ink);font-size:.85rem;font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap;transition:border-color .12s,background .12s}
+.res:hover{border-color:var(--accent-line);background:var(--accent-soft)}
+.res-i{width:18px;height:18px;border-radius:50%;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-size:10px;flex:0 0 auto;line-height:1}
+.res.go{border-color:var(--accent-line);background:var(--accent-soft);color:var(--accent)}
+.res.done{border-color:var(--ok);color:var(--ok)}
+.res.done .res-i{background:var(--ok)}
+.res-x{font-family:var(--f-mono);font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);font-weight:400}
+.res-drop{flex:0 0 100%}
+.res-drop:empty{display:none}
+.pod{margin-top:4px;padding:12px 14px;border-radius:var(--r-m);background:var(--surface-2);border:1px solid var(--rule-soft);display:flex;flex-direction:column;gap:10px;text-align:left}
+.pod-t{display:flex;flex-direction:column;gap:1px;min-width:0}
+.pod-n{font-weight:600;font-size:.93rem;line-height:1.25}
+.pod-s{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.pod-a{width:100%;height:36px}
+.modal-card:has(.ytbox){max-width:660px}
+.ytbox{width:100%;aspect-ratio:16/9;border-radius:var(--r-m);overflow:hidden;background:var(--ink)}
+.ytbox iframe{width:100%;height:100%;border:0;display:block}
+/* one introduction spanning a module's checklist rows */
+.ckgroup{display:flex;flex-direction:column;gap:7px}
+.ckgrid{display:flex;gap:8px;align-items:stretch}
+.ckstack{flex:1;min-width:0;display:flex;flex-direction:column;gap:7px}
+.ckstack .ckrow{width:100%}
+.ckmedia{flex:0 0 auto;display:flex;flex-direction:column;gap:7px}
+.ckpod{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;padding:8px 14px;min-width:96px;border:1px solid var(--rule);border-radius:var(--r-m);background:var(--surface);color:var(--ink);font-size:.85rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:border-color .12s,background .12s}
+.ckpod:hover{border-color:var(--accent-line);background:var(--accent-soft)}
+.ckpod.done{border-color:var(--ok);color:var(--ok)}
+.ckpod.done .res-i{background:var(--ok)}
+.ckpod-l{line-height:1.2}
+@media (max-width:560px){ .ckgrid{flex-direction:column} .ckmedia{flex-direction:row} .ckpod{flex-direction:row;padding:9px 14px;min-width:0} }
+.fx-groups{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.fx-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.fx-h b{font-family:var(--f-display);font-size:1rem}
+.fx-h span{font-family:var(--f-mono);font-size:10px;letter-spacing:.06em;color:var(--ink-3)}
+/* the Videos and Podcasts screens */
+.vidlist,.podlist{display:flex;flex-direction:column;gap:12px}
+.vidrow,.podrow{background:var(--surface);border:1px solid var(--rule-soft);border-radius:var(--r-l);box-shadow:var(--shadow-s);padding:15px 17px;display:flex;flex-direction:column;gap:11px}
+.vidrow.done,.podrow.done{border-color:var(--ok)}
+.vidrow h3,.podrow h3{font-family:var(--f-display);font-weight:700;font-size:1.05rem;line-height:1.25}
+.vidrow h3 span,.podrow h3 span{display:block;font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--ink-3);margin-bottom:3px}
+.podrow .pod-a{width:100%;height:38px}
+.podrow-miss{display:none;font-size:.85rem;color:var(--ink-3)}
+.podrow.missing .podrow-miss{display:block}
+.vid-soon{font-size:.85rem;color:var(--ink-3)}
 </style>
 </head>
 <body>
@@ -442,6 +488,8 @@ body{padding-top:var(--ribbon-h)}
       <button data-view="template">Template</button>
       <button data-view="lab">Template Lab</button>
       <button data-view="models">Models</button>
+      <button data-view="vids">Videos</button>
+      <button data-view="pods">Podcasts</button>
       <button data-view="faults">Fault list<span id="nav-faults"></span></button>
       <button data-view="record">Record<span id="nav-record"></span></button>
       <button data-view="settings">Settings</button>
@@ -459,6 +507,8 @@ body{padding-top:var(--ribbon-h)}
     <section id="view-template" class="hidden"></section>
     <section id="view-lab" class="hidden"></section>
     <section id="view-models" class="hidden"></section>
+    <section id="view-vids" class="hidden"></section>
+    <section id="view-pods" class="hidden"></section>
     <section id="view-faults" class="hidden"></section>
     <section id="view-record" class="hidden"></section>
     <section id="view-settings" class="hidden"></section>
@@ -500,11 +550,12 @@ body{padding-top:var(--ribbon-h)}
 <script src="topic-11.js?v=1"></script>
 <script src="topic-12.js?v=1"></script>
 <script src="topic-13.js?v=1"></script>
+<script src="media.js?v=1"></script>
 <script src="writer.js?v=1"></script>
 <script src="bootcamp.js?v=1"></script>
 <script src="engine.js?v=2"></script>
 <script src="api.js?v=1"></script>
 <script src="lab.js?v=1"></script>
-<script src="student.js?v=2"></script>
+<script src="student.js?v=3"></script>
 </body>
 </html>

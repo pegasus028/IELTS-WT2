@@ -21,6 +21,9 @@ Live LevelUp: `https://pegasus028.github.io/LevelUp/` (set in `window.PC_LEVELUP
 | `content.js` | Question types, domains, schemas, the eleven variables, ranks, badges, the error-tag dictionary (`REMEDIATION`) |
 | `topic-00.js … topic-13.js` | The fourteen modules: theory, 406 items, systems checks |
 | `prompts.js` · `prompts-2.js` | 37 original prompts (23 from the Matrix Arena bank + 14 new across all five types) with eleven variables × two tiers × near-miss distractors |
+| `media.js` | The podcast and YouTube video for each module. Podcasts are wired to `audio/module-00.mp3` … `module-13.mp3`; paste a YouTube link into a module's `video: ''` to add its video (instructions at the top of the file) |
+| `podcasts.html` | All fourteen episodes on one page, no sign-in (linked from the Podcasts tab) |
+| `audio/` | The fourteen podcast MP3s |
 | `models.js` | 9 model essays (Band 7 at B2, Band 8 at C1) with the variables behind them, dissect labels and 3 Band 6 contrast versions |
 | `mocks.js` | Three exam-mode mocks |
 | `roster.js` | Fast-access class lists (edit for M4.1 and the tutees) |
@@ -33,6 +36,12 @@ Live LevelUp: `https://pegasus028.github.io/LevelUp/` (set in `window.PC_LEVELUP
 | `tools/smoke.py` | Headless end-to-end test with screenshots (Playwright) |
 | `tools/lab-smoke.py` | Template Lab end-to-end test: `python3 tools/lab-smoke.py` (offline) and `--mock` (cloud mode against a mocked server with canned AI replies) |
 | `tools/lab-validate.js` · `tools/gs-test.js` | Lab content check; `Code.gs` + `Lab.gs` run in Node against an in-memory sheet and a fake Claude API |
+
+## Podcasts and videos
+
+Each module's introduction (podcast now, YouTube video when it exists) can be opened from four places: the pill strip under each module header on **Modules**, the Podcast/Video buttons beside each module's checklist on the **Flight plan**, the **Lessons to go back to** list on the **Fault list** (built from the questions the student missed, grouped by module, costliest first), and the **Videos** and **Podcasts** tabs. Plays, minutes heard, finished episodes and video opens are kept on the progress object (`p.media`) and shown on the Flight Deck under *Podcasts & videos* in each student's panel.
+
+To add a video: upload it to YouTube as Unlisted or Public (not Private) with embedding allowed, copy the Share link, paste it into that module's `video: ''` in `media.js`, commit, and bump `media.js?v=` in `index.html`, `teacher.html` and `podcasts.html`.
 
 ## Deploy
 

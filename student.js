@@ -150,6 +150,7 @@
       if (!S.p[k]) S.p[k] = (k === 'badges' || k === 'reports') ? [] : (k === 'stats' ? { seen: 0, correct: 0, byTag: {} } : {});
     });
     if (!S.p.tier) S.p.tier = 'B2';
+    if (!S.p.media) S.p.media = {};
     var newDay = P.touchDay(S.p);
     $('#screen-login').classList.add('hidden');
     $('#screen-app').classList.remove('hidden');
@@ -190,11 +191,12 @@
   }
 
   /* --------------------------------------------------------------- views */
-  var VIEWS = ['plan', 'map', 'play', 'bootcamp', 'bootrun', 'writer', 'write', 'template', 'lab', 'models', 'faults', 'record', 'settings', 'live'];
+  var VIEWS = ['plan', 'map', 'play', 'bootcamp', 'bootrun', 'writer', 'write', 'template', 'lab', 'models', 'vids', 'pods', 'faults', 'record', 'settings', 'live'];
   function show(v) {
     clearTimeout(S.celebrateTimer);
     if (v !== 'lab' && window.Lab) window.Lab.leave();
     $('#modal-slot').innerHTML = '';
+    stopAllAudio();
     VIEWS.forEach(function (x) { $('#view-' + x).classList.toggle('hidden', x !== v); });
     document.querySelectorAll('.nav button[data-view]').forEach(function (b) { b.classList.toggle('on', b.dataset.view === v || (v === 'write' && b.dataset.view === 'writer') || (v === 'play' && b.dataset.view === 'map') || (v === 'bootrun' && b.dataset.view === 'bootcamp')); });
     try { if (location.hash.replace('#', '') !== v) history.replaceState(null, '', '#' + v); } catch (e) {}
@@ -204,6 +206,8 @@
     if (v === 'template') paintTemplate();
     if (v === 'lab' && window.Lab) window.Lab.mount($('#view-lab'), window.PCHost);
     if (v === 'models') paintModels();
+    if (v === 'vids') paintVids();
+    if (v === 'pods') paintPods();
     if (v === 'faults') paintFaults();
     if (v === 'record') paintRecord();
     if (v === 'settings') paintSettings();
@@ -278,11 +282,12 @@
     C.TOPICS.forEach(function (t) {
       var lv = t.levels[0], tp = P.topicPct(p, t), ck = p.checks[lv.check.id], green = ck && ck.best >= E.PASS_CHECK;
       html += '<div class="step' + (green ? ' done' : '') + '"><div class="step-h"><span class="step-n">' + t.n + '</span><span class="step-t"><span class="step-name">' + esc(t.name) + '</span><span class="step-s">' + esc(t.blurb) + '</span></span><span class="step-pct' + (green ? ' good' : '') + '">' + tp + '%</span></div>' +
-        '<div class="step-b">' + lv.subs.map(function (s) {
+        '<div class="step-b"><div class="ckgroup">' + mediaDrop('plan-' + t.id) + '<div class="ckgrid">' + ckMedia(t, 'plan-' + t.id) + '<div class="ckstack">' + lv.subs.map(function (s) {
           var rec = p.subs[s.id], done = rec && rec.best >= E.PASS_SUB;
           return '<button class="ckrow' + (done ? ' done' : '') + '" data-sub="' + s.id + '"><span class="ck-box">' + (done ? '✓' : '') + '</span><span class="ck-txt"><span class="ck-name">' + esc(s.name) + '</span><span class="ck-sub">' + esc(s.cefr) + ' · ' + s.items.length + ' questions' + (rec ? ' · best ' + pct(rec.best) + '%' : '') + '</span></span><span class="ck-go">' + (done ? 'again' : 'open') + ' →</span></button>';
         }).join('') +
         '<button class="ckrow' + (green ? ' done' : '') + '" data-check="' + lv.id + '"' + (P.checkUnlocked(p, lv) ? '' : ' disabled') + '><span class="ck-box">' + (green ? '✓' : '') + '</span><span class="ck-txt"><span class="ck-name">Systems check</span><span class="ck-sub">' + (P.checkUnlocked(p, lv) ? lv.check.items.length + ' questions · pass at 75%' : 'clear the three modules first') + (ck ? ' · best ' + pct(ck.best) + '%' : '') + '</span></span><span class="ck-go">go →</span></button>' +
+        '</div></div></div>' +
         '</div></div>';
     });
     html += '</div>';
@@ -298,6 +303,7 @@
     $('#view-plan').querySelectorAll('[data-check]').forEach(function (b) { b.addEventListener('click', function () { S.planReturn = true; startCheck(b.dataset.check); }); });
     $('#view-plan').querySelectorAll('[data-assign]').forEach(function (b) { b.addEventListener('click', function () { startAssignment(b.dataset.assign); }); });
     $('#plan-boot').addEventListener('click', function () { show('bootcamp'); });
+    wireMedia($('#view-plan'));
   }
 
   /* =====================================================================
@@ -314,6 +320,7 @@
       html += '<div class="sys' + (green ? ' done' : '') + (open ? ' exp' : '') + '"><button class="sys-head" data-sys="' + t.id + '">' + E.artBand(t.art, 'sys-art') +
         '<span class="sys-meta"><span class="sys-line1"><span class="sys-code">' + esc(t.code) + '</span><span class="sys-name">' + esc(t.name) + '</span><span class="pill">' + esc(t.cefr) + '</span>' + (green ? '<span class="pill good">Green</span>' : '') + '</span>' +
         '<span class="sys-blurb">' + esc(t.blurb) + '</span><span class="sys-prog"><span class="bar-line"><span style="width:' + tp + '%"></span></span><span class="sys-pct">' + tp + '%</span></span></span><span class="caret">›</span></button>';
+      html += resStrip(t);
       if (open) {
         html += '<div class="sys-body">' + lv.subs.map(function (s) {
           var rec = p.subs[s.id], done = rec && rec.best >= E.PASS_SUB;
@@ -329,6 +336,169 @@
     $('#view-map').querySelectorAll('[data-sys]').forEach(function (b) { b.addEventListener('click', function () { S.sysOpen = S.sysOpen === b.dataset.sys ? null : b.dataset.sys; paintMap(); }); });
     $('#view-map').querySelectorAll('[data-sub]').forEach(function (b) { b.addEventListener('click', function () { S.planReturn = false; openSub(b.dataset.sub); }); });
     $('#view-map').querySelectorAll('[data-check]').forEach(function (b) { b.addEventListener('click', function () { S.planReturn = false; startCheck(b.dataset.check); }); });
+    wireMedia($('#view-map'));
+  }
+
+  /* =====================================================================
+     MODULE MEDIA — the podcast and the video for each module (media.js).
+     The same players are mounted in four places: the module header on the
+     Modules map, each module card on the Flight plan, each module group on
+     the Fault list, and the Videos / Podcasts tabs. Listening is tracked on
+     the progress object (p.media[moduleId]) wherever it happens, so the
+     Flight Deck sees who has heard what.
+     ===================================================================== */
+  function mediaRec(topicId) {
+    if (!S.p.media) S.p.media = {};
+    return S.p.media[topicId] || (S.p.media[topicId] = { plays: 0, seconds: 0, done: false });
+  }
+  function mdOf(topicId) { return (S.p.media || {})[topicId] || {}; }
+  function ytId(url) {
+    var m = String(url || '').match(/(?:youtu\.be\/|[?&]v=|\/embed\/|\/shorts\/|\/live\/)([A-Za-z0-9_-]{6,})/);
+    return m ? m[1] : '';
+  }
+  function stopAllAudio() { document.querySelectorAll('audio').forEach(function (a) { try { a.pause(); } catch (e) {} }); }
+  function mediaDrop(key) { return '<div class="res-drop" id="drop-' + key + '"></div>'; }
+
+  /* The pill strip under a module header on the Modules map. */
+  function resStrip(t) {
+    var md = mdOf(t.id), lv = t.levels[0];
+    var doneSubs = P.subsDone ? P.subsDone(S.p, lv) : lv.subs.filter(function (sb) { var r = S.p.subs[sb.id]; return r && r.best >= E.PASS_SUB; }).length;
+    var h = '<div class="sys-res">';
+    if (t.podcast) h += '<button class="res' + (md.done ? ' done' : '') + '" data-pod="' + t.id + '" data-drop="map-' + t.id + '"><span class="res-i">' + (md.done ? '✓' : '♪') + '</span>Podcast' +
+      (!md.done && md.seconds ? '<span class="res-x">' + Math.round(md.seconds / 60) + 'm in</span>' : '') + '</button>';
+    if (t.video) h += '<button class="res' + (md.videoOpens ? ' done' : '') + '" data-vid="' + t.id + '"><span class="res-i">▶</span>Video</button>';
+    h += '<button class="res go' + (doneSubs === lv.subs.length ? ' done' : '') + '" data-sysopen="' + t.id + '"><span class="res-i">' + (doneSubs === lv.subs.length ? '✓' : '▤') + '</span>Complete modules<span class="res-x">' + doneSubs + ' of ' + lv.subs.length + '</span></button>';
+    return h + mediaDrop('map-' + t.id) + '</div>';
+  }
+  /* The tall buttons beside a checklist group (Flight plan, Fault list). */
+  function ckMedia(t, key) {
+    if (!t.podcast && !t.video) return '';
+    var md = mdOf(t.id), h = '<div class="ckmedia">';
+    if (t.podcast) h += '<button class="ckpod' + (md.done ? ' done' : '') + '" data-pod="' + t.id + '" data-drop="' + key + '" title="' + esc(t.name) + ' — the podcast"><span class="res-i">' + (md.done ? '✓' : '♪') + '</span><span class="ckpod-l">Podcast</span></button>';
+    if (t.video) h += '<button class="ckpod' + (md.videoOpens ? ' done' : '') + '" data-vid="' + t.id + '" title="' + esc(t.name) + ' — the video"><span class="res-i">▶</span><span class="ckpod-l">Video</span></button>';
+    return h + '</div>';
+  }
+  function wireMedia(root) {
+    if (!root) return;
+    root.querySelectorAll('[data-pod]').forEach(function (b) {
+      b.addEventListener('click', function (ev) { ev.stopPropagation(); togglePodcast($('#drop-' + b.dataset.drop), E.Bank.topic(b.dataset.pod)); });
+    });
+    root.querySelectorAll('[data-vid]').forEach(function (b) {
+      b.addEventListener('click', function (ev) { ev.stopPropagation(); playVideo(E.Bank.topic(b.dataset.vid)); });
+    });
+    root.querySelectorAll('[data-sysopen]').forEach(function (b) {
+      b.addEventListener('click', function (ev) {
+        ev.stopPropagation();
+        S.sysOpen = S.sysOpen === b.dataset.sysopen ? null : b.dataset.sysopen;
+        paintMap();
+      });
+    });
+  }
+
+  /* The listening bookkeeping, shared by every player in the app. */
+  function wirePodAudio(a, topicId, onMissing) {
+    var mark = 0, r = mdOf(topicId);
+    function rec() { r = mediaRec(topicId); return r; }
+    a.addEventListener('error', function () { a.style.display = 'none'; if (onMissing) onMissing(); });
+    if (r.seconds && !r.done) {
+      a.addEventListener('loadedmetadata', function () {
+        if (r.seconds < a.duration - 5) { a.currentTime = r.seconds; mark = r.seconds; }
+      });
+    }
+    a.addEventListener('play', function () {
+      document.querySelectorAll('audio').forEach(function (o) { if (o !== a) o.pause(); });
+      rec(); r.plays = (r.plays || 0) + 1; r.last = new Date().toISOString(); syncSoon();
+    });
+    a.addEventListener('seeked', function () { mark = a.currentTime; });
+    a.addEventListener('pause', syncSoon);
+    a.addEventListener('timeupdate', function () {
+      if (a.currentTime - mark < 10) return;
+      rec(); r.seconds = Math.round((r.seconds || 0) + (a.currentTime - mark));
+      mark = a.currentTime;
+    });
+    a.addEventListener('ended', function () { rec(); r.done = true; r.seconds = Math.round(a.duration || r.seconds || 0); sync(); });
+  }
+
+  /* The inline player, toggled open under whichever button asked for it. */
+  function togglePodcast(drop, t) {
+    if (!drop || !t || !t.podcast) return;
+    if (drop.dataset.open === 'pod') { stopAllAudio(); drop.dataset.open = ''; drop.innerHTML = ''; return; }
+    var r = mdOf(t.id);
+    drop.dataset.open = 'pod';
+    drop.innerHTML = '<div class="pod"><div class="pod-t">' +
+      '<span class="pod-n">' + esc(t.code) + ' · ' + esc(t.name) + ' — the podcast</span>' +
+      '<span class="pod-s">' + (r.done ? 'You have listened to this one' : r.seconds ? 'Picking up ' + Math.round(r.seconds / 60) + ' min in' : 'Listen before the questions') + '</span></div>' +
+      '<audio class="pod-a" controls preload="none" src="' + esc(t.podcast) + '"></audio></div>';
+    var a = drop.querySelector('audio');
+    wirePodAudio(a, t.id, function () { drop.querySelector('.pod-s').textContent = 'This episode has not been uploaded yet'; });
+    a.addEventListener('ended', function () { toast('Episode finished. Now try the questions.'); });
+    a.play().catch(function () {});
+  }
+
+  /* Opening a video is tracked the same way, whichever button started it. */
+  function playVideo(t) {
+    if (!t || !t.video) return;
+    var r = mediaRec(t.id);
+    r.videoOpens = (r.videoOpens || 0) + 1;
+    r.last = new Date().toISOString();
+    syncSoon();
+    stopAllAudio();
+    var id = ytId(t.video);
+    modal('<p class="kicker">' + esc(t.code) + ' · video</p>' +
+      '<h3 style="font-size:1.2rem">' + esc(t.name) + '</h3>' +
+      (id ? '<div class="ytbox"><iframe src="https://www.youtube-nocookie.com/embed/' + esc(id) + '?rel=0&autoplay=1" ' +
+        'title="' + esc(t.name) + '" frameborder="0" allowfullscreen ' +
+        'allow="accelerometer; autoplay; encrypted-media; picture-in-picture"></iframe></div>' : '<p class="tiny">This video link could not be read.</p>') +
+      '<a class="btn wide" href="' + esc(t.video) + '" target="_blank" rel="noopener">Open on YouTube</a>' +
+      '<button class="btn ghost wide" data-close>Close</button>');
+  }
+
+  /* ------------------------------------------------------------ VIDEOS tab */
+  function paintVids() {
+    var withVideo = C.TOPICS.filter(function (t) { return t.video; });
+    var html = '<div class="sect-h"><div><h2>Videos</h2><p>' + (withVideo.length
+      ? 'Watch a module explained. They play here — no need to leave the app.'
+      : 'The module videos are on their way. Each one will appear here, on its module header and on the Flight plan as soon as it is added.') + '</p></div></div>';
+    html += '<div class="vidlist">';
+    withVideo.forEach(function (t) {
+      var md = mdOf(t.id), id = ytId(t.video);
+      html += '<div class="vidrow' + (md.videoOpens ? ' done' : '') + '"><h3><span>' + esc(t.code) + '</span>' + esc(t.name) + '</h3>' +
+        (id ? '<div class="ytbox"><iframe loading="lazy" src="https://www.youtube-nocookie.com/embed/' + esc(id) + '?rel=0" title="' + esc(t.name) + '" frameborder="0" allowfullscreen allow="accelerometer; encrypted-media; picture-in-picture" data-vid-topic="' + t.id + '"></iframe></div>'
+            : '<p class="vid-soon">This video link could not be read.</p>') + '</div>';
+    });
+    html += '</div>';
+    $('#view-vids').innerHTML = html;
+    /* An embedded player gives no play event across origins, so count the
+       first time a student puts a finger or pointer on it. */
+    $('#view-vids').querySelectorAll('iframe[data-vid-topic]').forEach(function (f) {
+      var once = false;
+      function mark() {
+        if (once) return; once = true;
+        var r = mediaRec(f.dataset.vidTopic);
+        r.videoOpens = (r.videoOpens || 0) + 1; r.last = new Date().toISOString(); syncSoon();
+      }
+      f.addEventListener('mouseenter', mark);
+      f.addEventListener('touchstart', mark, { passive: true });
+    });
+  }
+
+  /* ---------------------------------------------------------- PODCASTS tab */
+  function paintPods() {
+    var html = '<div class="sect-h"><div><h2>Podcasts</h2><p>One episode for each module. Nothing to answer — put them on for the ride to school.</p></div>' +
+      '<a class="btn sm" href="podcasts.html">Open without signing in</a></div>';
+    html += '<div class="podlist">';
+    C.TOPICS.forEach(function (t) {
+      if (!t.podcast) return;
+      var md = mdOf(t.id);
+      html += '<div class="podrow' + (md.done ? ' done' : '') + '"><h3><span>' + esc(t.code) + (md.done ? ' · LISTENED ✓' : md.seconds ? ' · ' + Math.round(md.seconds / 60) + ' MIN IN' : '') + '</span>' + esc(t.name) + '</h3>' +
+        '<audio class="pod-a" controls preload="none" data-pod-topic="' + t.id + '" src="' + esc(t.podcast) + '"></audio>' +
+        '<p class="podrow-miss">This episode has not been uploaded yet.</p></div>';
+    });
+    html += '</div>';
+    $('#view-pods').innerHTML = html;
+    $('#view-pods').querySelectorAll('audio[data-pod-topic]').forEach(function (a) {
+      wirePodAudio(a, a.dataset.podTopic, function () { var row = a.closest('.podrow'); if (row) row.classList.add('missing'); });
+    });
   }
 
   function openSub(subId) {
@@ -631,6 +801,53 @@
   /* =====================================================================
      FAULT LIST
      ===================================================================== */
+  /* Which sub-module an item belongs to. A systems-check question is sent to
+     the sub-module of its module that teaches the same error tag. */
+  var ITEM_SUB = null;
+  function itemSubId(id) {
+    if (!ITEM_SUB) {
+      ITEM_SUB = {};
+      C.TOPICS.forEach(function (t) {
+        t.levels.forEach(function (lv) {
+          var tagSub = {};
+          lv.subs.forEach(function (sb) { sb.items.forEach(function (it) { ITEM_SUB[it.id] = sb.id; if (!tagSub[it.tag]) tagSub[it.tag] = sb.id; }); });
+          (lv.check.items || []).forEach(function (it) { ITEM_SUB[it.id] = tagSub[it.tag] || lv.subs[0].id; });
+        });
+      });
+    }
+    return ITEM_SUB[id];
+  }
+  /* The lessons to go back to, built from the questions this student missed:
+     one group per module (the costliest first), the module's podcast and
+     video beside it, and a row for each sub-module with its missed count. */
+  function faultChecklist(all, due) {
+    var dueSet = {}; due.forEach(function (id) { dueSet[id] = 1; });
+    var byTopic = {}, order = [];
+    all.forEach(function (id) {
+      var sb = E.Bank.sub(itemSubId(id));
+      if (!sb) return;
+      var tid = sb.topicId;
+      if (!byTopic[tid]) { byTopic[tid] = { n: 0, subs: {}, subOrder: [] }; order.push(tid); }
+      var g = byTopic[tid]; g.n++;
+      if (!g.subs[sb.id]) { g.subs[sb.id] = { n: 0, due: 0 }; g.subOrder.push(sb.id); }
+      g.subs[sb.id].n++; if (dueSet[id]) g.subs[sb.id].due++;
+    });
+    if (!order.length) return '';
+    order.sort(function (a, b) { return byTopic[b].n - byTopic[a].n; });
+    var html = '<div class="sect-h" style="margin-top:22px"><div><h2 style="font-size:1.1rem">Lessons to go back to</h2><p>Built from the questions you missed. Listen to the module first, then reopen the lesson.</p></div></div><div class="fx-groups">';
+    order.forEach(function (tid) {
+      var t = E.Bank.topic(tid), g = byTopic[tid];
+      if (!t) return;
+      html += '<div class="step"><div class="step-h"><span class="step-n">' + t.n + '</span><span class="step-t"><span class="step-name">' + esc(t.name) + '</span><span class="step-s">' + g.n + (g.n === 1 ? ' question' : ' questions') + ' on your fault list</span></span></div>' +
+        '<div class="step-b"><div class="ckgroup">' + mediaDrop('fx-' + tid) + '<div class="ckgrid">' + ckMedia(t, 'fx-' + tid) + '<div class="ckstack">' +
+        g.subOrder.map(function (sid) {
+          var sb = E.Bank.sub(sid), c = g.subs[sid];
+          return '<button class="ckrow" data-fx-sub="' + sid + '"><span class="ck-box"></span><span class="ck-txt"><span class="ck-name">' + esc(sb.name) + '</span><span class="ck-sub">' + esc(t.code) + ' · ' + c.n + (c.n === 1 ? ' question' : ' questions') + ' missed' + (c.due ? ' · ' + c.due + ' due now' : '') + '</span></span><span class="ck-go">open →</span></button>';
+        }).join('') + '</div></div></div></div></div>';
+    });
+    return html + '</div>';
+  }
+
   function paintFaults() {
     var due = P.dueReview(S.p), all = Object.keys(S.p.review).filter(function (id) { return E.Bank.item(id); });
     var html = '<div class="sect-h"><div><h2>Fault list</h2><p>Every question you get wrong is logged here and comes back a day or two later. Get one right twice in a row and it clears for good. The gap is the point.</p></div></div>';
@@ -641,8 +858,11 @@
       html += '<div style="display:flex;flex-direction:column;gap:7px">' + Object.keys(tagCount).sort(function (a, b) { return tagCount[b] - tagCount[a]; }).map(function (t) { return '<div style="display:flex;justify-content:space-between;gap:12px;font-size:.9rem"><span>' + esc((C.REMEDIATION[t] || {}).name || t) + '</span><span style="color:var(--ink-3);font-family:var(--f-mono);font-size:.82rem">' + tagCount[t] + '</span></div>'; }).join('') + '</div>';
       html += due.length ? '<button class="btn primary wide" id="fx-go">Clear ' + Math.min(due.length, 12) + ' now</button>' : '<p class="tiny">Nothing is due yet. Questions come back after a day or two.</p>';
       html += '</div>';
+      html += faultChecklist(all, due);
     }
     $('#view-faults').innerHTML = html;
+    wireMedia($('#view-faults'));
+    $('#view-faults').querySelectorAll('[data-fx-sub]').forEach(function (b) { b.addEventListener('click', function () { S.planReturn = false; openSub(b.dataset.fxSub); }); });
     var g = $('#fx-go');
     if (g) g.addEventListener('click', function () { S.planReturn = false; startRun('faults', E.shuffle(due).slice(0, 12).map(E.Bank.item), { title: 'Fault list' }); });
   }

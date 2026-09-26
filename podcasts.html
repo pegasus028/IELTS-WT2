@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Position Control — Podcasts</title>
+<meta name="description" content="The fourteen module introductions for IELTS Academic Writing Task 2. Listen anywhere.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>&#127911;</text></svg>">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600&display=swap">
+<style>
+/* A page for the bus. No sign-in, no navigation, nothing to decide: eight
+   names and eight play buttons. It loads media.js and nothing else, so it is
+   a few kilobytes over mobile data rather than the whole item bank. */
+:root{
+  --navy:#0B2545; --ink:#12202E; --ink-2:#4A5C6E; --ink-3:#7C8A98;
+  --bg:#EEF2F6; --surface:#FFFFFF; --rule:#DCE3EA; --accent:#12557A;
+  --r:14px;
+}
+@media (prefers-color-scheme:dark){
+  :root{ --ink:#E8EEF4; --ink-2:#A8B6C2; --ink-3:#7C8A98;
+         --bg:#0E1620; --surface:#16212D; --rule:#26323F; --accent:#7FC2E8; }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);color:var(--ink);
+  font-family:Figtree,system-ui,-apple-system,"Segoe UI",sans-serif;
+  line-height:1.5;padding-bottom:40px;
+}
+.ribbon{
+  background:var(--navy);color:#fff;padding:11px 16px;text-align:center;
+  font-weight:600;font-size:.98rem;
+}
+.ribbon a{
+  display:inline-block;color:#fff;text-decoration:none;font-weight:800;
+  padding:2px 12px;border-radius:99px;margin-left:8px;
+  background:rgba(255,255,255,.16);border:1.5px solid rgba(255,255,255,.5);
+}
+main{max-width:640px;margin:0 auto;padding:26px 16px 0}
+h1{font-family:"Bricolage Grotesque",Figtree,sans-serif;font-weight:800;font-size:1.9rem;line-height:1.1}
+.sub{color:var(--ink-2);font-size:.95rem;margin-top:7px}
+ol{list-style:none;margin-top:22px;display:flex;flex-direction:column;gap:12px}
+li{
+  background:var(--surface);border:1px solid var(--rule);border-radius:var(--r);
+  padding:15px 17px;display:flex;flex-direction:column;gap:11px;
+}
+h2{
+  font-family:"Bricolage Grotesque",Figtree,sans-serif;font-weight:600;
+  font-size:1.08rem;line-height:1.25;
+}
+h2 span{
+  display:block;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:10px;letter-spacing:.1em;color:var(--ink-3);font-weight:400;margin-bottom:3px;
+}
+audio{width:100%;height:40px}
+.missing{font-size:.88rem;color:var(--ink-3)}
+footer{max-width:640px;margin:26px auto 0;padding:0 16px;color:var(--ink-3);font-size:.85rem}
+footer a{color:var(--accent)}
+</style>
+</head>
+<body>
+
+<div class="ribbon">Contact T.Chris for more info on Line ID:
+  <a href="https://line.me/ti/p/s8-dggjcqD" target="_blank" rel="noopener">pegasus028</a>
+</div>
+
+<main>
+  <h1>IELTS Writing Task 2 — the fourteen introductions</h1>
+  <p class="sub">One episode for each module. Nothing to answer — put them on for the ride to school.</p>
+  <ol id="list"></ol>
+</main>
+
+<footer>
+  <p>Working on the questions instead? <a href="index.html">Open the study portal</a>.</p>
+</footer>
+
+<script src="media.js?v=1"></script>
+<script>
+(function () {
+  var list = document.getElementById('list');
+  var n = 0;
+  Object.keys(MEDIA).forEach(function (id) {
+    var m = MEDIA[id];
+    if (!m || !m.podcast) return;
+    n++;
+    var li = document.createElement('li');
+    var h = document.createElement('h2');
+    var tag = document.createElement('span');
+    var parts = String(m.title || id).split(' · ');
+    tag.textContent = parts.length > 1 ? parts[0].toUpperCase() : 'MODULE';
+    h.appendChild(tag);
+    h.appendChild(document.createTextNode(parts.length > 1 ? parts.slice(1).join(' · ') : (m.title || id)));
+    li.appendChild(h);
+
+    var a = document.createElement('audio');
+    a.controls = true;
+    a.preload = 'none';
+    a.src = m.podcast;
+    li.appendChild(a);
+
+    /* An episode that has not been uploaded yet says so, rather than showing a
+       player that does nothing when a student taps it on a moving bus. */
+    var miss = document.createElement('p');
+    miss.className = 'missing';
+    miss.textContent = 'This episode has not been uploaded yet.';
+    miss.hidden = true;
+    li.appendChild(miss);
+    a.addEventListener('error', function () { a.hidden = true; miss.hidden = false; });
+
+    /* Where they left off, kept in this browser only. Nothing is sent
+       anywhere: this page has no sign-in and no server. */
+    var key = 'pc.pod.' + id;
+    a.addEventListener('loadedmetadata', function () {
+      try {
+        var at = parseFloat(localStorage.getItem(key) || '0');
+        if (at > 5 && at < a.duration - 10) a.currentTime = at;
+      } catch (e) {}
+    });
+    var mark = 0;
+    a.addEventListener('timeupdate', function () {
+      if (a.currentTime - mark < 10) return;
+      mark = a.currentTime;
+      try { localStorage.setItem(key, String(Math.round(a.currentTime))); } catch (e) {}
+    });
+    a.addEventListener('ended', function () {
+      try { localStorage.removeItem(key); } catch (e) {}
+    });
+    /* One at a time, so tapping a second episode stops the first. */
+    a.addEventListener('play', function () {
+      list.querySelectorAll('audio').forEach(function (other) {
+        if (other !== a) other.pause();
+      });
+    });
+
+    list.appendChild(li);
+  });
+  if (!n) list.innerHTML = '<li class="missing">No episodes have been added yet.</li>';
+})();
+</script>
+</body>
+</html>

@@ -208,6 +208,21 @@
       if (strong.length) h += '<div class="rep-block good"><div class="rep-h"><h4>Secure</h4></div><p class="rep-p">' + strong.map(function (s) { return esc(s.info.name || s.tag) + ' (' + Math.round(s.rate * 100) + '%)'; }).join(' · ') + '</p></div>';
       h += '</div></details>';
       /* modules */
+      /* Podcasts and videos: who has listened to or watched what (media.js). */
+      var withMedia = C.TOPICS.filter(function (x) { return x.podcast || x.video; });
+      if (withMedia.length) {
+        var md = p.media || {};
+        var heard = withMedia.filter(function (x) { var r = md[x.id]; return r && (r.plays || r.videoOpens); }).length;
+        h += '<details class="disc"><summary>Podcasts &amp; videos<span class="count">' + heard + ' of ' + withMedia.length + ' opened</span></summary><div class="disc-body" style="padding-top:10px;overflow:auto"><table class="roster" style="min-width:0"><thead><tr><th>Module</th><th>Podcast</th><th>Listened</th><th>Video</th><th>Last</th></tr></thead><tbody>' +
+          withMedia.map(function (x) {
+            var r = md[x.id] || {}, none = !r.plays && !r.videoOpens;
+            return '<tr' + (none ? ' style="background:var(--no-soft)"' : '') + '><td>' + esc(x.code) + ' · ' + esc(x.name) + '</td>' +
+              '<td>' + (x.podcast ? (r.done ? '✓ finished' : (r.plays || 0) + ' play' + (r.plays === 1 ? '' : 's')) : '—') + '</td>' +
+              '<td>' + (r.seconds ? Math.round(r.seconds / 60) + ' min' : '—') + '</td>' +
+              '<td>' + (x.video ? (r.videoOpens ? r.videoOpens + ' open' + (r.videoOpens === 1 ? '' : 's') : '0') : '—') + '</td>' +
+              '<td>' + (r.last ? esc(String(r.last).slice(0, 10)) : '—') + '</td></tr>';
+          }).join('') + '</tbody></table><p class="tiny" style="margin-top:8px">Rows in red have never been opened. A student stuck on a module who never played its introduction is a different teaching problem from one who did.</p></div></details>';
+      }
       h += '<details class="disc"><summary>Modules<span class="count">' + P.checksCleared(p) + ' green</span></summary><div class="disc-body" style="padding-top:10px"><div class="sysbars">' + P.systemScores(p).map(function (r) { return '<div class="sysbar"><span>' + esc(r.code) + ' · ' + esc(r.name) + '</span><span class="sysbar-b"><i style="width:' + r.pct + '%"></i></span><span class="sysbar-n">' + r.pct + '%</span></div>'; }).join('') + '</div></div></details>';
       /* log */
       var attempts = (d.attempts || []).filter(function (a) { return a && a.itemId; }).slice().reverse().slice(0, 60);
