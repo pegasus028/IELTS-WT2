@@ -30,8 +30,9 @@ var LAB_SHEETS = {
   LabAttempts: ['id', 'studentId', 'ts', 'templateId', 'pct', 'level', 'promptId', 'timing', 'version', 'words', 'share', 'overall', 'points', 'seconds', 'status', 'json']
 };
 var LAB_DEFAULTS = {
-  LAB_COACH_MODELS: 'claude-haiku-4-5-20251001,claude-sonnet-4-6',
-  LAB_RATE_MODELS: 'claude-sonnet-4-6,claude-haiku-4-5-20251001',
+  /* Tried in order: if a model is retired or busy, the next one answers. */
+  LAB_COACH_MODELS: 'claude-haiku-5-5,claude-sonnet-5-5,claude-haiku-4-5-20251001,claude-sonnet-4-6',
+  LAB_RATE_MODELS: 'claude-sonnet-5-5,claude-sonnet-4-6,claude-haiku-5-5,claude-haiku-4-5-20251001',
   LAB_STUDENT_DAILY: '250',
   LAB_DAILY: '4000'
 };
@@ -323,4 +324,25 @@ function LAB_rate_(p) {
   if (!/^(A1|A2|B1|B2|C1|C2)$/.test(r.cefr)) r.cefr = '';
   r.strengths = (r.strengths || []).slice(0, 3); r.priorities = (r.priorities || []).slice(0, 3);
   return r;
+}
+
+/* ------------------------------------------------------ setup check
+   In the Apps Script editor: choose testLabAI in the function menu next
+   to Run, press Run, then open the Execution log. It says whether the key
+   is set and which model answered. Costs one tiny AI call.            */
+function testLabAI() {
+  var key = LAB_key_();
+  if (!key) { Logger.log('NO KEY: add the Script property ANTHROPIC_API_KEY (Project Settings > Script properties).'); return; }
+  Logger.log('Key found (' + key.slice(0, 7) + '...' + key.slice(-4) + '). Asking the coach models in turn...');
+  var models = LAB_prop_('LAB_COACH_MODELS').split(',').map(function (m) { return m.trim(); }).filter(String);
+  for (var i = 0; i < models.length; i++) {
+    var res = UrlFetchApp.fetch('https://api.anthropic.com/v1/messages', {
+      method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+      headers: { 'x-api-key': key, 'anthropic-version': '2023-06-01' },
+      payload: JSON.stringify({ model: models[i], max_tokens: 20, messages: [{ role: 'user', content: 'Reply with the word OK.' }] })
+    });
+    Logger.log(models[i] + ': HTTP ' + res.getResponseCode() + (res.getResponseCode() === 200 ? '  <- working' : '  ' + res.getContentText().slice(0, 160)));
+    if (res.getResponseCode() === 200) { Logger.log('AI coaching is ready. Remember: Deploy > Manage deployments > pencil > Version: New version > Deploy.'); return; }
+  }
+  Logger.log('No model answered. HTTP 401 = wrong key; 400 with "credit" = no API credit; 404 = model name not available to this key.');
 }
