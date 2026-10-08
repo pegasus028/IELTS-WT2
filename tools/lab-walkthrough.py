@@ -83,7 +83,7 @@ def build_blueprint(page, s, pct, src_id, coaching, first_ever):
     for i, lid in enumerate(LINE_IDS):
         for c in [c for c in coaching if c['share'] == pct and c['line'] == lid]:
             fb = coach_line(page, c['first'])
-            if first_ever or pct == '30': shot(page, '04-line-flagged' if pct == '60' else '09-line-flagged-30', '#lab-line', 330)
+            if first_ever or pct == '30': shot(page, '04-line-flagged' if pct == '60' else '09-line-flagged-30', '#lab-fb', 250)
         fb = coach_line(page, lines[lid])
         if 'Fix this first' in fb: raise SystemExit('BLOCKED %s %s %s: %s' % (s['id'], pct, lid, fb))
         if first_ever and lid == 'a-mech': shot(page, '05a-line-card', '.lab-comp'); shot(page, '05b-test-drive', '#lab-drive', 175); shot(page, '05c-line-coached', '#lab-fb', 300)

@@ -506,10 +506,19 @@
     if (/(^|[.!?]\s+|\s)i\s/.test(' ' + text)) out.push({ original: 'i', correction: 'I', type: 'spelling', explain: 'The pronoun I is always a capital letter.' });
     return out;
   }
+  /* A contraction is a register error, so it is counted with the errors. */
+  var FULL = { "can't": 'cannot', "won't": 'will not', "shan't": 'shall not', "it's": 'it is', "there's": 'there is', "that's": 'that is', "they're": 'they are', "we're": 'we are', "i'm": 'I am', "you're": 'you are', "let's": 'let us' };
+  function contractionErrors(text) {
+    var out = [], re = new RegExp(CONTRACTION.source, 'gi'), m;
+    while ((m = re.exec(String(text)))) {
+      var w = m[0], low = w.toLowerCase().replace(/’/g, "'");
+      out.push({ original: w, correction: FULL[low] || low.replace(/n't$/, ' not'), type: 'register', explain: 'Contraction: write the full form in an academic essay.' });
+    }
+    return out;
+  }
   function styleIssues(text, isTopicLine) {
     var out = [];
     (W && W.LEX ? W.LEX.CLICHE : []).concat(EXTRA_CLICHE).forEach(function (re) { var m = String(text).match(re); if (m) out.push({ kind: 'warn', msg: '"' + m[0] + '" reads as memorised: examiners spot it at once. Say it your own way.' }); });
-    if (CONTRACTION.test(text)) out.push({ kind: 'warn', msg: 'Contraction: write the full form (it is, do not) in an academic essay.' });
     if (INFORMAL.test(text)) out.push({ kind: 'warn', msg: 'Informal word: "' + String(text).match(INFORMAL)[0] + '". Choose a formal one.' });
     if (isTopicLine && W && W.LEX && W.LEX.LINKER_HEAD.test(String(text).trim())) out.push({ kind: 'warn', msg: 'Starts with a robotic linker ("' + String(text).trim().match(W.LEX.LINKER_HEAD)[0].replace(/,$/, '') + '"). Connect the paragraphs through meaning instead.' });
     if (/\s{2,}/.test(text)) out.push({ kind: 'tip', msg: 'Double space.' });
@@ -545,7 +554,7 @@
     if (text && !/^\{/.test(text) && /^[a-z]/.test(text)) res.errors.push({ original: text.split(/\s+/)[0], correction: text.charAt(0).toUpperCase() + text.split(/\s+/)[0].slice(1), type: 'punctuation', explain: 'A sentence starts with a capital letter.' });
     if (!/[.!?:;]$/.test(text) && !/\}$/.test(text)) res.errors.push({ original: text.slice(-12), correction: text.slice(-12) + '.', type: 'punctuation', explain: 'End the line with a full stop.' });
     if (/\}$/.test(text)) res.issues.push({ kind: 'tip', msg: 'Add the full stop after the slot: "…[' + L.SLOT_LABEL[toks[toks.length - 1]] + ']."' });
-    res.errors = res.errors.concat(spellErrors(frameText(text)));
+    res.errors = res.errors.concat(spellErrors(frameText(text)), contractionErrors(frameText(text)));
     res.issues = res.issues.concat(styleIssues(first || text, comp.id === 'a-topic' || comp.id === 'b-topic'));
     return res;
   }
@@ -579,7 +588,7 @@
       res.hasSecond = !!value2;
       res.reworded = !!value2 && similarity(value, value2) <= 0.7;
     }
-    res.errors = spellErrors(value + (value2 ? ' ' + value2 : ''));
+    res.errors = spellErrors(value + (value2 ? ' ' + value2 : '')).concat(contractionErrors(value + (value2 ? ' ' + value2 : '')));
     res.issues = res.issues.concat(styleIssues(value));
     return res;
   }

@@ -346,5 +346,28 @@
         "why": "dangling participle: the person doing the thinking must be the subject"
       }
     ]
-  }
+  },
+  "coaching": [
+    {
+      "share": "60",
+      "line": "a-topic",
+      "first": "Firstly, the first view is about [Facet A].",
+      "flagged": "6 template words: under the 9–18 budget. Starts with a robotic linker (\"Firstly\"): connect the paragraphs through meaning instead.",
+      "fixed": "The first view is mainly about [Facet A], which many people see as very important."
+    },
+    {
+      "share": "60",
+      "line": "i-position",
+      "first": "I believe that [Position], and this essay explains why.",
+      "flagged": "Too close to an example (\"I believe that [Position], and this essay explains why.\"): the template must be in your own words.",
+      "fixed": "After looking carefully at both sides, I believe that [Position]."
+    },
+    {
+      "share": "30",
+      "line": "i-position",
+      "first": "I'm sure that [Position].",
+      "flagged": "Contraction: write the full form (it is, do not) in an academic essay.",
+      "fixed": "My view is that [Position]."
+    }
+  ]
 }
