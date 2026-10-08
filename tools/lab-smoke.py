@@ -119,12 +119,36 @@ with sync_playwright() as pw:
     for i, (cid, line) in enumerate(LINES.items()):
         page.fill('#lab-line', line)
         page.click('#lab-coach'); page.wait_for_selector('#lab-fb .lab-fb', timeout=15000)
-        if i == 0: shot(page, '03-line-feedback')
+        if i == 0:
+            shot(page, '03-line-feedback')
+            d = page.inner_text('#lab-drive-para'); print('  test drive, line 1:', d[:160])
+            assert page.query_selector('#lab-drive-para .lab-drive-line.cur') and 'flood' in d, d
+        if i == 4:
+            notes = page.inner_text('#lab-drive-notes'); print('  test drive notes, line 5:', notes.replace('\n', ' | ')[:200])
+            assert '-ing phrase' in notes, notes
+            page.click('[data-dtype=PROBLEM]'); page.wait_for_timeout(100)
+            assert 'drain' in page.inner_text('#lab-drive-para').lower()
+            page.click('[data-dband="6"]'); page.wait_for_timeout(100); shot(page, '03b-test-drive')
+            assert 'Band 6 ideas' in page.inner_text('#lab-drive-notes')
+            page.click('[data-dband="8"]'); page.click('[data-dtype=DISCUSS]'); page.wait_for_timeout(100)
+        if i == 9:
+            assert 'subject of its verb' in page.inner_text('#lab-drive-notes')
         txt = page.inner_text('#lab-fb')
         if 'Fix this first' in txt: print('  BLOCKED', cid, txt); raise SystemExit(1)
         if i == 4: print('  line 5 feedback:', txt.replace('\n', ' | ')[:300])
         if i < 13: page.click('#lab-next'); page.wait_for_timeout(120)
     page.click('#lab-finishbp'); page.wait_for_selector('#lab-save'); shot(page, '04-summary')
+
+    step('test drive: the whole blueprint on the five flood prompts')
+    for ty in ['DISCUSS', 'OPINION', 'ADVANTAGE', 'PROBLEM', 'TWOPART']:
+        page.click('#lab-drivefull [data-dtype=%s]' % ty); page.wait_for_timeout(80)
+        paras = page.evaluate("Array.prototype.map.call(document.querySelectorAll('#lab-drive-essay p'), function(p){return p.innerText})")
+        txt = ' '.join(paras); kp = page.inner_text('#lab-drivefull .lab-kpis').replace('\n', ' ')
+        print('  %-9s %s' % (ty, kp[:70]))
+        assert len(paras) == 4 and '[' not in txt and 'not written yet' not in txt, txt[:300]
+    page.click('#lab-drivefull [data-dtype=DISCUSS]'); page.wait_for_timeout(80)
+    page.click('#lab-dhl'); assert 'hl' not in page.get_attribute('#lab-drive-essay', 'class')
+    page.click('#lab-dhl'); shot(page, '04b-summary-test-drive')
     page.click('#lab-save'); page.wait_for_timeout(1200)
     modal = page.query_selector('#modal-slot .modal-card')
     if modal: print('  award:', modal.inner_text().split('\n')[1:3]); page.evaluate("document.getElementById('modal-slot').innerHTML=''")

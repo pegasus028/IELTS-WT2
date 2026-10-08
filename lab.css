@@ -240,3 +240,24 @@
   .lab-ring b{width:40px;height:40px;font-size:.8rem}
   .lab-runwrap{padding-bottom:84px}
 }
+
+/* Test drive: the student's lines carrying the flood scenario's ideas */
+.lab-drive{border:1px solid var(--accent-line);border-radius:var(--r-m);padding:12px 14px;display:flex;flex-direction:column;gap:8px;background:var(--surface)}
+.lab-drive-h{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.lab-drive-h .kicker{margin:0 0 2px}
+.lab-drive-h b{font-family:var(--f-display);font-size:1rem}
+.lab-drive-ctl{display:flex;flex-direction:column;gap:6px}
+.lab-drive-f{margin:0}
+.lab-drive-q{font-size:.9rem;color:var(--ink-2)}
+.lab-drive-q summary{cursor:pointer;line-height:1.5}
+.lab-drive-q p{margin:6px 0 0;line-height:1.55;font-style:italic}
+.lab-drive-para{padding:9px 11px;border-radius:var(--r-s);background:var(--surface-2)}
+.lab-drive-para p{margin:0;font-size:.97rem;line-height:1.7}
+.lab-drive-line.cur{background:var(--gold-soft);border-bottom:2px dashed var(--gold);-webkit-box-decoration-break:clone;box-decoration-break:clone;padding:1px 0}
+.lab-drive-gap{font-family:var(--f-mono);font-size:10px;color:var(--ink-3);border:1px dashed var(--rule);border-radius:4px;padding:0 5px;white-space:nowrap}
+.lab-drive-sw{display:inline-block;width:14px;height:10px;background:var(--accent-soft);border-bottom:2px solid var(--accent-line);vertical-align:middle;margin-right:3px}
+.lab-drive-key{margin:0}
+.lab-drive-full{display:flex;flex-direction:column;gap:10px}
+.lab-drive-full .lab-ex-h{margin-top:2px}
+.lab-drive-src a{color:var(--ink-2)}
+.lab-kpi b .lab-kpi-sm{font-size:1rem;line-height:1.3}

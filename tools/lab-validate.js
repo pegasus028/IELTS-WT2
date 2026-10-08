@@ -33,5 +33,34 @@ L.PCTS.forEach(function (o) {
   if (Math.abs(sum - F) > 8) bad(o.pct + '%: component targets drift from the frame budget');
 });
 Object.keys(L.MISSPELL).forEach(function (k) { if (k === L.MISSPELL[k]) bad('misspelling maps to itself: ' + k); });
+/* lab-scenario.js: the Blueprint Studio test drive (five prompts × Band 6/7/8) */
+vm.runInContext(fs.readFileSync(path.join(ROOT, 'lab-scenario.js'), 'utf8'), ctx);
+const S = ctx.window.LabScenario;
+if (!S) bad('lab-scenario.js did not load');
+else {
+  const TYPES = ['OPINION', 'DISCUSS', 'ADVANTAGE', 'PROBLEM', 'TWOPART'];
+  TYPES.forEach(function (t) {
+    if (S.order.indexOf(t) < 0) bad('scenario order is missing ' + t);
+    const p = S.prompts[t]; if (!p) { bad('scenario has no ' + t + ' prompt'); return; }
+    if (!p.text || !p.title) bad(t + ': prompt needs text and title');
+    S.bands.forEach(function (b) {
+      const set = p.sets[b.band]; if (!set) { bad(t + ' Band ' + b.band + ': no variables'); return; }
+      KEYS.forEach(function (k) {
+        const v = set[k];
+        if (!v) return bad(t + ' ' + b.band + ': no ' + k);
+        if (/^mech/.test(k) && !(v.ing && v.clause && /^[a-z]+ing\b/.test(v.ing))) bad(t + ' ' + b.band + ' ' + k + ': needs { ing, clause } and ing must start with an -ing verb');
+        if (/^ex/.test(k) && !(v.np && v.clause)) bad(t + ' ' + b.band + ' ' + k + ': needs { np, clause }');
+        [].concat(typeof v === 'object' ? [v.ing, v.clause, v.np] : [v]).filter(Boolean).forEach(function (x) {
+          if (/[.;]$/.test(x.trim())) bad(t + ' ' + b.band + ' ' + k + ': drop the final punctuation (the frame supplies it)');
+          if (/\b(research shows|nowadays|double-edged)\b/i.test(x)) bad(t + ' ' + b.band + ' ' + k + ': cliché in "' + x + '"');
+        });
+      });
+      ['core2', 'facetA2', 'facetB2', 'position2'].forEach(function (k) { if (!set[k]) bad(t + ' ' + b.band + ': no reworded ' + k); });
+    });
+  });
+  Object.keys(S.bandFor).forEach(function (lv) { if (!L.LEVELS.some(function (l) { return l.id === lv; })) bad('scenario bandFor: unknown level ' + lv); });
+  L.LEVELS.forEach(function (l) { if (!S.bandFor[l.id]) bad('scenario bandFor: no band for level ' + l.id); });
+  console.log('  test drive: ' + TYPES.length + ' prompts × ' + S.bands.length + ' bands checked');
+}
 console.log(errors ? errors + ' problem(s)' : 'OK — Template Lab content is consistent');
 process.exit(errors ? 1 : 0);

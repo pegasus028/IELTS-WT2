@@ -36,7 +36,8 @@
     ai: null, aiNote: '',
     setup: null, build: null, run: null, review: null,
     filters: { type: 'all' }, asmTemplate: null, asmTiming: 'none', asmPrompt: null,
-    showOtherTier: false, pending: false, highlightFrame: true
+    showOtherTier: false, pending: false, highlightFrame: true,
+    drive: { open: true, type: 'DISCUSS', band: 0 }
   };
 
   /* ============================================================== helpers */
@@ -200,6 +201,181 @@
     var coached = (tpl.slotNotes || {})[key];
     if (coached) hints.unshift(coached);
     return hints.filter(function (h, i) { return hints.indexOf(h) === i; }).slice(0, 2);
+  }
+
+  /* =========================================================== TEST DRIVE
+     Drops the student's own lines into a real essay (lab-scenario.js: the
+     Bangkok floods, five prompts, ideas at Band 6/7/8) so she can see her
+     frame carrying real ideas while she builds it. The frame is always hers;
+     the scenario only fills the slots. Her lead-in decides the grammar of
+     each slot ("works by" → an -ing phrase, "because" → a clause, "A clear
+     example is" → a noun phrase), so the scenario keeps each mechanism and
+     example in more than one shape and the matching one is used.          */
+  var SCN = global.LabScenario || null;
+  var ING_BEFORE = /\b(by|through|from|via|on|upon|of|is|are|was|were|be|involves?|means?|like|without)\s*$/i;
+  var CLAUSE_BEFORE = /(\b(that|because|since|when|while|whereas|although|though|if|where|once|so|after|before|how|why)|[:;,])\s*$/i;
+  var SHAPE_NAME = { ing: 'an -ing phrase', clause: 'a full clause', np: 'a noun phrase' };
+  function driveOk() { return !!(SCN && SCN.prompts); }
+  function driveBand(t) { return st.drive.band || (SCN.bandFor[t.level] || 7); }
+  /* Which shape the frame asks for, read off the text just before the slot. */
+  function shapeAt(before, key) {
+    var b = String(before || '').replace(/\s+$/, ''), start = !b || /[.!?]$/.test(b);
+    if (/^mech/.test(key)) return start ? 'clause' : ING_BEFORE.test(b) ? 'ing' : 'clause';
+    if (/^ex/.test(key)) return start ? 'np' : CLAUSE_BEFORE.test(b) ? 'clause' : 'np';
+    return '';
+  }
+  function scnValue(set, key, n, shape) {
+    var second = n > 0 && set[key + '2'];
+    var v = second ? set[key + '2'] : set[key];
+    if (v && typeof v === 'object') v = v[shape] || v.np || v.ing || v.clause;
+    return { text: v || '', second: !!second };
+  }
+  function leadWords(plain) {
+    var w = String(plain || '').replace(/\s+$/, '').split(/\s+/).filter(Boolean);
+    if (!w.length || /[.!?]$/.test(w[w.length - 1])) return '';
+    return w.slice(-2).join(' ');
+  }
+  /* Render a whole essay from the template lines with the scenario's ideas.
+     opts.cur marks one component; opts.gaps shows lines not written yet. */
+  function driveRender(tpl, type, band, opts) {
+    opts = opts || {};
+    var set = SCN.prompts[type].sets[band], labs = labelsFor(type);
+    var seen = {}, paras = [], frameCount = 0, ownCount = 0, cur = {};
+    L.PARAS.forEach(function (pg) {
+      var plain = '', html = '';
+      L.COMPONENTS.filter(function (c) { return c.para === pg.key; }).forEach(function (c) {
+        var text = (tpl.lines[c.id] || {}).text || '';
+        if (!text.trim()) { if (opts.gaps) html += ' <span class="lab-drive-gap">line ' + c.n + ' · not written yet</span> '; return; }
+        if (plain && !/\s$/.test(plain)) plain += ' ';
+        var lh = '', re = /\{(\w+)\}/g, last = 0, m;
+        while ((m = re.exec(text))) {
+          var before = text.slice(last, m.index);
+          plain += before; lh += esc(before); frameCount += words(before);
+          var k = m[1], n = seen[k] || 0; seen[k] = n + 1;
+          var shape = shapeAt(plain, k), v = scnValue(set, k, n, shape);
+          var sofar = plain.replace(/\s+$/, ''), startsSentence = !sofar || /[.!?]$/.test(sofar);
+          var filled = v.text ? fitValue(v.text, startsSentence) : '';
+          /* close an inner ", which …" / ", when …" before the frame goes on */
+          if (filled && /,\s/.test(filled) && /^\s*[A-Za-z]/.test(text.slice(re.lastIndex))) filled += ',';
+          if (c.id === opts.cur) cur[k] = { shape: shape, lead: leadWords(plain), second: v.second, value: filled };
+          if (filled) {
+            ownCount += words(filled); plain += filled;
+            lh += '<b class="lab-own" title="' + esc('[' + (labs[k] || k) + ']') + '">' + esc(filled) + '</b>';
+          } else {
+            plain += '[' + (labs[k] || k) + ']'; lh += '<span class="slot">' + esc('[' + (labs[k] || k) + ']') + '</span>';
+          }
+          last = re.lastIndex;
+        }
+        var tail = text.slice(last); plain += tail; lh += esc(tail); frameCount += words(tail);
+        html += ' <span class="lab-drive-line' + (c.id === opts.cur ? ' cur' : '') + '" data-dc="' + c.id + '">' + lh.trim() + '</span>';
+      });
+      paras.push({ key: pg.key, text: tidy(plain), html: html.replace(/\s+/g, ' ').trim() });
+    });
+    var total = words(paras.map(function (p) { return p.text; }).join(' '));
+    return { paras: paras, words: total, frameWords: frameCount, ownWords: ownCount, share: total ? frameCount / total : 0, cur: cur };
+  }
+  /* A copy of the template with every line as the student has it now: coached
+     text, or her uncoached draft, and `override` for the line being typed. */
+  function driveTpl(t, overrideId, overrideTok) {
+    var x = { lines: {} };
+    L.COMPONENTS.forEach(function (c) {
+      var ln = t.lines[c.id] || {};
+      var txt = ln.text || (ln.draft ? toTokens(ln.draft).text : '');
+      if (c.id === overrideId) txt = overrideTok;
+      x.lines[c.id] = { text: txt || '' };
+    });
+    return x;
+  }
+  function driveControls(t) {
+    var band = driveBand(t);
+    return '<div class="lab-drive-ctl"><div class="filters lab-drive-f" role="group" aria-label="Question type">' + SCN.order.map(function (ty) {
+      return '<button data-dtype="' + ty + '"' + (st.drive.type === ty ? ' class="on"' : '') + '>' + esc(typeName(ty)) + '</button>';
+    }).join('') + '</div><div class="filters lab-drive-f" role="group" aria-label="Level of the ideas">' + SCN.bands.map(function (b) {
+      return '<button data-dband="' + b.band + '"' + (band === b.band ? ' class="on"' : '') + '>' + b.name + ' ideas</button>';
+    }).join('') + '</div></div>';
+  }
+  function bindDriveControls(t, repaint) {
+    $$('[data-dtype]').forEach(function (b) { b.addEventListener('click', function () { st.drive.type = b.dataset.dtype; repaint(); }); });
+    $$('[data-dband]').forEach(function (b) { b.addEventListener('click', function () {
+      var v = +b.dataset.dband; st.drive.band = v === (SCN.bandFor[t.level] || 7) ? 0 : v; repaint();
+    }); });
+  }
+  function drivePrompt(type) {
+    var p = SCN.prompts[type];
+    return '<details class="lab-drive-q"><summary><b>' + esc(typeName(type)) + ':</b> ' + esc(p.title) + '</summary><p>' + esc(p.text) + '</p></details>';
+  }
+  /* What the student should notice about the line she is writing. */
+  function driveNotes(t, comp, r) {
+    var notes = [], labs = labelsFor(st.drive.type);
+    comp.slots.forEach(function (k) {
+      var c = r.cur[k]; if (!c) return;
+      if (c.shape) notes.push({ kind: 'tip', msg: (c.lead ? 'After "' + c.lead + '"' : 'At the start of a sentence') + ', [' + L.SLOT_LABEL[k] + '] needs ' + SHAPE_NAME[c.shape] + ', so the idea goes in as "' + c.value + '". In the exam, write your idea in that shape.' });
+      if (c.shape === 'np' && !c.lead) notes.push({ kind: 'warn', msg: 'Your line makes [' + L.SLOT_LABEL[k] + '] the subject of its verb. If your example is plural ("the school closures"), the verb must change too ("show", not "shows"). A line that puts the slot after the verb ("A clear case is …") is safer to reuse.' });
+      if (c.second) notes.push({ kind: 'tip', msg: 'Second mention: the essay rewords [' + L.SLOT_LABEL[k] + '] here ("' + c.value + '"). Do the same in the exam.' });
+      if (labs[k] !== L.SLOT_LABEL[k]) notes.push({ kind: 'tip', msg: 'In a ' + typeName(st.drive.type).toLowerCase() + ' essay, [' + L.SLOT_LABEL[k] + '] becomes "' + labs[k] + '". Read your sentence: does it still make sense?' });
+    });
+    if (comp.slots.length && !comp.slots.some(function (k) { return r.cur[k]; })) notes.push({ kind: 'warn', msg: 'Your line has no slot yet, so no ideas can go in. Add ' + comp.slots.map(function (k) { return '[' + L.SLOT_LABEL[k] + ']'; }).join(' and ') + '.' });
+    var auto = SCN.bandFor[t.level] || 7, band = driveBand(t);
+    if (band !== auto) notes.push({ kind: 'warn', msg: 'Your blueprint targets ' + levelInfo(t.level).name + '; these are Band ' + band + ' ideas. Does your frame sound like the same writer as the ideas? It should.' });
+    return notes;
+  }
+  function paintDriveBuild(t, comp, overrideTok) {
+    var box = $('#lab-drive'); if (!box || !driveOk()) return;
+    if (!st.drive.open) {
+      box.innerHTML = '<button class="linky" id="lab-dtog">Show the test drive: your line in a real flood essay</button>';
+      $('#lab-dtog').addEventListener('click', function () { st.drive.open = true; paintDriveBuild(t, comp, currentTok()); });
+      return;
+    }
+    box.innerHTML = '<div class="lab-drive">' +
+      '<div class="lab-drive-h"><div><p class="kicker">Test drive · ' + esc(SCN.title) + '</p><b>Your line, carrying real ideas</b></div><button class="linky" id="lab-dtog">Hide</button></div>' +
+      driveControls(t) + drivePrompt(st.drive.type) +
+      '<div class="lab-essay hl lab-drive-para" id="lab-drive-para"></div>' +
+      '<p class="tiny lab-drive-key"><span class="lab-drive-sw"></span> highlighted = ideas for this prompt (what you write in the exam) · plain = your template</p>' +
+      '<ul class="lab-notes" id="lab-drive-notes"></ul>' +
+    '</div>';
+    $('#lab-dtog').addEventListener('click', function () { st.drive.open = false; paintDriveBuild(t, comp, currentTok()); });
+    bindDriveControls(t, function () { paintDriveBuild(t, comp, currentTok()); });
+    refreshDrive(t, comp, overrideTok);
+  }
+  /* Called on every keystroke: only the paragraph and the notes change. */
+  function refreshDrive(t, comp, tok) {
+    var pEl = $('#lab-drive-para'), nEl = $('#lab-drive-notes'); if (!pEl || !driveOk()) return;
+    var r = driveRender(driveTpl(t, comp.id, tok), st.drive.type, driveBand(t), { cur: comp.id, gaps: true });
+    var para = r.paras.filter(function (p) { return p.key === comp.para; })[0];
+    pEl.innerHTML = '<p>' + (para && para.html ? para.html : '<span class="tiny">Write your line above to see it here.</span>') + '</p>';
+    var notes = driveNotes(t, comp, r);
+    nEl.innerHTML = notes.map(function (n) { return '<li class="' + n.kind + '">' + esc(n.msg) + '</li>'; }).join('');
+    nEl.style.display = notes.length ? '' : 'none';
+  }
+  function currentTok() { var ta = $('#lab-line'); return ta ? toTokens(ta.value).text : ''; }
+  /* The whole essay, on the blueprint summary. */
+  function driveFullHtml(t) {
+    var band = driveBand(t), r = driveRender(driveTpl(t), st.drive.type, band, { gaps: true });
+    var share = r.share, over = share * 100 > t.pct + 5;
+    var gaps = L.COMPONENTS.filter(function (c) { return !((t.lines[c.id] || {}).text); }).length;
+    return '<div class="card lab-pad lab-drive-full" id="lab-drivefull"><p class="kicker">Test drive · ' + esc(SCN.title) + '</p><h3>Your blueprint on a real prompt</h3>' +
+      '<p class="tiny">' + esc(SCN.blurb) + ' Your fourteen lines are the frame; the ideas are the kind you would write into the slots in the exam. Switch the question type to see whether every line still works.</p>' +
+      driveControls(t) + drivePrompt(st.drive.type) +
+      '<div class="lab-kpis">' +
+        kpi(r.words, 'Words', 'aim for 260–290') +
+        kpi(pctStr(share), 'Template share', 'target ' + t.pct + '%' + (over ? ' · over' : '')) +
+        kpi(pctStr(1 - share), 'Ideas', 'the words you write fresh') +
+        kpi('<span class="lab-kpi-sm">' + esc(typeName(st.drive.type)) + '</span>', 'Question type', L.TYPE_FIT[st.drive.type] === 'good' ? 'fits a two-sided frame' : L.TYPE_FIT[st.drive.type] === 'ok' ? 'needs a clear stance' : 'harder fit: read every line') +
+      '</div>' +
+      '<div class="lab-ex-h"><span class="tiny"><span class="lab-drive-sw"></span> highlighted = ideas · plain = your template</span><label class="tiny"><input type="checkbox" id="lab-dhl"' + (st.highlightFrame ? ' checked' : '') + '> highlight the ideas</label></div>' +
+      '<div class="lab-essay' + (st.highlightFrame ? ' hl' : '') + '" id="lab-drive-essay">' + r.paras.map(function (p) { return '<p>' + p.html + '</p>'; }).join('') + '</div>' +
+      '<ul class="lab-notes">' +
+        '<li class="tip">Read it aloud. A sentence that sounds odd shows a line that is not reusable yet: press <b>edit</b> next to that line below.</li>' +
+        (L.TYPE_FIT[st.drive.type] !== 'good' ? '<li class="tip">' + esc(L.TYPE_NOTES[st.drive.type] || '') + '</li>' : '') +
+        (over ? '<li class="warn">At ' + pctStr(share) + ', your template carries more of this essay than the ' + t.pct + '% you chose. Trim words in your lines that carry no meaning.</li>' : '') +
+        (gaps ? '<li class="warn">' + gaps + ' line' + (gaps > 1 ? 's are' : ' is') + ' not written yet, so the essay has gaps.</li>' : '') +
+      '</ul>' +
+      '<p class="tiny lab-drive-src">Facts: ' + SCN.sources.map(function (s) { return '<a href="' + esc(s.url) + '" target="_blank" rel="noopener">' + esc(s.name) + '</a>'; }).join(' · ') + '</p>' +
+    '</div>';
+  }
+  function bindDriveFull(t, repaint) {
+    bindDriveControls(t, repaint);
+    var hl = $('#lab-dhl'); if (hl) hl.addEventListener('change', function () { st.highlightFrame = hl.checked; $('#lab-drive-essay').classList.toggle('hl', hl.checked); });
   }
 
   /* ============================================================== storage
@@ -525,7 +701,7 @@
   function paintStudio(el) {
     var list = st.data.templates.slice().sort(function (a, b) { return String(b.updatedAt).localeCompare(String(a.updatedAt)); });
     var html = '<div class="lab-hero card"><div><p class="kicker">Blueprint Studio</p><h3>Your template, in your words</h3>' +
-      '<ol class="lab-steps"><li><b>Choose the share</b> of the essay your template will carry: 60, 50, 40 or 30%.</li><li><b>Choose your target</b> level and band.</li><li><b>Rewrite 14 lines</b>, each with a job to do. Study the examples, then write your own, and the coach checks each one.</li><li><b>Save it</b>, then take it to the Assembly Line.</li></ol></div>' +
+      '<ol class="lab-steps"><li><b>Choose the share</b> of the essay your template will carry: 60, 50, 40 or 30%.</li><li><b>Choose your target</b> level and band.</li><li><b>Rewrite 14 lines</b>, each with a job to do. Study the examples, then write your own, and the coach checks each one. A <b>test drive</b> drops every line into a real essay on the Bangkok floods, so you can see your template at work.</li><li><b>Save it</b>, then take it to the Assembly Line.</li></ol></div>' +
       '<button class="btn primary" id="lab-new">New blueprint →</button></div>';
     if (!list.length) html += '<p class="tiny lab-empty">No blueprints yet. Your first one takes about 30–40 minutes: fourteen short lines, each coached.</p>';
     else html += '<div class="lab-grid">' + list.map(function (t) {
@@ -636,6 +812,7 @@
         '<div class="lab-meter"><span id="lab-wc" class="lab-num">0 words</span><div class="bar-line thin"><span id="lab-wbar"></span></div></div>' +
         '<div class="lab-preview" id="lab-preview"></div>' +
       '</div>' +
+      (driveOk() ? '<div id="lab-drive"></div>' : '') +
       '<div class="lab-acts"><button class="btn primary" id="lab-coach"' + (b.busy ? ' disabled' : '') + '>' + (ln.tries ? 'Coach me again' : 'Coach me') + '</button><span class="tiny" id="lab-tries">' + (ln.tries ? 'Try ' + (ln.tries + 1) + ' · best so far ' + (ln.bestPts || 0) + ' pts' : '') + '</span></div>' +
       '<div id="lab-fb">' + (b.fb ? renderFeedback(b.fb, { kind: 'frame' }) : (ln.last ? '<p class="kicker">Last coaching</p>' + renderFeedback(ln.last, { kind: 'frame', stored: true }) : '')) + '</div>' +
     '</div>';
@@ -653,7 +830,9 @@
       $('#lab-wbar').parentNode.className = 'bar-line thin' + (n > budget.hi ? ' over' : n >= budget.lo ? '' : ' gold');
       $('#lab-preview').innerHTML = ta.value.trim() ? slotChips(conv.text) : '<span class="tiny">Your line will appear here with its slots highlighted.</span>';
       ln.draft = ta.value;
+      if (st.drive.open) refreshDrive(t, comp, conv.text);
     }
+    paintDriveBuild(t, comp, toTokens(ta.value).text);
     ta.addEventListener('input', live); live();
     $$('[data-ins]').forEach(function (btn) { btn.addEventListener('click', function () { insertAtCursor(ta, '[' + L.SLOT_LABEL[btn.dataset.ins] + ']'); live(); }); });
     $('#lab-othertier').addEventListener('click', function () { st.showOtherTier = !st.showOtherTier; paintBuild(el); });
@@ -774,6 +953,7 @@
         kpi(pctStr(predicted), 'Predicted template share', 'in a ' + L.ESSAY_WORDS + '-word essay (target ' + t.pct + '%)') +
         kpi(clean + '/14', 'Error-free lines', esc(lv.name)) +
       '</div></div>';
+    if (driveOk()) html += driveFullHtml(t);
     html += L.PARAS.map(function (pg) {
       return '<div class="card lab-para"><p class="kicker">' + esc(pg.name) + '</p>' + L.COMPONENTS.filter(function (c) { return c.para === pg.key; }).map(function (c) {
         var l = t.lines[c.id] || {}, f = l.last;
@@ -788,6 +968,12 @@
       html += '<div class="lab-nav"><button class="btn" id="lab-sback">← Back to line 14</button><button class="btn primary" id="lab-save"' + (tplDone(t) === 14 ? '' : ' disabled') + '>Save blueprint (+' + L.POINTS.blueprint + ')</button></div>';
     }
     el.innerHTML = html;
+    if (driveOk()) bindDriveFull(t, function repaintDrive() {
+      var box = $('#lab-drivefull'); if (!box) return;
+      var tmp = document.createElement('div'); tmp.innerHTML = driveFullHtml(t);
+      box.parentNode.replaceChild(tmp.firstChild, box);
+      bindDriveFull(t, repaintDrive);
+    });
     $('#lab-shome').addEventListener('click', function () { st.view = 'home'; st.build = null; paintBody(); });
     $$('[data-edit]').forEach(function (x) { x.addEventListener('click', function () { openBuild(t, +x.dataset.edit); }); });
     var sv = $('#lab-save');
@@ -1390,6 +1576,7 @@
     mount: mount, leave: leave,
     busy: function () { return !!(st.run && !st.run.done && st.run.busy); },
     /* for tests and the teacher console */
-    _state: st, _quickFrame: quickFrame, _quickVar: quickVar, _assemble: assemble, _overallBand: overallBand, _toTokens: toTokens, _compBudget: compBudget
+    _state: st, _quickFrame: quickFrame, _quickVar: quickVar, _assemble: assemble, _overallBand: overallBand, _toTokens: toTokens, _compBudget: compBudget,
+    _driveRender: driveRender, _shapeAt: shapeAt
   };
 })(window);
