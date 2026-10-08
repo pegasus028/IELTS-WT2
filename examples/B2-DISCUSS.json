@@ -1,0 +1,316 @@
+{
+  "level": "B2",
+  "type": "DISCUSS",
+  "promptId": "p-remote-work",
+  "blueprints": {
+    "30": {
+      "lines": {
+        "i-open": "Few questions divide opinion as sharply as [Core Topic].",
+        "i-sides": "One side stresses [Facet A], whereas the other fears [Facet B].",
+        "i-position": "I would argue that [Position].",
+        "a-topic": "The first view rests mainly on [Facet A].",
+        "a-mech": "The logic is simple: [Mechanism A].",
+        "a-example": "Consider the case of [Example A].",
+        "a-nuance": "Still, this argument loses its force when [Nuance A].",
+        "b-topic": "The other side focuses instead on [Facet B].",
+        "b-mech": "Their worry follows a clear chain: [Mechanism B].",
+        "b-example": "The experience of [Example B] shows this.",
+        "b-nuance": "Nevertheless, this view is often overstated, since [Nuance B].",
+        "c-open": "In the end, [Core Topic] is neither simply good nor simply bad.",
+        "c-position": "Overall, I would still argue that [Position].",
+        "c-rationale": "This is the wiser answer, since [Rationale]."
+      }
+    },
+    "40": {
+      "lines": {
+        "i-open": "Few public questions divide opinion as sharply as [Core Topic].",
+        "i-sides": "One side points to [Facet A], whereas the other is more concerned about [Facet B].",
+        "i-position": "On balance, I would argue that [Position].",
+        "a-topic": "The first view places the greatest weight on [Facet A].",
+        "a-mech": "The logic is straightforward: [Mechanism A].",
+        "a-example": "This is easy to observe in the case of [Example A].",
+        "a-nuance": "That said, this argument holds only under certain conditions and weakens when [Nuance A].",
+        "b-topic": "Those on the other side focus instead on [Facet B].",
+        "b-mech": "This view rests on a simple chain: [Mechanism B].",
+        "b-example": "The experience of [Example B] shows that this is real.",
+        "b-nuance": "Nevertheless, this view is often overstated: in practice, [Nuance B].",
+        "c-open": "Taking everything into account, I conclude that [Core Topic] is neither simply good nor simply bad.",
+        "c-position": "Overall, the most convincing position is that [Position].",
+        "c-rationale": "This is the most reasonable answer, since [Rationale]."
+      }
+    },
+    "50": {
+      "lines": {
+        "i-open": "In recent years, few public questions have been debated as widely as [Core Topic].",
+        "i-sides": "One view points to [Facet A], whereas its opponents worry more about [Facet B].",
+        "i-position": "Having weighed both arguments, I would argue that [Position].",
+        "a-topic": "The first view places the greatest weight on [Facet A].",
+        "a-mech": "The logic behind this is straightforward: [Mechanism A].",
+        "a-example": "This is clear in the case of [Example A].",
+        "a-nuance": "That said, this argument has limits, and it weakens when [Nuance A].",
+        "b-topic": "The opposite side focuses on [Facet B], a concern that is hard to dismiss.",
+        "b-mech": "It rests on a clear chain of cause and effect: [Mechanism B].",
+        "b-example": "The experience of [Example B] shows that this is not just theory.",
+        "b-nuance": "Nevertheless, this view is often overstated, since it ignores the fact that [Nuance B].",
+        "c-open": "Taking everything into account, I conclude that [Core Topic] cannot be judged as simply good or bad.",
+        "c-position": "On balance, the most convincing position is that [Position].",
+        "c-rationale": "This seems the most reasonable answer, since [Rationale]."
+      }
+    },
+    "60": {
+      "lines": {
+        "i-open": "Few public questions have been debated as widely as [Core Topic], and opinions remain divided.",
+        "i-sides": "Supporters of one view draw attention to [Facet A], whereas their opponents are far more concerned about [Facet B].",
+        "i-position": "Having weighed both arguments carefully, I would argue that [Position].",
+        "a-topic": "Those who hold the first view place the greatest weight on [Facet A].",
+        "a-mech": "The logic behind this claim is straightforward: [Mechanism A].",
+        "a-example": "This pattern can be observed clearly in the case of [Example A].",
+        "a-nuance": "That said, this argument holds only under certain conditions, and it weakens when [Nuance A].",
+        "b-topic": "Those who take the opposite position focus instead on [Facet B], a concern that is hard to dismiss.",
+        "b-mech": "This view rests on a clear chain of cause and effect: [Mechanism B].",
+        "b-example": "The experience of [Example B] shows that this is not just theory.",
+        "b-nuance": "Nevertheless, this argument is often overstated, because it ignores the fact that [Nuance B].",
+        "c-open": "Taking everything into account, I conclude that [Core Topic] cannot be judged as simply good or bad.",
+        "c-position": "On balance, the position I find most convincing is that [Position].",
+        "c-rationale": "This seems the most reasonable answer, since [Rationale]."
+      }
+    }
+  },
+  "runs": {
+    "30": {
+      "vars": {
+        "core": {
+          "text": "whether employees should work from home instead of travelling to an office every day",
+          "text2": "remote working"
+        },
+        "facetA": {
+          "text": "the time and money that home working saves for staff and companies alike",
+          "text2": "these practical savings for workers and employers"
+        },
+        "facetB": {
+          "text": "the isolation felt by staff who spend every working day alone at home",
+          "text2": "the risk of weaker teamwork and lower productivity"
+        },
+        "position": {
+          "text": "companies should combine home working with a few fixed days in the office each week",
+          "text2": "a weekly mix of home and office days serves employers and staff best"
+        },
+        "mechA": {
+          "text": "skipping the long daily commute means that staff start work fresher and more focused, while firms can rent smaller and cheaper offices"
+        },
+        "exA": {
+          "text": "Bangkok office workers who no longer lose several hours each week in rush-hour traffic"
+        },
+        "nuanceA": {
+          "text": "the job depends on face-to-face service or special equipment, as in hospitals, factories and shops"
+        },
+        "mechB": {
+          "text": "without casual conversations in the office, people feel cut off from their team, and small problems that could be solved in minutes take days instead"
+        },
+        "exB": {
+          "text": "new staff who had to learn their jobs over video calls during the COVID-19 lockdowns"
+        },
+        "nuanceB": {
+          "text": "regular online meetings and clear daily goals can reduce much of this isolation"
+        },
+        "rationale": {
+          "text": "it keeps the real savings of home working while protecting the teamwork that every company depends on"
+        }
+      }
+    },
+    "40": {
+      "vars": {
+        "core": {
+          "text": "whether employees should be allowed to work from home",
+          "text2": "remote working"
+        },
+        "facetA": {
+          "text": "the time and money that home working saves for staff and companies",
+          "text2": "these practical savings for workers and employers"
+        },
+        "facetB": {
+          "text": "the isolation of staff who spend every working day alone at home",
+          "text2": "weaker teamwork and lower productivity"
+        },
+        "position": {
+          "text": "companies should combine home working with a few fixed office days a week",
+          "text2": "a planned mix of home and office days serves both staff and employers best"
+        },
+        "mechA": {
+          "text": "skipping the daily commute means that staff start work fresher and more focused, while firms can rent smaller offices"
+        },
+        "exA": {
+          "text": "Bangkok office workers who no longer lose hours each week in rush-hour traffic"
+        },
+        "nuanceA": {
+          "text": "the job depends on face-to-face service or special equipment, as in hospitals and shops"
+        },
+        "mechB": {
+          "text": "without casual talk in the office, people feel cut off from their team, and small problems take much longer to solve"
+        },
+        "exB": {
+          "text": "new staff who had to learn their jobs over video calls during COVID-19"
+        },
+        "nuanceB": {
+          "text": "regular online meetings and clear daily goals can reduce much of this isolation"
+        },
+        "rationale": {
+          "text": "it keeps the real savings of home working without harming teamwork in the company"
+        }
+      }
+    },
+    "50": {
+      "vars": {
+        "core": {
+          "text": "whether employees should be allowed to work from home",
+          "text2": "remote working"
+        },
+        "facetA": {
+          "text": "the time and money that home working saves",
+          "text2": "these savings for staff and employers"
+        },
+        "facetB": {
+          "text": "the isolation of staff who spend every day alone",
+          "text2": "weaker teamwork and lower productivity"
+        },
+        "position": {
+          "text": "companies should combine home working with regular days in the office",
+          "text2": "a mix of home and office days serves both staff and employers best"
+        },
+        "mechA": {
+          "text": "skipping the daily commute means that staff start work fresher, and firms can rent smaller, cheaper offices"
+        },
+        "exA": {
+          "text": "Bangkok workers who no longer spend hours in rush-hour traffic"
+        },
+        "nuanceA": {
+          "text": "the job needs face-to-face service, as in hospitals and shops"
+        },
+        "mechB": {
+          "text": "without casual talk in the office, staff feel cut off and problems take longer to solve"
+        },
+        "exB": {
+          "text": "new staff who learned their jobs only over video calls during COVID-19"
+        },
+        "nuanceB": {
+          "text": "regular online meetings and clear goals can reduce much of this isolation"
+        },
+        "rationale": {
+          "text": "it keeps the savings of home working without harming teamwork in the company"
+        }
+      }
+    },
+    "60": {
+      "vars": {
+        "core": {
+          "text": "whether employees should work from home",
+          "text2": "remote working"
+        },
+        "facetA": {
+          "text": "the time and money that home working saves",
+          "text2": "these savings"
+        },
+        "facetB": {
+          "text": "the isolation of staff who work alone",
+          "text2": "weaker teamwork and lower productivity"
+        },
+        "position": {
+          "text": "companies should combine home working with regular office days",
+          "text2": "a mix of home and office days works best"
+        },
+        "mechA": {
+          "text": "skipping the commute means that staff start work fresher and firms need smaller offices"
+        },
+        "exA": {
+          "text": "Bangkok workers who no longer sit for hours in rush-hour traffic"
+        },
+        "nuanceA": {
+          "text": "the job needs face-to-face service, as in hospitals"
+        },
+        "mechB": {
+          "text": "without casual talk in the office, small problems take longer to solve"
+        },
+        "exB": {
+          "text": "new staff who learned their jobs over video calls during COVID-19"
+        },
+        "nuanceB": {
+          "text": "regular online meetings can reduce much of the isolation of working alone"
+        },
+        "rationale": {
+          "text": "it keeps the savings of home working without harming teamwork within the company"
+        }
+      }
+    }
+  },
+  "coaching": [
+    {
+      "share": "60",
+      "line": "a-topic",
+      "first": "Firstly, many people believe that the most important thing is [Facet A].",
+      "flagged": "Starts with a robotic linker (\"Firstly\"). Connect the paragraphs through meaning instead.",
+      "fixed": "Those who hold the first view place the greatest weight on [Facet A]."
+    },
+    {
+      "share": "60",
+      "line": "a-mech",
+      "first": "It works by [Mechanism A].",
+      "flagged": "3 template words: under the 6–11 budget. Too close to an example (\"It works by [Mechanism A].\"). Condition 1: the template must be in your own words.",
+      "fixed": "The logic behind this claim is straightforward: [Mechanism A]."
+    },
+    {
+      "share": "30",
+      "line": "c-open",
+      "first": "In conclusion, both sides of [Core Topic] have real strengths and real limits.",
+      "flagged": "Too close to an example (\"In conclusion, both sides of [Core Topic] have real strengths and real limits.\"). Condition 1: the template must be in your own words.",
+      "fixed": "In the end, [Core Topic] is neither simply good nor simply bad."
+    }
+  ],
+  "review": {
+    "60": [
+      {
+        "quote": "these savings, which they see as central",
+        "fix": "these savings",
+        "why": "redundant: 'place the greatest weight on' already says they are central"
+      },
+      {
+        "quote": "can reduce much of this isolation",
+        "fix": "can reduce much of the isolation of working alone",
+        "why": "reference: this paragraph is about teamwork, so 'this isolation' has nothing to point back to"
+      },
+      {
+        "quote": "without harming company teamwork",
+        "fix": "without harming teamwork within the company",
+        "why": "unnatural noun–noun compound"
+      },
+      {
+        "quote": "Taking everything into account, remote working cannot be judged",
+        "fix": "Taking everything into account, I conclude that remote working cannot be judged",
+        "why": "dangling participle: the person, not the topic, takes everything into account; make 'I' the subject"
+      }
+    ],
+    "50": [
+      {
+        "quote": "serves both sides best",
+        "fix": "serves both staff and employers best",
+        "why": "ambiguous: 'sides' was used earlier for the two views, not for staff and employers"
+      },
+      {
+        "quote": "Taking everything into account, remote working cannot be judged",
+        "fix": "Taking everything into account, I conclude that remote working cannot be judged",
+        "why": "dangling participle: the person, not the topic, takes everything into account; make 'I' the subject"
+      }
+    ],
+    "40": [
+      {
+        "quote": "serves both sides best",
+        "fix": "serves both staff and employers best",
+        "why": "ambiguous: 'sides' was used earlier for the two views, not for staff and employers"
+      },
+      {
+        "quote": "Taking everything into account, remote working is",
+        "fix": "Taking everything into account, I conclude that remote working is",
+        "why": "dangling participle: the person, not the topic, takes everything into account; make 'I' the subject"
+      }
+    ]
+  }
+}

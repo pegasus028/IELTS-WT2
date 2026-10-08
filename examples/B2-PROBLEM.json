@@ -1,0 +1,323 @@
+{
+  "level": "B2",
+  "type": "PROBLEM",
+  "promptId": "p-online-scams",
+  "blueprints": {
+    "60": {
+      "lines": {
+        "i-open": "Across many countries, [Core Topic] has grown into a serious concern that families, schools and governments can no longer ignore.",
+        "i-sides": "This situation grows mainly out of [Facet A], and the most practical answer to it lies in [Facet B].",
+        "i-position": "Having weighed the cause and the cure, I believe that [Position].",
+        "a-topic": "The most important reason why this problem keeps growing is [Facet A].",
+        "a-mech": "The cause does its damage in a fairly simple way: [Mechanism A].",
+        "a-example": "A case that many young people in my city would recognise is [Example A].",
+        "a-nuance": "Unfortunately, the problem is made even worse by a second, separate cause: [Nuance A].",
+        "b-topic": "To tackle this cause at its source, the most sensible response is [Facet B].",
+        "b-mech": "A response like this is likely to work because [Mechanism B].",
+        "b-example": "A small example of this approach working in practice is the experience of [Example B].",
+        "b-nuance": "Even so, this measure cannot do the whole job on its own, because [Nuance B].",
+        "c-open": "Taken together, these points show that [Core Topic] is not something we must accept, since its cause is known.",
+        "c-position": "For this reason, the best plan is that [Position].",
+        "c-rationale": "This two-part plan is the most sensible one because [Rationale]."
+      }
+    },
+    "50": {
+      "lines": {
+        "i-open": "In many countries, [Core Topic] has become a serious concern that families and governments cannot ignore.",
+        "i-sides": "This situation grows mainly out of [Facet A], and the most practical answer lies in [Facet B].",
+        "i-position": "Having weighed the cause and the cure, I believe that [Position].",
+        "a-topic": "The main reason why this problem keeps growing is [Facet A].",
+        "a-mech": "The cause does its damage in a simple way: [Mechanism A].",
+        "a-example": "A case that many people in my city would recognise is [Example A].",
+        "a-nuance": "Unfortunately, the problem is made worse by a second, separate cause: [Nuance A].",
+        "b-topic": "To tackle this cause at its source, the most sensible response is [Facet B].",
+        "b-mech": "This response is likely to work because [Mechanism B].",
+        "b-example": "A small example of this working in practice is [Example B].",
+        "b-nuance": "Even so, this measure cannot do the whole job alone, because [Nuance B].",
+        "c-open": "Taken together, these points show that [Core Topic] need not be accepted.",
+        "c-position": "For this reason, the best plan is that [Position].",
+        "c-rationale": "This two-part plan is the most sensible because [Rationale]."
+      }
+    },
+    "40": {
+      "lines": {
+        "i-open": "In many countries, [Core Topic] is now a concern that no family can ignore.",
+        "i-sides": "This situation grows mainly out of [Facet A], and the answer lies in [Facet B].",
+        "i-position": "Having weighed cause and cure, I believe that [Position].",
+        "a-topic": "The main reason this problem keeps growing is [Facet A].",
+        "a-mech": "The cause works in a simple way: [Mechanism A].",
+        "a-example": "Many people in my city would recognise [Example A].",
+        "a-nuance": "Unfortunately, a second, separate cause makes the problem worse: [Nuance A].",
+        "b-topic": "To tackle this cause at its source, the best step is [Facet B].",
+        "b-mech": "This is likely to work because [Mechanism B].",
+        "b-example": "A small example of this working is [Example B].",
+        "b-nuance": "Even so, this measure cannot do the whole job, because [Nuance B].",
+        "c-open": "Overall, [Core Topic] is not something we have to accept.",
+        "c-position": "For this reason, the best plan is that [Position].",
+        "c-rationale": "This plan is the most sensible because [Rationale]."
+      }
+    },
+    "30": {
+      "lines": {
+        "i-open": "In many countries, [Core Topic] is a serious concern.",
+        "i-sides": "It grows out of [Facet A]; the answer lies in [Facet B].",
+        "i-position": "I would argue that [Position].",
+        "a-topic": "This problem keeps growing because of [Facet A].",
+        "a-mech": "The cause works like this: [Mechanism A].",
+        "a-example": "One familiar case in my city is [Example A].",
+        "a-nuance": "Unfortunately, a second cause makes it worse: [Nuance A].",
+        "b-topic": "To tackle this cause, the best step is [Facet B].",
+        "b-mech": "This should work because [Mechanism B].",
+        "b-example": "A small example is [Example B].",
+        "b-nuance": "Even so, this measure cannot do everything, because [Nuance B].",
+        "c-open": "Overall, [Core Topic] has causes we can tackle.",
+        "c-position": "For this reason, the best plan is that [Position].",
+        "c-rationale": "This plan is sensible because [Rationale]."
+      }
+    }
+  },
+  "runs": {
+    "60": {
+      "vars": {
+        "core": {
+          "text": "online fraud against young people",
+          "text2": "this type of crime"
+        },
+        "facetA": {
+          "text": "teenagers' trust in friendly messages and cheap offers",
+          "text2": "how easily young users are fooled"
+        },
+        "facetB": {
+          "text": "lessons on scams at school",
+          "text2": "training students to spot scams"
+        },
+        "position": {
+          "text": "schools must teach scam awareness, and banks must check risky payments",
+          "text2": "schools should lead, with banks as a safety net"
+        },
+        "mechA": {
+          "text": "fake shops and hacked accounts look real, so teenagers pay without checking"
+        },
+        "exA": {
+          "text": "a Facebook page selling concert tickets that never arrive"
+        },
+        "nuanceA": {
+          "text": "many teenagers now have banking apps, so money leaves in seconds"
+        },
+        "mechB": {
+          "text": "students who have practised with fake messages learn to pause and check"
+        },
+        "exB": {
+          "text": "my school, where one talk on investment scams made us careful"
+        },
+        "nuanceB": {
+          "text": "new tricks keep appearing, which is why banks should also delay unusual payments"
+        },
+        "rationale": {
+          "text": "scams need victims to hurry, and both steps slow them down"
+        }
+      }
+    },
+    "50": {
+      "vars": {
+        "core": {
+          "text": "the rise of online fraud against young people",
+          "text2": "this type of crime"
+        },
+        "facetA": {
+          "text": "the trust teenagers place in friendly messages and cheap offers",
+          "text2": "how easily young users believe what they see"
+        },
+        "facetB": {
+          "text": "regular lessons on scams in secondary schools",
+          "text2": "training students to recognise a scam"
+        },
+        "position": {
+          "text": "schools must teach students to recognise scams, and banks must check unusual payments",
+          "text2": "schools should lead, with banks as a safety net"
+        },
+        "mechA": {
+          "text": "fake shops and hacked friends' accounts look real, so teenagers pay before checking"
+        },
+        "exA": {
+          "text": "a Facebook page offering cheap concert tickets that never arrive"
+        },
+        "nuanceA": {
+          "text": "many teenagers have their own banking apps, so money can leave in seconds"
+        },
+        "mechB": {
+          "text": "students who have practised with fake messages learn to pause and check"
+        },
+        "exB": {
+          "text": "my school, where one talk on fake investment groups made us careful"
+        },
+        "nuanceB": {
+          "text": "scammers keep changing their tricks, which is why banks should also delay unusual payments"
+        },
+        "rationale": {
+          "text": "scams only succeed when victims hurry, and both steps slow them down"
+        }
+      }
+    },
+    "40": {
+      "vars": {
+        "core": {
+          "text": "the rapid rise of online fraud targeting young people",
+          "text2": "this type of crime"
+        },
+        "facetA": {
+          "text": "teenagers' trust in friendly messages and offers that seem too good to miss",
+          "text2": "how easily young users believe what they see online"
+        },
+        "facetB": {
+          "text": "practical lessons on scams in secondary schools",
+          "text2": "training students to spot warning signs"
+        },
+        "position": {
+          "text": "schools must teach students to recognise scams, while banks must check unusual payments by young customers",
+          "text2": "schools should lead, with banks as a safety net"
+        },
+        "mechA": {
+          "text": "a fake shop or a friend's hacked account looks real, so a teenager pays before checking"
+        },
+        "exA": {
+          "text": "Facebook pages offering cheap concert tickets that never arrive after payment"
+        },
+        "nuanceA": {
+          "text": "many teenagers now have their own banking apps, so money can leave in seconds without any adult knowing"
+        },
+        "mechB": {
+          "text": "students who have practised with fake messages, such as urgent requests for payment, learn to pause first"
+        },
+        "exB": {
+          "text": "my own school, where one talk on fake investment groups made many classmates more careful"
+        },
+        "nuanceB": {
+          "text": "scammers keep changing their tricks, which is why banks should also question unusual payments from young customers"
+        },
+        "rationale": {
+          "text": "scams only succeed when victims hurry, and both steps give them time to think"
+        }
+      }
+    },
+    "30": {
+      "vars": {
+        "core": {
+          "text": "the rise of online fraud that takes money from young people",
+          "text2": "this form of crime"
+        },
+        "facetA": {
+          "text": "teenagers' trust in friendly messages and offers that seem too good to miss",
+          "text2": "how easily young users believe what they see online"
+        },
+        "facetB": {
+          "text": "regular lessons that show secondary students how scams are designed",
+          "text2": "training students to spot warning signs"
+        },
+        "position": {
+          "text": "secondary schools must teach every student to recognise scams, while banks must check unusual payments",
+          "text2": "schools should lead, with banks as a safety net"
+        },
+        "mechA": {
+          "text": "criminals copy a friend's profile or build a real-looking shop page, so a teenager pays before checking"
+        },
+        "exA": {
+          "text": "a Facebook page that sells cheap tickets for a big Bangkok concert and disappears once the money is sent"
+        },
+        "nuanceA": {
+          "text": "many teenagers now have their own banking apps, so money can leave in seconds before any adult notices"
+        },
+        "mechB": {
+          "text": "students who have practised with fake messages, such as a stranger's demand to pay at once, learn to pause before trusting anyone online"
+        },
+        "exB": {
+          "text": "my own school, where one talk on fake investment groups made many classmates check messages before replying"
+        },
+        "nuanceB": {
+          "text": "scammers change their tricks faster than any lesson can keep up with, which is why banks should also question unusual payments from young customers"
+        },
+        "rationale": {
+          "text": "scams only succeed when victims hurry, and both lessons and bank checks give young people time to think"
+        }
+      }
+    }
+  },
+  "coaching": [
+    {
+      "share": "60",
+      "line": "a-topic",
+      "first": "Firstly, the main cause is [Facet A].",
+      "flagged": "5 template words (budget 9–18) · COPIED. Too close to an example (\"The main cause is [Facet A].\"). Starts with a robotic linker (\"Firstly\"). Connect the paragraphs through meaning instead.",
+      "fixed": "The most important reason why this problem keeps growing is [Facet A]."
+    },
+    {
+      "share": "60",
+      "line": "i-sides",
+      "first": "It's mainly caused by [Facet A], and the best answer is [Facet B].",
+      "flagged": "9 template words: under the 11–22 budget. Contraction: write the full form (it is, do not) in an academic essay.",
+      "fixed": "This situation grows mainly out of [Facet A], and the most practical answer to it lies in [Facet B]."
+    },
+    {
+      "share": "30",
+      "line": "b-nuance",
+      "first": "But it can't solve every part of the problem because [Nuance B]",
+      "flagged": "10 template words (budget 6–11). Add the full stop after the slot: \"…[Nuance B].\" Contraction: write the full form (it is, do not) in an academic essay.",
+      "fixed": "Even so, this measure cannot do everything, because [Nuance B]."
+    }
+  ],
+  "review": {
+    "60": [
+      {
+        "quote": "scam lessons at school",
+        "fix": "lessons on scams at school",
+        "why": "ambiguous noun compound: 'scam lessons' can read as lessons in scamming"
+      },
+      {
+        "quote": "so teenagers pay fast",
+        "fix": "so teenagers pay without checking",
+        "why": "informal and imprecise: the point is paying before checking, not speed"
+      },
+      {
+        "quote": "teenagers have banking apps",
+        "fix": "many teenagers now have banking apps",
+        "why": "overgeneralisation (not all teenagers), and 'now' explains the rise"
+      }
+    ],
+    "50": [
+      {
+        "quote": "regular scam lessons in secondary schools",
+        "fix": "regular lessons on scams in secondary schools",
+        "why": "ambiguous noun compound: 'scam lessons' can read as lessons in scamming"
+      }
+    ],
+    "40": [
+      {
+        "quote": "practical scam lessons in secondary schools",
+        "fix": "practical lessons on scams in secondary schools",
+        "why": "ambiguous noun compound: 'scam lessons' can read as lessons in scamming"
+      },
+      {
+        "quote": "Having weighed both, I believe",
+        "fix": "Having weighed cause and cure, I believe",
+        "why": "unclear reference: 'both' has no antecedent"
+      },
+      {
+        "quote": "Even so, it cannot do the whole job",
+        "fix": "Even so, this measure cannot do the whole job",
+        "why": "ambiguous pronoun: the nearest noun is 'my own school', not the training"
+      }
+    ],
+    "30": [
+      {
+        "quote": "Even so, it cannot do everything",
+        "fix": "Even so, this measure cannot do everything",
+        "why": "ambiguous pronoun: the nearest noun is 'my own school', not the training"
+      },
+      {
+        "quote": "scammers change their tricks faster than any lesson",
+        "fix": "scammers change their tricks faster than any lesson can keep up with",
+        "why": "incomplete comparison: tricks are compared with a lesson, not with what a lesson can do"
+      }
+    ]
+  }
+}

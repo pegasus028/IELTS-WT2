@@ -1,0 +1,350 @@
+{
+  "level": "B1",
+  "type": "DISCUSS",
+  "promptId": "p-screen-time",
+  "blueprints": {
+    "30": {
+      "lines": {
+        "i-open": "Parents, teachers and students often have different opinions about [Core Topic].",
+        "i-sides": "Some people focus on [Facet A], while others stress [Facet B].",
+        "i-position": "My view is that [Position].",
+        "a-topic": "The first view centres on [Facet A].",
+        "a-mech": "This works because [Mechanism A].",
+        "a-example": "We see this in [Example A].",
+        "a-nuance": "However, this view does not always hold, because [Nuance A].",
+        "b-topic": "The other side puts more weight on [Facet B].",
+        "b-mech": "The reason is that [Mechanism B].",
+        "b-example": "One clear case is [Example B].",
+        "b-nuance": "Still, this view has one clear weak point: [Nuance B].",
+        "c-open": "Overall, each side of the debate on [Core Topic] has something to offer.",
+        "c-position": "My final answer is that [Position].",
+        "c-rationale": "This is best because [Rationale]."
+      }
+    },
+    "40": {
+      "lines": {
+        "i-open": "Families, schools and young people often have different opinions about [Core Topic].",
+        "i-sides": "Some people care most about [Facet A], while others think more about [Facet B].",
+        "i-position": "After thinking about both sides, I believe that [Position].",
+        "a-topic": "The first view is mainly about [Facet A], which many see as important.",
+        "a-mech": "Here is how it works: [Mechanism A].",
+        "a-example": "A good example from real life is [Example A].",
+        "a-nuance": "But this view does not hold in every case, because [Nuance A].",
+        "b-topic": "The other group of people is more interested in [Facet B].",
+        "b-mech": "Their argument is simple: [Mechanism B].",
+        "b-example": "We can see this, for example, in [Example B].",
+        "b-nuance": "However, this side also has a weak point, because [Nuance B].",
+        "c-open": "In the end, there are good points on both sides of the debate on [Core Topic].",
+        "c-position": "So my final answer is that [Position].",
+        "c-rationale": "This is the best answer because [Rationale]."
+      }
+    },
+    "50": {
+      "lines": {
+        "i-open": "Families and schools often disagree about [Core Topic], and this question really matters to young people.",
+        "i-sides": "Some people care most about [Facet A], while others mainly see [Facet B].",
+        "i-position": "After looking at both sides, I believe that [Position].",
+        "a-topic": "The first view is about [Facet A], which many people see as important.",
+        "a-mech": "We can explain how this works simply: [Mechanism A].",
+        "a-example": "A good example of this from real life is [Example A].",
+        "a-nuance": "But we should remember that this view does not hold in every case, because [Nuance A].",
+        "b-topic": "The other group of people is more interested in [Facet B].",
+        "b-mech": "Their main argument is easy to follow: [Mechanism B].",
+        "b-example": "We can see this in daily life, for example in [Example B].",
+        "b-nuance": "However, this side also has a weak point, because [Nuance B].",
+        "c-open": "In the end, there are good points on both sides of the debate on [Core Topic].",
+        "c-position": "So, when I weigh both views, my final answer is that [Position].",
+        "c-rationale": "This is the best answer because [Rationale]."
+      }
+    },
+    "60": {
+      "lines": {
+        "i-open": "Many families and schools have different ideas about [Core Topic], and this question matters greatly to young people.",
+        "i-sides": "Some people care most about [Facet A], but other people in this debate mainly see [Facet B].",
+        "i-position": "After looking carefully at both sides, I believe that [Position].",
+        "a-topic": "The first view is mainly about [Facet A], which many people see as very important.",
+        "a-mech": "We can explain how this works in a very simple way: [Mechanism A].",
+        "a-example": "A good example of this from real life is [Example A].",
+        "a-nuance": "But we should remember that this view does not hold in every case, because [Nuance A].",
+        "b-topic": "The other group of people is more interested in [Facet B].",
+        "b-mech": "Their main argument is quite easy to follow and understand: [Mechanism B].",
+        "b-example": "People can see this clearly in daily life, for example in [Example B].",
+        "b-nuance": "However, this side also has a weak point that we cannot ignore, because [Nuance B].",
+        "c-open": "In the end, there are good points on both sides of the debate on [Core Topic].",
+        "c-position": "So, after I have thought about both views, my final answer is that [Position].",
+        "c-rationale": "I think this is the best answer for everyone because [Rationale]."
+      }
+    }
+  },
+  "runs": {
+    "30": {
+      "vars": {
+        "core": {
+          "text": "how much time children should spend on phones, tablets and computers each day",
+          "text2": "children's daily screen time"
+        },
+        "facetA": {
+          "text": "the danger that heavy screen use poses to children's health and sleep",
+          "text2": "protecting young children's bodies and minds"
+        },
+        "facetB": {
+          "text": "the important role of digital devices in modern education",
+          "text2": "the value of tablets and learning apps for schoolwork"
+        },
+        "position": {
+          "text": "parents should set a firm limit on screens for fun but still allow devices for learning",
+          "text2": "a clear daily limit is wiser than a complete ban"
+        },
+        "mechA": {
+          "text": "long hours on screens keep children indoors and awake late at night, so they move less, sleep badly and lose focus at school"
+        },
+        "exA": {
+          "text": "students who play online games until midnight and then fall asleep in their morning classes"
+        },
+        "nuanceA": {
+          "text": "a strict ban can make children feel left out when their friends share videos and games online"
+        },
+        "mechB": {
+          "text": "learning apps and videos can explain a hard topic in many ways, so each child can learn at her own speed"
+        },
+        "exB": {
+          "text": "Thai schools that moved all of their lessons online during the COVID-19 period"
+        },
+        "nuanceB": {
+          "text": "children often switch from a learning video to games or social media without noticing how much time has passed"
+        },
+        "rationale": {
+          "text": "it keeps the real benefits of technology while still protecting children's health and sleep"
+        }
+      }
+    },
+    "40": {
+      "vars": {
+        "core": {
+          "text": "how much time children should spend on phones, tablets and computers",
+          "text2": "children's screen time"
+        },
+        "facetA": {
+          "text": "the risks of screens for children's health and sleep",
+          "text2": "protecting young children's bodies and minds"
+        },
+        "facetB": {
+          "text": "the role of digital devices in modern learning",
+          "text2": "the value of tablets and apps for schoolwork"
+        },
+        "position": {
+          "text": "parents should limit screens for fun but allow devices for schoolwork",
+          "text2": "a clear daily limit works better than a total ban"
+        },
+        "mechA": {
+          "text": "long hours of screen time keep children indoors and awake late, so they move less, sleep badly and find it hard to focus"
+        },
+        "exA": {
+          "text": "students who play online games until midnight and then feel tired in their morning classes"
+        },
+        "nuanceA": {
+          "text": "a strict ban can make children feel left out when their friends share videos and games online"
+        },
+        "mechB": {
+          "text": "learning apps and videos can explain a difficult topic in many different ways, so children can learn at their own speed"
+        },
+        "exB": {
+          "text": "Thai schools that moved all their lessons online during the COVID-19 period"
+        },
+        "nuanceB": {
+          "text": "children often switch from a learning video to games or social media without noticing the time"
+        },
+        "rationale": {
+          "text": "it keeps the real benefits of technology while still protecting children's health"
+        }
+      }
+    },
+    "50": {
+      "vars": {
+        "core": {
+          "text": "how long children should spend on screens",
+          "text2": "children's screen time"
+        },
+        "facetA": {
+          "text": "children's health and sleep",
+          "text2": "keeping young children healthy"
+        },
+        "facetB": {
+          "text": "devices as tools for learning",
+          "text2": "the value of tablets and apps for schoolwork"
+        },
+        "position": {
+          "text": "parents should limit screens for fun but allow devices for learning",
+          "text2": "a sensible limit is better than a total ban"
+        },
+        "mechA": {
+          "text": "long hours of screen time keep children indoors and awake late, so they move less and sleep badly"
+        },
+        "exA": {
+          "text": "children who play online games until midnight and feel tired in class the next day"
+        },
+        "nuanceA": {
+          "text": "a strict ban can make children feel left out when their friends share videos and games"
+        },
+        "mechB": {
+          "text": "learning apps explain a topic in many ways, so children can learn at their own speed"
+        },
+        "exB": {
+          "text": "Thai schools that taught lessons online during COVID-19"
+        },
+        "nuanceB": {
+          "text": "children often switch from a learning video to games without noticing"
+        },
+        "rationale": {
+          "text": "it keeps the benefits of technology and protects children's health"
+        }
+      }
+    },
+    "60": {
+      "vars": {
+        "core": {
+          "text": "how long children spend on screens",
+          "text2": "screen time"
+        },
+        "facetA": {
+          "text": "children's health and sleep",
+          "text2": "the health of young children"
+        },
+        "facetB": {
+          "text": "devices as learning tools",
+          "text2": "the value of tablets for schoolwork"
+        },
+        "position": {
+          "text": "parents should limit screens but allow devices for learning",
+          "text2": "a sensible limit is better than a total ban"
+        },
+        "mechA": {
+          "text": "long hours of screen time keep children awake late, so they sleep badly"
+        },
+        "exA": {
+          "text": "children who play games until midnight and feel tired in class"
+        },
+        "nuanceA": {
+          "text": "a strict ban can make children feel left out"
+        },
+        "mechB": {
+          "text": "apps explain a topic in many ways, so children learn at their own speed"
+        },
+        "exB": {
+          "text": "Thai schools that taught online during COVID-19"
+        },
+        "nuanceB": {
+          "text": "children often switch from a learning video to games"
+        },
+        "rationale": {
+          "text": "it keeps the benefits of technology and protects health"
+        }
+      }
+    }
+  },
+  "review": {
+    "30": [
+      {
+        "quote": "a strict ban can make children feel left out, because their friends share videos and games online",
+        "fix": "a strict ban can make children feel left out when their friends share videos and games online",
+        "why": "two 'because' clauses stacked; the second idea is a 'when' clause"
+      },
+      {
+        "quote": "this view does not always work",
+        "fix": "this view does not always hold",
+        "why": "a view or argument 'holds' or 'applies'; it does not 'work'"
+      },
+      {
+        "quote": "each side of children's daily screen time has something to offer",
+        "fix": "each side of the debate on children's daily screen time has something to offer",
+        "why": "'sides' belong to a debate, not to the topic itself"
+      }
+    ],
+    "40": [
+      {
+        "quote": "long screen hours keep children indoors and awake late at night",
+        "fix": "long hours of screen time keep children indoors and awake late",
+        "why": "'long screen hours' is not a natural noun phrase"
+      },
+      {
+        "quote": "But this view does not work in every case",
+        "fix": "But this view does not hold in every case",
+        "why": "a view or argument 'holds' or 'applies'; it does not 'work'"
+      },
+      {
+        "quote": "there are good points on both sides of children's screen time",
+        "fix": "there are good points on both sides of the debate on children's screen time",
+        "why": "'sides' belong to a debate, not to the topic itself"
+      }
+    ],
+    "50": [
+      {
+        "quote": "while others look more at devices as tools for learning",
+        "fix": "while others mainly see devices as tools for learning",
+        "why": "'look more at X as Y' is unnatural"
+      },
+      {
+        "quote": "long screen hours keep children indoors and awake late",
+        "fix": "long hours of screen time keep children indoors and awake late",
+        "why": "'long screen hours' is not a natural noun phrase"
+      },
+      {
+        "quote": "this view does not work in every case",
+        "fix": "this view does not hold in every case",
+        "why": "a view or argument 'holds' or 'applies'; it does not 'work'"
+      },
+      {
+        "quote": "there are good points on both sides of children's screen time",
+        "fix": "there are good points on both sides of the debate on children's screen time",
+        "why": "'sides' belong to a debate, not to the topic itself"
+      },
+      {
+        "quote": "So, after thinking about both views, my final answer is that",
+        "fix": "So, when I weigh both views, my final answer is that",
+        "why": "dangling participle: the person doing the thinking must be the subject"
+      }
+    ],
+    "60": [
+      {
+        "quote": "this question matters a lot to young people",
+        "fix": "this question matters greatly to young people",
+        "why": "'a lot' is informal"
+      },
+      {
+        "quote": "other people think that we should look more at devices as learning tools",
+        "fix": "other people in this debate mainly see devices as learning tools",
+        "why": "'look more at X as Y' is unnatural"
+      },
+      {
+        "quote": "long screen hours keep children awake late",
+        "fix": "long hours of screen time keep children awake late",
+        "why": "'long screen hours' is not a natural noun phrase"
+      },
+      {
+        "quote": "children who game until midnight",
+        "fix": "children who play games until midnight",
+        "why": "'game' as a verb is informal"
+      },
+      {
+        "quote": "this view does not work in every case",
+        "fix": "this view does not hold in every case",
+        "why": "a view or argument 'holds' or 'applies'; it does not 'work'"
+      },
+      {
+        "quote": "there are good points on both sides of screen time",
+        "fix": "there are good points on both sides of the debate on screen time",
+        "why": "'sides' belong to a debate, not to the topic itself"
+      },
+      {
+        "quote": "a sensible limit beats a total ban",
+        "fix": "a sensible limit is better than a total ban",
+        "why": "'beats' is informal"
+      },
+      {
+        "quote": "So, after thinking about both views, my final answer is that",
+        "fix": "So, after I have thought about both views, my final answer is that",
+        "why": "dangling participle: the person doing the thinking must be the subject"
+      }
+    ]
+  }
+}

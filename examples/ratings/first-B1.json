@@ -1,0 +1,586 @@
+{
+ "B1-DISCUSS": {
+  "60": {
+   "tr": 6,
+   "cc": 6,
+   "lr": 5,
+   "gra": 6,
+   "mean": 5.75,
+   "overall": 6.0,
+   "cefr": "around B2",
+   "summary": "Both views and a clear, qualified position are there, but each slot holds a short clause inside long padded frame lines, so ideas are thinly developed and the wording reads as formulaic.",
+   "strength": "A clear, qualified position in paragraph one: 'parents should limit screens but allow devices for learning'.",
+   "priority": {
+    "crit": "LR",
+    "text": "Cut the empty frame padding ('in a very simple way', 'quite easy to follow and understand', 'very important') and spend those words on topic vocabulary in the slots (e.g. 'sleep deprivation', 'self-paced learning')."
+   },
+   "errors": [
+    {
+     "quote": "this question matters a lot to young people",
+     "fix": "this question matters greatly to young people",
+     "why": "lr-register: 'a lot' is informal"
+    },
+    {
+     "quote": "other people think that we should look more at devices as learning tools",
+     "fix": "others see devices mainly as learning tools",
+     "why": "lr-precision: 'look more at X as Y' is unnatural"
+    },
+    {
+     "quote": "long screen hours keep children awake late",
+     "fix": "long hours of screen time keep children awake late",
+     "why": "lr-collocation: 'long screen hours' is not a natural noun phrase"
+    },
+    {
+     "quote": "children who game until midnight",
+     "fix": "children who play games until midnight",
+     "why": "lr-register: 'game' as a verb is informal"
+    },
+    {
+     "quote": "this view does not work in every case",
+     "fix": "this view does not hold in every case",
+     "why": "lr-collocation: a view or argument 'holds' or 'applies'; it does not 'work'"
+    },
+    {
+     "quote": "there are good points on both sides of screen time",
+     "fix": "there are good points on both sides of the screen-time debate",
+     "why": "lr-precision: 'sides' belong to a debate, not to 'screen time'"
+    },
+    {
+     "quote": "a sensible limit beats a total ban",
+     "fix": "a sensible limit is better than a total ban",
+     "why": "lr-register: 'beats' is informal"
+    }
+   ]
+  },
+  "50": {
+   "tr": 7,
+   "cc": 6,
+   "lr": 6,
+   "gra": 6,
+   "mean": 6.25,
+   "overall": 6.5,
+   "cefr": "around B2",
+   "summary": "A clear position held from introduction to conclusion, with a mechanism, an example and a limit for each view; cohesion still relies on long fixed signposts and the grammar range in her own words is narrow.",
+   "strength": "A nuance with a concrete reason: 'a strict ban can make children feel left out when their friends share videos and games'.",
+   "priority": {
+    "crit": "CC",
+    "text": "Shorten the move labels ('We can explain how this works simply:', 'A good example of this from real life is') to short openers ('This happens because…', 'Thai schools during COVID-19 show this…') and link with reference ('this habit', 'such apps')."
+   },
+   "errors": [
+    {
+     "quote": "while others look more at devices as tools for learning",
+     "fix": "while others see devices mainly as tools for learning",
+     "why": "lr-precision: 'look more at X as Y' is unnatural"
+    },
+    {
+     "quote": "long screen hours keep children indoors and awake late",
+     "fix": "long hours of screen time keep children indoors and awake late",
+     "why": "lr-collocation: 'long screen hours' is not a natural noun phrase"
+    },
+    {
+     "quote": "this view does not work in every case",
+     "fix": "this view does not hold in every case",
+     "why": "lr-collocation: a view or argument 'holds' or 'applies'; it does not 'work'"
+    },
+    {
+     "quote": "there are good points on both sides of children's screen time",
+     "fix": "there are good points on both sides of the debate on children's screen time",
+     "why": "lr-precision: 'sides' belong to a debate, not to 'screen time'"
+    }
+   ]
+  },
+  "40": {
+   "tr": 7,
+   "cc": 6,
+   "lr": 6,
+   "gra": 7,
+   "mean": 6.5,
+   "overall": 6.5,
+   "cefr": "around B2",
+   "summary": "A clear, developed position with both views explained and limited; grammar is accurate and varied, but every move is still introduced by a template label and the vocabulary is plain.",
+   "strength": "A precise nuance: 'children often switch from a learning video to games or social media without noticing the time'.",
+   "priority": {
+    "crit": "CC",
+    "text": "Replace the remaining labels ('Here is how it works:', 'A good example from real life is', 'So my final answer is') with linking by meaning, e.g. end one sentence on 'sleep' and start the next with 'This lost sleep…'."
+   },
+   "errors": [
+    {
+     "quote": "long screen hours keep children indoors and awake late at night",
+     "fix": "long hours of screen time keep children indoors and awake late at night",
+     "why": "lr-collocation: 'long screen hours' is not a natural noun phrase"
+    },
+    {
+     "quote": "But this view does not work in every case",
+     "fix": "But this view does not hold in every case",
+     "why": "lr-collocation: a view or argument 'holds' or 'applies'; it does not 'work'"
+    },
+    {
+     "quote": "there are good points on both sides of children's screen time",
+     "fix": "there are good points on both sides of the debate on children's screen time",
+     "why": "lr-precision: 'sides' belong to a debate, not to 'screen time'"
+    }
+   ]
+  },
+  "30": {
+   "tr": 7,
+   "cc": 7,
+   "lr": 6,
+   "gra": 7,
+   "mean": 6.75,
+   "overall": 7.0,
+   "cefr": "around B2",
+   "summary": "The strongest DISCUSS essay: a clear position, both views developed, concise signposting and accurate complex sentences; vocabulary is the one criterion still at Band 6 (mean 6.75 sits on the rounding boundary).",
+   "strength": "An accurate, dense noun phrase: 'the danger that heavy screen use poses to children's health and sleep'.",
+   "priority": {
+    "crit": "LR",
+    "text": "Upgrade three plain items to precise collocations she can control: 'a hard topic' → 'a difficult concept', 'lose focus' → 'struggle to concentrate', 'weak point' → 'drawback'."
+   },
+   "errors": [
+    {
+     "quote": "because a strict ban can make children feel left out, because their friends share videos and games online",
+     "fix": "because a strict ban can make children feel left out when their friends share videos and games online",
+     "why": "gra-complex: two 'because' clauses stacked; the second reason should be a 'when' clause"
+    },
+    {
+     "quote": "this view does not always work",
+     "fix": "this view does not always hold",
+     "why": "lr-collocation: a view or argument 'holds' or 'applies'; it does not 'work'"
+    },
+    {
+     "quote": "each side of children's daily screen time has something to offer",
+     "fix": "each side of the debate on children's screen time has something to offer",
+     "why": "lr-precision: 'sides' belong to a debate, not to 'screen time'"
+    }
+   ]
+  }
+ },
+ "B1-OPINION": {
+  "60": {
+   "tr": 6,
+   "cc": 6,
+   "lr": 5,
+   "gra": 6,
+   "mean": 5.75,
+   "overall": 6.0,
+   "cefr": "around B2",
+   "summary": "The position is clear and the opposing view is answered, but the frame lines fill 60% of the essay, ideas are compressed into short clauses and 'opinion', 'choice' and 'point' repeat throughout.",
+   "strength": "A clear causal mechanism: 'cheap snacks at every break slowly lead to a daily sugar habit'.",
+   "priority": {
+    "crit": "LR",
+    "text": "Remove the repeated frame words ('opinion' appears four times, 'point'/'choice' three each) and the padding ('it is fair to say that', 'in the end'); use the space to name the health result (weight gain, risk of diabetes)."
+   },
+   "errors": [
+    {
+     "quote": "My opinion is based mainly on the harm sugar does to students' health, even though other people in the debate often care more about students' freedom to choose",
+     "fix": "My opinion is based mainly on the harm sugar does to students' health, while other people care more about students' freedom to choose",
+     "why": "lr-precision: 'even though' signals a concession that the sentence does not make; 'while' marks the contrast"
+    },
+    {
+     "quote": "but this limit does not change the main point of the argument",
+     "fix": "but this does not change the main point of the argument",
+     "why": "lr-precision: 'limit' is the wrong word here; 'this limitation' or simply 'this'"
+    },
+    {
+     "quote": "usually point to the right of teenagers to decide instead",
+     "fix": "instead usually point to teenagers' right to decide for themselves",
+     "why": "lr-precision: 'instead' is misplaced and 'decide' needs a complement"
+    },
+    {
+     "quote": "Looking back at the arguments about sugar in school shops, one side seems clearly stronger to me",
+     "fix": "Looking back at the arguments about sugar in school shops, I find one side clearly stronger",
+     "why": "gra-participle: dangling participle; the subject of 'Looking…' must be the writer, not the noun that follows"
+    }
+   ]
+  },
+  "50": {
+   "tr": 7,
+   "cc": 6,
+   "lr": 6,
+   "gra": 6,
+   "mean": 6.25,
+   "overall": 6.5,
+   "cefr": "around B2",
+   "summary": "A clear position held throughout, a pointable school example and a fair rebuttal of the freedom-of-choice view; the template signposting is still heavy and the sentence patterns repeat.",
+   "strength": "A pointable example: 'my own school in Bangkok, where many girls buy sweet milk tea after lunch'.",
+   "priority": {
+    "crit": "CC",
+    "text": "Trim the move labels ('It is easy to see how this happens:', 'A clear example of this can be found in') and fix the reference 'this limit' so each sentence links to the last by meaning."
+   },
+   "errors": [
+    {
+     "quote": "even though other people often care more about students' freedom to choose their own food",
+     "fix": "while other people care more about students' freedom to choose their own food",
+     "why": "lr-precision: 'even though' signals a concession that the sentence does not make"
+    },
+    {
+     "quote": "but this limit does not change the main point of the argument",
+     "fix": "but this does not change the main point of the argument",
+     "why": "lr-precision: 'limit' is the wrong word; 'this limitation' or 'this'"
+    },
+    {
+     "quote": "Looking back at the arguments about sugar in school shops, one side seems stronger to me",
+     "fix": "Looking back at the arguments about sugar in school shops, I find one side stronger",
+     "why": "gra-participle: dangling participle; the subject of 'Looking…' must be the writer, not the noun that follows"
+    }
+   ]
+  },
+  "40": {
+   "tr": 7,
+   "cc": 6,
+   "lr": 6,
+   "gra": 7,
+   "mean": 6.5,
+   "overall": 6.5,
+   "cefr": "around B2",
+   "summary": "A well-supported agree essay with a fair counter-view and rebuttal and accurate, varied grammar; cohesion still leans on fixed labels and one unclear reference.",
+   "strength": "A fair statement of the other side: 'teenagers need to practise making their own choices, even bad ones, before adulthood'.",
+   "priority": {
+    "crit": "CC",
+    "text": "Fix 'this limit' and replace 'This is how it happens:' / 'A clear example of this can be found in' with openers that carry content ('That habit is visible in my own school…')."
+   },
+   "errors": [
+    {
+     "quote": "but this limit does not change the main point",
+     "fix": "but this does not change the main point",
+     "why": "lr-precision: 'limit' is the wrong word; 'this limitation' or 'this'"
+    },
+    {
+     "quote": "Looking back at sugar in school shops, one side seems clearly stronger to me",
+     "fix": "Looking back at the debate on sugar in school shops, I find one side clearly stronger",
+     "why": "gra-participle: dangling participle; the subject of 'Looking…' must be the writer, not the noun that follows"
+    }
+   ]
+  },
+  "30": {
+   "tr": 7,
+   "cc": 7,
+   "lr": 6,
+   "gra": 7,
+   "mean": 6.75,
+   "overall": 7.0,
+   "cefr": "around B2",
+   "summary": "The strongest OPINION essay: clear position, concrete example, a sharp rebuttal and accurate complex sentences; vocabulary stays plain (mean 6.75 on the rounding boundary).",
+   "strength": "A sharp rebuttal: 'so the rule only covers school hours'.",
+   "priority": {
+    "crit": "LR",
+    "text": "Add two or three precise health and policy collocations in the slots, e.g. 'form lifelong eating habits', 'restrict the sale of sugary drinks', 'the risk of obesity'."
+   },
+   "errors": [
+    {
+     "quote": "Looking back at the debate on sugar in school shops, one side is stronger",
+     "fix": "Looking back at the debate on sugar in school shops, I find one side stronger",
+     "why": "gra-participle: dangling participle; the subject of 'Looking…' must be the writer, not the noun that follows"
+    },
+    {
+     "quote": "so it should help them build healthy habits for life",
+     "fix": "so school should help them build healthy habits for life",
+     "why": "cc-reference: 'it' has no clear antecedent (the rule? school?)"
+    }
+   ]
+  }
+ },
+ "B1-ADVANTAGE": {
+  "60": {
+   "tr": 6,
+   "cc": 6,
+   "lr": 5,
+   "gra": 6,
+   "mean": 5.75,
+   "overall": 6.0,
+   "cefr": "around B2",
+   "summary": "A verdict is given and each side has a mechanism and example, but only one advantage and one disadvantage are covered, and the heavy frame wording ('real' four times, 'advantage/disadvantage/harm' throughout) reads as formulaic.",
+   "strength": "A verdict the prompt did not force: 'the benefits outweigh the harm when viewing time is controlled'.",
+   "priority": {
+    "crit": "LR",
+    "text": "Cut the padded frame lines ('this advantage has its limits and does not apply in every situation', 'A real example of this that I know well') and use a synonym chain (benefit → gain → value; harm → drawback → cost) instead of repeating the same nouns."
+   },
+   "errors": []
+  },
+  "50": {
+   "tr": 6,
+   "cc": 6,
+   "lr": 6,
+   "gra": 6,
+   "mean": 6.0,
+   "overall": 6.0,
+   "cefr": "around B2",
+   "summary": "A clear, conditional verdict with one well-explained advantage and one disadvantage; the plural 'advantages and disadvantages' is not met, and signposting is still heavy.",
+   "strength": "A vivid mechanism: 'every hour in front of the screen is an hour without running, playing or sleeping'.",
+   "priority": {
+    "crit": "TR",
+    "text": "Use the nuance slots to add a second advantage (e.g. learning about other cultures or calming children before bed) and a second disadvantage (e.g. advertising for snacks and toys), one sentence each."
+   },
+   "errors": [
+    {
+     "quote": "Looking at the two sides together, my answer is that the benefits outweigh the harm",
+     "fix": "Looking at the two sides together, I conclude that the benefits outweigh the harm",
+     "why": "gra-participle: dangling participle; the subject of 'Looking…' must be the writer, not the noun that follows"
+    }
+   ]
+  },
+  "40": {
+   "tr": 6,
+   "cc": 6,
+   "lr": 6,
+   "gra": 7,
+   "mean": 6.25,
+   "overall": 6.5,
+   "cefr": "around B2",
+   "summary": "Accurate and varied grammar and a clear verdict, but only one advantage and one disadvantage are developed and every move still opens with a template label.",
+   "strength": "A personal, checkable example: 'my younger cousin, who learned English words and songs from cartoons before starting school'.",
+   "priority": {
+    "crit": "TR",
+    "text": "Answer the plurals: add a second advantage and a second disadvantage in the nuance slots (one sentence each) so the prompt's 'advantages and disadvantages' is fully covered."
+   },
+   "errors": [
+    {
+     "quote": "the amount of time children now spend in front of the television, which has good and bad effects",
+     "fix": "the amount of time children now spend in front of the television, a habit that has good and bad effects",
+     "why": "cc-reference: 'which' could refer to 'the television' or to 'the amount of time'"
+    },
+    {
+     "quote": "Looking at both sides, my answer is that the benefits outweigh the harm",
+     "fix": "Looking at both sides, I conclude that the benefits outweigh the harm",
+     "why": "gra-participle: dangling participle; the subject of 'Looking…' must be the writer, not the noun that follows"
+    }
+   ]
+  },
+  "30": {
+   "tr": 6,
+   "cc": 7,
+   "lr": 6,
+   "gra": 7,
+   "mean": 6.5,
+   "overall": 6.5,
+   "cefr": "around B2",
+   "summary": "Well organised with a conditional verdict and accurate grammar, but still only one advantage and one disadvantage, which holds Task Response at 6.",
+   "strength": "A precise conditional position: 'the advantages of television are greater than the disadvantages, as long as parents set clear limits'.",
+   "priority": {
+    "crit": "TR",
+    "text": "Answer the plurals: turn each nuance sentence into a second point plus its limit, e.g. 'A second benefit is exposure to other cultures, although…' and 'A further drawback is advertising aimed at children…'."
+   },
+   "errors": [
+    {
+     "quote": "The most useful advantage is learning new things",
+     "fix": "The greatest advantage is learning new things",
+     "why": "lr-collocation: 'useful advantage' is redundant; 'greatest/main advantage'"
+    },
+    {
+     "quote": "Still, this advantage does not always work",
+     "fix": "Still, this advantage does not always apply",
+     "why": "lr-collocation: an advantage 'applies'; it does not 'work'"
+    }
+   ]
+  }
+ },
+ "B1-PROBLEM": {
+  "60": {
+   "tr": 6,
+   "cc": 6,
+   "lr": 5,
+   "gra": 6,
+   "mean": 5.75,
+   "overall": 6.0,
+   "cefr": "around B2",
+   "summary": "Two causes and a measure for every actor are named, but only the parents' measure is developed; schools and governments share one vague clause, and the frame wording repeats 'problem' and 'cause' throughout.",
+   "strength": "An idiomatic summary line: 'every group has its own part to play'.",
+   "priority": {
+    "crit": "LR",
+    "text": "Replace the repeated 'problem'/'cause' and the vague frame phrases ('make evening study lighter', 'not getting smaller') with precise terms: 'sleep loss', 'reduce the homework load', 'restrict late-night tutoring'."
+   },
+   "errors": [
+    {
+     "quote": "this problem is not getting smaller",
+     "fix": "this problem is growing",
+     "why": "lr-precision: unnatural negative phrasing"
+    },
+    {
+     "quote": "The biggest reason for it is using phones late at night",
+     "fix": "The main cause is phone use late at night",
+     "why": "lr-collocation: a problem has a 'main cause', not a 'biggest reason'"
+    },
+    {
+     "quote": "Solving it needs more than one group",
+     "fix": "Solving it requires action from more than one group",
+     "why": "lr-precision: a solution requires action, not 'groups'"
+    },
+    {
+     "quote": "schools and governments should make evening study lighter",
+     "fix": "schools and governments should reduce the evening study load",
+     "why": "lr-collocation: 'make study lighter' is unnatural"
+    }
+   ]
+  },
+  "50": {
+   "tr": 6,
+   "cc": 6,
+   "lr": 6,
+   "gra": 6,
+   "mean": 6.0,
+   "overall": 6.0,
+   "cefr": "around B2",
+   "summary": "Clear causes and a well-explained family phone rule, but schools and governments get only one clause between them, so the second question is not fully answered.",
+   "strength": "A mechanism that ties the solution to the cause: 'without a phone nearby, nothing keeps a student awake in bed'.",
+   "priority": {
+    "crit": "TR",
+    "text": "Give schools and governments their own developed measure, e.g. a school homework cap with how it works, and a government limit on tutoring hours on school nights."
+   },
+   "errors": [
+    {
+     "quote": "The biggest reason for it is using phones late at night",
+     "fix": "The main cause is phone use late at night",
+     "why": "lr-collocation: a problem has a 'main cause', not a 'biggest reason'"
+    },
+    {
+     "quote": "Solving it needs several groups",
+     "fix": "Solving it requires action from several groups",
+     "why": "lr-precision: a solution requires action, not 'groups'"
+    }
+   ]
+  },
+  "40": {
+   "tr": 6,
+   "cc": 6,
+   "lr": 6,
+   "gra": 7,
+   "mean": 6.25,
+   "overall": 6.5,
+   "cefr": "around B2",
+   "summary": "Accurate grammar and a specific measure for each actor in the introduction, but only the parents' measure is developed in the body, which holds Task Response at 6.",
+   "strength": "A link from the nuance to the multi-actor answer: 'which is why schools and governments must also act'.",
+   "priority": {
+    "crit": "TR",
+    "text": "Add one developed sentence each for schools (homework limits, and why they work) and governments (a curfew on late tutoring), so all three named actors are answered."
+   },
+   "errors": [
+    {
+     "quote": "Its biggest reason is using phones for chats and videos late at night",
+     "fix": "Its main cause is the use of phones for chats and videos late at night",
+     "why": "lr-collocation: a problem has a 'main cause', not a 'biggest reason'"
+    }
+   ]
+  },
+  "30": {
+   "tr": 6,
+   "cc": 7,
+   "lr": 6,
+   "gra": 7,
+   "mean": 6.5,
+   "overall": 6.5,
+   "cefr": "around B2",
+   "summary": "Well organised with two clear causes and accurate grammar; schools and governments are still covered in a single clause, so the second question is only partly developed.",
+   "strength": "A concrete second cause: 'many students attend tutoring after school, so they get home late and start homework at nine'.",
+   "priority": {
+    "crit": "TR",
+    "text": "Develop the school and government measures with a mechanism each (e.g. 'a homework cap of one hour a night, which…'; 'a 9 p.m. closing time for tutoring centres, which…')."
+   },
+   "errors": [
+    {
+     "quote": "so she sleeps sooner",
+     "fix": "so she falls asleep sooner",
+     "why": "lr-collocation: 'fall asleep sooner', not 'sleep sooner'"
+    },
+    {
+     "quote": "Every group has a part:",
+     "fix": "Every group has a part to play:",
+     "why": "lr-collocation: the fixed phrase is 'a part to play'"
+    }
+   ]
+  }
+ },
+ "B1-TWOPART": {
+  "60": {
+   "tr": 6,
+   "cc": 6,
+   "lr": 5,
+   "gra": 6,
+   "mean": 5.75,
+   "overall": 6.0,
+   "cefr": "around B2",
+   "summary": "Both questions are answered with a cause, a second cause and a clear negative verdict, but the slot content is brief and the frame wording ('quite simple to explain', 'very easy to notice', 'know very well') is padded and formulaic.",
+   "strength": "A clear mechanism: 'every mark matters because entrance exams decide a student's future'.",
+   "priority": {
+    "crit": "LR",
+    "text": "Delete the intensifier padding in the frame lines ('actually quite', 'very easy', 'very well') and use the space for topic words: 'university admission', 'exam pressure', 'burnout'."
+   },
+   "errors": [
+    {
+     "quote": "it leads to two clear questions",
+     "fix": "it raises two questions",
+     "why": "lr-collocation: a trend 'raises' questions"
+    },
+    {
+     "quote": "Looking back at both questions, the picture of after-school tutoring is now much clearer",
+     "fix": "Looking back at both questions, I can now see after-school tutoring more clearly",
+     "why": "gra-participle: dangling participle; the subject of 'Looking…' must be the writer, not the noun that follows"
+    }
+   ]
+  },
+  "50": {
+   "tr": 7,
+   "cc": 6,
+   "lr": 6,
+   "gra": 6,
+   "mean": 6.25,
+   "overall": 6.5,
+   "cefr": "around B2",
+   "summary": "Both questions answered with a clear position held throughout and a well-chosen local example; signposting is still template-heavy and the grammar range in her own words is narrow.",
+   "strength": "A local, checkable example: 'Siam Square, where tutoring schools stay busy late into the evening'.",
+   "priority": {
+    "crit": "CC",
+    "text": "Shorten the frame labels ('The way this works is simple:', 'It is easy to see why this matters:') and link by reference ('this race', 'such long days')."
+   },
+   "errors": [
+    {
+     "quote": "Looking back at both questions, the picture of after-school tutoring is now clearer",
+     "fix": "Looking back at both questions, I can now see after-school tutoring more clearly",
+     "why": "gra-participle: dangling participle; the subject of 'Looking…' must be the writer, not the noun that follows"
+    }
+   ]
+  },
+  "40": {
+   "tr": 7,
+   "cc": 6,
+   "lr": 6,
+   "gra": 7,
+   "mean": 6.5,
+   "overall": 6.5,
+   "cefr": "around B2",
+   "summary": "A clear, developed answer to both questions with accurate, varied grammar; every move still opens with a fixed label and the conclusion's opening sentence is empty.",
+   "strength": "A well-controlled relative clause: 'which reduces their sleep and leaves no time for friends'.",
+   "priority": {
+    "crit": "CC",
+    "text": "Replace the empty conclusion opener ('after-school tutoring is now easier to understand') with a sentence that restates both answers, and cut the remaining labels ('The way it works is simple:', 'It is easy to see why:')."
+   },
+   "errors": [
+    {
+     "quote": "Looking back at both questions, after-school tutoring is now easier to understand",
+     "fix": "Looking back at both questions, I find after-school tutoring easier to understand",
+     "why": "gra-participle: dangling participle; the subject of 'Looking…' must be the writer, not the noun that follows"
+    }
+   ]
+  },
+  "30": {
+   "tr": 7,
+   "cc": 7,
+   "lr": 6,
+   "gra": 7,
+   "mean": 6.75,
+   "overall": 7.0,
+   "cefr": "around B2",
+   "summary": "The strongest TWOPART essay: both questions answered with mechanisms, local examples and a principled rationale, in accurate complex sentences; vocabulary is plain (mean 6.75 on the rounding boundary).",
+   "strength": "A rationale stated as a principle: 'teenagers need time to rest, play sport and see their friends, not only time to study for exams'.",
+   "priority": {
+    "crit": "LR",
+    "text": "Add three precise education collocations she can control in the slots: 'exam pressure', 'university admission', 'burnout' (replacing 'hard subject', 'good side')."
+   },
+   "errors": [
+    {
+     "quote": "Looking back, after-school tutoring is now easier to understand",
+     "fix": "Looking back, I find after-school tutoring easier to understand",
+     "why": "gra-participle: dangling participle; the subject of 'Looking…' must be the writer, not the noun that follows"
+    }
+   ]
+  }
+ }
+}

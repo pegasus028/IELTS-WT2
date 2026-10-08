@@ -25,6 +25,27 @@
   });
 
   var COMP = {}; L.COMPONENTS.forEach(function (c, i) { c.n = i + 1; COMP[c.id] = c; });
+  /* A component as it reads in a blueprint built for one question type:
+     the type's name, job, tip and examples where the playbook changes them,
+     the general component everywhere else. `base` keeps the general one so
+     the copied-wording check can test against both sets of examples.     */
+  function compFor(type, comp) {
+    var o = ((L.TYPE_COMPONENTS || {})[type] || {})[comp.id];
+    if (!o) return comp;
+    var m = extend({}, comp);
+    ['name', 'fn', 'why', 'tip'].forEach(function (k) { if (o[k]) m[k] = o[k]; });
+    m.examples = { B2: (o.examples && o.examples.B2) || comp.examples.B2, C1: (o.examples && o.examples.C1) || comp.examples.C1 };
+    m.base = comp;
+    return m;
+  }
+  function bpTypeInfo(id) { return (L.BP_TYPES || []).filter(function (x) { return x.id === id; })[0] || null; }
+  var BP_SHORT = { DISCUSS: 'Discuss', OPINION: 'Opinion', ADVANTAGE: 'Adv/Disadv', PROBLEM: 'Problem', TWOPART: 'Two-part' };
+  function bpTypeShort(id) { return BP_SHORT[id] || 'All-purpose'; }
+  /* What each relabelled slot means in a blueprint of this type. */
+  function slotMeanings(type) {
+    var pb = ((T.PLAYBOOKS || {})[type] || {}).labels || {};
+    return Object.keys(pb).map(function (k) { return { key: k, generic: L.SLOT_LABEL[k], meaning: pb[k] }; });
+  }
   var VAR_KEYS = C.VARIABLES.map(function (v) { return v.key; });
   var MAX_TRIES = 3;
   var TIMEOUT_COACH = 45000, TIMEOUT_RATE = 60000, TIMEOUT_SAVE = 20000;
@@ -37,7 +58,8 @@
     setup: null, build: null, run: null, review: null,
     filters: { type: 'all' }, asmTemplate: null, asmTiming: 'none', asmPrompt: null,
     showOtherTier: false, pending: false, highlightFrame: true,
-    drive: { open: true, type: 'DISCUSS', band: 0 }
+    drive: { open: true, type: 'DISCUSS', band: 0 },
+    ex: { level: 'B1', type: 'DISCUSS', pct: '40', view: 'one', para: 'bodyA' }
   };
 
   /* ============================================================== helpers */
@@ -458,7 +480,12 @@
       st.ai = !!r.ai; st.aiNote = r.ai ? 'AI coach online' : 'The class server has no AI key yet: quick checks only.';
     }).catch(function (e) {
       st.ai = false;
-      st.aiNote = /Unknown action/.test(String(e.message)) ? 'The class server has not been updated for the Lab yet: quick checks only.' : 'Could not reach the AI coach: quick checks only.';
+      var msg = String(e && e.message || e);
+      /* Apps Script answers with an HTML error page (not JSON) when Lab.gs is
+         missing from the project: "LAB_handle is not defined". */
+      st.aiNote = /Unknown action/.test(msg) ? 'The class server has not been updated for the Lab yet: quick checks only.'
+        : /JSON|Unexpected token|not valid/i.test(msg) ? 'The class server is missing the Lab script (Lab.gs): quick checks only. Your work is kept on this device.'
+        : 'Could not reach the AI coach: quick checks only.';
     });
   }
 
@@ -506,6 +533,7 @@
     if (res.words > res.budget.hi) res.issues.push({ kind: 'warn', msg: res.words + ' template words: over the ' + res.budget.lo + '–' + res.budget.hi + ' budget for a ' + pct + '% template. Trim words that carry no meaning.' });
     if (res.words < res.budget.lo) res.issues.push({ kind: 'tip', msg: res.words + ' template words: under the ' + res.budget.lo + '–' + res.budget.hi + ' budget. Fine if the line still does its job.' });
     var ex = comp.examples.B2.concat(comp.examples.C1), worst = 0, worstEx = '';
+    if (comp.base) ex = ex.concat(comp.base.examples.B2, comp.base.examples.C1);
     ex.forEach(function (e) {
       var a = text.replace(/\{\w+\}/g, ' slotx '), b = e.replace(/\{\w+\}/g, ' slotx ');
       var run = longestRun(a, b), tri = trigramOverlap(a, b), score = Math.max(run >= 5 ? 1 : 0, tri);
@@ -659,7 +687,7 @@
       '<div class="lab">' +
       '<div class="sect-h"><div><h2>Template Lab</h2><p>Build a Task 2 template in your own words, one line at a time, then test it on real prompts. Every line and every variable is coached, scored and saved to your ID.</p></div></div>' +
       '<div class="lab-top"><div class="tabs lab-tabs">' +
-        [['studio', 'Blueprint Studio'], ['assembly', 'Assembly Line'], ['score', 'Scorecard']].map(function (t) { return '<button class="tab' + (st.tab === t[0] ? ' on' : '') + '" data-ltab="' + t[0] + '">' + t[1] + '</button>'; }).join('') +
+        [['studio', 'Blueprint Studio'], ['assembly', 'Assembly Line'], ['score', 'Scorecard']].concat(global.LabExamples ? [['examples', 'Examples']] : []).map(function (t) { return '<button class="tab' + (st.tab === t[0] ? ' on' : '') + '" data-ltab="' + t[0] + '">' + t[1] + '</button>'; }).join('') +
       '</div><div class="lab-chips"><div class="chip lab-chipwrap"><b id="lab-chip-pts" class="lab-num">' + (s.points || 0) + '</b><span>Lab points</span></div><div class="chip"><b id="lab-chip-rank">' + esc(r.rank.name) + '</b><span>Lab rank</span></div></div></div>' +
       '<p class="lab-ai"><span class="pill' + aiCls + '">' + esc(aiTxt) + '</span>' + (Object.keys(st.data.dirty || {}).length ? ' <span class="pill gold">' + Object.keys(st.data.dirty).length + ' waiting to sync</span>' : '') + '</p>' +
       '<div id="lab-body"></div></div>';
@@ -688,6 +716,7 @@
       if (st.run && st.run.done) return paintFinish(el);
       return paintAsmHome(el);
     }
+    if (st.tab === 'examples') return paintExamples(el);
     if (st.review) return paintReview(el);
     return paintScore(el);
   }
@@ -708,19 +737,23 @@
       var lv = levelInfo(t.level), done = tplDone(t), score = tplScore(t);
       return '<div class="card lab-tcard' + (t.status === 'complete' ? ' done' : '') + '">' +
         '<div class="lab-tcard-h"><b>' + esc(t.name) + '</b><span class="pill">v' + (t.version || 1) + '</span></div>' +
-        '<div class="lab-pills"><span class="pill gold">' + t.pct + '% template</span><span class="pill">' + esc(lv.name) + '</span>' +
+        '<div class="lab-pills"><span class="pill gold">' + t.pct + '% template</span><span class="pill">' + esc(lv.name) + '</span><span class="pill on">' + esc(bpTypeShort(t.type)) + '</span>' +
         (t.status === 'complete' ? '<span class="pill good">Complete · ' + Math.round(score / (L.COMPONENTS.length * L.POINTS.lineMax) * 100) + '% blueprint score</span>' : '<span class="pill">Draft · ' + done + '/14 lines</span>') + '</div>' +
         '<p class="tiny">' + templateFrameWords(t) + ' template words · updated ' + esc(fmtDate(t.updatedAt)) + '</p>' +
         '<div class="lab-acts">' + (t.status === 'complete'
-          ? '<button class="btn sm" data-topen="' + t.id + '">View</button><button class="btn sm" data-tver="' + t.id + '">New version</button><button class="btn sm" data-tuse="' + t.id + '">Use on a prompt →</button><button class="btn sm ghost" data-twriter="' + t.id + '">Use in Writer</button>'
+          ? '<button class="btn sm" data-topen="' + t.id + '">View</button><button class="btn sm" data-tver="' + t.id + '">New version</button><button class="btn sm" data-tcopy="' + t.id + '" title="Start a blueprint at another share from these lines">Copy at another share</button><button class="btn sm" data-tuse="' + t.id + '">Use on a prompt →</button><button class="btn sm ghost" data-twriter="' + t.id + '">Use in Writer</button>'
           : '<button class="btn sm primary" data-tcont="' + t.id + '">Continue</button><button class="btn sm ghost" data-tdel="' + t.id + '">Delete draft</button>') + '</div></div>';
     }).join('') + '</div>';
     el.innerHTML = html;
-    $('#lab-new').addEventListener('click', function () { st.setup = { pct: 40, level: host.tier ? (host.tier() === 'C1' ? 'C1' : 'B2') : 'B2', name: '' }; st.view = 'setup'; paintBody(); scrollTop(); });
+    $('#lab-new').addEventListener('click', function () { st.setup = { pct: 40, level: host.tier ? (host.tier() === 'C1' ? 'C1' : 'B2') : 'B2', type: 'DISCUSS', name: '' }; st.view = 'setup'; paintBody(); scrollTop(); });
+    $$('[data-tcopy]').forEach(function (b) { b.addEventListener('click', function () {
+      var src = getTpl(b.dataset.tcopy), next = [60, 50, 40, 30].filter(function (x) { return x < src.pct; })[0] || [60, 50, 40, 30].filter(function (x) { return x !== src.pct; })[0];
+      st.setup = { pct: next, level: src.level, type: src.type || 'DISCUSS', name: '', from: src.id }; st.view = 'setup'; paintBody(); scrollTop();
+    }); });
     $$('[data-tcont]').forEach(function (b) { b.addEventListener('click', function () { openBuild(getTpl(b.dataset.tcont)); }); });
-    $$('[data-topen]').forEach(function (b) { b.addEventListener('click', function () { st.build = { tpl: getTpl(b.dataset.topen), idx: 0, readOnly: true }; st.view = 'summary'; paintBody(); scrollTop(); }); });
+    $$('[data-topen]').forEach(function (b) { b.addEventListener('click', function () { var tp = getTpl(b.dataset.topen); st.drive.type = tp.type || st.drive.type; st.build = { tpl: tp, idx: 0, readOnly: true }; st.view = 'summary'; paintBody(); scrollTop(); }); });
     $$('[data-tver]').forEach(function (b) { b.addEventListener('click', function () { newVersion(getTpl(b.dataset.tver)); }); });
-    $$('[data-tuse]').forEach(function (b) { b.addEventListener('click', function () { st.asmTemplate = b.dataset.tuse; st.tab = 'assembly'; st.run = null; paint(); scrollTop(); }); });
+    $$('[data-tuse]').forEach(function (b) { b.addEventListener('click', function () { st.asmTemplate = b.dataset.tuse; st.filters.type = getTpl(b.dataset.tuse).type || 'all'; st.tab = 'assembly'; st.run = null; paint(); scrollTop(); }); });
     $$('[data-twriter]').forEach(function (b) { b.addEventListener('click', function () { useInWriter(getTpl(b.dataset.twriter)); }); });
     $$('[data-tdel]').forEach(function (b) { b.addEventListener('click', function () {
       if (!confirm('Delete this draft blueprint? This cannot be undone.')) return;
@@ -733,29 +766,41 @@
   function getTpl(id) { return st.data.templates.filter(function (t) { return t.id === id; })[0]; }
 
   function paintSetup(el) {
-    var s = st.setup, lv = levelInfo(s.level);
+    var s = st.setup, lv = levelInfo(s.level), src = s.from ? getTpl(s.from) : null;
     var fw = frameBudget(s.pct), own = L.ESSAY_WORDS - fw;
+    var defName = lv.id + ' ' + bpTypeShort(s.type) + ' · ' + s.pct + '%';
     var html = '<div class="lab-back"><button class="btn sm ghost" id="lab-cancel">← Blueprints</button></div>' +
-      '<div class="card lab-pad"><p class="kicker">Step 1 · Template share</p><h3>How much of the essay should your template carry?</h3>' +
+      (src ? '<div class="card lab-pad lab-copynote"><p class="kicker">Copy at another share</p><p>Your ' + src.pct + '% lines from <b>' + esc(src.name) + '</b> will be copied in as drafts. Trim each one to the new word budget in your own way, then coach it again: the budget changes with the share, so every line is checked afresh.</p></div>' : '') +
+      '<div class="card lab-pad"><p class="kicker">Step 1 · Question type</p><h3>Which question type is this blueprint for?</h3><p class="tiny">One blueprint per type keeps every line doing the right job: in a Problem/solution blueprint the first body paragraph is the cause and the second the solution that answers it.</p>' +
+        '<div class="lab-types">' + (L.BP_TYPES || []).map(function (o) {
+          return '<button class="lab-type' + (s.type === o.id ? ' on' : '') + '" data-bt="' + o.id + '"' + (src ? ' disabled' : '') + '><b>' + esc(o.name) + '</b><span class="tiny">' + esc(o.signal) + '</span><span>' + esc(o.blurb) + '</span></button>';
+        }).join('') + '</div></div>' +
+      '<div class="card lab-pad"><p class="kicker">Step 2 · Template share</p><h3>How much of the essay should your template carry?</h3>' +
       '<div class="lab-pcts">' + L.PCTS.map(function (o) {
         return '<label class="lab-pct' + (s.pct === o.pct ? ' on' : '') + '"><input type="radio" name="lab-pct" value="' + o.pct + '"' + (s.pct === o.pct ? ' checked' : '') + '>' +
           '<span class="lab-pct-n">' + o.pct + '%</span><span class="lab-pct-t"><b>' + esc(o.name) + '</b><span>' + esc(o.blurb) + '</span><span class="tiny">' + esc(o.research) + '</span><span class="pill">' + esc(o.suits) + '</span></span></label>';
       }).join('') + '</div>' +
       '<div class="lab-split"><div class="lab-split-bar"><span class="f" style="width:' + s.pct + '%"></span><span class="o" style="width:' + (100 - s.pct) + '%"></span></div>' +
       '<p class="tiny"><b>' + fw + '</b> template words + <b>' + own + '</b> words of your own ideas ≈ a ' + L.ESSAY_WORDS + '-word essay. Research on memorised IELTS scripts proposes at least 50% self-written language for Band 7 and 59% for Band 8 (Wray &amp; Pegg, 2009).</p></div></div>' +
-      '<div class="card lab-pad"><p class="kicker">Step 2 · Target level</p><h3>Which level are you writing at?</h3><p class="tiny">Your template and your variables should be at the same level. A C1 frame around B1 ideas is the exact pattern examiners notice.</p>' +
+      '<div class="card lab-pad"><p class="kicker">Step 3 · Target level</p><h3>Which level are you writing at?</h3><p class="tiny">Your template and your variables should be at the same level. A C1 frame around B1 ideas is the exact pattern examiners notice.</p>' +
       '<div class="filters lab-levels">' + L.LEVELS.map(function (l) { return '<button data-lv="' + l.id + '"' + (s.level === l.id ? ' class="on"' : '') + '>' + esc(l.name) + '</button>'; }).join('') + '</div><p class="tiny">' + esc(lv.note) + '</p></div>' +
-      '<div class="card lab-pad"><p class="kicker">Step 3 · Name</p><div class="field"><label for="lab-name">Blueprint name</label><input type="text" id="lab-name" maxlength="48" value="' + esc(s.name || (lv.id + ' frame · ' + s.pct + '%')) + '"></div></div>' +
+      '<div class="card lab-pad"><p class="kicker">Step 4 · Name</p><div class="field"><label for="lab-name">Blueprint name</label><input type="text" id="lab-name" maxlength="48" value="' + esc(s.name || defName) + '"></div></div>' +
       '<p class="lab-cta"><button class="btn primary" id="lab-startbuild">Start building: 14 lines →</button></p>';
     el.innerHTML = html;
     $('#lab-cancel').addEventListener('click', function () { st.view = 'home'; paintBody(); });
     $$('input[name=lab-pct]').forEach(function (r) { r.addEventListener('change', function () { s.pct = +r.value; s.name = ''; paintSetup(el); }); });
     $$('[data-lv]').forEach(function (b) { b.addEventListener('click', function () { s.level = b.dataset.lv; s.name = ''; paintSetup(el); }); });
+    $$('[data-bt]').forEach(function (b) { b.addEventListener('click', function () { s.type = b.dataset.bt; s.name = ''; paintSetup(el); }); });
     $('#lab-name').addEventListener('input', function () { s.name = this.value; });
     $('#lab-startbuild').addEventListener('click', function () {
       var t = { id: uid('T'), studentId: st.sid, name: (s.name || $('#lab-name').value || 'My blueprint').trim(), version: 1, parentId: '', rootId: '',
-        pct: s.pct, level: s.level, status: 'draft', lines: {}, slotNotes: {}, createdAt: nowIso(), updatedAt: nowIso() };
+        pct: s.pct, level: s.level, type: s.type || 'DISCUSS', status: 'draft', lines: {}, slotNotes: {}, createdAt: nowIso(), updatedAt: nowIso() };
       t.rootId = t.id;
+      if (src) {
+        t.copiedFrom = src.id;
+        L.COMPONENTS.forEach(function (c) { var l = src.lines[c.id]; if (l && l.text) t.lines[c.id] = { draft: toLabels(l.text) }; });
+        Object.keys(src.slotNotes || {}).forEach(function (k) { t.slotNotes[k] = src.slotNotes[k]; });
+      }
       saveItem('template', t);
       openBuild(t);
     });
@@ -764,6 +809,7 @@
   function openBuild(t, idx) {
     if (idx == null) { idx = 0; for (var i = 0; i < L.COMPONENTS.length; i++) { var ln = t.lines[L.COMPONENTS[i].id]; if (!ln || !ln.last) { idx = i; break; } if (i === L.COMPONENTS.length - 1) idx = i; } }
     st.build = { tpl: t, idx: idx, fb: null, busy: false };
+    if (t.type) st.drive.type = t.type;
     st.tab = 'studio'; st.view = 'build';
     paint(); scrollTop();
   }
@@ -788,26 +834,28 @@
 
   /* ------------------------------------------------------------- builder */
   function paintBuild(el) {
-    var b = st.build, t = b.tpl, comp = L.COMPONENTS[b.idx], ln = t.lines[comp.id] || {}, lv = levelInfo(t.level), tier = lv.tier;
+    var b = st.build, t = b.tpl, comp = compFor(t.type, L.COMPONENTS[b.idx]), ln = t.lines[comp.id] || {}, lv = levelInfo(t.level), tier = lv.tier;
+    var meanings = slotMeanings(t.type).filter(function (m) { return comp.slots.indexOf(m.key) >= 0; });
     var budget = compBudget(t.pct, comp.id), para = L.PARAS.filter(function (p) { return p.key === comp.para; })[0];
     var draft = ln.draft != null ? ln.draft : toLabels(ln.text || '');
-    var html = '<div class="lab-back"><button class="btn sm ghost" id="lab-bhome">← Blueprints</button><span class="tiny">' + esc(t.name) + ' · v' + (t.version || 1) + ' · ' + t.pct + '% · ' + esc(lv.name) + '</span></div>';
+    var html = '<div class="lab-back"><button class="btn sm ghost" id="lab-bhome">← Blueprints</button><span class="tiny">' + esc(t.name) + ' · v' + (t.version || 1) + ' · ' + esc(bpTypeShort(t.type)) + ' · ' + t.pct + '% · ' + esc(lv.name) + '</span></div>';
     html += '<div class="lab-rail">' + L.PARAS.map(function (pg) {
       return '<div class="lab-rail-g"><span class="kicker">' + esc(pg.name.replace('Body paragraph', 'Body')) + '</span><div>' + L.COMPONENTS.filter(function (c) { return c.para === pg.key; }).map(function (c) {
         var l = t.lines[c.id], cls = c.n - 1 === b.idx ? ' cur' : (l && l.last ? (l.last.errors === 0 && l.last.fnv === 'meets' ? ' ok' : ' done') : '');
-        return '<button class="lab-dot' + cls + '" data-go="' + (c.n - 1) + '" title="' + esc(c.n + '. ' + c.name) + '">' + c.n + '</button>';
+        return '<button class="lab-dot' + cls + '" data-go="' + (c.n - 1) + '" title="' + esc(c.n + '. ' + compFor(t.type, c).name) + '">' + c.n + '</button>';
       }).join('') + '</div></div>';
     }).join('') + '</div>';
     html += '<div class="card lab-comp">' +
       '<p class="kicker">' + esc(para.name) + ' · line ' + comp.n + ' of ' + L.COMPONENTS.length + '</p>' +
       '<h3>' + esc(comp.name) + '</h3>' +
       '<p class="lab-fn">' + esc(comp.fn) + '</p>' +
+      (meanings.length ? '<p class="lab-typenote">' + esc(bpTypeInfo(t.type) ? bpTypeInfo(t.type).name : '') + ' blueprint: ' + meanings.map(function (m) { return '<b>[' + esc(m.generic) + ']</b> = ' + esc(m.meaning.toLowerCase()); }).join(' · ') + '</p>' : '') +
       '<div class="lab-why"><div class="lab-pills">' + comp.crit.map(function (k) { return '<span class="pill on">' + k + '</span>'; }).join('') + '<span class="pill gold">≈ ' + budget.target + ' template words (' + budget.lo + '–' + budget.hi + ')</span></div><p>' + esc(comp.why) + '</p><p class="tiny"><b>Watch out:</b> ' + esc(comp.tip) + '</p></div>' +
       '<div class="lab-ex"><div class="lab-ex-h"><b>Study these, then write your own</b><button class="linky" id="lab-othertier">' + (st.showOtherTier ? 'Hide' : 'Show') + ' the ' + (tier === 'C1' ? 'B2' : 'C1') + ' versions</button></div>' +
         comp.examples[tier].map(function (e) { return '<div class="lab-exrow">' + slotChips(e) + '</div>'; }).join('') +
         (st.showOtherTier ? '<p class="kicker" style="margin-top:8px">' + (tier === 'C1' ? 'B2' : 'C1') + '</p>' + comp.examples[tier === 'C1' ? 'B2' : 'C1'].map(function (e) { return '<div class="lab-exrow alt">' + slotChips(e) + '</div>'; }).join('') : '') +
       '</div>' +
-      '<div class="lab-write"><div class="lab-slotbtns"><span class="tiny">Insert:</span>' + comp.slots.map(function (k) { return '<button class="lab-slotbtn" data-ins="' + k + '">[' + esc(L.SLOT_LABEL[k]) + ']</button>'; }).join('') + '</div>' +
+      '<div class="lab-write"><div class="lab-slotbtns"><span class="tiny">Insert:</span>' + comp.slots.map(function (k) { var mm = meanings.filter(function (m) { return m.key === k; })[0]; return '<button class="lab-slotbtn" data-ins="' + k + '"' + (mm ? ' title="' + esc(mm.meaning) + '"' : '') + '>[' + esc(L.SLOT_LABEL[k]) + ']' + (mm ? ' <span class="tiny">' + esc(mm.meaning.toLowerCase()) + '</span>' : '') + '</button>'; }).join('') + '</div>' +
         '<label class="sr" for="lab-line">Your line</label><textarea id="lab-line" rows="3" spellcheck="true" placeholder="Write the line in your own words and include ' + comp.slots.map(function (k) { return '[' + L.SLOT_LABEL[k] + ']'; }).join(' and ') + '">' + esc(draft) + '</textarea>' +
         '<div class="lab-meter"><span id="lab-wc" class="lab-num">0 words</span><div class="bar-line thin"><span id="lab-wbar"></span></div></div>' +
         '<div class="lab-preview" id="lab-preview"></div>' +
@@ -855,14 +903,14 @@
   }
 
   function coachLine() {
-    var b = st.build, t = b.tpl, comp = L.COMPONENTS[b.idx], ln = t.lines[comp.id] || (t.lines[comp.id] = {});
+    var b = st.build, t = b.tpl, comp = compFor(t.type, L.COMPONENTS[b.idx]), ln = t.lines[comp.id] || (t.lines[comp.id] = {});
     var raw = $('#lab-line').value, q = quickFrame(comp, raw, t.pct);
     if (q.blocking.length) { b.fb = { blocking: q.blocking }; $('#lab-fb').innerHTML = renderFeedback(b.fb, { kind: 'frame' }); return; }
     b.busy = true; $('#lab-coach').disabled = true; $('#lab-fb').innerHTML = coachWaiting();
     var lv = levelInfo(t.level);
     var ask = st.ai === false ? Promise.reject(new Error('offline')) : server('lab.coach', {
-      kind: 'frame', level: lv.id, band: lv.band, pct: t.pct,
-      component: { id: comp.id, name: comp.name, fn: comp.fn, why: comp.why, slots: comp.slots.map(function (k) { return L.SLOT_LABEL[k]; }), paragraph: comp.para },
+      kind: 'frame', level: lv.id, band: lv.band, pct: t.pct, type: t.type ? typeName(t.type) : '',
+      component: { id: comp.id, name: comp.name, fn: comp.fn, why: comp.why, slots: comp.slots.map(function (k) { var mm = slotMeanings(t.type).filter(function (m) { return m.key === k; })[0]; return L.SLOT_LABEL[k] + (mm ? ' (= ' + mm.meaning + ')' : ''); }), paragraph: comp.para },
       line: toLabels(q.text), words: q.words, budget: { lo: q.budget.lo, hi: q.budget.hi },
       context: L.COMPONENTS.filter(function (c) { return c.para === comp.para && c.id !== comp.id && t.lines[c.id] && t.lines[c.id].text; }).map(function (c) { return toLabels(t.lines[c.id].text); })
     }, TIMEOUT_COACH).then(function (r) { return r.coach; });
@@ -946,7 +994,7 @@
     var fw = templateFrameWords(t), clean = L.COMPONENTS.filter(function (c) { var l = t.lines[c.id]; return l && l.last && l.last.errors === 0; }).length;
     var predicted = fw / L.ESSAY_WORDS;
     var html = '<div class="lab-back"><button class="btn sm ghost" id="lab-shome">← Blueprints</button></div>';
-    html += '<div class="card lab-pad"><p class="kicker">' + (t.status === 'complete' ? 'Blueprint' : 'Review before saving') + ' · v' + (t.version || 1) + '</p><h3>' + esc(t.name) + '</h3>' +
+    html += '<div class="card lab-pad"><p class="kicker">' + (t.status === 'complete' ? 'Blueprint' : 'Review before saving') + ' · v' + (t.version || 1) + ' · ' + esc(bpTypeInfo(t.type) ? bpTypeInfo(t.type).name : 'All-purpose') + '</p><h3>' + esc(t.name) + '</h3>' +
       '<div class="lab-kpis">' +
         kpi(Math.round(score / max * 100) + '%', 'Blueprint score', score + ' / ' + max + ' pts') +
         kpi(fw, 'Template words', 'budget ≈ ' + frameBudget(t.pct)) +
@@ -957,7 +1005,7 @@
     html += L.PARAS.map(function (pg) {
       return '<div class="card lab-para"><p class="kicker">' + esc(pg.name) + '</p>' + L.COMPONENTS.filter(function (c) { return c.para === pg.key; }).map(function (c) {
         var l = t.lines[c.id] || {}, f = l.last;
-        return '<div class="lab-sline"><div class="lab-sline-t">' + (l.text ? slotChips(l.text) : '<span class="tiny">(empty)</span>') + '</div><div class="lab-sline-m"><span class="tiny">' + c.n + '. ' + esc(c.name) + '</span>' +
+        return '<div class="lab-sline"><div class="lab-sline-t">' + (l.text ? slotChips(l.text) : '<span class="tiny">(empty)</span>') + '</div><div class="lab-sline-m"><span class="tiny">' + c.n + '. ' + esc(compFor(t.type, c).name) + '</span>' +
           (f ? '<span class="pill ' + (f.errors === 0 ? 'good' : 'bad') + '">' + (f.errors === 0 ? 'no errors' : f.errors + ' error' + (f.errors > 1 ? 's' : '')) + '</span>' + (f.cefr ? '<span class="pill">' + esc(f.cefr) + '</span>' : '') + '<span class="pill gold">' + f.points + ' pts</span>' : '') +
           (!b.readOnly ? '<button class="linky" data-edit="' + (c.n - 1) + '">edit</button>' : '') + '</div></div>';
       }).join('') + '</div>';
@@ -991,7 +1039,7 @@
     var sb = $('#lab-sback'); if (sb) sb.addEventListener('click', function () { openBuild(t, 13); });
     var vr = $('#lab-sver'); if (vr) vr.addEventListener('click', function () { newVersion(t); });
     var wr = $('#lab-swriter'); if (wr) wr.addEventListener('click', function () { useInWriter(t); });
-    var us = $('#lab-suse'); if (us) us.addEventListener('click', function () { st.asmTemplate = t.id; st.tab = 'assembly'; st.run = null; paint(); scrollTop(); });
+    var us = $('#lab-suse'); if (us) us.addEventListener('click', function () { st.asmTemplate = t.id; st.filters.type = t.type || 'all'; st.tab = 'assembly'; st.run = null; paint(); scrollTop(); });
   }
   function kpi(v, label, sub) { return '<div class="lab-kpi"><b class="lab-num">' + v + '</b><span>' + esc(label) + '</span>' + (sub ? '<small>' + sub + '</small>' : '') + '</div>'; }
 
@@ -1006,7 +1054,8 @@
     Object.keys(pb).forEach(function (k) { lab[k] = pb[k]; });
     return lab;
   }
-  function fitPill(type) {
+  function fitPill(type, tpl) {
+    if (tpl && tpl.type) return type === tpl.type ? '<span class="pill good">your ' + esc(bpTypeShort(tpl.type)) + ' blueprint</span>' : '<span class="pill bad">blueprint is for ' + esc(bpTypeShort(tpl.type)) + '</span>';
     var f = L.TYPE_FIT[type];
     return f === 'good' ? '<span class="pill good">fits the frame</span>' : f === 'ok' ? '<span class="pill">needs a clear stance</span>' : '<span class="pill bad">harder fit: relabelled slots</span>';
   }
@@ -1026,7 +1075,7 @@
     var list = C.PROMPTS.filter(function (pr) { return st.filters.type === 'all' || pr.type === st.filters.type; });
     var html = draftRunsHtml();
     html += '<div class="card lab-pad"><p class="kicker">Step 1 · Your blueprint</p><div class="lab-row2"><select id="lab-tsel" class="lab-select">' + tpls.map(function (x) {
-      return '<option value="' + x.id + '"' + (x.id === t.id ? ' selected' : '') + '>' + esc(x.name) + ' · v' + (x.version || 1) + ' · ' + x.pct + '% · ' + esc(levelInfo(x.level).id) + '</option>';
+      return '<option value="' + x.id + '"' + (x.id === t.id ? ' selected' : '') + '>' + esc(x.name) + ' · v' + (x.version || 1) + ' · ' + esc(bpTypeShort(x.type)) + ' · ' + x.pct + '% · ' + esc(levelInfo(x.level).id) + '</option>';
     }).join('') + '</select><span class="pill gold">' + t.pct + '% template</span><span class="pill">' + esc(lv.name) + '</span></div>' +
       '<p class="tiny">Your target is built into the blueprint: the coach checks every variable against ' + esc(lv.name) + '.</p></div>';
     html += '<div class="card lab-pad"><p class="kicker">Step 2 · Timing</p><div class="lab-timings">' + L.TIMINGS.map(function (o) {
@@ -1036,11 +1085,11 @@
       return '<button data-ft="' + ty + '"' + (st.filters.type === ty ? ' class="on"' : '') + '>' + (ty === 'all' ? 'All types' : esc(typeName(ty))) + '</button>';
     }).join('') + '</div><p class="lab-cta" style="margin:0 0 10px"><button class="btn sm" id="lab-random">Random prompt</button></p>' +
       '<div class="promptgrid lab-prompts">' + list.map(function (pr) {
-        return '<button class="pcard' + (done[pr.id] ? ' done' : '') + (st.asmPrompt === pr.id ? ' lab-picked' : '') + '" data-pp="' + pr.id + '"><span class="pcard-t">' + esc(pr.title) + '</span><span class="pcard-m"><span class="pill gold">' + esc(typeName(pr.type)) + '</span>' + fitPill(pr.type) + (done[pr.id] ? '<span class="pill good">done ' + done[pr.id] + '×</span>' : '') + '</span><span class="pcard-r">' + esc(pr.text) + '</span></button>';
+        return '<button class="pcard' + (done[pr.id] ? ' done' : '') + (st.asmPrompt === pr.id ? ' lab-picked' : '') + '" data-pp="' + pr.id + '"><span class="pcard-t">' + esc(pr.title) + '</span><span class="pcard-m"><span class="pill gold">' + esc(typeName(pr.type)) + '</span>' + fitPill(pr.type, t) + (done[pr.id] ? '<span class="pill good">done ' + done[pr.id] + '×</span>' : '') + '</span><span class="pcard-r">' + esc(pr.text) + '</span></button>';
       }).join('') + '</div></div>';
     el.innerHTML = html;
     bindDraftRuns();
-    $('#lab-tsel').addEventListener('change', function () { st.asmTemplate = this.value; paintAsmHome(el); });
+    $('#lab-tsel').addEventListener('change', function () { st.asmTemplate = this.value; var nt = getTpl(this.value); if (nt && nt.type) st.filters.type = nt.type; paintAsmHome(el); });
     $$('input[name=lab-timing]').forEach(function (r) { r.addEventListener('change', function () { st.asmTiming = r.value; $$('.lab-timing').forEach(function (x) { x.classList.toggle('on', x.querySelector('input').checked); }); }); });
     $$('[data-ft]').forEach(function (b) { b.addEventListener('click', function () { st.filters.type = b.dataset.ft; paintAsmHome(el); }); });
     $('#lab-random').addEventListener('click', function () { var pool = list.length ? list : C.PROMPTS; startRun(t, pool[Math.floor(Math.random() * pool.length)], st.asmTiming); });
@@ -1362,6 +1411,13 @@
     '</div>';
     if (a.compare && !opts.waiting) html += compareHtml(a);
     html += '</div>';
+    /* The ten-point pre-flight runs on every finished run, so a student gets
+       feedback on the whole essay even when the AI rating is unavailable. */
+    if (a.essay && W && W.preflight && !opts.waiting) {
+      var pre = W.preflight(a.essay, pr.id ? pr : a.promptId), probs = pre.rows.filter(function (r) { return r.status !== 'ok'; });
+      html += '<div class="card preflight"><div class="pf-h"><b>Pre-flight check</b><span class="pill ' + (pre.bad ? 'bad' : pre.warn ? 'gold' : 'good') + '">' + esc(pre.summary) + '</span></div>' +
+        (probs.length ? probs : pre.rows.slice(0, 3)).map(function (r) { return '<div class="pf-row ' + r.status + '"><span class="pf-dot"></span><div><b>' + esc(r.label) + '</b><p>' + esc(r.note) + '</p></div></div>'; }).join('') + '</div>';
+    }
     html += '<div class="card lab-pad"><div class="lab-ex-h"><p class="kicker">Your essay</p><label class="tiny"><input type="checkbox" id="lab-hl"' + (st.highlightFrame ? ' checked' : '') + '> highlight your own words</label></div><div class="lab-essay' + (st.highlightFrame ? ' hl' : '') + '" id="lab-essay">' + (a.parasHtml || []).map(function (h) { return '<p>' + h + '</p>'; }).join('') + '</div>' +
       '<p class="tiny">' + esc(pr.text) + '</p></div>';
     html += '<details class="card lab-pad lab-varlist"><summary><b>Coaching for each variable</b></summary>' + Object.keys(a.vars).map(function (k) {
@@ -1546,6 +1602,105 @@
     bindReport(a, el, false);
   }
 
+  /* ============================================================= EXAMPLES
+     Worked examples (lab-examples.js): two students, one blueprint per
+     question type at each share, each used on a real prompt from the bank
+     and rated. Read-only: the blueprints are there to study, never to copy
+     (the copied-wording check would flag them in a student's own Studio). */
+  function exSet() { var E = global.LabExamples; return E.sets.filter(function (x) { return x.level === st.ex.level && x.type === st.ex.type; })[0]; }
+  function exTpl(set, pct) {
+    var lines = {}; Object.keys(set.blueprints[pct] || {}).forEach(function (id) { lines[id] = { text: set.blueprints[pct][id] }; });
+    return { id: set.id + '-' + pct, pct: +pct, level: set.level, type: set.type, lines: lines, slotNotes: {} };
+  }
+  function exBuilt(set, pct, mark) { return assemble(exTpl(set, pct), set.runs[pct] || {}, mark ? { mark: true, labels: labelsFor(set.type) } : {}); }
+  function bandCell(r) { return r ? '<b class="lab-num">' + fmtBand(r.overall) + '</b>' : '—'; }
+  function paintExamples(el) {
+    var E = global.LabExamples, x = st.ex, set = exSet(), stu = E.students[x.level], pr = PR.get(set.promptId) || { title: '', text: '' };
+    var pcts = ['60', '50', '40', '30'];
+    var html = '<div class="card lab-pad lab-exhero"><p class="kicker">Worked examples</p><h3>Two students, five question types, four template shares</h3><p class="tiny">' + esc(E.note) + '</p>' +
+      '<div class="lab-exstu">' + Object.keys(E.students).map(function (k) { var s0 = E.students[k]; return '<button class="lab-type' + (x.level === k ? ' on' : '') + '" data-exlv="' + k + '"><b>' + esc(s0.name) + ' · ' + esc(s0.level) + '</b><span class="tiny">' + esc(s0.target) + ' target</span><span>' + esc(s0.blurb) + '</span></button>'; }).join('') + '</div>' +
+      '<div class="filters" style="margin-top:12px">' + E.sets.filter(function (q) { return q.level === x.level; }).map(function (q) { return '<button data-extype="' + q.type + '"' + (q.type === x.type ? ' class="on"' : '') + '>' + esc(bpTypeShort(q.type)) + '</button>'; }).join('') + '</div>' +
+      '<div class="filters" style="margin-top:8px">' + pcts.map(function (p) { return '<button data-expct="' + p + '"' + (x.view === 'one' && x.pct === p ? ' class="on"' : '') + '>' + p + '%</button>'; }).join('') + '<button data-exview="compare"' + (x.view === 'compare' ? ' class="on"' : '') + '>Compare the four shares</button></div></div>';
+    /* the scorecard of this student: estimates by type × share */
+    html += '<div class="card lab-pad"><p class="kicker">' + esc(stu.name) + '\'s results · estimated band by share</p><div class="lab-tablewrap"><table class="lab-table"><thead><tr><th>Question type</th>' + pcts.map(function (p) { return '<th>' + p + '%</th>'; }).join('') + '</tr></thead><tbody>' +
+      E.sets.filter(function (q) { return q.level === x.level; }).map(function (q) {
+        return '<tr' + (q.type === x.type ? ' class="on"' : '') + '><td>' + esc(bpTypeShort(q.type)) + '</td>' + pcts.map(function (p) { return '<td>' + bandCell(q.rating[p]) + '</td>'; }).join('') + '</tr>';
+      }).join('') + '</tbody></table></div><p class="tiny">Same ideas, same prompt, four shares: as the template carries less of the essay, the student\'s own words carry more of it. Estimates by an independent reviewer against the public band descriptors; not official IELTS scores.</p></div>';
+    html += '<div class="card lab-pad">' + PR.card(pr, { demand: true }) + '<p class="tiny">' + esc(L.TYPE_NOTES[set.type] || '') + '</p></div>';
+    if (x.view === 'compare') html += exCompareHtml(set);
+    else html += exOneHtml(set, x.pct, stu);
+    /* Teacher demo: an account whose ID starts with "demo-" can load the
+       examples as its own Lab data, so Assembly Line and Scorecard can be
+       shown with real runs. Students never see this button. */
+    if (/^demo-/i.test(String(st.sid || ''))) html += '<div class="card lab-pad"><p class="kicker">Teacher demo account</p><p class="tiny">Load the examples into this account as its own blueprints and runs, to demonstrate the Assembly Line and the Scorecard.</p><div class="lab-acts">' +
+      Object.keys(E.students).map(function (k) { return '<button class="btn sm" data-exload="' + k + '">Load ' + esc(E.students[k].name) + '\'s 20 blueprints and runs</button>'; }).join('') + '</div></div>';
+    el.innerHTML = html;
+    $$('[data-exload]').forEach(function (b) { b.addEventListener('click', function () {
+      var file = 'examples/store/' + (b.dataset.exload === 'B1' ? 'demo-b1-nam' : 'demo-b2-fah') + '.json';
+      fetch(file).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (d) {
+        (d.templates || []).forEach(function (t) { t.studentId = st.sid; upsert(st.data.templates, t); });
+        (d.attempts || []).forEach(function (a) {
+          a.studentId = st.sid;
+          /* the reviewer's rating travels with the example, so the Scorecard has bands to show */
+          var ex = E.sets.filter(function (q) { return q.level === a.level && q.type === a.type; })[0], r = ex && ex.rating[String(a.pct)];
+          if (r && !a.rating) a.rating = { tr: r.tr, cc: r.cc, lr: r.lr, gra: r.gra, overall: r.overall, cefr: r.cefr, summary: r.summary, strengths: [r.strength], priorities: r.priority ? [r.priority] : [], frameNote: '', ts: nowIso() };
+          upsert(st.data.attempts, a);
+        });
+        persist(); recompute(); toast('Loaded ' + (d.templates || []).length + ' blueprints and ' + (d.attempts || []).length + ' runs into this account.');
+      }).catch(function () { toast('Could not load the examples on this device.'); });
+    }); });
+    $$('[data-exlv]').forEach(function (b) { b.addEventListener('click', function () { x.level = b.dataset.exlv; paintBody(); }); });
+    $$('[data-extype]').forEach(function (b) { b.addEventListener('click', function () { x.type = b.dataset.extype; paintBody(); }); });
+    $$('[data-expct]').forEach(function (b) { b.addEventListener('click', function () { x.pct = b.dataset.expct; x.view = 'one'; paintBody(); }); });
+    $$('[data-exview]').forEach(function (b) { b.addEventListener('click', function () { x.view = 'compare'; paintBody(); }); });
+    $$('[data-expara]').forEach(function (b) { b.addEventListener('click', function () { x.para = b.dataset.expara; paintBody(); }); });
+    var hl = $('#lab-exhl'); if (hl) hl.addEventListener('change', function () { st.highlightFrame = hl.checked; $('#lab-exessay').classList.toggle('hl', hl.checked); });
+  }
+  function exOneHtml(set, pct, stu) {
+    var t = exTpl(set, pct), built = exBuilt(set, pct, true), plain = exBuilt(set, pct, false), rt = set.rating[pct], r0 = set.firstRating[pct];
+    var html = '<div class="card lab-pad lab-result"><p class="kicker">' + esc(stu.name) + ' · ' + esc(bpTypeInfo(set.type).name) + ' blueprint · ' + pct + '% template</p>';
+    if (rt) html += '<div class="lab-rating"><div class="score-ring" style="--p:' + Math.round(rt.overall / 9 * 100) + '"><i>' + fmtBand(rt.overall) + '</i></div><div><p class="kicker">Estimated band · not an official IELTS score</p><h3>Band ' + fmtBand(rt.overall) + ' · ' + esc(rt.cefr) + '</h3>' +
+      '<div class="lab-crit">' + [['TR', 'tr', 'Task Response'], ['CC', 'cc', 'Coherence & Cohesion'], ['LR', 'lr', 'Lexical Resource'], ['GRA', 'gra', 'Grammar']].map(function (c) {
+        return '<div class="lab-critrow"><span title="' + c[2] + '">' + c[0] + '</span><div class="bar-line"><span style="width:' + Math.round((rt[c[1]] || 0) / 9 * 100) + '%"></span></div><b class="lab-num">' + rt[c[1]] + '</b></div>';
+      }).join('') + '</div></div></div>' +
+      '<p class="lab-sum">' + esc(rt.summary) + '</p><div class="lab-list ok"><b>What worked</b><ul><li>' + esc(rt.strength) + '</li></ul></div>' +
+      (rt.priority ? '<div class="lab-list"><b>To reach the next half band</b><ul><li><span class="pill on">' + esc(rt.priority.crit) + '</span> ' + esc(rt.priority.text) + '</li></ul></div>' : '');
+    html += '<div class="lab-kpis">' + kpi(plain.words, 'Words', plain.words >= 250 ? 'at least 250 ✓' : 'under 250') + kpi(pctStr(plain.share), 'Template share', 'target ' + pct + '% · own words ' + pctStr(1 - plain.share)) +
+      kpi(templateFrameWords(t), 'Template words', '14 lines') + kpi(r0 ? fmtBand(r0.overall) + ' → ' + (rt ? fmtBand(rt.overall) : '—') : '—', 'Before → after proofreading', r0 ? r0.errors + ' error' + (r0.errors === 1 ? '' : 's') + ' fixed' : '') + '</div></div>';
+    /* the blueprint */
+    html += '<div class="card lab-pad"><p class="kicker">Step 1 · Her blueprint (Blueprint Studio)</p>' + L.PARAS.map(function (pg) {
+      return '<div class="lab-para"><p class="kicker">' + esc(pg.name) + '</p>' + L.COMPONENTS.filter(function (c) { return c.para === pg.key; }).map(function (c) {
+        return '<div class="lab-sline"><div class="lab-sline-t">' + slotChips(t.lines[c.id].text) + '</div><div class="lab-sline-m"><span class="tiny">' + c.n + '. ' + esc(compFor(set.type, c).name) + '</span><span class="pill">' + frameWords(t.lines[c.id].text) + ' words</span></div></div>';
+      }).join('') + '</div>';
+    }).join('') + '</div>';
+    /* coaching moments for this share */
+    var co = (set.coaching || []).filter(function (c) { return c.share === pct; });
+    if (co.length) html += '<div class="card lab-pad"><p class="kicker">How the coach changed her lines</p>' + co.map(function (c) {
+      var comp = compFor(set.type, COMP[c.line]);
+      return '<div class="lab-coachstory"><p class="tiny"><b>' + esc(comp.name) + '</b></p><p><s>' + esc(c.first) + '</s></p><p class="lab-offline">' + esc(c.flagged) + '</p><p><b>' + esc(c.fixed) + '</b></p></div>';
+    }).join('') + '</div>';
+    /* the variables and the essay */
+    var labs = labelsFor(set.type), v = set.runs[pct];
+    html += '<div class="card lab-pad"><p class="kicker">Step 2 · Her variables for this prompt (Assembly Line)</p><div class="lab-exvars">' + slotOrder(t).map(function (k) {
+      return '<div class="lab-varrow"><div class="lab-varrow-h"><b>' + esc(labs[k] || L.SLOT_LABEL[k]) + '</b><span class="pill">' + words(v[k].text) + ' words</span></div><p class="lab-varval">' + esc(v[k].text) + (v[k].text2 ? '<br><span class="tiny">second mention: </span>' + esc(v[k].text2) : '') + '</p></div>';
+    }).join('') + '</div></div>';
+    html += '<div class="card lab-pad"><div class="lab-ex-h"><p class="kicker">Step 3 · The assembled essay</p><label class="tiny"><input type="checkbox" id="lab-exhl"' + (st.highlightFrame ? ' checked' : '') + '> highlight her own words</label></div><div class="lab-essay' + (st.highlightFrame ? ' hl' : '') + '" id="lab-exessay">' + built.paras.map(function (p) { return '<p>' + p.html + '</p>'; }).join('') + '</div></div>';
+    var rv = (set.review || {})[pct] || [];
+    if (rv.length) html += '<details class="card lab-pad"><summary><b>Step 4 · Proofreading after the rating (' + rv.length + ' fix' + (rv.length === 1 ? '' : 'es') + ')</b></summary><div class="lab-errs">' + rv.map(function (e) {
+      return '<div class="lab-err"><s>' + esc(e.quote) + '</s> → <b>' + esc(e.fix) + '</b><span class="tiny"> ' + esc(e.why) + '</span></div>';
+    }).join('') + '</div></details>';
+    return html;
+  }
+  function exCompareHtml(set) {
+    var x = st.ex, pcts = ['60', '50', '40', '30'];
+    var html = '<div class="card lab-pad"><p class="kicker">Compare the four shares · same prompt, same ideas</p><div class="filters">' + L.PARAS.map(function (pg) { return '<button data-expara="' + pg.key + '"' + (x.para === pg.key ? ' class="on"' : '') + '>' + esc(pg.name.replace('Body paragraph', 'Body')) + '</button>'; }).join('') + '</div>' +
+      '<div class="lab-excmp">' + pcts.map(function (p) {
+        var b = exBuilt(set, p, true), plain = exBuilt(set, p, false), para = b.paras.filter(function (q) { return q.key === x.para; })[0], rt = set.rating[p];
+        return '<div class="lab-excol"><div class="lab-excol-h"><b>' + p + '% template</b><span class="pill gold">actual ' + pctStr(plain.share) + '</span>' + (rt ? '<span class="pill good">Band ' + fmtBand(rt.overall) + '</span>' : '') + '</div><div class="lab-essay hl"><p>' + para.html + '</p></div></div>';
+      }).join('') + '</div><p class="tiny">Highlighted words are hers; the rest is her template. At 60% the frame does most of the talking; at 30% one short signpost per move leaves room for mechanisms and examples.</p></div>';
+    return html;
+  }
+
   /* ============================================================== mount */
   function mount(el, h) {
     host = h; root = el;
@@ -1577,6 +1732,7 @@
     busy: function () { return !!(st.run && !st.run.done && st.run.busy); },
     /* for tests and the teacher console */
     _state: st, _quickFrame: quickFrame, _quickVar: quickVar, _assemble: assemble, _overallBand: overallBand, _toTokens: toTokens, _compBudget: compBudget,
+    _varBudget: varBudget, _compFor: compFor, _slotMeanings: slotMeanings, _labelsFor: labelsFor, _occurrences: occurrences, _frameWords: templateFrameWords,
     _driveRender: driveRender, _shapeAt: shapeAt
   };
 })(window);

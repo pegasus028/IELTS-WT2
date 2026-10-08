@@ -1,0 +1,383 @@
+{
+  "level": "B2",
+  "type": "OPINION",
+  "promptId": "p-tablets-textbooks",
+  "blueprints": {
+    "60": {
+      "lines": {
+        "i-open": "The idea of [Core Topic] has clear appeal, but a change this large needs a careful look.",
+        "i-sides": "Part of this view is convincing because of [Facet A], but the rest is harder to accept, given [Facet B].",
+        "i-position": "Overall, I agree only in part: my view is that [Position].",
+        "a-topic": "The part of the argument that I fully accept is based on [Facet A].",
+        "a-mech": "The reason behind this is quite simple: [Mechanism A].",
+        "a-example": "A clear case of this that most people would recognise is [Example A].",
+        "a-nuance": "It is fair to admit that [Nuance A]; still, this is a problem to manage, not a reason to reject the idea.",
+        "b-topic": "The part of the statement that I reject is its extreme form, mainly because of [Facet B].",
+        "b-mech": "The problem follows from one basic fact: [Mechanism B].",
+        "b-example": "This danger becomes easy to picture if we consider the case of [Example B].",
+        "b-nuance": "Supporters of this change might suggest a simple remedy, but in reality [Nuance B].",
+        "c-open": "Looking back at both reasons, I can see that [Core Topic] is neither wholly right nor wholly wrong.",
+        "c-position": "My final answer is therefore a qualified yes: [Position].",
+        "c-rationale": "I settle on this approach mainly because [Rationale]."
+      }
+    },
+    "50": {
+      "lines": {
+        "i-open": "The idea of [Core Topic] has clear appeal, but such a change needs a careful look.",
+        "i-sides": "Part of this view is convincing because of [Facet A], but the rest is hard to accept, given [Facet B].",
+        "i-position": "Overall, I agree only partly: I believe that [Position].",
+        "a-topic": "The part of the argument that I accept is based on [Facet A].",
+        "a-mech": "The reason for this is simple: [Mechanism A].",
+        "a-example": "A case of this that many would recognise is [Example A].",
+        "a-nuance": "It is fair to admit that [Nuance A]; still, this drawback can be managed.",
+        "b-topic": "What I reject is the claim in its extreme form, mainly because of [Facet B].",
+        "b-mech": "The problem follows from one basic fact: [Mechanism B].",
+        "b-example": "This danger is easy to picture in the case of [Example B].",
+        "b-nuance": "Supporters of this change might suggest a simple remedy, but [Nuance B].",
+        "c-open": "Seen as a whole, [Core Topic] is clearly neither wholly right nor wholly wrong.",
+        "c-position": "My final answer is therefore a qualified yes: [Position].",
+        "c-rationale": "I choose this approach because [Rationale]."
+      }
+    },
+    "40": {
+      "lines": {
+        "i-open": "The idea of [Core Topic] is appealing, but such a change needs a careful look.",
+        "i-sides": "Part of this view convinces me because of [Facet A], but [Facet B] weakens the rest.",
+        "i-position": "Overall, I agree only partly: [Position].",
+        "a-topic": "The part of the argument I accept rests on [Facet A].",
+        "a-mech": "The reason is simple: [Mechanism A].",
+        "a-example": "A familiar case of this is [Example A].",
+        "a-nuance": "It is fair to admit that [Nuance A]; still, this drawback can be managed.",
+        "b-topic": "What I reject is the claim in its extreme form, because of [Facet B].",
+        "b-mech": "The problem is simple: [Mechanism B].",
+        "b-example": "Consider, for instance, the case of [Example B].",
+        "b-nuance": "Supporters of this change might suggest a remedy, but [Nuance B].",
+        "c-open": "Looking back, I see that [Core Topic] is neither wholly right nor wholly wrong.",
+        "c-position": "My answer is a qualified yes: [Position].",
+        "c-rationale": "I choose this approach because [Rationale]."
+      }
+    },
+    "30": {
+      "lines": {
+        "i-open": "The idea of [Core Topic] is appealing but needs a careful look.",
+        "i-sides": "I accept part of it because of [Facet A], but [Facet B] weakens the rest.",
+        "i-position": "I agree only partly: [Position].",
+        "a-topic": "The part I accept rests on [Facet A].",
+        "a-mech": "The reason is simple: [Mechanism A].",
+        "a-example": "A familiar case is [Example A].",
+        "a-nuance": "Admittedly, [Nuance A]; still, this drawback can be managed.",
+        "b-topic": "I reject the claim in its extreme form because of [Facet B].",
+        "b-mech": "The problem is simple: [Mechanism B].",
+        "b-example": "Consider the case of [Example B].",
+        "b-nuance": "Supporters might suggest a remedy, but [Nuance B].",
+        "c-open": "On reflection, [Core Topic] is neither wholly right nor wrong.",
+        "c-position": "My answer is a qualified yes: [Position].",
+        "c-rationale": "I choose this approach because [Rationale]."
+      }
+    }
+  },
+  "runs": {
+    "60": {
+      "vars": {
+        "core": {
+          "text": "replacing paper textbooks with tablets in every school",
+          "text2": "this switch to screens"
+        },
+        "facetA": {
+          "text": "the fresh, interactive content that tablets offer",
+          "text2": "the richer content of digital books"
+        },
+        "facetB": {
+          "text": "unequal access to devices",
+          "text2": "the risk to poorer students"
+        },
+        "position": {
+          "text": "tablets belong in lessons, but printed textbooks should stay in some subjects",
+          "text2": "screens should support books, not replace them all"
+        },
+        "mechA": {
+          "text": "a digital book is updated quickly and holds videos that paper cannot"
+        },
+        "exA": {
+          "text": "a chemistry class watching a video of an experiment too dangerous to do at school"
+        },
+        "nuanceA": {
+          "text": "a tablet also brings games into the classroom"
+        },
+        "mechB": {
+          "text": "a student with a broken device or no signal cannot study"
+        },
+        "exB": {
+          "text": "a rural student whose family shares one phone"
+        },
+        "nuanceB": {
+          "text": "even free tablets for all would not fix weak signals or broken devices at home"
+        },
+        "rationale": {
+          "text": "schools should add new tools without making students depend on them"
+        }
+      }
+    },
+    "50": {
+      "vars": {
+        "core": {
+          "text": "replacing paper textbooks with tablets in every secondary school",
+          "text2": "this switch from paper to screens"
+        },
+        "facetA": {
+          "text": "the fresh, interactive content that tablets can offer",
+          "text2": "the richer content of digital books"
+        },
+        "facetB": {
+          "text": "unequal access to devices and the internet",
+          "text2": "the risk of leaving poorer students behind"
+        },
+        "position": {
+          "text": "tablets should become a normal part of lessons, but printed textbooks should stay in some subjects",
+          "text2": "screens should support books, not replace them all"
+        },
+        "mechA": {
+          "text": "a digital book can follow every syllabus change and hold videos that paper cannot"
+        },
+        "exA": {
+          "text": "a chemistry class watching a video of an experiment too dangerous to do at school"
+        },
+        "nuanceA": {
+          "text": "a tablet also brings games into the classroom"
+        },
+        "mechB": {
+          "text": "a student with a broken device or no signal cannot study any subject"
+        },
+        "exB": {
+          "text": "a rural student whose family shares one phone between three children"
+        },
+        "nuanceB": {
+          "text": "even a free tablet for every student would not fix weak signals at home"
+        },
+        "rationale": {
+          "text": "a school should add new tools without making any student depend on them"
+        }
+      }
+    },
+    "40": {
+      "vars": {
+        "core": {
+          "text": "replacing paper textbooks with tablets in every secondary school",
+          "text2": "this switch from paper to screens"
+        },
+        "facetA": {
+          "text": "the fresh, interactive material that a tablet can offer",
+          "text2": "the richer content of digital books"
+        },
+        "facetB": {
+          "text": "the unequal access to devices and the internet",
+          "text2": "the risk of leaving poorer students behind"
+        },
+        "position": {
+          "text": "tablets should become a normal part of secondary lessons, but printed textbooks should stay in subjects that need careful reading",
+          "text2": "screens should support books in every school rather than replace them in every subject"
+        },
+        "mechA": {
+          "text": "a digital textbook can follow every syllabus change, and its on-screen videos show ideas that paper can only describe"
+        },
+        "exA": {
+          "text": "a chemistry class watching a video of an experiment too dangerous for a school laboratory"
+        },
+        "nuanceA": {
+          "text": "a tablet also brings games and chat apps into the classroom, drawing attention away from the lesson"
+        },
+        "mechB": {
+          "text": "a student with a broken tablet or a weak signal cannot study any subject"
+        },
+        "exB": {
+          "text": "a rural student whose family shares one old phone between three children"
+        },
+        "nuanceB": {
+          "text": "even free tablets for all would not fix a weak signal at home"
+        },
+        "rationale": {
+          "text": "a good school adds new tools for study without making any student depend on them"
+        }
+      }
+    },
+    "30": {
+      "vars": {
+        "core": {
+          "text": "replacing paper textbooks with tablets in every secondary school",
+          "text2": "this switch from paper to screens"
+        },
+        "facetA": {
+          "text": "the fresh, interactive material that a tablet can offer",
+          "text2": "the richer, more current content of digital books"
+        },
+        "facetB": {
+          "text": "the unequal access to devices and a stable internet connection",
+          "text2": "the risk of leaving poorer students behind"
+        },
+        "position": {
+          "text": "tablets should become a normal part of secondary lessons, but printed textbooks should stay in the subjects that need careful reading",
+          "text2": "screens should support books in every school rather than replace them in every subject"
+        },
+        "mechA": {
+          "text": "a digital textbook can follow every syllabus change, and its on-screen videos and quizzes show students ideas that paper can only describe"
+        },
+        "exA": {
+          "text": "a chemistry class watching a video of an experiment too dangerous for a school laboratory, then answering quiz questions about it"
+        },
+        "nuanceA": {
+          "text": "a tablet also brings games and chat apps into the classroom, where they easily draw attention away from the lesson"
+        },
+        "mechB": {
+          "text": "a student with a broken tablet or a weak signal at home cannot open a single textbook or do homework"
+        },
+        "exB": {
+          "text": "a rural student whose family shares one old phone between three children"
+        },
+        "nuanceB": {
+          "text": "even free tablets and repairs would not stop a weak signal at home from blocking study"
+        },
+        "rationale": {
+          "text": "a good school adds new tools for study without making any student depend on them"
+        }
+      }
+    }
+  },
+  "coaching": [
+    {
+      "share": "60",
+      "line": "i-sides",
+      "first": "I agree with this view because of [Facet A] and [Facet B].",
+      "flagged": "8 template words (budget 11–22) · COPIED. Too close to an example (\"I agree with this view because of [Facet A] and [Facet B].\"). Condition 1: the template must be in your own words.",
+      "fixed": "Part of this view is convincing because of [Facet A], but the rest is harder to accept, given [Facet B]."
+    },
+    {
+      "share": "60",
+      "line": "a-topic",
+      "first": "Firstly, the part of the argument that I accept is [Facet A].",
+      "flagged": "10 template words (budget 9–18). Starts with a robotic linker (\"Firstly\"). Connect the paragraphs through meaning instead.",
+      "fixed": "The part of the argument that I fully accept is based on [Facet A]."
+    },
+    {
+      "share": "30",
+      "line": "i-sides",
+      "first": "Part of this view is convincing because of [Facet A], but the rest is harder to accept, given [Facet B].",
+      "flagged": "16 template words: over the 6–11 budget for a 30% template. Trim words that carry no meaning.",
+      "fixed": "I accept part of it because of [Facet A], but [Facet B] weakens the rest."
+    }
+  ],
+  "review": {
+    "60": [
+      {
+        "quote": "the fresh, interactive content of tablets",
+        "fix": "the fresh, interactive content that tablets offer",
+        "why": "unnatural: tablets are the device; the content is on them"
+      },
+      {
+        "quote": "The way this works is fairly direct:",
+        "fix": "The reason behind this is quite simple:",
+        "why": "unnatural frame: 'direct' does not describe how a mechanism works; the line announces a reason, so say so"
+      },
+      {
+        "quote": "might reply that the government could give every student a free tablet, yet this still leaves the deeper difficulty unsolved",
+        "fix": "might suggest a simple remedy, but in reality even free tablets for all would not fix weak signals or broken devices at home",
+        "why": "vague reference: the difficulty that remains is never named, so name it"
+      },
+      {
+        "quote": "Looking back at both reasons, it is clear that",
+        "fix": "Looking back at both reasons, I can see that",
+        "why": "dangling participle: 'it' cannot look back; make 'I' the subject"
+      },
+      {
+        "quote": "not a reason to stop",
+        "fix": "not a reason to reject the idea",
+        "why": "'stop' had no object"
+      }
+    ],
+    "50": [
+      {
+        "quote": "tablets should become normal in lessons",
+        "fix": "tablets should become a normal part of lessons",
+        "why": "unnatural phrasing: 'normal in lessons' → 'a normal part of lessons'"
+      },
+      {
+        "quote": "This works in a direct way:",
+        "fix": "The reason for this is simple:",
+        "why": "unnatural frame: 'direct' does not describe how a mechanism works; the line announces a reason, so say so"
+      },
+      {
+        "quote": "might reply that the government could give a free tablet to every student, yet the deeper difficulty remains",
+        "fix": "might suggest a simple remedy, but even a free tablet for every student would not fix weak signals at home",
+        "why": "vague reference: the difficulty that remains is never named, so name it"
+      },
+      {
+        "quote": "Looking back, it is clear that this switch from paper to screens is",
+        "fix": "Seen as a whole, this switch from paper to screens is clearly",
+        "why": "dangling participle: 'it' cannot look back; the participle must belong to the subject"
+      }
+    ],
+    "40": [
+      {
+        "quote": "the fresh, interactive material that only a tablet can offer",
+        "fix": "the fresh, interactive material that a tablet can offer",
+        "why": "overclaim: the prompt itself names laptops, which offer the same material"
+      },
+      {
+        "quote": "tablets should become normal in secondary lessons",
+        "fix": "tablets should become a normal part of secondary lessons",
+        "why": "unnatural phrasing: 'normal in lessons' → 'a normal part of lessons'"
+      },
+      {
+        "quote": "This works quite directly:",
+        "fix": "The reason is simple:",
+        "why": "unnatural frame: 'direct' does not describe how a mechanism works; the line announces a reason, so say so"
+      },
+      {
+        "quote": "pulling attention from the lesson",
+        "fix": "drawing attention away from the lesson",
+        "why": "collocation: 'draw attention away from'"
+      },
+      {
+        "quote": "might reply that the government could give every student a free tablet, yet the difficulty remains",
+        "fix": "might suggest a remedy, but even free tablets for all would not fix a weak signal at home",
+        "why": "vague reference: the difficulty that remains is never named, so name it"
+      },
+      {
+        "quote": "Looking back, this switch from paper to screens is",
+        "fix": "Looking back, I see that this switch from paper to screens is",
+        "why": "dangling participle: the switch cannot look back; make 'I' the subject"
+      }
+    ],
+    "30": [
+      {
+        "quote": "the fresh, interactive material that only a tablet can offer",
+        "fix": "the fresh, interactive material that a tablet can offer",
+        "why": "overclaim: the prompt itself names laptops, which offer the same material"
+      },
+      {
+        "quote": "tablets should become normal in secondary lessons",
+        "fix": "tablets should become a normal part of secondary lessons",
+        "why": "unnatural phrasing: 'normal in lessons' → 'a normal part of lessons'"
+      },
+      {
+        "quote": "This works directly:",
+        "fix": "The reason is simple:",
+        "why": "unnatural frame: 'direct' does not describe how a mechanism works; the line announces a reason, so say so"
+      },
+      {
+        "quote": "where they easily pull attention from the lesson",
+        "fix": "where they easily draw attention away from the lesson",
+        "why": "collocation: 'draw attention away from'"
+      },
+      {
+        "quote": "might reply that the government could give every student a free tablet and pay for any repairs, yet the difficulty remains",
+        "fix": "might suggest a remedy, but even free tablets and repairs would not stop a weak signal at home from blocking study",
+        "why": "vague reference: the difficulty that remains is never named, so name it"
+      },
+      {
+        "quote": "Looking back, this switch from paper to screens is",
+        "fix": "On reflection, this switch from paper to screens is",
+        "why": "dangling participle: the switch cannot look back; make 'I' the subject"
+      }
+    ]
+  }
+}

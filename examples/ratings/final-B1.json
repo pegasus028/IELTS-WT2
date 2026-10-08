@@ -1,0 +1,344 @@
+{
+  "B1-DISCUSS": {
+    "30": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 7,
+      "mean": 7,
+      "overall": 7,
+      "cefr": "around C1",
+      "summary": "A controlled, accurate discussion with a clear compromise position and some less common collocations, though ideas are supported only briefly rather than 'well extended'.",
+      "strength": "She frames the first view with a precise noun phrase: 'the danger that heavy screen use poses to children's health and sleep'.",
+      "priority": {
+        "crit": "TR",
+        "text": "Make each example do more work: add the specific result it shows (what the tired students actually miss in class, what the online lessons let a child do), so ideas are 'well extended and supported' at TR 8 rather than stated once."
+      },
+      "errors": []
+    },
+    "40": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 6,
+      "gra": 7,
+      "mean": 6.75,
+      "overall": 7,
+      "cefr": "around C1",
+      "summary": "Clear position held from introduction to conclusion, logical progression and error-free complex sentences; vocabulary is accurate but mostly everyday.",
+      "strength": "Her mechanism builds a clear chain of effects: 'long hours of screen time keep children indoors and awake late, so they move less, sleep badly and find it hard to focus'.",
+      "priority": {
+        "crit": "LR",
+        "text": "Replace two or three everyday words in each body paragraph with precise topic collocations (e.g. 'sleep badly' becomes 'get too little sleep to concentrate'); LR 7 needs 'some ability to use less common ... items' and 'awareness of style and collocation'."
+      },
+      "errors": []
+    },
+    "50": {
+      "tr": 7,
+      "cc": 6,
+      "lr": 6,
+      "gra": 7,
+      "mean": 6.5,
+      "overall": 6.5,
+      "cefr": "around B2",
+      "summary": "A clear, well-balanced discussion with accurate grammar throughout, held at 6.5 by wordy signpost frames and a fairly restricted everyday vocabulary.",
+      "strength": "Her limit on the first view is concrete and believable: 'a strict ban can make children feel left out when their friends share videos and games'.",
+      "priority": {
+        "crit": "CC",
+        "text": "Shorten the long signpost frames so the links point back instead of announcing themselves (e.g. 'We can explain how this works in a very simple way:' becomes 'This happens because'); CC 7 needs reference and substitution 'used flexibly', not mechanical signposting."
+      },
+      "errors": []
+    },
+    "60": {
+      "tr": 7,
+      "cc": 6,
+      "lr": 6,
+      "gra": 6,
+      "mean": 6.25,
+      "overall": 6.5,
+      "cefr": "around B2",
+      "summary": "Both views and a clear compromise position are covered with a mechanism, example and limit in each body, but the long template signposts make the cohesion mechanical, and most complex sentences sit in the frames, leaving too little of her own language to evidence GRA 7.",
+      "strength": "Her limit on the first view is fair and concrete: 'a strict ban can make children feel left out'.",
+      "priority": {
+        "crit": "CC",
+        "text": "Shorten the long signpost frames so the links point back instead of announcing themselves (e.g. 'We can explain how this works in a very simple way:' becomes 'This happens because'); CC 7 needs reference and substitution 'used flexibly', not mechanical signposting."
+      },
+      "errors": []
+    }
+  },
+  "B1-OPINION": {
+    "30": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 6,
+      "gra": 7,
+      "mean": 6.75,
+      "overall": 7,
+      "cefr": "around C1",
+      "summary": "A clear and well-argued opinion with concrete school examples and accurate grammar; the vocabulary is mostly everyday and one reference is vague.",
+      "strength": "Her intro names the real issue precisely: 'the eating habits they form'.",
+      "priority": {
+        "crit": "LR",
+        "text": "Replace two or three everyday words in each body paragraph with precise topic collocations (e.g. 'sleep badly' becomes 'get too little sleep to concentrate'); LR 7 needs 'some ability to use less common ... items' and 'awareness of style and collocation'."
+      },
+      "errors": [
+        {
+          "quote": "but this reason still stands",
+          "fix": "but my main argument still stands",
+          "why": "'this reason' seems to point back to the girls buying sweets outside the gate; name the argument that still holds."
+        }
+      ]
+    },
+    "40": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 6,
+      "gra": 7,
+      "mean": 6.75,
+      "overall": 7,
+      "cefr": "around C1",
+      "summary": "Well-organised opinion essay with a clear position, a fair rebuttal and accurate complex sentences; vocabulary is precise enough but rarely less common.",
+      "strength": "She uses a natural collocation to show the long-term risk: 'a daily sugar habit that is hard to break'.",
+      "priority": {
+        "crit": "LR",
+        "text": "Replace two or three everyday words in each body paragraph with precise topic collocations (e.g. 'sleep badly' becomes 'get too little sleep to concentrate'); LR 7 needs 'some ability to use less common ... items' and 'awareness of style and collocation'."
+      },
+      "errors": [
+        {
+          "quote": "People in many countries are talking about taking sweet drinks and snacks out of school canteens and shops, including young people like me.",
+          "fix": "People in many countries, including young people like me, are talking about taking sweet drinks and snacks out of school canteens and shops.",
+          "why": "Misplaced modifier: 'including young people like me' sits after 'shops', so it seems to describe the shops rather than the people."
+        }
+      ]
+    },
+    "50": {
+      "tr": 7,
+      "cc": 6,
+      "lr": 6,
+      "gra": 7,
+      "mean": 6.5,
+      "overall": 6.5,
+      "cefr": "around B2",
+      "summary": "A clear, consistently held opinion with a rebutted counter-view and accurate grammar, kept at 6.5 by padded signposting and everyday vocabulary.",
+      "strength": "Her mechanism shows how the harm builds up day by day: 'cheap sweet snacks at every break slowly lead to a daily sugar habit'.",
+      "priority": {
+        "crit": "CC",
+        "text": "Shorten the long signpost frames so the links point back instead of announcing themselves (e.g. 'We can explain how this works in a very simple way:' becomes 'This happens because'); CC 7 needs reference and substitution 'used flexibly', not mechanical signposting."
+      },
+      "errors": []
+    },
+    "60": {
+      "tr": 7,
+      "cc": 6,
+      "lr": 6,
+      "gra": 6,
+      "mean": 6.25,
+      "overall": 6.5,
+      "cefr": "around B2",
+      "summary": "A clear agree position with a fair counter-argument and rebuttal, but the heavy template wording makes the cohesion mechanical and leaves too little of her own language to evidence LR or GRA 7.",
+      "strength": "Her mechanism shows how the harm builds up: 'cheap snacks at every break slowly lead to a daily sugar habit'.",
+      "priority": {
+        "crit": "CC",
+        "text": "Shorten the long signpost frames so the links point back instead of announcing themselves (e.g. 'We can explain how this works in a very simple way:' becomes 'This happens because'); CC 7 needs reference and substitution 'used flexibly', not mechanical signposting."
+      },
+      "errors": []
+    }
+  },
+  "B1-ADVANTAGE": {
+    "30": {
+      "tr": 6,
+      "cc": 7,
+      "lr": 6,
+      "gra": 7,
+      "mean": 6.5,
+      "overall": 6.5,
+      "cefr": "around B2",
+      "summary": "Fluent, accurate and well-linked, with a firm verdict and vivid examples, but the prompt's plural 'advantages' is answered with just one advantage.",
+      "strength": "Her mechanism for the disadvantage uses a neat parallel structure: 'every hour in front of the screen is an hour without running, playing with friends or getting enough sleep'.",
+      "priority": {
+        "crit": "TR",
+        "text": "The prompt asks for advantages and disadvantages in the plural, but only one advantage (learning) is given; add a second advantage, such as relaxation or shared family viewing, in the nuance sentence so the main parts are 'appropriately addressed' (TR 7)."
+      },
+      "errors": []
+    },
+    "40": {
+      "tr": 6,
+      "cc": 7,
+      "lr": 6,
+      "gra": 7,
+      "mean": 6.5,
+      "overall": 6.5,
+      "cefr": "around B2",
+      "summary": "Logically organised and grammatically accurate with a clear conditional verdict, held at TR 6 because the plural 'advantages' gets a single advantage.",
+      "strength": "Her mechanism for the disadvantage is vivid and balanced: 'every hour in front of the screen is an hour without running, playing or sleeping well'.",
+      "priority": {
+        "crit": "TR",
+        "text": "The prompt asks for advantages and disadvantages in the plural, but only one advantage (learning) is given; add a second advantage, such as relaxation or shared family viewing, in the nuance sentence so the main parts are 'appropriately addressed' (TR 7)."
+      },
+      "errors": []
+    },
+    "50": {
+      "tr": 6,
+      "cc": 6,
+      "lr": 6,
+      "gra": 7,
+      "mean": 6.25,
+      "overall": 6.5,
+      "cefr": "around B2",
+      "summary": "Accurate and clearly organised with a reasoned verdict, but only one advantage answers a plural prompt and the signposting is wordy.",
+      "strength": "Her mechanism for the disadvantage is vivid and balanced: 'every hour in front of the screen is an hour without running, playing or sleeping'.",
+      "priority": {
+        "crit": "TR",
+        "text": "The prompt asks for advantages and disadvantages in the plural, but only one advantage (learning) is given; add a second advantage, such as relaxation or shared family viewing, in the nuance sentence so the main parts are 'appropriately addressed' (TR 7)."
+      },
+      "errors": []
+    },
+    "60": {
+      "tr": 6,
+      "cc": 6,
+      "lr": 6,
+      "gra": 6,
+      "mean": 6,
+      "overall": 6,
+      "cefr": "around B2",
+      "summary": "A clear verdict with a mechanism and example on each side, but only one advantage answers a plural 'advantages' prompt, the long template signposts make the linking mechanical, and too little of her own language shows to evidence GRA 7.",
+      "strength": "Her mechanism for the disadvantage is short and clear: 'hours in front of the screen replace play and sleep'.",
+      "priority": {
+        "crit": "TR",
+        "text": "The prompt asks for advantages and disadvantages in the plural, but only one advantage (learning) is given; add a second advantage, such as relaxation or shared family viewing, in the nuance sentence so the main parts are 'appropriately addressed' (TR 7)."
+      },
+      "errors": []
+    }
+  },
+  "B1-PROBLEM": {
+    "30": {
+      "tr": 6,
+      "cc": 7,
+      "lr": 6,
+      "gra": 7,
+      "mean": 6.5,
+      "overall": 6.5,
+      "cefr": "around B2",
+      "summary": "A well-linked, accurate answer with two causes and a measure for each actor, held at TR 6 because schools and governments get a clause each while parents get a full paragraph.",
+      "strength": "Her second cause is specific and believable: 'many students attend tutoring after school, so they get home late and start homework at nine'.",
+      "priority": {
+        "crit": "TR",
+        "text": "Schools and governments each get only a clause while parents get a whole paragraph; give each its own measure with a short 'how it helps' (e.g. a later first lesson, a limit on late weekday tutoring) so every named actor is properly answered (TR 7)."
+      },
+      "errors": []
+    },
+    "40": {
+      "tr": 6,
+      "cc": 7,
+      "lr": 6,
+      "gra": 7,
+      "mean": 6.5,
+      "overall": 6.5,
+      "cefr": "around B2",
+      "summary": "Clear progression, error-free grammar and a separate measure named for each actor, though only the parents' measure is explained and supported.",
+      "strength": "Her solution is tied directly to the cause it answers: 'with no phone nearby, nothing keeps a student awake, so she falls asleep sooner'.",
+      "priority": {
+        "crit": "TR",
+        "text": "Schools and governments each get only a clause while parents get a whole paragraph; give each its own measure with a short 'how it helps' (e.g. a later first lesson, a limit on late weekday tutoring) so every named actor is properly answered (TR 7)."
+      },
+      "errors": []
+    },
+    "50": {
+      "tr": 6,
+      "cc": 6,
+      "lr": 6,
+      "gra": 7,
+      "mean": 6.25,
+      "overall": 6.5,
+      "cefr": "around B2",
+      "summary": "Accurate and clearly organised with two causes and a strong parental measure, but the schools' and governments' measures are only named, not developed.",
+      "strength": "Her solution is tied directly to the cause: 'without a phone nearby, nothing keeps a student awake in bed'.",
+      "priority": {
+        "crit": "TR",
+        "text": "Schools and governments each get only a clause while parents get a whole paragraph; give each its own measure with a short 'how it helps' (e.g. a later first lesson, a limit on late weekday tutoring) so every named actor is properly answered (TR 7)."
+      },
+      "errors": []
+    },
+    "60": {
+      "tr": 6,
+      "cc": 6,
+      "lr": 6,
+      "gra": 6,
+      "mean": 6,
+      "overall": 6,
+      "cefr": "around B2",
+      "summary": "Two causes and a well-developed parental solution, but schools and governments share one undeveloped clause and the template signposts make the linking mechanical, with too little of her own language to evidence GRA 7.",
+      "strength": "Her main cause is concrete and easy to picture: 'chats and videos keep teenagers awake past midnight'.",
+      "priority": {
+        "crit": "TR",
+        "text": "Schools and governments each get only a clause while parents get a whole paragraph; give each its own measure with a short 'how it helps' (e.g. a later first lesson, a limit on late weekday tutoring) so every named actor is properly answered (TR 7)."
+      },
+      "errors": []
+    }
+  },
+  "B1-TWOPART": {
+    "30": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 6,
+      "gra": 7,
+      "mean": 6.75,
+      "overall": 7,
+      "cefr": "around C1",
+      "summary": "Concise, accurate and well-organised answers to both questions with a clear verdict; the vocabulary range and the vague closing line keep LR at 6.",
+      "strength": "She answers the first question with a precise, idiomatic phrase: 'the race for a seat at a top university'.",
+      "priority": {
+        "crit": "LR",
+        "text": "Replace two or three everyday words in each body paragraph with precise topic collocations (e.g. 'sleep badly' becomes 'get too little sleep to concentrate'); LR 7 needs 'some ability to use less common ... items' and 'awareness of style and collocation'."
+      },
+      "errors": []
+    },
+    "40": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 6,
+      "gra": 7,
+      "mean": 6.75,
+      "overall": 7,
+      "cefr": "around C1",
+      "summary": "Clear answers to both questions with a held position, logical progression and error-free sentences; vocabulary is mostly everyday.",
+      "strength": "She answers the first question with a precise, idiomatic phrase: 'the race for a seat at a top university'.",
+      "priority": {
+        "crit": "LR",
+        "text": "Replace two or three everyday words in each body paragraph with precise topic collocations (e.g. 'sleep badly' becomes 'get too little sleep to concentrate'); LR 7 needs 'some ability to use less common ... items' and 'awareness of style and collocation'."
+      },
+      "errors": []
+    },
+    "50": {
+      "tr": 7,
+      "cc": 6,
+      "lr": 6,
+      "gra": 7,
+      "mean": 6.5,
+      "overall": 6.5,
+      "cefr": "around B2",
+      "summary": "Both questions answered with a consistent verdict, relevant Thai examples and accurate grammar, held at 6.5 by wordy signposts and everyday vocabulary.",
+      "strength": "Her first reason has a clear, specific mechanism: 'every mark matters because the entrance exams decide which university a student can enter'.",
+      "priority": {
+        "crit": "CC",
+        "text": "Shorten the long signpost frames so the links point back instead of announcing themselves (e.g. 'We can explain how this works in a very simple way:' becomes 'This happens because'); CC 7 needs reference and substitution 'used flexibly', not mechanical signposting."
+      },
+      "errors": []
+    },
+    "60": {
+      "tr": 7,
+      "cc": 6,
+      "lr": 6,
+      "gra": 6,
+      "mean": 6.25,
+      "overall": 6.5,
+      "cefr": "around B2",
+      "summary": "Both questions are answered with two reasons and a clear negative verdict, but the long template frames make cohesion mechanical and the conclusion opens with a vague filler line; little of her own language is left to evidence GRA 7.",
+      "strength": "Her first reason has a clear mechanism: 'every mark matters because entrance exams decide a student's future'.",
+      "priority": {
+        "crit": "CC",
+        "text": "Shorten the long signpost frames so the links point back instead of announcing themselves (e.g. 'We can explain how this works in a very simple way:' becomes 'This happens because'); CC 7 needs reference and substitution 'used flexibly', not mechanical signposting."
+      },
+      "errors": []
+    }
+  }
+}

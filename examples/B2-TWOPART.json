@@ -1,0 +1,373 @@
+{
+  "level": "B2",
+  "type": "TWOPART",
+  "promptId": "p-cashless",
+  "blueprints": {
+    "60": {
+      "lines": {
+        "i-open": "In recent years, many societies have witnessed [Core Topic], and this trend raises two questions that deserve careful answers.",
+        "i-sides": "The answer to the first question lies mainly in [Facet A], whereas the second can best be judged by considering [Facet B].",
+        "i-position": "Taking both answers together, I would argue that [Position].",
+        "a-topic": "To answer the first question, the most important factor, in my view, is [Facet A].",
+        "a-mech": "The logic behind this answer is quite straightforward: [Mechanism A].",
+        "a-example": "A clear illustration of this point can be found in [Example A].",
+        "a-nuance": "It must be admitted, however, that this factor alone does not explain everything, since [Nuance A].",
+        "b-topic": "Turning to the second question, the most convincing answer lies in [Facet B].",
+        "b-mech": "In practice, this benefit arises mainly from [Mechanism B].",
+        "b-example": "This can be seen clearly in my own family, where [Example B].",
+        "b-nuance": "Even so, it would be unwise to accept this answer without a clear qualification, because [Nuance B].",
+        "c-open": "Looking back at both questions, I find that [Core Topic] is less simple than it first appears.",
+        "c-position": "With both answers in mind, I firmly believe that [Position].",
+        "c-rationale": "This seems the fairest conclusion to me, since [Rationale]."
+      }
+    },
+    "50": {
+      "lines": {
+        "i-open": "Many societies have recently witnessed [Core Topic], and this trend raises two questions worth answering.",
+        "i-sides": "The answer to the first question lies mainly in [Facet A], whereas the second is best judged by considering [Facet B].",
+        "i-position": "Taking both answers together, I would argue that [Position].",
+        "a-topic": "To answer the first question, the most important factor is [Facet A].",
+        "a-mech": "The logic behind this is straightforward: [Mechanism A].",
+        "a-example": "A clear illustration of this can be found in [Example A].",
+        "a-nuance": "It must be admitted, however, that this factor alone does not explain everything, since [Nuance A].",
+        "b-topic": "Turning to the second question, the most convincing answer lies in [Facet B].",
+        "b-mech": "This benefit arises mainly from [Mechanism B].",
+        "b-example": "This can be seen in my own family, where [Example B].",
+        "b-nuance": "Even so, this answer needs a clear qualification, because [Nuance B].",
+        "c-open": "Looking back at both questions, I find that [Core Topic] is less simple than it first appears.",
+        "c-position": "With both answers in mind, I firmly believe that [Position].",
+        "c-rationale": "This seems the fairest conclusion, since [Rationale]."
+      }
+    },
+    "40": {
+      "lines": {
+        "i-open": "Many societies have recently witnessed [Core Topic], which raises two separate questions.",
+        "i-sides": "The answer to the first question lies in [Facet A], while the second rests on [Facet B].",
+        "i-position": "Overall, I would argue that [Position].",
+        "a-topic": "To answer the first question, the key factor is [Facet A].",
+        "a-mech": "The logic here is simple: [Mechanism A].",
+        "a-example": "A clear illustration can be found in [Example A].",
+        "a-nuance": "Still, this factor alone does not explain everything, since [Nuance A].",
+        "b-topic": "Turning to the second question, the strongest answer lies in [Facet B].",
+        "b-mech": "This benefit arises mainly from [Mechanism B].",
+        "b-example": "This can be seen in my family, where [Example B].",
+        "b-nuance": "Even so, this answer needs a qualification, because [Nuance B].",
+        "c-open": "Looking back, I find that [Core Topic] is less simple than it first appears.",
+        "c-position": "With both answers in mind, I believe that [Position].",
+        "c-rationale": "This is the fairest conclusion, since [Rationale]."
+      }
+    },
+    "30": {
+      "lines": {
+        "i-open": "Many societies have witnessed [Core Topic], which raises two questions.",
+        "i-sides": "The answer to the first question lies in [Facet A]; the second, in [Facet B].",
+        "i-position": "I would argue that [Position].",
+        "a-topic": "The first question comes down to [Facet A].",
+        "a-mech": "The logic is simple: [Mechanism A].",
+        "a-example": "A clear illustration is [Example A].",
+        "a-nuance": "Still, this factor alone cannot explain everything, since [Nuance A].",
+        "b-topic": "Turning to the second, the answer lies in [Facet B].",
+        "b-mech": "This benefit arises from [Mechanism B].",
+        "b-example": "My own family shows this clearly: [Example B].",
+        "b-nuance": "Even so, this answer needs a qualification: [Nuance B].",
+        "c-open": "Looking back, I find that [Core Topic] is less simple than it seems.",
+        "c-position": "Overall, I firmly believe that [Position].",
+        "c-rationale": "This is the fairest view, since [Rationale]."
+      }
+    }
+  },
+  "runs": {
+    "60": {
+      "vars": {
+        "core": {
+          "text": "the shift from cash to phone payments",
+          "text2": "this move away from notes and coins"
+        },
+        "facetA": {
+          "text": "the low cost of QR-code payment",
+          "text2": "how cheap and simple it is to accept payment by QR code"
+        },
+        "facetB": {
+          "text": "the safety and control digital payment gives users",
+          "text2": "greater security and better budgeting"
+        },
+        "position": {
+          "text": "the change is mostly positive if cash remains available",
+          "text2": "digital payment is welcome, but cash must stay"
+        },
+        "mechA": {
+          "text": "a printed code costs sellers nothing, so any stall can use one"
+        },
+        "exA": {
+          "text": "Thailand's PromptPay, now used by street vendors in Bangkok"
+        },
+        "nuanceA": {
+          "text": "COVID-19 made people avoid touching notes and turned scanning into a habit"
+        },
+        "mechB": {
+          "text": "reducing the risk of theft and recording every payment"
+        },
+        "exB": {
+          "text": "my mother checks our spending in her banking app"
+        },
+        "nuanceB": {
+          "text": "people without smartphones, often the elderly, may be left out"
+        },
+        "rationale": {
+          "text": "convenience helps nearly everyone, and the risks can be managed"
+        }
+      }
+    },
+    "50": {
+      "vars": {
+        "core": {
+          "text": "the shift from cash to paying by phone",
+          "text2": "this move away from notes and coins"
+        },
+        "facetA": {
+          "text": "the low cost and ease of QR-code payment",
+          "text2": "how cheap and simple it is for sellers to accept QR payments"
+        },
+        "facetB": {
+          "text": "the safety and control that digital payment gives users",
+          "text2": "greater security and better budgeting"
+        },
+        "position": {
+          "text": "the change is mostly positive, provided that cash remains available",
+          "text2": "digital payment is a welcome step, but cash must stay as an option"
+        },
+        "mechA": {
+          "text": "a printed QR code costs a seller nothing, so even tiny stalls can accept phone payments"
+        },
+        "exA": {
+          "text": "Thailand's PromptPay system, now used by street vendors across Bangkok"
+        },
+        "nuanceA": {
+          "text": "the COVID-19 pandemic made people avoid touching notes and turned scanning into a habit"
+        },
+        "mechB": {
+          "text": "reducing the risk of theft and recording every payment in an app"
+        },
+        "exB": {
+          "text": "my mother checks our monthly spending in her banking app"
+        },
+        "nuanceB": {
+          "text": "older people without smartphones may be left out, and scammers often target new users"
+        },
+        "rationale": {
+          "text": "convenience helps nearly everyone, while the risks can be managed"
+        }
+      }
+    },
+    "40": {
+      "vars": {
+        "core": {
+          "text": "the rapid move from cash to paying by phone or card",
+          "text2": "this shift away from notes and coins"
+        },
+        "facetA": {
+          "text": "the low cost and ease of QR-code payment for sellers",
+          "text2": "how cheap and simple it is for sellers to accept QR payments"
+        },
+        "facetB": {
+          "text": "the safety and control that digital payment gives users",
+          "text2": "greater security and better budgeting in daily life"
+        },
+        "position": {
+          "text": "the change is mostly positive, provided that cash remains available",
+          "text2": "digital payment is a good step, but cash must stay as an option"
+        },
+        "mechA": {
+          "text": "a printed QR code costs a seller nothing, so even the smallest stall can accept phone payments"
+        },
+        "exA": {
+          "text": "Thailand's PromptPay system, which street vendors across Bangkok now use every day"
+        },
+        "nuanceA": {
+          "text": "the COVID-19 pandemic made people avoid touching notes and quickly turned scanning into a habit"
+        },
+        "mechB": {
+          "text": "reducing the risk of theft and recording every payment, so people see where their money goes"
+        },
+        "exB": {
+          "text": "my mother checks our spending in her banking app every month"
+        },
+        "nuanceB": {
+          "text": "older people without smartphones may be left out, and scammers often target new users"
+        },
+        "rationale": {
+          "text": "the ease of paying by phone helps nearly everyone, while keeping cash protects people without smartphones"
+        }
+      }
+    },
+    "30": {
+      "vars": {
+        "core": {
+          "text": "the rapid move from cash to paying by phone or card",
+          "text2": "this shift away from notes and coins"
+        },
+        "facetA": {
+          "text": "the low cost and simplicity of QR-code payment for sellers",
+          "text2": "how cheap and simple it is for sellers to accept QR payments"
+        },
+        "facetB": {
+          "text": "the safety and control that digital payment gives ordinary users",
+          "text2": "greater security and better budgeting in daily life"
+        },
+        "position": {
+          "text": "the change is mostly positive, provided that cash remains available for those who need it",
+          "text2": "digital payment is a good step, but notes and coins must stay as an option"
+        },
+        "mechA": {
+          "text": "a printed QR code costs a seller nothing, so even the smallest street stall can accept phone payments"
+        },
+        "exA": {
+          "text": "Thailand's PromptPay system, which street food vendors across Bangkok now use every day"
+        },
+        "nuanceA": {
+          "text": "the COVID-19 pandemic made people afraid to touch notes and quickly turned scanning a code into a daily habit"
+        },
+        "mechB": {
+          "text": "reducing the risk of losing cash and recording every payment, so people can see where their money goes"
+        },
+        "exB": {
+          "text": "my mother checks our spending in her banking app at the end of each month"
+        },
+        "nuanceB": {
+          "text": "older people without smartphones can be left out, and scammers often target those new to banking apps"
+        },
+        "rationale": {
+          "text": "the ease of paying by phone helps nearly everyone, while keeping cash protects those who cannot use a phone"
+        }
+      }
+    }
+  },
+  "coaching": [
+    {
+      "share": "60",
+      "line": "a-topic",
+      "first": "Firstly, the main reason for this change is [Facet A].",
+      "flagged": "Starts with a robotic linker (\"Firstly\"). Connect the paragraphs through meaning instead. (Also 8 template words: under the 9–18 budget.)",
+      "fixed": "To answer the first question, the most important factor, in my view, is [Facet A]."
+    },
+    {
+      "share": "60",
+      "line": "c-position",
+      "first": "On balance, it's clear that [Position].",
+      "flagged": "Contraction: write the full form (it is, do not) in an academic essay. (Also 5 template words: under the 6–13 budget.)",
+      "fixed": "With both answers in mind, I firmly believe that [Position]."
+    },
+    {
+      "share": "30",
+      "line": "b-topic",
+      "first": "As for the second question, my answer is [Facet B].",
+      "flagged": "Too close to an example (\"As for the second question, my answer is [Facet B].\"). Condition 1: the template must be in your own words.",
+      "fixed": "Turning to the second, the answer lies in [Facet B]."
+    }
+  ],
+  "review": {
+    "60": [
+      {
+        "quote": "The answer to the first question is found mainly in",
+        "fix": "The answer to the first question lies mainly in",
+        "why": "unnatural phrasing: an answer is not 'found in' a cause; name the question and use 'lies in'"
+      },
+      {
+        "quote": "how simple scanning a code is",
+        "fix": "how cheap and simple it is to accept payment by QR code",
+        "why": "topic–mechanism mismatch: the next sentence explains the cost to sellers, not simplicity"
+      },
+      {
+        "quote": "removing the risk of theft",
+        "fix": "reducing the risk of theft",
+        "why": "overclaim: phones can be lost or stolen and accounts hacked, so digital payment reduces the risk but does not remove it"
+      },
+      {
+        "quote": "Looking back at both questions, this move away from notes and coins turns out to be",
+        "fix": "Looking back at both questions, I find that this move away from notes and coins is",
+        "why": "dangling participle: the change cannot look back at the questions; make 'I' the subject"
+      }
+    ],
+    "50": [
+      {
+        "quote": "The first answer is found mainly in",
+        "fix": "The answer to the first question lies mainly in",
+        "why": "unnatural phrasing: an answer is not 'found in' a cause; name the question and use 'lies in'"
+      },
+      {
+        "quote": "how simple it is to scan a code",
+        "fix": "how cheap and simple it is for sellers to accept QR payments",
+        "why": "topic–mechanism mismatch: the next sentence explains the cost to sellers"
+      },
+      {
+        "quote": "removing the risk of theft",
+        "fix": "reducing the risk of theft",
+        "why": "overclaim: phones can be lost or stolen and accounts hacked, so digital payment reduces the risk but does not remove it"
+      },
+      {
+        "quote": "scammers often target beginners",
+        "fix": "scammers often target new users",
+        "why": "word choice: 'beginners' is vague; the meaning is people new to banking apps"
+      },
+      {
+        "quote": "Looking back at both questions, this move away from notes and coins is",
+        "fix": "Looking back at both questions, I find that this move away from notes and coins is",
+        "why": "dangling participle: the change cannot look back at the questions; make 'I' the subject"
+      }
+    ],
+    "40": [
+      {
+        "quote": "The first answer is found in",
+        "fix": "The answer to the first question lies in",
+        "why": "unnatural phrasing: an answer is not 'found in' a cause; name the question and use 'lies in'"
+      },
+      {
+        "quote": "removing the risk of theft",
+        "fix": "reducing the risk of theft",
+        "why": "overclaim: phones can be lost or stolen and accounts hacked, so digital payment reduces the risk but does not remove it"
+      },
+      {
+        "quote": "while its risks are easy to limit if cash stays",
+        "fix": "while keeping cash protects people without smartphones",
+        "why": "logic: keeping cash protects people without smartphones; it does nothing to limit scams, the other risk named"
+      },
+      {
+        "quote": "Looking back, this shift away from notes and coins is",
+        "fix": "Looking back, I find that this shift away from notes and coins is",
+        "why": "dangling participle: the change cannot look back at the questions; make 'I' the subject"
+      },
+      {
+        "quote": "how cheap and simple it is to scan a code",
+        "fix": "how cheap and simple it is for sellers to accept QR payments",
+        "why": "the buyer scans; the argument is about the seller's cost"
+      }
+    ],
+    "30": [
+      {
+        "quote": "The first answer is found in",
+        "fix": "The answer to the first question lies in",
+        "why": "unnatural phrasing: an answer is not 'found in' a cause; name the question and use 'lies in'"
+      },
+      {
+        "quote": "removing the risk of losing a wallet",
+        "fix": "reducing the risk of losing cash",
+        "why": "overclaim: phones can be lost or stolen and accounts hacked, so digital payment reduces the risk but does not remove it"
+      },
+      {
+        "quote": "while its risks stay small if cash remains",
+        "fix": "while keeping cash protects those who cannot use a phone",
+        "why": "logic: keeping cash protects people without smartphones; it does nothing to limit scams, the other risk named"
+      },
+      {
+        "quote": "Looking back, this shift away from notes and coins is",
+        "fix": "Looking back, I find that this shift away from notes and coins is",
+        "why": "dangling participle: the change cannot look back at the questions; make 'I' the subject"
+      },
+      {
+        "quote": "how cheap and simple it is to scan a code",
+        "fix": "how cheap and simple it is for sellers to accept QR payments",
+        "why": "the buyer scans; the argument is about the seller's cost"
+      }
+    ]
+  }
+}

@@ -1,0 +1,350 @@
+{
+  "B2-DISCUSS": {
+    "30": {
+      "tr": 7,
+      "cc": 8,
+      "lr": 7,
+      "gra": 8,
+      "mean": 7.5,
+      "overall": 7.5,
+      "cefr": "around C1",
+      "summary": "Fluent, accurate and easy to follow, with a clear position for a weekly mix of home and office days; the COVID-19 example ends with 'shows this' instead of the concrete result.",
+      "strength": "'small problems that could be solved in minutes take days instead'",
+      "priority": {
+        "crit": "TR",
+        "text": "Finish the COVID-19 example with its result (what the new staff struggled with) so the second view is supported, not just illustrated by name."
+      },
+      "errors": []
+    },
+    "40": {
+      "tr": 7,
+      "cc": 8,
+      "lr": 7,
+      "gra": 8,
+      "mean": 7.5,
+      "overall": 7.5,
+      "cefr": "around C1",
+      "summary": "A well-organised, accurate discussion with a clear hybrid position; the second view's example is still asserted rather than shown, which keeps Task Response at 7.",
+      "strength": "'people feel cut off from their team, and small problems take much longer to solve'",
+      "priority": {
+        "crit": "TR",
+        "text": "Replace 'shows that this is real' with what the example actually shows (e.g. new staff took longer to learn routines because nobody sat beside them to answer quick questions)."
+      },
+      "errors": []
+    },
+    "50": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 7,
+      "mean": 7,
+      "overall": 7,
+      "cefr": "around C1",
+      "summary": "Both views and a clear hybrid position are well organised, but the frames still carry much of the essay and the COVID-19 example does not say what actually happened.",
+      "strength": "'firms can rent smaller, cheaper offices'",
+      "priority": {
+        "crit": "TR",
+        "text": "Make the second example specific: say what went wrong for the new staff who learned over video calls (e.g. slower training, mistakes nobody spotted) instead of only saying it 'shows that this is not just theory'."
+      },
+      "errors": []
+    },
+    "60": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 7,
+      "mean": 7,
+      "overall": 7,
+      "cefr": "around C1",
+      "summary": "A clear hybrid position on remote work held from introduction to conclusion, with both views developed, but about half the words sit in signposting frames and the second example is left vague.",
+      "strength": "'without casual talk in the office, small problems take longer to solve'",
+      "priority": {
+        "crit": "CC",
+        "text": "Cut the long signposting frames ('The logic behind this claim is straightforward', 'This pattern can be observed clearly in the case of') so each paragraph moves straight from idea to mechanism to example."
+      },
+      "errors": []
+    }
+  },
+  "B2-OPINION": {
+    "30": {
+      "tr": 7,
+      "cc": 8,
+      "lr": 7,
+      "gra": 8,
+      "mean": 7.5,
+      "overall": 7.5,
+      "cefr": "around C1",
+      "summary": "Clear, accurate and fluent, with a well-qualified 'partly agree' position; the 'subjects that need careful reading' part of the thesis still has no support in the body.",
+      "strength": "'a student with a broken tablet or a weak signal at home cannot open a single textbook or do homework'",
+      "priority": {
+        "crit": "TR",
+        "text": "Give 'subjects that need careful reading' its own mechanism and example (or remove it), so the position is fully developed rather than partly asserted."
+      },
+      "errors": []
+    },
+    "40": {
+      "tr": 7,
+      "cc": 8,
+      "lr": 7,
+      "gra": 8,
+      "mean": 7.5,
+      "overall": 7.5,
+      "cefr": "around C1",
+      "summary": "An accurate, well-linked partial-agreement essay; the thesis that print should stay 'in subjects that need careful reading' introduces an idea the body never develops.",
+      "strength": "'its on-screen videos show ideas that paper can only describe'",
+      "priority": {
+        "crit": "TR",
+        "text": "Develop the 'careful reading' idea in body two (e.g. long texts in literature or history are easier to study on paper) or drop it from the thesis, so every part of the position is argued."
+      },
+      "errors": []
+    },
+    "50": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 7,
+      "mean": 7,
+      "overall": 7,
+      "cefr": "around C1",
+      "summary": "A balanced partial-agreement essay with good examples, but the frames dominate and the thesis that print should stay 'in some subjects' is not supported by the access argument in body two.",
+      "strength": "'a digital book can follow every syllabus change and hold videos that paper cannot'",
+      "priority": {
+        "crit": "TR",
+        "text": "Link the rejected part to the thesis: the body argues about poorer students' access, so the position should be about keeping print for access, or the body should name the subjects that need print."
+      },
+      "errors": []
+    },
+    "60": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 7,
+      "mean": 7,
+      "overall": 7,
+      "cefr": "around C1",
+      "summary": "A clear 'agree only in part' position with one accepted and one rejected part, but the frames are wordy and the 'some subjects' half of the position is never argued in the body.",
+      "strength": "'a chemistry class watching a video of an experiment too dangerous to do at school'",
+      "priority": {
+        "crit": "TR",
+        "text": "Make the position match the body: either argue which subjects need print, or change the thesis to 'printed textbooks should stay available for students without reliable devices'."
+      },
+      "errors": [
+        {
+          "quote": "not a reason to stop",
+          "fix": "not a reason to reject tablets",
+          "why": "'stop' has no object, so the meaning is unclear"
+        }
+      ]
+    }
+  },
+  "B2-ADVANTAGE": {
+    "30": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 8,
+      "mean": 7.25,
+      "overall": 7.5,
+      "cefr": "around C1",
+      "summary": "A strong, accurate essay with a conditional verdict ('while home study remains unsupervised'); one advantage only and repeated 'This …' openers keep TR and CC at 7.",
+      "strength": "'this freedom often exists only on paper'",
+      "priority": {
+        "crit": "TR",
+        "text": "Weigh a second advantage (e.g. specialist lessons reaching remote provinces) against the disadvantages, so the verdict that costs are greater rests on more than one benefit."
+      },
+      "errors": []
+    },
+    "40": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 8,
+      "mean": 7.25,
+      "overall": 7.5,
+      "cefr": "around C1",
+      "summary": "Accurate and convincing, with a clear verdict and vivid personal evidence, but only one advantage is weighed and the 'This advantage / This harm / This drawback' openers become mechanical.",
+      "strength": "'many of us switched off our cameras and slowly fell behind'",
+      "priority": {
+        "crit": "CC",
+        "text": "Vary the sentence openers in the body paragraphs (only one 'This + noun' per paragraph), using a participle or 'Because nobody in the room notices…' to start one sentence."
+      },
+      "errors": []
+    },
+    "50": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 7,
+      "mean": 7,
+      "overall": 7,
+      "cefr": "around C1",
+      "summary": "A clear 'drawbacks outweigh' verdict with relevant Thai examples; the frames still carry much of the text and every body sentence opens with 'This' + noun.",
+      "strength": "'so small gaps quietly grow'",
+      "priority": {
+        "crit": "TR",
+        "text": "Add a second advantage in the nuance or body (e.g. access to specialist teachers for students in small provincial schools) so the plural 'advantages' is properly weighed before the verdict."
+      },
+      "errors": []
+    },
+    "60": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 7,
+      "mean": 7,
+      "overall": 7,
+      "cefr": "around C1",
+      "summary": "A clear verdict that the drawbacks outweigh the benefits, with one advantage and one disadvantage each developed, but the frames are long and only one advantage is weighed.",
+      "strength": "'nobody notices when a student is confused or distracted'",
+      "priority": {
+        "crit": "CC",
+        "text": "Shorten the stock frames ('A clear illustration of this benefit can be found in', 'This harm usually develops gradually') so the paragraphs read naturally rather than as a fixed pattern."
+      },
+      "errors": []
+    }
+  },
+  "B2-PROBLEM": {
+    "30": {
+      "tr": 7,
+      "cc": 8,
+      "lr": 7,
+      "gra": 8,
+      "mean": 7.5,
+      "overall": 7.5,
+      "cefr": "around C1",
+      "summary": "A fluent, accurate problem-solution essay with concrete Bangkok examples and a coherent two-part plan; the first cause explains vulnerability more than the reported rise.",
+      "strength": "'scammers change their tricks faster than any lesson can keep up with'",
+      "priority": {
+        "crit": "TR",
+        "text": "Add one clause that ties the first cause to the increase (e.g. 'and fake pages now cost almost nothing to build') so the answer to 'Why is this happening?' is precise."
+      },
+      "errors": []
+    },
+    "40": {
+      "tr": 7,
+      "cc": 8,
+      "lr": 7,
+      "gra": 8,
+      "mean": 7.5,
+      "overall": 7.5,
+      "cefr": "around C1",
+      "summary": "Well organised and accurate, with two causes and two measures that answer them; the main cause still describes why young people are fooled rather than why fraud is rising.",
+      "strength": "'money can leave in seconds without any adult knowing'",
+      "priority": {
+        "crit": "TR",
+        "text": "Reframe the first body's topic sentence around what has changed recently (cheap mass messaging, fake pages that are easy to build) so 'Why is this happening?' is answered as a rise, not a constant."
+      },
+      "errors": []
+    },
+    "50": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 7,
+      "mean": 7,
+      "overall": 7,
+      "cefr": "around C1",
+      "summary": "A clear cause-and-solution essay with a two-part plan, but the frames still carry much of the text and the school-talk example is too slight to support the main measure.",
+      "strength": "'fake shops and hacked friends' accounts look real, so teenagers pay before checking'",
+      "priority": {
+        "crit": "TR",
+        "text": "Strengthen the evidence for school training: describe what students practise (e.g. spotting urgent payment demands in fake messages) rather than relying on one talk that 'made us careful'."
+      },
+      "errors": []
+    },
+    "60": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 7,
+      "mean": 7,
+      "overall": 7,
+      "cefr": "around C1",
+      "summary": "Both questions are answered with two causes and two linked measures, but the frames take up over half the essay and the main cause explains why scams work rather than why they are rising.",
+      "strength": "'scams need victims to hurry, and both steps slow them down'",
+      "priority": {
+        "crit": "TR",
+        "text": "Make the main cause explain the rise: say what has changed (e.g. scammers can now reach thousands of teenagers through social media at almost no cost), not only that young users are easily fooled."
+      },
+      "errors": []
+    }
+  },
+  "B2-TWOPART": {
+    "30": {
+      "tr": 7,
+      "cc": 8,
+      "lr": 7,
+      "gra": 8,
+      "mean": 7.5,
+      "overall": 7.5,
+      "cefr": "around C1",
+      "summary": "A fluent, accurate answer to both questions with a qualified verdict; the security benefit is asserted without its own example, which keeps Task Response at 7.",
+      "strength": "'scammers often target those new to banking apps'",
+      "priority": {
+        "crit": "TR",
+        "text": "Support the security half of the answer with its own example (e.g. a vendor with no cash box to rob, a lost phone locked by a PIN); the mother's banking-app example shows only budgeting."
+      },
+      "errors": [
+        {
+          "quote": "how cheap and simple it is to scan a code",
+          "fix": "how cheap and simple it is for sellers to accept payment by QR code",
+          "why": "scanning is the buyer's action; the cost argument in the next sentence is about sellers"
+        }
+      ]
+    },
+    "40": {
+      "tr": 7,
+      "cc": 8,
+      "lr": 7,
+      "gra": 8,
+      "mean": 7.5,
+      "overall": 7.5,
+      "cefr": "around C1",
+      "summary": "A clear, well-organised and accurate answer to both questions with a conditional verdict; the security benefit lacks its own example and one topic sentence names the buyer's action where the argument is about sellers.",
+      "strength": "'keeping cash protects people without smartphones'",
+      "priority": {
+        "crit": "TR",
+        "text": "Support the security half of the answer with its own example (e.g. a vendor with no cash box to rob, a lost phone locked by a PIN); the mother's banking-app example shows only budgeting."
+      },
+      "errors": [
+        {
+          "quote": "how cheap and simple it is to scan a code",
+          "fix": "how cheap and simple it is for sellers to accept payment by QR code",
+          "why": "scanning is the buyer's action; the cost argument in the next sentence is about sellers"
+        }
+      ]
+    },
+    "50": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 7,
+      "mean": 7,
+      "overall": 7,
+      "cefr": "around C1",
+      "summary": "Both questions are answered with clear causes and a qualified verdict, but the frames still carry nearly half the text and the security benefit is claimed rather than supported.",
+      "strength": "'the COVID-19 pandemic made people avoid touching notes and turned scanning into a habit'",
+      "priority": {
+        "crit": "TR",
+        "text": "Support the security half of the answer with its own example (e.g. a vendor with no cash box to rob, a lost phone locked by a PIN); the mother's banking-app example shows only budgeting."
+      },
+      "errors": []
+    },
+    "60": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 7,
+      "mean": 7,
+      "overall": 7,
+      "cefr": "around C1",
+      "summary": "Both questions are answered with a clear conditional position, but the frames carry over half the essay, the security claim has no supporting example and it is not weighed against online fraud.",
+      "strength": "'a printed code costs sellers nothing, so any stall can use one'",
+      "priority": {
+        "crit": "TR",
+        "text": "Support the security half of the answer with its own example (e.g. a vendor with no cash box to rob, a lost phone locked by a PIN); the mother's banking-app example shows only budgeting."
+      },
+      "errors": []
+    }
+  }
+}

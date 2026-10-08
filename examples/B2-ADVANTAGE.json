@@ -1,0 +1,368 @@
+{
+  "level": "B2",
+  "type": "ADVANTAGE",
+  "promptId": "p-online-learning",
+  "blueprints": {
+    "30": {
+      "lines": {
+        "i-open": "Few changes divide opinion as sharply as [Core Topic].",
+        "i-sides": "Its main strength is [Facet A]; its worst cost is [Facet B].",
+        "i-position": "I am convinced that [Position].",
+        "a-topic": "The best reason to welcome it is [Facet A].",
+        "a-mech": "This works simply, by [Mechanism A].",
+        "a-example": "One clear illustration is [Example A].",
+        "a-nuance": "Admittedly, this advantage shrinks in practice, since [Nuance A].",
+        "b-topic": "This benefit comes at a price: [Facet B].",
+        "b-mech": "This harm arises because [Mechanism B].",
+        "b-example": "This drawback was visible in [Example B].",
+        "b-nuance": "Even so, this problem can be reduced, given that [Nuance B].",
+        "c-open": "Taken as a whole, [Core Topic] offers real benefits and real risks.",
+        "c-position": "Weighing both, I believe that [Position].",
+        "c-rationale": "This rests on one principle: [Rationale]."
+      }
+    },
+    "40": {
+      "lines": {
+        "i-open": "Few recent changes have divided opinion as sharply as [Core Topic].",
+        "i-sides": "The strongest argument for it is [Facet A], whereas its worst cost is [Facet B].",
+        "i-position": "Having weighed both sides, I am convinced that [Position].",
+        "a-topic": "The most persuasive reason to welcome it is [Facet A].",
+        "a-mech": "This advantage works simply, by [Mechanism A].",
+        "a-example": "A clear illustration of this is [Example A].",
+        "a-nuance": "Admittedly, this advantage is smaller in practice than it appears, since [Nuance A].",
+        "b-topic": "This benefit, however, comes at a price: [Facet B].",
+        "b-mech": "This harm develops because [Mechanism B].",
+        "b-example": "This drawback was clearly visible in [Example B].",
+        "b-nuance": "Even so, this problem can be reduced, if not removed, given that [Nuance B].",
+        "c-open": "Taken as a whole, [Core Topic] offers real benefits but also real risks.",
+        "c-position": "Weighing one against the other, I believe that [Position].",
+        "c-rationale": "This rests on one principle: [Rationale]."
+      }
+    },
+    "50": {
+      "lines": {
+        "i-open": "Few recent changes have divided opinion as sharply as [Core Topic], because its effects reach into daily life.",
+        "i-sides": "The strongest argument for it is [Facet A], whereas its most worrying cost is [Facet B].",
+        "i-position": "Having weighed both sides, I am convinced that [Position].",
+        "a-topic": "The most persuasive reason to welcome this development is [Facet A].",
+        "a-mech": "This advantage works simply, by [Mechanism A].",
+        "a-example": "A clear illustration of this benefit is [Example A].",
+        "a-nuance": "Admittedly, this advantage is often smaller in practice than it appears, since [Nuance A].",
+        "b-topic": "This benefit, however, comes at a serious price: [Facet B].",
+        "b-mech": "This harm develops gradually, because [Mechanism B].",
+        "b-example": "The cost of this drawback was clearly visible in [Example B].",
+        "b-nuance": "Even so, this problem can be reduced, if not removed, given that [Nuance B].",
+        "c-open": "Taken as a whole, [Core Topic] offers real benefits, but its risks are at least as real.",
+        "c-position": "Weighing one against the other, I believe that [Position].",
+        "c-rationale": "This judgement rests on one principle: [Rationale]."
+      }
+    },
+    "60": {
+      "lines": {
+        "i-open": "Few recent changes have divided opinion as sharply as [Core Topic], because its effects reach deep into the daily life of ordinary families.",
+        "i-sides": "The strongest argument in its favour is [Facet A], whereas the most worrying cost it brings is [Facet B].",
+        "i-position": "Having weighed both sides carefully, I am convinced that [Position].",
+        "a-topic": "The most persuasive reason to welcome this development is [Facet A], which many people value highly.",
+        "a-mech": "This advantage works in a straightforward way, by [Mechanism A].",
+        "a-example": "A clear illustration of this benefit can be found in [Example A].",
+        "a-nuance": "Admittedly, this advantage is often smaller in practice than it first appears, since [Nuance A].",
+        "b-topic": "This benefit, however, comes at a price: [Facet B], which deserves equally careful attention.",
+        "b-mech": "This harm usually develops gradually, mainly because [Mechanism B].",
+        "b-example": "The real cost of this drawback was clearly visible in [Example B].",
+        "b-nuance": "Even so, this problem can be reduced, if not removed entirely, given that [Nuance B].",
+        "c-open": "Taken as a whole, [Core Topic] offers real benefits, but it also brings risks that are at least as real.",
+        "c-position": "Weighing one against the other, I believe that [Position].",
+        "c-rationale": "This judgement rests on one simple principle: [Rationale]."
+      }
+    }
+  },
+  "runs": {
+    "30": {
+      "vars": {
+        "core": {
+          "text": "the shift of secondary school lessons from the classroom to screens at home",
+          "text2": "online schooling"
+        },
+        "facetA": {
+          "text": "flexible access to good teaching for every student, wherever she lives",
+          "text2": "the freedom to study anywhere"
+        },
+        "facetB": {
+          "text": "weaker supervision and less human contact that students receive at home",
+          "text2": "the loss of a teacher's daily presence"
+        },
+        "position": {
+          "text": "the drawbacks outweigh the benefits for most teenage students while home study remains unsupervised",
+          "text2": "the costs are greater than the gains for most secondary students"
+        },
+        "mechA": {
+          "text": "letting students pause and replay a difficult explanation as often as they need until it makes sense"
+        },
+        "exA": {
+          "text": "the way many Thai schools posted recorded lessons on YouTube during the COVID-19 closures, so students could replay them at home whenever a topic was unclear"
+        },
+        "nuanceA": {
+          "text": "many rural families lack a stable connection or a laptop for each child, so this freedom often exists only on paper"
+        },
+        "mechB": {
+          "text": "nobody in the room notices when a student is confused or distracted, so small gaps in understanding quietly grow into large ones"
+        },
+        "exB": {
+          "text": "my own primary class during COVID-19, when many of us switched off our cameras and slowly fell behind"
+        },
+        "nuanceB": {
+          "text": "teachers can hold short live check-ins in small groups and set daily tasks that must be handed in"
+        },
+        "rationale": {
+          "text": "teenagers learn best when a real teacher and classmates are there to guide and motivate them"
+        }
+      }
+    },
+    "40": {
+      "vars": {
+        "core": {
+          "text": "the shift from classroom teaching to online lessons at home",
+          "text2": "online schooling"
+        },
+        "facetA": {
+          "text": "flexible access to good teaching, wherever a student lives",
+          "text2": "the freedom to study anywhere and at any pace"
+        },
+        "facetB": {
+          "text": "weaker supervision and less human contact at home",
+          "text2": "the loss of a teacher's daily presence"
+        },
+        "position": {
+          "text": "the drawbacks outweigh the benefits for most teenage students",
+          "text2": "the costs are greater than the gains for most secondary students"
+        },
+        "mechA": {
+          "text": "letting students pause and replay a difficult explanation at any hour until it makes sense"
+        },
+        "exA": {
+          "text": "the way many Thai schools posted recorded lessons on YouTube during the school closures, so students could replay them whenever they needed"
+        },
+        "nuanceA": {
+          "text": "many rural families still lack a stable internet connection or a laptop"
+        },
+        "mechB": {
+          "text": "nobody in the room notices when a student is confused or distracted, so small gaps quietly grow"
+        },
+        "exB": {
+          "text": "my own primary class during COVID-19, when many of us switched off our cameras and slowly fell behind"
+        },
+        "nuanceB": {
+          "text": "teachers can hold short live check-ins in small groups and set daily tasks"
+        },
+        "rationale": {
+          "text": "teenagers learn best when a real teacher and classmates are there to guide them"
+        }
+      }
+    },
+    "50": {
+      "vars": {
+        "core": {
+          "text": "the shift of secondary school teaching from the classroom to online lessons",
+          "text2": "online schooling"
+        },
+        "facetA": {
+          "text": "flexible access to good teaching for every student",
+          "text2": "the freedom to study anywhere"
+        },
+        "facetB": {
+          "text": "weaker supervision and less human contact at home",
+          "text2": "the loss of a teacher's daily presence"
+        },
+        "position": {
+          "text": "the drawbacks outweigh the benefits for most teenage students",
+          "text2": "the costs are greater than the gains for most secondary students"
+        },
+        "mechA": {
+          "text": "letting students pause and replay a hard explanation until it makes sense"
+        },
+        "exA": {
+          "text": "the way many Thai schools posted recorded lessons on YouTube during the COVID-19 closures, so students could replay them at home"
+        },
+        "nuanceA": {
+          "text": "many rural families still lack a stable internet connection or a laptop"
+        },
+        "mechB": {
+          "text": "nobody notices when a student is confused or distracted, so small gaps quietly grow"
+        },
+        "exB": {
+          "text": "my primary class during COVID-19, when many of us quietly fell behind"
+        },
+        "nuanceB": {
+          "text": "teachers can hold short live check-ins and set daily tasks"
+        },
+        "rationale": {
+          "text": "teenagers learn best when a real teacher is there to guide them"
+        }
+      }
+    },
+    "60": {
+      "vars": {
+        "core": {
+          "text": "the shift from classroom teaching to online lessons",
+          "text2": "online schooling"
+        },
+        "facetA": {
+          "text": "flexible access to good teaching",
+          "text2": "the freedom to study anywhere"
+        },
+        "facetB": {
+          "text": "weaker supervision and less human contact",
+          "text2": "the loss of a teacher's presence"
+        },
+        "position": {
+          "text": "the drawbacks outweigh the benefits for most teenagers",
+          "text2": "the costs are greater than the gains for secondary students"
+        },
+        "mechA": {
+          "text": "letting students replay a hard explanation at any hour"
+        },
+        "exA": {
+          "text": "the recorded lessons that many Thai schools posted on YouTube during the COVID-19 closures"
+        },
+        "nuanceA": {
+          "text": "many rural families lack a stable internet connection"
+        },
+        "mechB": {
+          "text": "nobody notices when a student is confused or distracted"
+        },
+        "exB": {
+          "text": "my own primary class during COVID-19, when many of us fell behind"
+        },
+        "nuanceB": {
+          "text": "teachers can run short live check-ins and set daily tasks"
+        },
+        "rationale": {
+          "text": "teenagers learn best when a real teacher guides them"
+        }
+      }
+    }
+  },
+  "coaching": [
+    {
+      "share": "60",
+      "line": "a-topic",
+      "first": "Firstly, the biggest advantage is [Facet A].",
+      "flagged": "5 template words: under the 9–18 budget. Too close to an example (\"The biggest advantage is [Facet A].\"): the template must be in your own words. Starts with a robotic linker (\"Firstly\"): connect the paragraphs through meaning instead.",
+      "fixed": "The most persuasive reason to welcome this development is [Facet A], which many people value highly."
+    },
+    {
+      "share": "60",
+      "line": "c-position",
+      "first": "Weighing one against the other, it's clear to me that [Position].",
+      "flagged": "Contraction: write the full form (it is, do not) in an academic essay.",
+      "fixed": "Weighing one against the other, I believe that [Position]."
+    },
+    {
+      "share": "30",
+      "line": "i-sides",
+      "first": "The strongest argument in its favour is [Facet A], whereas the most worrying cost it brings is [Facet B].",
+      "flagged": "15 template words: over the 6–11 budget for a 30% template. Trim words that carry no meaning.",
+      "fixed": "Its main strength is [Facet A]; its worst cost is [Facet B]."
+    }
+  ],
+  "review": {
+    "60": [
+      {
+        "quote": "weaker supervision and human contact",
+        "fix": "weaker supervision and less human contact",
+        "why": "collocation: 'weaker' fits supervision but not 'human contact'; use 'less human contact'"
+      },
+      {
+        "quote": "This harm usually develops in a predictable way, because",
+        "fix": "This harm usually develops gradually, mainly because",
+        "why": "the because-clause gives a reason, not a 'way'"
+      },
+      {
+        "quote": "is clearly visible in my own primary class during COVID-19",
+        "fix": "was clearly visible in my own primary class during COVID-19",
+        "why": "tense: the COVID-19 classes are finished, so the verb must be past"
+      },
+      {
+        "quote": "Weighing one against the other, my final answer is that",
+        "fix": "Weighing one against the other, I believe that",
+        "why": "dangling participle: 'my answer' cannot do the weighing; make 'I' the subject"
+      },
+      {
+        "quote": "the DLTV channel, whose lessons were streamed to rural Thai homes during school closures",
+        "fix": "the recorded lessons that many Thai schools posted on YouTube during the COVID-19 closures",
+        "why": "fact and fit: DLTV was a scheduled TV broadcast that needed no internet and could not be paused, so it did not show replaying and clashed with the internet limit that follows; recorded online lessons show both"
+      }
+    ],
+    "50": [
+      {
+        "quote": "the weaker supervision and human contact at home",
+        "fix": "weaker supervision and less human contact at home",
+        "why": "collocation: 'weaker' fits supervision but not 'human contact'; use 'less human contact'"
+      },
+      {
+        "quote": "This harm develops in a predictable way, because",
+        "fix": "This harm develops gradually, because",
+        "why": "the because-clause gives a reason, not a 'way'"
+      },
+      {
+        "quote": "is clearly visible in my primary class during COVID-19",
+        "fix": "was clearly visible in my primary class during COVID-19",
+        "why": "tense: the COVID-19 classes are finished, so the verb must be past"
+      },
+      {
+        "quote": "Weighing one against the other, my answer is that",
+        "fix": "Weighing one against the other, I believe that",
+        "why": "dangling participle: 'my answer' cannot do the weighing; make 'I' the subject"
+      },
+      {
+        "quote": "the DLTV channel, which streamed lessons by experienced teachers to rural Thai homes",
+        "fix": "the way many Thai schools posted recorded lessons on YouTube during the COVID-19 closures, so students could replay them at home",
+        "why": "fact and fit: DLTV was a scheduled TV broadcast that needed no internet and could not be paused, so it did not show replaying and clashed with the internet limit that follows; recorded online lessons show both"
+      }
+    ],
+    "40": [
+      {
+        "quote": "the weaker supervision and human contact at home",
+        "fix": "weaker supervision and less human contact at home",
+        "why": "collocation: 'weaker' fits supervision but not 'human contact'; use 'less human contact'"
+      },
+      {
+        "quote": "This drawback is clearly visible in my own primary class during COVID-19",
+        "fix": "This drawback was clearly visible in my own primary class during COVID-19",
+        "why": "tense: the COVID-19 classes are finished, so the verb must be past"
+      },
+      {
+        "quote": "Weighing one against the other, my answer is that",
+        "fix": "Weighing one against the other, I believe that",
+        "why": "dangling participle: 'my answer' cannot do the weighing; make 'I' the subject"
+      },
+      {
+        "quote": "the DLTV channel, which streamed lessons by experienced teachers to rural Thai homes during the school closures",
+        "fix": "the way many Thai schools posted recorded lessons on YouTube during the school closures, so students could replay them whenever they needed",
+        "why": "fact and fit: DLTV was a scheduled TV broadcast that needed no internet and could not be paused, so it did not show replaying and clashed with the internet limit that follows; recorded online lessons show both"
+      }
+    ],
+    "30": [
+      {
+        "quote": "the weaker supervision and human contact that students receive at home",
+        "fix": "weaker supervision and less human contact that students receive at home",
+        "why": "collocation: 'weaker' fits supervision but not 'human contact'; use 'less human contact'"
+      },
+      {
+        "quote": "This drawback shows clearly in my own primary class during COVID-19",
+        "fix": "This drawback was visible in my own primary class during COVID-19",
+        "why": "tense: the COVID-19 classes are finished, so the verb must be past"
+      },
+      {
+        "quote": "Weighing both, my answer is that",
+        "fix": "Weighing both, I believe that",
+        "why": "dangling participle: 'my answer' cannot do the weighing; make 'I' the subject"
+      },
+      {
+        "quote": "the DLTV channel, which streamed lessons from one well-known school in Hua Hin to rural Thai homes during the COVID-19 closures",
+        "fix": "the way many Thai schools posted recorded lessons on YouTube during the COVID-19 closures, so students could replay them at home whenever a topic was unclear",
+        "why": "fact and fit: DLTV was a scheduled TV broadcast that needed no internet and could not be paused, so it did not show replaying and clashed with the internet limit that follows; recorded online lessons show both"
+      }
+    ]
+  }
+}

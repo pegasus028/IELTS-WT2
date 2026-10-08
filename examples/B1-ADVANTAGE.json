@@ -1,0 +1,302 @@
+{
+  "level": "B1",
+  "type": "ADVANTAGE",
+  "promptId": "p-children-tv",
+  "blueprints": {
+    "30": {
+      "lines": {
+        "i-open": "Many people have strong feelings about [Core Topic].",
+        "i-sides": "It can offer [Facet A], but it can also lead to [Facet B].",
+        "i-position": "I firmly believe that [Position].",
+        "a-topic": "In my view, the greatest advantage is [Facet A].",
+        "a-mech": "It works like this: [Mechanism A].",
+        "a-example": "An example from my own life is [Example A].",
+        "a-nuance": "Still, this advantage does not always apply, because [Nuance A].",
+        "b-topic": "The main disadvantage, though, is [Facet B].",
+        "b-mech": "The reason is simple: [Mechanism B].",
+        "b-example": "This problem can be seen in [Example B].",
+        "b-nuance": "However, this disadvantage can be controlled, because [Nuance B].",
+        "c-open": "Overall, [Core Topic] can bring both benefits and harm.",
+        "c-position": "My final answer is that [Position].",
+        "c-rationale": "This answer makes sense because [Rationale]."
+      }
+    },
+    "40": {
+      "lines": {
+        "i-open": "Many people have strong feelings about [Core Topic], a trend that has good and bad effects.",
+        "i-sides": "It brings benefits such as [Facet A], but also harm such as [Facet B].",
+        "i-position": "Weighing both sides, I believe that [Position].",
+        "a-topic": "The most important advantage to look at is [Facet A].",
+        "a-mech": "This works in a simple way: [Mechanism A].",
+        "a-example": "An example of this from my life is [Example A].",
+        "a-nuance": "Of course, this advantage has limits and does not apply in every case, because [Nuance A].",
+        "b-topic": "The picture changes when we look at the main disadvantage: [Facet B].",
+        "b-mech": "The reason for this is simple: [Mechanism B].",
+        "b-example": "This is clear in daily life, for example in [Example B].",
+        "b-nuance": "However, this disadvantage is not hard to control, because [Nuance B].",
+        "c-open": "In the end, [Core Topic] can bring both benefits and harm.",
+        "c-position": "Looking at both sides, I conclude that [Position].",
+        "c-rationale": "This is the most sensible answer because [Rationale]."
+      }
+    },
+    "50": {
+      "lines": {
+        "i-open": "Many people have strong feelings about [Core Topic], because it affects daily life in good and bad ways.",
+        "i-sides": "It can bring benefits such as [Facet A], but it can also cause harm such as [Facet B].",
+        "i-position": "After weighing the good and the bad, I believe that [Position].",
+        "a-topic": "The most important advantage to look at is [Facet A].",
+        "a-mech": "It works in a very simple way: [Mechanism A].",
+        "a-example": "An example of this that I know well is [Example A].",
+        "a-nuance": "Of course, this advantage has limits and does not apply in every situation, because [Nuance A].",
+        "b-topic": "The picture is less positive when we turn to the biggest disadvantage: [Facet B].",
+        "b-mech": "The reason for this harm is simple: [Mechanism B].",
+        "b-example": "This problem is clear in everyday life, for example in [Example B].",
+        "b-nuance": "However, this disadvantage is easier to control than it seems, because [Nuance B].",
+        "c-open": "In the end, it is clear that [Core Topic] can bring benefits and harm.",
+        "c-position": "Looking at the two sides together, I conclude that [Position].",
+        "c-rationale": "This seems the most sensible answer because [Rationale]."
+      }
+    },
+    "60": {
+      "lines": {
+        "i-open": "Many people have strong feelings about [Core Topic], because it changes daily life in both good and bad ways.",
+        "i-sides": "It can bring real benefits such as [Facet A], but it can also cause serious harm such as [Facet B].",
+        "i-position": "After weighing the good and the bad, I believe that [Position].",
+        "a-topic": "The first and most important advantage to look at is [Facet A].",
+        "a-mech": "This works in a simple way: [Mechanism A].",
+        "a-example": "A real example of this that I know well is [Example A].",
+        "a-nuance": "Of course, this advantage has its limits and does not apply in every situation, because [Nuance A].",
+        "b-topic": "The picture is less positive when we turn to the biggest disadvantage, which is [Facet B].",
+        "b-mech": "The reason for this harm is quite simple: [Mechanism B].",
+        "b-example": "This problem is clear in everyday life, for example in [Example B].",
+        "b-nuance": "However, this disadvantage is not as hard to control as it first seems, because [Nuance B].",
+        "c-open": "In the end, it is clear that [Core Topic] can bring both real benefits and real harm.",
+        "c-position": "When I put the two sides together, my answer is that [Position].",
+        "c-rationale": "This seems the most sensible answer to me because [Rationale]."
+      }
+    }
+  },
+  "runs": {
+    "30": {
+      "vars": {
+        "core": {
+          "text": "the amount of time that children now spend in front of the television each day",
+          "text2": "children's daily viewing habits"
+        },
+        "facetA": {
+          "text": "the chance to learn about the world outside their home and school",
+          "text2": "learning new things from good programmes"
+        },
+        "facetB": {
+          "text": "the loss of sleep, sport and outdoor play when the television stays on",
+          "text2": "having less time for rest and active play"
+        },
+        "position": {
+          "text": "the advantages of television are greater than the disadvantages, as long as parents set clear limits",
+          "text2": "the benefits outweigh the harm when parents control viewing time carefully"
+        },
+        "mechA": {
+          "text": "good programmes show children places, animals and languages that they would never see at home or school"
+        },
+        "exA": {
+          "text": "my younger cousin, who learned many English words and songs from cartoons before she started primary school"
+        },
+        "nuanceA": {
+          "text": "many programmes for children are made only for fun and teach very little about real life or school subjects"
+        },
+        "mechB": {
+          "text": "every hour in front of the screen is an hour without running, playing with friends or getting enough sleep"
+        },
+        "exB": {
+          "text": "students who watch Korean dramas late at night and then feel too sleepy to listen in morning classes"
+        },
+        "nuanceB": {
+          "text": "parents can set a clear daily time limit and turn the television off at least one hour before bedtime"
+        },
+        "rationale": {
+          "text": "children can still learn from good programmes while staying active, healthy and well rested"
+        }
+      }
+    },
+    "40": {
+      "vars": {
+        "core": {
+          "text": "the amount of time children now spend in front of the television",
+          "text2": "children's viewing habits"
+        },
+        "facetA": {
+          "text": "the chance to learn about the world outside their home",
+          "text2": "learning new things from good programmes"
+        },
+        "facetB": {
+          "text": "having less time for sleep, sport and outdoor play",
+          "text2": "the loss of rest and active play"
+        },
+        "position": {
+          "text": "the advantages of television are greater than the disadvantages if parents set clear limits",
+          "text2": "the benefits outweigh the harm when viewing time is carefully controlled"
+        },
+        "mechA": {
+          "text": "good programmes show children places, animals and languages they cannot see at home or school"
+        },
+        "exA": {
+          "text": "my younger cousin, who learned English words and songs from cartoons before starting school"
+        },
+        "nuanceA": {
+          "text": "many children's programmes are made only for fun and teach little about real life"
+        },
+        "mechB": {
+          "text": "every hour in front of the screen is an hour without running, playing or sleeping well"
+        },
+        "exB": {
+          "text": "students who watch Korean dramas late at night and feel sleepy in morning classes"
+        },
+        "nuanceB": {
+          "text": "parents can set a daily time limit and switch the television off before bedtime"
+        },
+        "rationale": {
+          "text": "children can still learn from good programmes and stay healthy and well rested"
+        }
+      }
+    },
+    "50": {
+      "vars": {
+        "core": {
+          "text": "the amount of time that children spend watching television",
+          "text2": "children's viewing habits"
+        },
+        "facetA": {
+          "text": "the chance to learn about the wider world",
+          "text2": "learning new things from good programmes"
+        },
+        "facetB": {
+          "text": "less time for sleep and exercise",
+          "text2": "the loss of rest and active play"
+        },
+        "position": {
+          "text": "the advantages are greater than the disadvantages if parents set clear limits",
+          "text2": "the benefits outweigh the harm when viewing time is controlled"
+        },
+        "mechA": {
+          "text": "good programmes show children places, animals and languages that they cannot see at home"
+        },
+        "exA": {
+          "text": "my younger cousin, who learned English words from cartoons before starting school"
+        },
+        "nuanceA": {
+          "text": "many children's programmes are only for fun and teach very little"
+        },
+        "mechB": {
+          "text": "every hour in front of the screen is an hour without running, playing or sleeping"
+        },
+        "exB": {
+          "text": "students who watch dramas late at night and feel sleepy in class"
+        },
+        "nuanceB": {
+          "text": "parents can set a daily limit and turn the television off at bedtime"
+        },
+        "rationale": {
+          "text": "children can learn from good programmes and still stay healthy"
+        }
+      }
+    },
+    "60": {
+      "vars": {
+        "core": {
+          "text": "the time children spend watching television",
+          "text2": "children's viewing habits"
+        },
+        "facetA": {
+          "text": "learning about the wider world",
+          "text2": "the chance to learn new things"
+        },
+        "facetB": {
+          "text": "less time for sleep and exercise",
+          "text2": "the loss of rest and active play"
+        },
+        "position": {
+          "text": "the advantages are greater than the disadvantages if parents set limits",
+          "text2": "the benefits outweigh the harm when viewing time is controlled"
+        },
+        "mechA": {
+          "text": "good programmes show places and animals that children never see at home"
+        },
+        "exA": {
+          "text": "my younger cousin, who learned English words from cartoons"
+        },
+        "nuanceA": {
+          "text": "many programmes for children are only for fun"
+        },
+        "mechB": {
+          "text": "hours in front of the screen replace play and sleep"
+        },
+        "exB": {
+          "text": "students who watch dramas late and feel sleepy in class"
+        },
+        "nuanceB": {
+          "text": "parents can set a daily limit and turn the television off at bedtime"
+        },
+        "rationale": {
+          "text": "children can learn from television and still stay healthy"
+        }
+      }
+    }
+  },
+  "coaching": [
+    {
+      "share": "60",
+      "line": "a-topic",
+      "first": "Firstly, the main advantage of this is [Facet A].",
+      "flagged": "7 template words (budget 9–18): under the budget. Starts with a robotic linker (\"Firstly\"). Connect the paragraphs through meaning instead.",
+      "fixed": "The first and most important advantage to look at is [Facet A]."
+    },
+    {
+      "share": "60",
+      "line": "i-position",
+      "first": "I think it's good because [Position].",
+      "flagged": "5 template words (budget 6–11): under the budget. Contraction: write the full form (it is, do not) in an academic essay.",
+      "fixed": "After weighing the good and the bad, I believe that [Position]."
+    },
+    {
+      "share": "30",
+      "line": "c-position",
+      "first": "On balance, [Position].",
+      "flagged": "2 template words (budget 4–8): under the budget. COPIED: too close to an example (\"On balance, [Position].\"). Condition 1: the template must be in your own words.",
+      "fixed": "My final answer is that [Position]."
+    }
+  ],
+  "review": {
+    "30": [
+      {
+        "quote": "The most useful advantage is learning new things",
+        "fix": "In my view, the greatest advantage is learning new things",
+        "why": "'useful advantage' is redundant; 'greatest advantage'"
+      },
+      {
+        "quote": "Still, this advantage does not always work",
+        "fix": "Still, this advantage does not always apply",
+        "why": "an advantage 'applies'; it does not 'work'"
+      }
+    ],
+    "40": [
+      {
+        "quote": "the amount of time children now spend in front of the television, which has good and bad effects",
+        "fix": "the amount of time children now spend in front of the television, a trend that has good and bad effects",
+        "why": "'which' could refer to 'the television' or to 'the amount of time'"
+      },
+      {
+        "quote": "Looking at both sides, my answer is that the benefits outweigh the harm",
+        "fix": "Looking at both sides, I conclude that the benefits outweigh the harm",
+        "why": "dangling participle: the person doing the looking must be the subject"
+      }
+    ],
+    "50": [
+      {
+        "quote": "Looking at the two sides together, my answer is that the benefits outweigh the harm",
+        "fix": "Looking at the two sides together, I conclude that the benefits outweigh the harm",
+        "why": "dangling participle: the person doing the looking must be the subject"
+      }
+    ],
+    "60": []
+  }
+}

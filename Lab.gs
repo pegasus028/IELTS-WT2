@@ -226,6 +226,7 @@ function LAB_coachFrame_(p) {
     'The template is reusable scaffolding. Words in [square brackets] are slots the student will fill later with content for ANY prompt. The slots are not errors; do not judge what might go in them.',
     '',
     'Target level: ' + p.level + ' (IELTS Band ' + p.band + '). Template share chosen: ' + p.pct + '% of a 280-word essay.',
+    (p.type ? 'This blueprint is built for ONE question type: ' + p.type + '. Judge whether the line does the job that type needs (e.g. in Problem/solution, Facet A is the main cause and Facet B the solution that answers it).' : 'This is an all-purpose blueprint (no question type chosen).'),
     'Component: "' + c.name + '" (paragraph: ' + c.paragraph + ')',
     'Its job: ' + c.fn,
     'Why it scores: ' + c.why,

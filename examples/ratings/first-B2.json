@@ -1,0 +1,661 @@
+{
+  "B2-DISCUSS": {
+    "30": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 8,
+      "mean": 7.25,
+      "overall": 7.5,
+      "cefr": "around C1",
+      "summary": "The fullest discussion: a clear hybrid position and both views extended with specific mechanisms and accurate grammar, held at TR 7 because the evidence for the second view ('new staff who had to learn their jobs over video calls') stays general, and at CC 7 because each body announces its moves the same way.",
+      "strength": "A vivid, precise consequence in her own words: 'small problems that could be solved in minutes take days instead'.",
+      "priority": {
+        "crit": "CC",
+        "text": "Let reference do the linking: drop one frame announcer per body ('The logic is simple:', 'Their worry follows a clear chain:') and start the next sentence with the noun phrase it continues ('This lost commute…', 'Such delays…')."
+      },
+      "errors": []
+    },
+    "40": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 8,
+      "mean": 7.25,
+      "overall": 7.5,
+      "cefr": "around C1",
+      "summary": "A fluent, nearly error-free discussion whose own words now carry most of the argument and a clear qualified position, though the examples stay general and each body still follows the same announced pattern.",
+      "strength": "A precise, picturable example: 'Bangkok office workers who no longer lose hours each week in rush-hour traffic'.",
+      "priority": {
+        "crit": "CC",
+        "text": "Remove the announcers ('The logic is straightforward:', 'This is easy to observe in the case of') from one body and link by reference instead, so the two bodies stop mirroring each other line for line."
+      },
+      "errors": [
+        {
+          "quote": "serves both sides best",
+          "fix": "serves both staff and employers best",
+          "why": "ambiguous: 'sides' was used earlier for the two views"
+        }
+      ]
+    },
+    "50": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 7,
+      "mean": 7,
+      "overall": 7,
+      "cefr": "around C1",
+      "summary": "A well-organised discussion with a clear position held from introduction to conclusion and a full facet–mechanism–example–nuance chain in each body, held at Band 7 by generic examples and a visible, repeated signposting pattern.",
+      "strength": "A clear causal chain: 'without casual talk in the office, staff feel cut off and problems take longer to solve'.",
+      "priority": {
+        "crit": "TR",
+        "text": "Replace one generic example ('new staff who learned their jobs only over video calls during COVID-19') with a specific, checkable instance (a named company's hybrid policy or a family member's real experience) and say what happened."
+      },
+      "errors": [
+        {
+          "quote": "serves both sides best",
+          "fix": "serves both staff and employers best",
+          "why": "ambiguous: 'sides' was used earlier for the two views, not for staff and employers"
+        }
+      ]
+    },
+    "60": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 6,
+      "gra": 7,
+      "mean": 6.75,
+      "overall": 7,
+      "cefr": "around B2",
+      "summary": "A clear mixed-model position with mechanism, example and limit on both sides, but nearly six words in ten are Fah's announcing frames ('The logic behind this claim is straightforward', 'This pattern can be observed clearly in the case of'), which read as memorised filler and leave thin, generic content.",
+      "strength": "A concrete, cause-and-effect mechanism in her own words: 'skipping the commute means that staff start work fresher and firms need smaller offices'.",
+      "priority": {
+        "crit": "LR",
+        "text": "Cut the frame to her 40% exam share: replace each announcing line (e.g. 'This pattern can be observed clearly in the case of' → 'In Bangkok, for example,') and spend the saved words on a more specific example and mechanism."
+      },
+      "errors": [
+        {
+          "quote": "these savings, which they see as central",
+          "fix": "these savings",
+          "why": "redundant: 'place the greatest weight on' already says they are central"
+        },
+        {
+          "quote": "can reduce much of this isolation",
+          "fix": "can reduce much of the isolation of working alone",
+          "why": "reference: this paragraph discusses teamwork and productivity, so 'this isolation' has no antecedent in it"
+        },
+        {
+          "quote": "without harming company teamwork",
+          "fix": "without harming teamwork within the company",
+          "why": "unnatural noun–noun compound"
+        }
+      ]
+    }
+  },
+  "B2-OPINION": {
+    "30": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 8,
+      "mean": 7.25,
+      "overall": 7.5,
+      "cefr": "around C1",
+      "summary": "The fullest version: richer mechanisms and examples ('then answering quiz questions about it', 'cannot open a single textbook or do homework') and accurate grammar, but the 'careful reading' half of the position is still unargued and the rebuttal's 'difficulty' is unnamed.",
+      "strength": "A precise, balanced position: 'screens should support books in every school rather than replace them in every subject'.",
+      "priority": {
+        "crit": "TR",
+        "text": "Develop the half of the position no paragraph supports: one sentence in body B on why careful-reading subjects need print (e.g. long literature texts on a small screen), and name what remains after free tablets and repairs (a weak home signal)."
+      },
+      "errors": [
+        {
+          "quote": "tablets should become normal in secondary lessons",
+          "fix": "tablets should become a normal part of secondary lessons",
+          "why": "unnatural phrasing: 'normal in lessons' → 'a normal part of lessons' (or 'standard in lessons')"
+        },
+        {
+          "quote": "This works directly:",
+          "fix": "The reason is simple:",
+          "why": "unnatural frame: 'direct' does not describe how a mechanism works; the line announces a reason, so say so"
+        },
+        {
+          "quote": "where they easily pull attention from the lesson",
+          "fix": "where they easily draw attention away from the lesson",
+          "why": "collocation: 'draw/pull attention away from'"
+        },
+        {
+          "quote": "yet the difficulty remains",
+          "fix": "yet a weak signal at home would still block study",
+          "why": "vague reference: which difficulty remains is not said"
+        },
+        {
+          "quote": "the fresh, interactive material that only a tablet can offer",
+          "fix": "the fresh, interactive material that a tablet can offer",
+          "why": "overclaim: the prompt itself names laptops, which offer the same material"
+        }
+      ]
+    },
+    "40": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 8,
+      "mean": 7.25,
+      "overall": 7.5,
+      "cefr": "around C1",
+      "summary": "An accurate, well-organised partial agreement in which Fah's own content now carries the argument, but the rejected half rests on unequal access while the stated position is about 'subjects that need careful reading', which no paragraph develops.",
+      "strength": "A sharp contrast in her own words: 'its on-screen videos show ideas that paper can only describe'.",
+      "priority": {
+        "crit": "TR",
+        "text": "Make the position and the body agree: either argue in body B why careful-reading subjects need print, or restate the position as 'not in every school until every student has reliable access', and name the difficulty that free tablets leave."
+      },
+      "errors": [
+        {
+          "quote": "tablets should become normal in secondary lessons",
+          "fix": "tablets should become a normal part of secondary lessons",
+          "why": "unnatural phrasing: 'normal in lessons' → 'a normal part of lessons' (or 'standard in lessons')"
+        },
+        {
+          "quote": "This works quite directly:",
+          "fix": "The reason is simple:",
+          "why": "unnatural frame: 'direct' does not describe how a mechanism works; the line announces a reason, so say so"
+        },
+        {
+          "quote": "pulling attention from the lesson",
+          "fix": "drawing attention away from the lesson",
+          "why": "collocation: 'draw/pull attention away from'"
+        },
+        {
+          "quote": "yet the difficulty remains",
+          "fix": "yet a weak signal at home would still block study",
+          "why": "vague reference: which difficulty remains is not said"
+        },
+        {
+          "quote": "the fresh, interactive material that only a tablet can offer",
+          "fix": "the fresh, interactive material that a tablet can offer",
+          "why": "overclaim: the prompt itself names laptops, which offer the same material"
+        }
+      ]
+    },
+    "50": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 7,
+      "mean": 7,
+      "overall": 7,
+      "cefr": "around C1",
+      "summary": "A clear partial agreement with a strong example on each side, held at Band 7 because the claim that printed books should stay 'in some subjects' is never supported and the rebuttal ends on an unnamed 'deeper difficulty'.",
+      "strength": "A precise, realistic detail: 'a rural student whose family shares one phone between three children'.",
+      "priority": {
+        "crit": "TR",
+        "text": "Support the second half of the position: name the subjects where print should stay (e.g. literature, where long careful reading matters) and give one reason in the conclusion's rationale, and say what 'the deeper difficulty' is."
+      },
+      "errors": [
+        {
+          "quote": "tablets should become normal in lessons",
+          "fix": "tablets should become a normal part of lessons",
+          "why": "unnatural phrasing: 'normal in lessons' → 'a normal part of lessons' (or 'standard in lessons')"
+        },
+        {
+          "quote": "This works in a direct way:",
+          "fix": "The reason is simple:",
+          "why": "unnatural frame: 'direct' does not describe how a mechanism works"
+        },
+        {
+          "quote": "yet the deeper difficulty remains",
+          "fix": "yet weak signals at home would still block study",
+          "why": "vague reference: 'the deeper difficulty' is never named"
+        }
+      ]
+    },
+    "60": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 6,
+      "gra": 7,
+      "mean": 6.75,
+      "overall": 7,
+      "cefr": "around B2",
+      "summary": "A well-judged 'partly agree' with the accepted and rejected parts named, but the long frames ('A clear case of this that most people would recognise is', 'This danger becomes easy to picture if we consider') dominate, the rebuttal ends on an unnamed 'deeper difficulty', and the 'some subjects' half of the position is never argued.",
+      "strength": "A concrete, picturable example: 'a chemistry class watching a video of an experiment too dangerous to do at school'.",
+      "priority": {
+        "crit": "LR",
+        "text": "Cut the frame towards her 40% exam share: shorten each announcer (e.g. 'A clear case of this that most people would recognise is' → 'For example,') and use the words to name the difficulty that free tablets leave unsolved."
+      },
+      "errors": [
+        {
+          "quote": "the fresh, interactive content of tablets",
+          "fix": "the fresh, interactive content that tablets offer",
+          "why": "unnatural: tablets are the device; the content is on them"
+        },
+        {
+          "quote": "The way this works is fairly direct:",
+          "fix": "The reason is simple:",
+          "why": "unnatural frame: 'direct' does not describe how a mechanism works; the line announces a reason, so say so"
+        },
+        {
+          "quote": "yet this still leaves the deeper difficulty unsolved",
+          "fix": "yet free tablets would not fix weak signals or broken devices at home",
+          "why": "vague reference: 'the deeper difficulty' is never named"
+        }
+      ]
+    }
+  },
+  "B2-ADVANTAGE": {
+    "30": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 8,
+      "mean": 7.25,
+      "overall": 7.5,
+      "cefr": "around C1",
+      "summary": "The fullest version, with a qualified verdict ('while home study remains unsupervised') and well-extended mechanisms, but the DLTV example clashes with both its replay mechanism and the internet-access nuance, and the template's tense and dangling-participle slips remain.",
+      "strength": "A precise, idiomatic limit: 'this freedom often exists only on paper'.",
+      "priority": {
+        "crit": "TR",
+        "text": "Replace the DLTV example with one that truly shows pausing and replaying (recorded lessons on a school platform) so the example, mechanism and internet-access nuance agree; then the advantage paragraph is fully supported."
+      },
+      "errors": [
+        {
+          "quote": "the weaker supervision and human contact that students receive at home",
+          "fix": "weaker supervision and less human contact that students receive at home",
+          "why": "collocation: 'weaker' fits supervision but not 'human contact'; use 'less human contact'"
+        },
+        {
+          "quote": "This drawback shows clearly in my own primary class during COVID-19",
+          "fix": "This drawback showed clearly in my own primary class during COVID-19",
+          "why": "tense: the example is a finished past event (COVID-19 classes), so the verb must be past"
+        },
+        {
+          "quote": "Weighing both, my answer is that",
+          "fix": "Weighing both, I conclude that",
+          "why": "dangling participle: 'my answer' cannot do the weighing; make 'I' the subject"
+        },
+        {
+          "quote": "the DLTV channel, which streamed lessons from one well-known school in Hua Hin to rural Thai homes during the COVID-19 closures",
+          "fix": "keep the claim but choose an example that fits the mechanism, e.g. 'recorded lessons on a school's online platform that students can replay'; if DLTV stays, call it 'broadcast' rather than 'streamed'",
+          "why": "fact-check / fit (not a language error): broadly accurate (DLTV, broadcast from Wang Klai Kangwon School in Hua Hin, carried home lessons during the 2020 closures), but it is mainly a scheduled satellite-TV broadcast, so it weakly illustrates 'replay', and its no-internet delivery undercuts the internet-access nuance that follows"
+        }
+      ]
+    },
+    "40": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 8,
+      "mean": 7.25,
+      "overall": 7.5,
+      "cefr": "around C1",
+      "summary": "A fluent, convincing 'drawbacks outweigh' essay with vivid own-experience detail, but the advantage's example (DLTV broadcasts) does not show the pause-and-replay mechanism and the disadvantage is evidenced from primary school, not secondary.",
+      "strength": "A vivid, honest personal detail: 'many of us switched off our cameras and slowly fell behind'.",
+      "priority": {
+        "crit": "TR",
+        "text": "Match each example to its mechanism and to the prompt: use recorded lessons a student can replay (e.g. a school's lesson videos on its learning platform) for the advantage, and a secondary-school case for the disadvantage."
+      },
+      "errors": [
+        {
+          "quote": "the weaker supervision and human contact at home",
+          "fix": "weaker supervision and less human contact at home",
+          "why": "collocation: 'weaker' fits supervision but not 'human contact'; use 'less human contact'"
+        },
+        {
+          "quote": "This drawback is clearly visible in my own primary class during COVID-19",
+          "fix": "This drawback was clearly visible in my own primary class during COVID-19",
+          "why": "tense: the example is a finished past event (COVID-19 classes), so the verb must be past"
+        },
+        {
+          "quote": "Weighing one against the other, my answer is that",
+          "fix": "Weighing one against the other, I conclude that",
+          "why": "dangling participle: 'my answer' cannot do the weighing; make 'I' the subject"
+        },
+        {
+          "quote": "the DLTV channel, which streamed lessons by experienced teachers to rural Thai homes during the school closures",
+          "fix": "keep the claim but choose an example that fits the mechanism, e.g. 'recorded lessons on a school's online platform that students can replay'; if DLTV stays, call it 'broadcast' rather than 'streamed'",
+          "why": "fact-check / fit (not a language error): broadly accurate (DLTV, broadcast from Wang Klai Kangwon School in Hua Hin, carried home lessons during the 2020 closures), but it is mainly a scheduled satellite-TV broadcast, so it weakly illustrates 'replay', and its no-internet delivery undercuts the internet-access nuance that follows"
+        }
+      ]
+    },
+    "50": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 7,
+      "mean": 7,
+      "overall": 7,
+      "cefr": "around C1",
+      "summary": "A clear verdict with a developed advantage and disadvantage and an honest limit for each, held at Band 7 by the DLTV example not matching its 'replay' mechanism, a primary-school example for a secondary-school prompt, and recurring template errors in tense and the dangling 'Weighing … my answer'.",
+      "strength": "A clear mechanism for the disadvantage: 'nobody notices when a student is confused or distracted, so small gaps quietly grow'.",
+      "priority": {
+        "crit": "GRA",
+        "text": "Fix the two errors built into her template, which appear in every essay: 'is clearly visible … during COVID-19' → 'was clearly visible', and 'Weighing one against the other, my answer is' → 'Weighing one against the other, I conclude that'."
+      },
+      "errors": [
+        {
+          "quote": "the weaker supervision and human contact at home",
+          "fix": "weaker supervision and less human contact at home",
+          "why": "collocation: 'weaker' fits supervision but not 'human contact'; use 'less human contact'"
+        },
+        {
+          "quote": "This harm develops in a predictable way, because",
+          "fix": "This harm develops because",
+          "why": "unnatural: the because-clause gives a reason, not a 'way'"
+        },
+        {
+          "quote": "is clearly visible in my primary class during COVID-19",
+          "fix": "was clearly visible in my primary class during COVID-19",
+          "why": "tense: the example is a finished past event (COVID-19 classes), so the verb must be past"
+        },
+        {
+          "quote": "Weighing one against the other, my answer is that",
+          "fix": "Weighing one against the other, I conclude that",
+          "why": "dangling participle: 'my answer' cannot do the weighing; make 'I' the subject"
+        },
+        {
+          "quote": "A clear illustration of this benefit is the DLTV channel, which streamed lessons by experienced teachers to rural Thai homes",
+          "fix": "keep the claim but choose an example that fits the mechanism, e.g. 'recorded lessons on a school's online platform that students can replay'; if DLTV stays, call it 'broadcast' rather than 'streamed'",
+          "why": "fact-check / fit (not a language error): broadly accurate (DLTV, broadcast from Wang Klai Kangwon School in Hua Hin, carried home lessons during the 2020 closures), but it is mainly a scheduled satellite-TV broadcast, so it weakly illustrates 'replay', and its no-internet delivery undercuts the internet-access nuance that follows"
+        }
+      ]
+    },
+    "60": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 6,
+      "gra": 7,
+      "mean": 6.75,
+      "overall": 7,
+      "cefr": "around B2",
+      "summary": "A clear 'drawbacks outweigh' verdict stated early and held, with an advantage, a disadvantage and a limit for each, but padded frames ('which deserves equally careful attention', 'This harm usually develops in a predictable way') and two template errors (tense, dangling participle) hold language back.",
+      "strength": "A well-controlled concession: 'this problem can be reduced, if not removed entirely'.",
+      "priority": {
+        "crit": "LR",
+        "text": "Cut the padding lines to her 40% exam share ('which many people value highly', 'which deserves equally careful attention') and use the words for a secondary-school example of the disadvantage."
+      },
+      "errors": [
+        {
+          "quote": "weaker supervision and human contact",
+          "fix": "weaker supervision and less human contact",
+          "why": "collocation: 'weaker' fits supervision but not 'human contact'; use 'less human contact'"
+        },
+        {
+          "quote": "This harm usually develops in a predictable way, because",
+          "fix": "This harm develops because",
+          "why": "unnatural: the because-clause gives a reason, not a 'way'"
+        },
+        {
+          "quote": "is clearly visible in my own primary class during COVID-19",
+          "fix": "was clearly visible in my own primary class during COVID-19",
+          "why": "tense: the example is a finished past event (COVID-19 classes), so the verb must be past"
+        },
+        {
+          "quote": "Weighing one against the other, my final answer is that",
+          "fix": "Weighing one against the other, I conclude that",
+          "why": "dangling participle: 'my answer' cannot do the weighing; make 'I' the subject"
+        },
+        {
+          "quote": "A clear illustration of this benefit can be found in the DLTV channel, whose lessons were streamed to rural Thai homes during school closures",
+          "fix": "keep the claim but choose an example that fits the mechanism, e.g. 'recorded lessons on a school's online platform that students can replay'; if DLTV stays, call it 'broadcast' rather than 'streamed'",
+          "why": "fact-check / fit (not a language error): broadly accurate (DLTV, broadcast from Wang Klai Kangwon School in Hua Hin, carried home lessons during the 2020 closures), but it is mainly a scheduled satellite-TV broadcast, so it weakly illustrates 'replay', and its no-internet delivery undercuts the internet-access nuance that follows"
+        }
+      ]
+    }
+  },
+  "B2-PROBLEM": {
+    "30": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 8,
+      "mean": 7.25,
+      "overall": 7.5,
+      "cefr": "around C1",
+      "summary": "The fullest version, with specific mechanisms ('criminals copy a friend's profile') and examples, accurate grammar and a clear division of roles; the main cause still explains vulnerability more than the rise, and one comparison is left incomplete.",
+      "strength": "A precise, concrete mechanism: 'criminals copy a friend's profile or build a real-looking shop page'.",
+      "priority": {
+        "crit": "TR",
+        "text": "Tie the first cause to the rise: one clause saying what is new (e.g. 'as more teenagers shop online each year') turns a description of vulnerability into an answer to 'Why is this happening?'."
+      },
+      "errors": [
+        {
+          "quote": "Even so, it cannot do everything",
+          "fix": "Even so, such training cannot do everything",
+          "why": "ambiguous pronoun: the nearest noun is 'my own school', not the training"
+        },
+        {
+          "quote": "scammers change their tricks faster than any lesson",
+          "fix": "scammers change their tricks faster than any lesson can keep up with",
+          "why": "incomplete comparison: tricks are compared with a lesson, not with what a lesson can do"
+        }
+      ]
+    },
+    "40": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 8,
+      "mean": 7.25,
+      "overall": 7.5,
+      "cefr": "around C1",
+      "summary": "An accurate, well-organised essay whose own content now carries the mechanisms and examples, with a clear, actor-specific position; the main cause still describes vulnerability rather than the rise, and two pronouns ('both', 'it') lack a clear antecedent.",
+      "strength": "A clear mechanism in her own words: 'a fake shop or a friend's hacked account looks real, so a teenager pays before checking'.",
+      "priority": {
+        "crit": "TR",
+        "text": "Answer 'Why is this happening?' directly: state in body A what has changed in recent years (more online shopping by teenagers, more realistic fake pages) so the first cause explains the increase, not just the risk."
+      },
+      "errors": [
+        {
+          "quote": "practical scam lessons in secondary schools",
+          "fix": "practical lessons on scams in secondary schools",
+          "why": "ambiguous noun compound: 'scam lessons' can read as lessons in scamming; use 'lessons on scams' / 'scam-awareness lessons'"
+        },
+        {
+          "quote": "Having weighed both, I believe",
+          "fix": "Having weighed the causes and the solutions, I believe",
+          "why": "unclear reference: 'both' has no antecedent"
+        },
+        {
+          "quote": "Even so, it cannot do the whole job",
+          "fix": "Even so, such training cannot do the whole job",
+          "why": "ambiguous pronoun: the nearest noun is 'my own school', not the training"
+        }
+      ]
+    },
+    "50": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 7,
+      "mean": 7,
+      "overall": 7,
+      "cefr": "around C1",
+      "summary": "A complete answer to both questions with a cause–solution match, a second cause, a second measure and a position that says who does what; held at Band 7 because the main cause explains why the young are vulnerable rather than why fraud is rising.",
+      "strength": "A clear, well-judged division of roles: 'schools should lead, with banks as a safety net'.",
+      "priority": {
+        "crit": "TR",
+        "text": "Make the main cause explain the rise the prompt reports: add what has changed (e.g. more teenagers shopping online and scammers using hacked friends' accounts) to the mechanism sentence."
+      },
+      "errors": [
+        {
+          "quote": "regular scam lessons in secondary schools",
+          "fix": "regular lessons on scams in secondary schools",
+          "why": "ambiguous noun compound: 'scam lessons' can read as lessons in scamming; use 'lessons on scams' / 'scam-awareness lessons'"
+        }
+      ]
+    },
+    "60": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 6,
+      "gra": 7,
+      "mean": 6.75,
+      "overall": 7,
+      "cefr": "around B2",
+      "summary": "A well-built problem–solution essay with two causes, a solution that answers the main cause and a second measure for banks, but heavy frames ('The cause does its damage in a fairly simple way', 'A small example of this approach working in practice is') and short, loose slot wording ('pay fast', 'made us careful') keep the language at Band 6.",
+      "strength": "A sharp, memorable rationale: 'scams need victims to hurry, and both steps slow them down'.",
+      "priority": {
+        "crit": "LR",
+        "text": "Trim the frames to her 40% exam share and give the slots precise wording: 'teenagers pay fast' → 'a teenager pays before checking'; 'made us careful' → 'made many of us more careful'."
+      },
+      "errors": [
+        {
+          "quote": "the most practical answer to it lies in scam lessons at school",
+          "fix": "the most practical answer to it lies in lessons on scams at school",
+          "why": "ambiguous noun compound: 'scam lessons' can read as lessons in scamming; use 'lessons on scams' / 'scam-awareness lessons'"
+        },
+        {
+          "quote": "so teenagers pay fast",
+          "fix": "so teenagers pay without checking",
+          "why": "informal and imprecise: the point is paying before checking, not speed"
+        },
+        {
+          "quote": "teenagers have banking apps",
+          "fix": "many teenagers now have their own banking apps",
+          "why": "overgeneralisation (not all teenagers), and 'now' is what explains the rise"
+        }
+      ]
+    }
+  },
+  "B2-TWOPART": {
+    "30": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 8,
+      "mean": 7.25,
+      "overall": 7.5,
+      "cefr": "around C1",
+      "summary": "The fullest version, with specific, well-extended answers to both questions and accurate grammar, held at TR 7 by an overstated benefit ('removing the risk of losing a wallet') and a rationale ('its risks stay small if cash remains') that does not follow from the body.",
+      "strength": "A precise, checkable mechanism: 'a printed QR code costs a seller nothing, so even the smallest street stall can accept phone payments'.",
+      "priority": {
+        "crit": "TR",
+        "text": "Make the conclusion follow from the body: keeping cash answers the exclusion of older people, so say that; and write 'reducing the risk of losing cash' instead of 'removing the risk of losing a wallet'."
+      },
+      "errors": [
+        {
+          "quote": "The first answer is found in",
+          "fix": "The answer to the first question lies in",
+          "why": "unnatural phrasing: an answer is not 'found in' a cause; name the question and use 'lies in'"
+        },
+        {
+          "quote": "removing the risk of losing a wallet",
+          "fix": "reducing the risk of losing cash",
+          "why": "overclaim / factual: digital payment reduces cash theft or loss but phones can be stolen or lost and accounts hacked, so the risk is not removed"
+        },
+        {
+          "quote": "while its risks stay small if cash remains",
+          "fix": "while keeping cash protects those who cannot use a phone",
+          "why": "logic: keeping cash does not reduce scams, the other risk named in body B"
+        }
+      ]
+    },
+    "40": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 8,
+      "mean": 7.25,
+      "overall": 7.5,
+      "cefr": "around C1",
+      "summary": "An accurate, well-paced answer to both questions with a clear qualified verdict, but the rationale's claim that the risks 'are easy to limit if cash stays' does not follow (keeping cash protects the excluded, not scam victims) and theft risk is overstated.",
+      "strength": "A concrete, personal example: 'my mother checks our spending in her banking app every month'.",
+      "priority": {
+        "crit": "TR",
+        "text": "Fix the rationale's logic: 'while keeping cash protects those it would otherwise leave out', and change 'removing the risk of theft' to 'reducing'."
+      },
+      "errors": [
+        {
+          "quote": "The first answer is found in",
+          "fix": "The answer to the first question lies in",
+          "why": "unnatural phrasing: an answer is not 'found in' a cause; name the question and use 'lies in'"
+        },
+        {
+          "quote": "removing the risk of theft",
+          "fix": "reducing the risk of theft",
+          "why": "overclaim / factual: digital payment reduces cash theft or loss but phones can be stolen or lost and accounts hacked, so the risk is not removed"
+        },
+        {
+          "quote": "while its risks are easy to limit if cash stays",
+          "fix": "while keeping cash protects the people it would otherwise leave out",
+          "why": "logic: keeping cash helps people without smartphones but does nothing to limit scams, the other risk named"
+        }
+      ]
+    },
+    "50": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 7,
+      "gra": 7,
+      "mean": 7,
+      "overall": 7,
+      "cefr": "around C1",
+      "summary": "A clear, balanced two-part answer with a cause and a second cause for the speed of change and a qualified positive verdict, held at Band 7 by the overclaim that digital payment 'removes' theft and the cost-versus-simplicity mismatch in body A.",
+      "strength": "A well-chosen second cause: 'the COVID-19 pandemic made people avoid touching notes and turned scanning into a habit'.",
+      "priority": {
+        "crit": "TR",
+        "text": "Make the claims precise: topic sentence 'how cheap and simple it is for sellers to accept QR payments' (to match the cost mechanism), and 'reducing', not 'removing', the risk of theft."
+      },
+      "errors": [
+        {
+          "quote": "The first answer is found mainly in",
+          "fix": "The answer to the first question lies mainly in",
+          "why": "unnatural phrasing: an answer is not 'found in' a cause; name the question and use 'lies in'"
+        },
+        {
+          "quote": "how simple it is to scan a code",
+          "fix": "how cheap and simple it is for sellers to accept QR payments",
+          "why": "topic–mechanism mismatch: the next sentence explains cost to sellers"
+        },
+        {
+          "quote": "removing the risk of theft",
+          "fix": "reducing the risk of theft",
+          "why": "overclaim / factual: digital payment reduces cash theft or loss but phones can be stolen or lost and accounts hacked, so the risk is not removed"
+        },
+        {
+          "quote": "scammers often target beginners",
+          "fix": "scammers often target new users",
+          "why": "word choice: 'beginners' is vague here; the meaning is people new to banking apps"
+        },
+        {
+          "quote": "Looking back at both questions, this move away from notes and coins is",
+          "fix": "Looking back at both questions, I find that this move away from notes and coins is",
+          "why": "dangling participle: 'this move' cannot look back at the questions"
+        }
+      ]
+    },
+    "60": {
+      "tr": 7,
+      "cc": 7,
+      "lr": 6,
+      "gra": 7,
+      "mean": 6.75,
+      "overall": 7,
+      "cefr": "around B2",
+      "summary": "Both questions are answered in order with a clear 'mostly positive if cash remains' position and a strong PromptPay example, but the long frames ('It must be admitted, however, that', 'it would be unwise to accept this answer without a clear qualification') read as memorised, and the topic sentence (simplicity) does not match its mechanism (cost).",
+      "strength": "A precise, checkable mechanism: 'a printed code costs sellers nothing, so any stall can use one'.",
+      "priority": {
+        "crit": "LR",
+        "text": "Trim the frames to her 40% exam share ('It must be admitted, however, that this factor alone' → 'Still, this factor alone') and say 'reduces' rather than 'removes' the risk of theft."
+      },
+      "errors": [
+        {
+          "quote": "how simple scanning a code is",
+          "fix": "how cheap and simple it is to accept payment by QR code",
+          "why": "topic–mechanism mismatch: the next sentence explains cost to sellers, not simplicity"
+        },
+        {
+          "quote": "removing the risk of theft",
+          "fix": "reducing the risk of theft",
+          "why": "overclaim / factual: digital payment reduces cash theft or loss but phones can be stolen or lost and accounts hacked, so the risk is not removed"
+        },
+        {
+          "quote": "Looking back at both questions, this move away from notes and coins turns out to be",
+          "fix": "Looking back at both questions, I find that this move away from notes and coins is",
+          "why": "dangling participle: 'this move' cannot look back at the questions"
+        }
+      ]
+    }
+  }
+}

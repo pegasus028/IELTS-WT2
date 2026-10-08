@@ -1,0 +1,308 @@
+{
+  "level": "B1",
+  "type": "TWOPART",
+  "promptId": "p-private-tutoring",
+  "blueprints": {
+    "30": {
+      "lines": {
+        "i-open": "Many people have noticed the growth of [Core Topic].",
+        "i-sides": "It comes from [Facet A], and its main effect is [Facet B].",
+        "i-position": "My own view is that [Position].",
+        "a-topic": "The first question has a clear answer: [Facet A].",
+        "a-mech": "This is because [Mechanism A].",
+        "a-example": "In Thailand, this is clear in [Example A].",
+        "a-nuance": "But there is a second reason too: [Nuance A].",
+        "b-topic": "For the second question, the main point is [Facet B].",
+        "b-mech": "This matters because [Mechanism B].",
+        "b-example": "One example in Bangkok is [Example B].",
+        "b-nuance": "Still, there is a good side: [Nuance B].",
+        "c-open": "Looking back, I find [Core Topic] easier to understand.",
+        "c-position": "So my overall answer is that [Position].",
+        "c-rationale": "I hold this view because [Rationale]."
+      }
+    },
+    "40": {
+      "lines": {
+        "i-open": "Many people have noticed the growth of [Core Topic], which raises two questions.",
+        "i-sides": "This has happened mainly because of [Facet A], and its biggest effect is [Facet B].",
+        "i-position": "After thinking about both, I believe that [Position].",
+        "a-topic": "The first question has a clear answer: [Facet A].",
+        "a-mech": "The way it works is simple: [Mechanism A].",
+        "a-example": "In Thailand, this is clear in [Example A].",
+        "a-nuance": "But there is also a second reason worth knowing: [Nuance A].",
+        "b-topic": "On whether this trend is good or bad, the main point is [Facet B].",
+        "b-mech": "It is easy to see why: [Mechanism B].",
+        "b-example": "One example in Bangkok is [Example B].",
+        "b-nuance": "To be fair, however, there is a good side too: [Nuance B].",
+        "c-open": "Looking back at both questions, I find [Core Topic] easier to understand.",
+        "c-position": "So my overall answer is that [Position].",
+        "c-rationale": "I hold this view because [Rationale]."
+      }
+    },
+    "50": {
+      "lines": {
+        "i-open": "The growth of [Core Topic] is something many people have noticed, and it raises two questions.",
+        "i-sides": "In short, this has happened mainly because of [Facet A], and its biggest effect is [Facet B].",
+        "i-position": "After thinking about both questions, I believe that [Position].",
+        "a-topic": "To answer the first question, the biggest reason for this change is [Facet A].",
+        "a-mech": "The way this works is simple: [Mechanism A].",
+        "a-example": "Here in Thailand, this is clear to see in [Example A].",
+        "a-nuance": "But there is also a second reason that we should not forget: [Nuance A].",
+        "b-topic": "On whether this change is good or bad, the most important point is [Facet B].",
+        "b-mech": "It is easy to see why this matters: [Mechanism B].",
+        "b-example": "A real example that people in Bangkok know is [Example B].",
+        "b-nuance": "To be fair, however, there is also a good side, because [Nuance B].",
+        "c-open": "Looking back at both questions, I can now see [Core Topic] more clearly.",
+        "c-position": "So, when I put everything together, my overall answer is that [Position].",
+        "c-rationale": "I hold this view mainly because [Rationale]."
+      }
+    },
+    "60": {
+      "lines": {
+        "i-open": "The growth of [Core Topic] is something that many people have noticed, and it raises two questions.",
+        "i-sides": "In short, this has happened mainly because of [Facet A], and its biggest effect on young people is [Facet B].",
+        "i-position": "After thinking carefully about both of these questions, I believe that [Position].",
+        "a-topic": "To answer the first question, I think the biggest reason for this change is [Facet A].",
+        "a-mech": "The way this works is actually quite simple to explain: [Mechanism A].",
+        "a-example": "Here in Thailand, this pattern is very easy to notice in [Example A].",
+        "a-nuance": "But there is also a second reason here that we should not forget: [Nuance A].",
+        "b-topic": "On whether this change is good or bad, the most important point is [Facet B].",
+        "b-mech": "It is quite easy to see why this matters: [Mechanism B].",
+        "b-example": "A real example that many people in Bangkok know very well is [Example B].",
+        "b-nuance": "To be fair, however, this change also has a good side, because [Nuance B].",
+        "c-open": "Looking back at both questions, I can now see [Core Topic] much more clearly.",
+        "c-position": "So, when I take everything together, my overall answer is that [Position].",
+        "c-rationale": "I feel sure about this view mainly because [Rationale]."
+      }
+    }
+  },
+  "runs": {
+    "30": {
+      "vars": {
+        "core": {
+          "text": "private tutoring centres for secondary school students in the evenings and at weekends",
+          "text2": "after-school tutoring"
+        },
+        "facetA": {
+          "text": "the strong competition for places at the best universities in the country",
+          "text2": "the race for a seat at a top university"
+        },
+        "facetB": {
+          "text": "the harm that long study hours do to students' sleep, health and free time",
+          "text2": "the damage to teenagers' rest and health"
+        },
+        "position": {
+          "text": "private tutoring does more harm than good for most secondary school students",
+          "text2": "the trend is mostly negative for young people"
+        },
+        "mechA": {
+          "text": "the entrance exams decide which university and faculty a student can enter, so every single mark matters"
+        },
+        "exA": {
+          "text": "the months before the TCAS exams, when tutoring centres are full every evening and every weekend"
+        },
+        "nuanceA": {
+          "text": "many busy parents want a safe place for their children to stay after school until they finish work"
+        },
+        "mechB": {
+          "text": "students sit in class all day and then study again at night, so they sleep less and have no time for sport, hobbies or friends"
+        },
+        "exB": {
+          "text": "Siam Square, where tutoring schools stay full of students in school uniform until late evening"
+        },
+        "nuanceB": {
+          "text": "an experienced tutor can help a weak student catch up in one hard subject, such as mathematics or physics"
+        },
+        "rationale": {
+          "text": "teenagers need time to rest, play sport and see their friends, not only time to study for exams"
+        }
+      }
+    },
+    "40": {
+      "vars": {
+        "core": {
+          "text": "private tutoring centres for secondary school students",
+          "text2": "after-school tutoring"
+        },
+        "facetA": {
+          "text": "the strong competition for places at the best universities",
+          "text2": "the race for a seat at a top university"
+        },
+        "facetB": {
+          "text": "the harm that long study hours do to students' sleep, health and free time",
+          "text2": "the damage to teenagers' rest and health"
+        },
+        "position": {
+          "text": "private tutoring does more harm than good for most secondary students",
+          "text2": "the trend is mostly negative for young people"
+        },
+        "mechA": {
+          "text": "every mark matters because the entrance exams decide which university and faculty a student can enter"
+        },
+        "exA": {
+          "text": "the months before the TCAS exams, when tutoring centres are full every evening and weekend"
+        },
+        "nuanceA": {
+          "text": "many busy parents want a safe place for their children to stay until they finish work"
+        },
+        "mechB": {
+          "text": "students sit in class all day and study again at night, which reduces their sleep and leaves no time for friends"
+        },
+        "exB": {
+          "text": "Siam Square, where tutoring schools stay full of students in uniform until late evening"
+        },
+        "nuanceB": {
+          "text": "an experienced tutor can help a weak student catch up in one hard subject, such as mathematics"
+        },
+        "rationale": {
+          "text": "teenagers need time to rest, play sport and see friends, not only time to study"
+        }
+      }
+    },
+    "50": {
+      "vars": {
+        "core": {
+          "text": "private tutoring for secondary school students",
+          "text2": "after-school tutoring"
+        },
+        "facetA": {
+          "text": "strong competition for places at good universities",
+          "text2": "the race to enter a top university"
+        },
+        "facetB": {
+          "text": "the harm to students' sleep, health and free time",
+          "text2": "the damage that long study hours do to teenagers"
+        },
+        "position": {
+          "text": "private tutoring does more harm than good for most students",
+          "text2": "the trend is mostly negative for young people"
+        },
+        "mechA": {
+          "text": "every mark matters because the entrance exams decide which university a student can enter"
+        },
+        "exA": {
+          "text": "the months before the TCAS exams, when tutoring centres are full every weekend"
+        },
+        "nuanceA": {
+          "text": "busy parents need a safe place for their children until they finish work"
+        },
+        "mechB": {
+          "text": "students study at school all day and then again at night, so they sleep less"
+        },
+        "exB": {
+          "text": "Siam Square, where tutoring schools stay busy late into the evening"
+        },
+        "nuanceB": {
+          "text": "an experienced tutor can help a weak student catch up in one hard subject"
+        },
+        "rationale": {
+          "text": "teenagers need time to rest and enjoy life, not only to study"
+        }
+      }
+    },
+    "60": {
+      "vars": {
+        "core": {
+          "text": "private tutoring for secondary school students",
+          "text2": "after-school tutoring"
+        },
+        "facetA": {
+          "text": "strong competition for university places",
+          "text2": "the race to enter a good university"
+        },
+        "facetB": {
+          "text": "the harm to students' sleep and free time",
+          "text2": "the damage to teenagers' health"
+        },
+        "position": {
+          "text": "tutoring does more harm than good for most students",
+          "text2": "the trend is mostly negative"
+        },
+        "mechA": {
+          "text": "every mark matters because entrance exams decide a student's future"
+        },
+        "exA": {
+          "text": "the months before the TCAS exams, when tutoring centres are full"
+        },
+        "nuanceA": {
+          "text": "busy parents need a safe place for children after school"
+        },
+        "mechB": {
+          "text": "students study at school and again at night, so they sleep less"
+        },
+        "exB": {
+          "text": "Siam Square, where tutoring schools stay busy at night"
+        },
+        "nuanceB": {
+          "text": "an experienced tutor can help a weak student catch up"
+        },
+        "rationale": {
+          "text": "teenagers need time to rest, not only to study"
+        }
+      }
+    }
+  },
+  "coaching": [
+    {
+      "share": "60",
+      "line": "a-topic",
+      "first": "Firstly, the reason why this has become so common is [Facet A].",
+      "flagged": "Starts with a robotic linker (\"Firstly\"). Connect the paragraphs through meaning instead.",
+      "fixed": "To answer the first question, I think the biggest reason for this change is [Facet A]."
+    },
+    {
+      "share": "60",
+      "line": "i-open",
+      "first": "The trend of [Core Topic] leads to two important questions.",
+      "flagged": "8 template words: under the 12–23 budget. Too close to an example (\"The trend of [Core Topic] leads to two important questions.\"). Condition 1: the template must be in your own words.",
+      "fixed": "The growth of [Core Topic] is something that many people have noticed, and it raises two questions."
+    },
+    {
+      "share": "30",
+      "line": "a-nuance",
+      "first": "But there's a second reason too: [Nuance A].",
+      "flagged": "Contraction: write the full form (it is, do not) in an academic essay.",
+      "fixed": "But there is a second reason too: [Nuance A]."
+    }
+  ],
+  "review": {
+    "30": [
+      {
+        "quote": "Looking back, after-school tutoring is now easier to understand",
+        "fix": "Looking back, I find after-school tutoring easier to understand",
+        "why": "dangling participle: the person doing the looking must be the subject"
+      }
+    ],
+    "40": [
+      {
+        "quote": "Looking back at both questions, after-school tutoring is now easier to understand",
+        "fix": "Looking back at both questions, I find after-school tutoring easier to understand",
+        "why": "dangling participle: the person doing the looking must be the subject"
+      }
+    ],
+    "50": [
+      {
+        "quote": "Looking back at both questions, the picture of after-school tutoring is now clearer",
+        "fix": "Looking back at both questions, I can now see after-school tutoring more clearly",
+        "why": "dangling participle: the person doing the looking must be the subject"
+      },
+      {
+        "quote": "So, taking everything together, my overall answer is that",
+        "fix": "So, when I put everything together, my overall answer is that",
+        "why": "dangling participle: the person doing the thinking must be the subject"
+      }
+    ],
+    "60": [
+      {
+        "quote": "it leads to two clear questions",
+        "fix": "it raises two questions",
+        "why": "a trend 'raises' questions"
+      },
+      {
+        "quote": "Looking back at both questions, the picture of after-school tutoring is now much clearer",
+        "fix": "Looking back at both questions, I can now see after-school tutoring much more clearly",
+        "why": "dangling participle: the person doing the looking must be the subject"
+      }
+    ]
+  }
+}

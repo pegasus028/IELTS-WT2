@@ -1,0 +1,328 @@
+{
+  "level": "B1",
+  "type": "PROBLEM",
+  "promptId": "p-teen-sleep",
+  "blueprints": {
+    "30": {
+      "lines": {
+        "i-open": "Doctors and parents in many places are now worried about [Core Topic].",
+        "i-sides": "This mostly happens because of [Facet A], and [Facet B] can help.",
+        "i-position": "My answer is that [Position].",
+        "a-topic": "Most of the problem comes from [Facet A].",
+        "a-mech": "It works like this: [Mechanism A].",
+        "a-example": "We see this in [Example A].",
+        "a-nuance": "However, there is also a second cause: [Nuance A].",
+        "b-topic": "The best step against this cause is [Facet B].",
+        "b-mech": "This works because [Mechanism B].",
+        "b-example": "A real case of this is [Example B].",
+        "b-nuance": "Still, this solution alone is not enough, since [Nuance B].",
+        "c-open": "All in all, [Core Topic] is serious, but it can be reduced.",
+        "c-position": "Every group has a part to play: [Position].",
+        "c-rationale": "This is fair because [Rationale]."
+      }
+    },
+    "40": {
+      "lines": {
+        "i-open": "Many people are now worried about [Core Topic], and the problem is growing.",
+        "i-sides": "The main cause is [Facet A], so the clearest answer is [Facet B].",
+        "i-position": "I believe that several groups must act: [Position].",
+        "a-topic": "The main reason for this problem is [Facet A].",
+        "a-mech": "This is how it causes the problem: [Mechanism A].",
+        "a-example": "We can see this in the lives of [Example A].",
+        "a-nuance": "However, this is not the only cause; another is that [Nuance A].",
+        "b-topic": "The most useful step against this cause is [Facet B].",
+        "b-mech": "This step works because [Mechanism B].",
+        "b-example": "This already works, for instance in [Example B].",
+        "b-nuance": "Of course, this solution alone cannot fix everything, since [Nuance B].",
+        "c-open": "All in all, [Core Topic] is serious, but we can reduce it.",
+        "c-position": "Every group has a part to play: [Position].",
+        "c-rationale": "This makes sense because [Rationale]."
+      }
+    },
+    "50": {
+      "lines": {
+        "i-open": "Many people in different countries are now worried about [Core Topic], and the problem is growing.",
+        "i-sides": "The main cause is [Facet A], so the clearest answer is [Facet B].",
+        "i-position": "Solving it requires action from several groups, so I believe [Position].",
+        "a-topic": "When we look at where this problem comes from, the main reason is [Facet A].",
+        "a-mech": "It causes the problem in a simple way: [Mechanism A].",
+        "a-example": "We can see this clearly in the lives of [Example A].",
+        "a-nuance": "However, this is not the only cause; another one is that [Nuance A].",
+        "b-topic": "To deal with this main cause, the most useful step is [Facet B].",
+        "b-mech": "This works against the cause because [Mechanism B].",
+        "b-example": "This idea already works in real life, for instance in [Example B].",
+        "b-nuance": "Of course, this solution cannot fix the whole problem alone, since [Nuance B].",
+        "c-open": "All in all, [Core Topic] is a serious problem, but we can reduce it.",
+        "c-position": "In the end, every group has a part to play: [Position].",
+        "c-rationale": "This plan makes sense because [Rationale]."
+      }
+    },
+    "60": {
+      "lines": {
+        "i-open": "Many people in different countries are now worried about [Core Topic], and this problem is growing.",
+        "i-sides": "The main cause of this problem is [Facet A], so the clearest answer to it is [Facet B].",
+        "i-position": "Solving it requires action from more than one group: [Position].",
+        "a-topic": "When we look at where this problem comes from, the main reason is [Facet A].",
+        "a-mech": "This causes the problem in a simple way: [Mechanism A].",
+        "a-example": "We can see this clearly in the daily lives of [Example A].",
+        "a-nuance": "However, this is not the only cause, and another one is that [Nuance A].",
+        "b-topic": "To deal with this main cause, the most useful step would be [Facet B].",
+        "b-mech": "This step works against the cause because [Mechanism B].",
+        "b-example": "This idea is already used in real life, for instance in [Example B].",
+        "b-nuance": "Of course, this solution cannot fix the whole problem by itself, since [Nuance B].",
+        "c-open": "All in all, [Core Topic] is a serious problem, but it is one that we can reduce.",
+        "c-position": "In the end, every group has its own part to play: [Position].",
+        "c-rationale": "This plan makes sense to me because [Rationale]."
+      }
+    }
+  },
+  "runs": {
+    "30": {
+      "vars": {
+        "core": {
+          "text": "secondary school students who do not get enough sleep",
+          "text2": "this lack of rest among teenagers"
+        },
+        "facetA": {
+          "text": "the habit of using phones for chats and videos late at night",
+          "text2": "phone use in bed"
+        },
+        "facetB": {
+          "text": "a firm family rule that keeps every phone out of the bedroom",
+          "text2": "a bedtime phone rule at home"
+        },
+        "position": {
+          "text": "parents should take phones away at bedtime, schools should set less homework and governments should limit late classes",
+          "text2": "families must set a firm phone rule, while schools and the state must cut homework and late classes"
+        },
+        "mechA": {
+          "text": "chats and videos are hard to stop, so teenagers stay awake long after bedtime and sleep too little"
+        },
+        "exA": {
+          "text": "students who chat on LINE until midnight and then fall asleep in their first lesson"
+        },
+        "nuanceA": {
+          "text": "many students attend tutoring after school, so they get home late and start homework at nine"
+        },
+        "mechB": {
+          "text": "with no phone nearby, nothing keeps a student awake, so she falls asleep sooner and wakes with more energy"
+        },
+        "exB": {
+          "text": "my own home, where my parents keep our phones in the kitchen after ten, and I sleep better"
+        },
+        "nuanceB": {
+          "text": "homework and late tutoring still keep some students up, which is why schools and governments must also act"
+        },
+        "rationale": {
+          "text": "each group controls one part of the problem, and no group can fix it alone"
+        }
+      }
+    },
+    "40": {
+      "vars": {
+        "core": {
+          "text": "secondary school students who do not get enough sleep",
+          "text2": "this lack of rest among teenagers"
+        },
+        "facetA": {
+          "text": "the use of phones for chats and videos late at night",
+          "text2": "phone use in bed"
+        },
+        "facetB": {
+          "text": "a family rule that keeps phones out of bedrooms",
+          "text2": "a bedtime phone rule at home"
+        },
+        "position": {
+          "text": "parents should control phones at night, schools should set less homework and governments should limit late classes",
+          "text2": "families must set a phone rule, while schools and the state must cut homework and late classes"
+        },
+        "mechA": {
+          "text": "chats and short videos keep teenagers awake long after bedtime, so they sleep only a few hours"
+        },
+        "exA": {
+          "text": "students who chat on LINE until midnight and then fall asleep in morning lessons"
+        },
+        "nuanceA": {
+          "text": "many students go to tutoring after school, so they start their homework very late"
+        },
+        "mechB": {
+          "text": "with no phone nearby, nothing keeps a student awake, so she falls asleep sooner"
+        },
+        "exB": {
+          "text": "my own home, where my parents keep all our phones in the kitchen after ten"
+        },
+        "nuanceB": {
+          "text": "homework and late tutoring still keep students up, which is why schools and governments must also act"
+        },
+        "rationale": {
+          "text": "each group can fix the part of the problem that it controls"
+        }
+      }
+    },
+    "50": {
+      "vars": {
+        "core": {
+          "text": "secondary students who do not sleep enough",
+          "text2": "this lack of rest among teenagers"
+        },
+        "facetA": {
+          "text": "phone use late at night",
+          "text2": "phone use in bed"
+        },
+        "facetB": {
+          "text": "a family rule about phones at bedtime",
+          "text2": "keeping phones out of bedrooms"
+        },
+        "position": {
+          "text": "parents should control phones at night, and schools and governments should reduce evening study",
+          "text2": "families must set a phone rule, while schools and the state must cut homework and late classes"
+        },
+        "mechA": {
+          "text": "chats, games and short videos keep teenagers awake long after bedtime"
+        },
+        "exA": {
+          "text": "students who chat on LINE until midnight and then sleep in class"
+        },
+        "nuanceA": {
+          "text": "tutoring classes and homework often fill the evening until very late"
+        },
+        "mechB": {
+          "text": "without a phone nearby, nothing keeps a student awake in bed"
+        },
+        "exB": {
+          "text": "my own home, where our phones stay in the kitchen after ten"
+        },
+        "nuanceB": {
+          "text": "homework and late classes still keep students up, which is why schools and governments must act too"
+        },
+        "rationale": {
+          "text": "each group can fix the part of the problem it controls"
+        }
+      }
+    },
+    "60": {
+      "vars": {
+        "core": {
+          "text": "students who sleep too little",
+          "text2": "this lack of rest"
+        },
+        "facetA": {
+          "text": "phone use late at night",
+          "text2": "phone use in bed"
+        },
+        "facetB": {
+          "text": "a bedtime phone rule",
+          "text2": "keeping phones out of bedrooms"
+        },
+        "position": {
+          "text": "parents should control phones at night, and schools and governments should reduce the evening study load",
+          "text2": "families must set a phone rule, and schools and the state must cut evening work"
+        },
+        "mechA": {
+          "text": "chats and videos keep teenagers awake past midnight"
+        },
+        "exA": {
+          "text": "students who chat on LINE late and sleep in class"
+        },
+        "nuanceA": {
+          "text": "tutoring and homework fill the evening until late"
+        },
+        "mechB": {
+          "text": "without a phone, nothing keeps a student awake"
+        },
+        "exB": {
+          "text": "my home, where phones stay in the kitchen after ten"
+        },
+        "nuanceB": {
+          "text": "homework and late classes still keep students up, which is why schools and governments must act too"
+        },
+        "rationale": {
+          "text": "each group controls one part of the problem"
+        }
+      }
+    }
+  },
+  "coaching": [
+    {
+      "share": "60",
+      "line": "a-topic",
+      "first": "Firstly, the main cause of this problem is [Facet A].",
+      "flagged": "8 template words: under the 9–18 budget. Too close to an example (\"The principal driver of this problem is [Facet A].\"): the template must be in your own words. Starts with a robotic linker (\"Firstly\"): connect the paragraphs through meaning instead.",
+      "fixed": "When we look at where this problem comes from, the main reason is [Facet A]."
+    },
+    {
+      "share": "60",
+      "line": "b-nuance",
+      "first": "Of course, this solution can't fix the whole problem by itself, since [Nuance B].",
+      "flagged": "Contraction: write the full form (it is, do not) in an academic essay.",
+      "fixed": "Of course, this solution cannot fix the whole problem by itself, since [Nuance B]."
+    },
+    {
+      "share": "30",
+      "line": "i-sides",
+      "first": "Its main reason is [Facet A], and the answer is [Facet B].",
+      "flagged": "Too close to an example (\"This problem comes mainly from [Facet A], and the answer is [Facet B].\"): the template must be in your own words.",
+      "fixed": "This mostly happens because of [Facet A], and [Facet B] can help."
+    }
+  ],
+  "review": {
+    "30": [
+      {
+        "quote": "so she sleeps sooner",
+        "fix": "so she falls asleep sooner",
+        "why": "'fall asleep sooner', not 'sleep sooner'"
+      },
+      {
+        "quote": "Every group has a part:",
+        "fix": "Every group has a part to play:",
+        "why": "the fixed phrase is 'a part to play'"
+      }
+    ],
+    "40": [
+      {
+        "quote": "Its biggest reason is using phones for chats and videos late at night",
+        "fix": "The main cause is the use of phones for chats and videos late at night",
+        "why": "a problem has a 'main cause', not a 'biggest reason'"
+      }
+    ],
+    "50": [
+      {
+        "quote": "The biggest reason for it is using phones late at night",
+        "fix": "The main cause is phone use late at night",
+        "why": "a problem has a 'main cause', not a 'biggest reason'"
+      },
+      {
+        "quote": "Solving it needs several groups",
+        "fix": "Solving it requires action from several groups",
+        "why": "a solution requires action, not 'groups'"
+      },
+      {
+        "quote": "Looking at where this problem comes from, the main reason is phone use in bed",
+        "fix": "When we look at where this problem comes from, the main reason is phone use in bed",
+        "why": "dangling participle: 'the main reason' is not doing the looking"
+      }
+    ],
+    "60": [
+      {
+        "quote": "this problem is not getting smaller",
+        "fix": "this problem is growing",
+        "why": "unnatural negative phrasing"
+      },
+      {
+        "quote": "The biggest reason for it is using phones late at night",
+        "fix": "The main cause of this problem is phone use late at night",
+        "why": "a problem has a 'main cause', not a 'biggest reason'"
+      },
+      {
+        "quote": "Solving it needs more than one group",
+        "fix": "Solving it requires action from more than one group",
+        "why": "a solution requires action, not 'groups'"
+      },
+      {
+        "quote": "schools and governments should make evening study lighter",
+        "fix": "schools and governments should reduce the evening study load",
+        "why": "'make study lighter' is unnatural"
+      }
+    ]
+  }
+}

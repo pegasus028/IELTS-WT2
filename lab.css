@@ -261,3 +261,28 @@
 .lab-drive-full .lab-ex-h{margin-top:2px}
 .lab-drive-src a{color:var(--ink-2)}
 .lab-kpi b .lab-kpi-sm{font-size:1rem;line-height:1.3}
+
+/* ---- blueprint question type (setup) and the Examples tab (Oct 2026) ---- */
+.lab-types,.lab-exstu{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:10px}
+.lab-type{display:flex;flex-direction:column;gap:4px;text-align:left;padding:12px 13px;border:1px solid var(--rule);border-radius:var(--r-m);background:var(--surface);color:var(--ink);font:inherit;font-size:.88rem;line-height:1.4;cursor:pointer}
+.lab-type b{font-size:.95rem}
+.lab-type.on{border-color:var(--accent);background:var(--accent-soft)}
+.lab-type:disabled{cursor:default;opacity:.55}
+.lab-type:disabled.on{opacity:1}
+.lab-type:focus-visible{outline:2px solid var(--accent-line);outline-offset:1px}
+.lab-copynote{border-left:4px solid var(--accent)}
+.lab-slotbtn .tiny{font-weight:400;opacity:.8}
+.lab-tablewrap{overflow-x:auto}
+.lab-extable,.lab-table{width:100%;border-collapse:collapse;font-size:.9rem}
+.lab-table th,.lab-table td{padding:7px 9px;border-bottom:1px solid var(--rule);text-align:center}
+.lab-table th:first-child,.lab-table td:first-child{text-align:left}
+.lab-table tr.on td{background:var(--accent-soft)}
+.lab-excmp{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:12px}
+.lab-excol{border:1px solid var(--rule);border-radius:var(--r-m);padding:10px;background:var(--surface);min-width:0}
+.lab-excol-h{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:6px}
+.lab-excol .lab-essay p{font-size:.9rem;line-height:1.55}
+.lab-coachstory{border-left:3px solid var(--rule);padding:4px 0 4px 12px;margin:10px 0}
+.lab-coachstory p{margin:3px 0}
+.lab-exvars{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px}
+@media (max-width:900px){.lab-excmp{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:560px){.lab-excmp{grid-template-columns:1fr}}

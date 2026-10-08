@@ -1,0 +1,343 @@
+{
+  "level": "B1",
+  "type": "OPINION",
+  "promptId": "p-school-snacks",
+  "blueprints": {
+    "30": {
+      "lines": {
+        "i-open": "People in many countries are talking about [Core Topic].",
+        "i-sides": "My opinion is based on [Facet A], but others stress [Facet B].",
+        "i-position": "After careful thought, I believe that [Position].",
+        "a-topic": "The strongest reason for my view is [Facet A].",
+        "a-mech": "Here is how it happens: [Mechanism A].",
+        "a-example": "A clear example of this is [Example A].",
+        "a-nuance": "Of course, [Nuance A], but this point does not change my main argument.",
+        "b-topic": "People who disagree point to [Facet B].",
+        "b-mech": "To them, this matters because [Mechanism B].",
+        "b-example": "We see this, for example, when [Example B].",
+        "b-nuance": "Still, this argument is not strong enough, because [Nuance B].",
+        "c-open": "Looking back at the debate on [Core Topic], I find one side stronger.",
+        "c-position": "For these reasons, my answer is clear: [Position].",
+        "c-rationale": "This is right because [Rationale]."
+      }
+    },
+    "40": {
+      "lines": {
+        "i-open": "People in many countries, including young people like me, are talking about [Core Topic].",
+        "i-sides": "My opinion is based mainly on [Facet A], but other people care more about [Facet B].",
+        "i-position": "After thinking carefully, I believe that [Position].",
+        "a-topic": "The most important reason for my opinion is [Facet A].",
+        "a-mech": "This is how it happens: [Mechanism A].",
+        "a-example": "A clear example of this can be found in [Example A].",
+        "a-nuance": "Of course, [Nuance A], but this limitation does not change the main point.",
+        "b-topic": "People who see this differently usually point to [Facet B].",
+        "b-mech": "To them, this matters because [Mechanism B].",
+        "b-example": "We can see this, for example, when [Example B].",
+        "b-nuance": "This argument is understandable, but it is not strong enough, because [Nuance B].",
+        "c-open": "Looking back at the debate on [Core Topic], I find one side clearly stronger.",
+        "c-position": "For these reasons, my answer is clear: [Position].",
+        "c-rationale": "This view is right because [Rationale]."
+      }
+    },
+    "50": {
+      "lines": {
+        "i-open": "People in many countries are talking about [Core Topic], and young people like me have strong feelings about it.",
+        "i-sides": "My opinion is based mainly on [Facet A], while other people care more about [Facet B].",
+        "i-position": "After thinking carefully about this, I believe that [Position].",
+        "a-topic": "The first and most important reason for my opinion is [Facet A].",
+        "a-mech": "It is easy to see how this happens: [Mechanism A].",
+        "a-example": "A clear example of this can be found in [Example A].",
+        "a-nuance": "Of course, [Nuance A], but this limitation does not change the main point of the argument.",
+        "b-topic": "People who see this question differently usually point to [Facet B].",
+        "b-mech": "In their opinion, this is important because [Mechanism B].",
+        "b-example": "We can see this kind of thinking, for example, when [Example B].",
+        "b-nuance": "This argument is easy to understand, but it is not strong enough, because [Nuance B].",
+        "c-open": "Looking back at the arguments about [Core Topic], I find one side stronger.",
+        "c-position": "For these reasons, my answer is still clear: [Position].",
+        "c-rationale": "This is the right choice because [Rationale]."
+      }
+    },
+    "60": {
+      "lines": {
+        "i-open": "People in many countries are talking about [Core Topic], and young people like me also have strong feelings about it.",
+        "i-sides": "My opinion is based mainly on [Facet A], while other people care more about [Facet B].",
+        "i-position": "After thinking carefully about this question, I believe that [Position].",
+        "a-topic": "The first and most important reason for my opinion is [Facet A], which affects almost every student.",
+        "a-mech": "It is easy to see how this happens in everyday life: [Mechanism A].",
+        "a-example": "A clear example of this from real life can be found in [Example A].",
+        "a-nuance": "Of course, it is fair to say that [Nuance A], but this limitation does not change the main point of the argument.",
+        "b-topic": "People who see this question differently usually point instead to [Facet B].",
+        "b-mech": "In their opinion, this point is important because [Mechanism B].",
+        "b-example": "We can see this kind of thinking, for example, when [Example B].",
+        "b-nuance": "This argument is easy to understand, but it is not strong enough in the end, because [Nuance B].",
+        "c-open": "Looking back at the arguments about [Core Topic], I find one side clearly stronger.",
+        "c-position": "For these reasons, my answer is still clear: [Position].",
+        "c-rationale": "This is the right choice, in my opinion, because [Rationale]."
+      }
+    }
+  },
+  "runs": {
+    "30": {
+      "vars": {
+        "core": {
+          "text": "removing sweet drinks and snacks from the canteens and shops in schools",
+          "text2": "sugar in school shops"
+        },
+        "facetA": {
+          "text": "the harm that sugar does to students' health and to the eating habits they form",
+          "text2": "the damage that sweet food does to young bodies"
+        },
+        "facetB": {
+          "text": "students' freedom to spend their own money on the food they like",
+          "text2": "the right of teenagers to decide for themselves"
+        },
+        "position": {
+          "text": "schools should sell healthy food and water instead of sweet drinks and snacks",
+          "text2": "school shops should offer only healthy choices"
+        },
+        "mechA": {
+          "text": "cheap sweet snacks at every break lead to a daily sugar habit that is very hard to break later in life"
+        },
+        "exA": {
+          "text": "my own school in Bangkok, where many girls buy a sweet milk tea after lunch and feel sleepy in afternoon lessons"
+        },
+        "nuanceA": {
+          "text": "some girls will simply buy sweets from the shops outside the gate after class"
+        },
+        "mechB": {
+          "text": "teenagers need to practise making their own choices, even bad ones, before they become adults"
+        },
+        "exB": {
+          "text": "parents give their children weekly pocket money and let them decide how to spend it"
+        },
+        "nuanceB": {
+          "text": "students are still free to eat sweets at home and at weekends, so the rule only covers school hours"
+        },
+        "rationale": {
+          "text": "young people spend most of their day at school, so school should help them build healthy habits for life"
+        }
+      }
+    },
+    "40": {
+      "vars": {
+        "core": {
+          "text": "taking sweet drinks and snacks out of school canteens and shops",
+          "text2": "sugar in school shops"
+        },
+        "facetA": {
+          "text": "the harm that sugar does to students' health and eating habits",
+          "text2": "the damage sweet food does to young bodies"
+        },
+        "facetB": {
+          "text": "students' freedom to choose their own food and drinks",
+          "text2": "the right of teenagers to decide for themselves"
+        },
+        "position": {
+          "text": "schools should sell healthy food and water instead of sweet drinks and snacks",
+          "text2": "canteens should offer only healthy choices"
+        },
+        "mechA": {
+          "text": "cheap sweet snacks at every break lead to a daily sugar habit that is hard to break"
+        },
+        "exA": {
+          "text": "my own school in Bangkok, where many girls buy a sweet milk tea after lunch every day"
+        },
+        "nuanceA": {
+          "text": "some girls will simply buy sweets from the shops near the gate instead"
+        },
+        "mechB": {
+          "text": "teenagers need to practise making their own choices, even bad ones, before adulthood"
+        },
+        "exB": {
+          "text": "parents give their children pocket money and let them decide how to spend it"
+        },
+        "nuanceB": {
+          "text": "students are still free to eat what they like at home and at weekends"
+        },
+        "rationale": {
+          "text": "young people should leave school with healthy habits that will last for life"
+        }
+      }
+    },
+    "50": {
+      "vars": {
+        "core": {
+          "text": "taking sweet drinks and snacks out of school shops",
+          "text2": "sugar in school shops"
+        },
+        "facetA": {
+          "text": "the harm sugar does to students' health and habits",
+          "text2": "the damage sweet food does to young bodies"
+        },
+        "facetB": {
+          "text": "students' freedom to choose their own food",
+          "text2": "the right of teenagers to decide for themselves"
+        },
+        "position": {
+          "text": "schools should sell healthy food instead of sweet drinks and snacks",
+          "text2": "school shops should offer only healthy choices"
+        },
+        "mechA": {
+          "text": "cheap sweet snacks at every break slowly lead to a daily sugar habit"
+        },
+        "exA": {
+          "text": "my own school in Bangkok, where many girls buy sweet milk tea after lunch"
+        },
+        "nuanceA": {
+          "text": "some girls will simply buy sweets from the shops near the gate"
+        },
+        "mechB": {
+          "text": "teenagers need to practise making their own choices before adulthood"
+        },
+        "exB": {
+          "text": "parents give children pocket money and let them decide how to spend it"
+        },
+        "nuanceB": {
+          "text": "students are still free to eat what they like at home and at weekends"
+        },
+        "rationale": {
+          "text": "school should help young people build healthy habits for life"
+        }
+      }
+    },
+    "60": {
+      "vars": {
+        "core": {
+          "text": "selling sweet snacks at school",
+          "text2": "sugar in school shops"
+        },
+        "facetA": {
+          "text": "the harm sugar does to students' health",
+          "text2": "the damage sweet food does to young bodies"
+        },
+        "facetB": {
+          "text": "students' freedom to choose",
+          "text2": "teenagers' right to decide for themselves"
+        },
+        "position": {
+          "text": "schools should sell healthy food instead of sweet snacks",
+          "text2": "school shops should offer only healthy choices"
+        },
+        "mechA": {
+          "text": "cheap snacks at every break slowly lead to a daily sugar habit"
+        },
+        "exA": {
+          "text": "my school in Bangkok, where many girls buy sweet milk tea"
+        },
+        "nuanceA": {
+          "text": "some girls will buy sweets near the school gate"
+        },
+        "mechB": {
+          "text": "teenagers must learn to make their own choices"
+        },
+        "exB": {
+          "text": "parents let children spend their own pocket money"
+        },
+        "nuanceB": {
+          "text": "students are still free to eat what they like at home"
+        },
+        "rationale": {
+          "text": "school should help young people build healthy habits"
+        }
+      }
+    }
+  },
+  "coaching": [
+    {
+      "share": "60",
+      "line": "a-topic",
+      "first": "Firstly, the main reason is [Facet A].",
+      "flagged": "5 template words: under the 9–18 budget. Starts with a robotic linker (\"Firstly\"). Connect the paragraphs through meaning instead.",
+      "fixed": "The first and most important reason for my opinion is [Facet A], which affects almost every student."
+    },
+    {
+      "share": "60",
+      "line": "i-position",
+      "first": "Overall, I believe that [Position].",
+      "flagged": "4 template words: under the 6–11 budget. Too close to an example (\"Overall, I believe that [Position].\"). Condition 1: the template must be in your own words.",
+      "fixed": "After thinking carefully about this question, I believe that [Position]."
+    },
+    {
+      "share": "30",
+      "line": "b-nuance",
+      "first": "This argument is easy to understand, but it is not strong enough in the end, because [Nuance B].",
+      "flagged": "16 template words: over the 6–11 budget for a 30% template. Trim words that carry no meaning.",
+      "fixed": "Still, this argument is not strong enough, because [Nuance B]."
+    }
+  ],
+  "review": {
+    "30": [
+      {
+        "quote": "Looking back at the debate on sugar in school shops, one side is stronger",
+        "fix": "Looking back at the debate on sugar in school shops, I find one side stronger",
+        "why": "dangling participle: the person doing the looking must be the subject"
+      },
+      {
+        "quote": "so it should help them build healthy habits for life",
+        "fix": "so school should help them build healthy habits for life",
+        "why": "'it' has no clear antecedent"
+      },
+      {
+        "quote": "but this reason still stands",
+        "fix": "but this point does not change my main argument",
+        "why": "'this reason' pointed back to the wrong thing"
+      }
+    ],
+    "40": [
+      {
+        "quote": "but this limit does not change the main point",
+        "fix": "but this limitation does not change the main point",
+        "why": "'limit' is the wrong word here; 'this limitation'"
+      },
+      {
+        "quote": "Looking back at sugar in school shops, one side seems clearly stronger to me",
+        "fix": "Looking back at the debate on sugar in school shops, I find one side clearly stronger",
+        "why": "dangling participle: the person doing the looking must be the subject"
+      },
+      {
+        "quote": "…, including young people like me.",
+        "fix": "People in many countries, including young people like me, are talking about …",
+        "why": "misplaced modifier: it described the shops, not the people"
+      }
+    ],
+    "50": [
+      {
+        "quote": "even though other people often care more about students' freedom to choose their own food",
+        "fix": "while other people care more about students' freedom to choose their own food",
+        "why": "'even though' signals a concession the sentence does not make; 'while' marks the contrast"
+      },
+      {
+        "quote": "but this limit does not change the main point of the argument",
+        "fix": "but this limitation does not change the main point of the argument",
+        "why": "'limit' is the wrong word here; 'this limitation'"
+      },
+      {
+        "quote": "Looking back at the arguments about sugar in school shops, one side seems stronger to me",
+        "fix": "Looking back at the arguments about sugar in school shops, I find one side stronger",
+        "why": "dangling participle: the person doing the looking must be the subject"
+      }
+    ],
+    "60": [
+      {
+        "quote": "My opinion is based mainly on the harm sugar does to students' health, even though other people in the debate often care more about students' freedom to choose",
+        "fix": "My opinion is based mainly on the harm sugar does to students' health, while other people care more about students' freedom to choose",
+        "why": "'even though' signals a concession the sentence does not make; 'while' marks the contrast"
+      },
+      {
+        "quote": "but this limit does not change the main point of the argument",
+        "fix": "but this limitation does not change the main point of the argument",
+        "why": "'limit' is the wrong word here; 'this limitation'"
+      },
+      {
+        "quote": "usually point to the right of teenagers to decide instead",
+        "fix": "usually point instead to teenagers' right to decide for themselves",
+        "why": "'instead' is misplaced and 'decide' needs a complement"
+      },
+      {
+        "quote": "Looking back at the arguments about sugar in school shops, one side seems clearly stronger to me",
+        "fix": "Looking back at the arguments about sugar in school shops, I find one side clearly stronger",
+        "why": "dangling participle: the person doing the looking must be the subject"
+      }
+    ]
+  }
+}
