@@ -1,5 +1,5 @@
 /* ===========================================================================
-   POSITION CONTROL — roster.js
+   QUILLMOOR ACADEMY (was Position Control) — roster.js
    The class lists behind the "Fast Access" tabs on the sign-in screen.
 
    A student picks their nickname instead of typing an ID, which is where most
@@ -9,7 +9,8 @@
    ---------------------------------------------------------------------------
    TO CHANGE THE CLASS
 
-   Edit the lists below: each row is { id: '<student number>', name: '<nickname>' }.
+   Edit the lists below: each row is { id: '<student id>', name: '<nickname>' }.
+   M4.1 moved to the Task 1 app in Oct 2026, so only the tutees are listed.
    Order does not matter — the tab sorts by nickname. Two students may share a
    nickname; the dropdown shows the student number beside each.
 
@@ -19,16 +20,12 @@
    =========================================================================== */
 
 var ROSTER_GROUPS = [
-  { key: 'm41', label: '4.1 Fast Access', cohort: 'M4.1', students: [
-    /* Replace with the M4.1 class list, e.g. { id: '51022', name: 'Proud' }, */
-    { id: '41001', name: 'Student A' },
-    { id: '41002', name: 'Student B' },
-    { id: '41003', name: 'Student C' }
-  ] },
-  { key: 'tut', label: 'Tutoring', cohort: 'Tutoring', students: [
-    /* The private tutees: use a short id each, e.g. { id: 'tut-mint', name: 'Mint' } */
-    { id: 'tut-one', name: 'Tutee One' },
-    { id: 'tut-two', name: 'Tutee Two' }
+  { key: 'tut', label: 'Quillmoor tutees', cohort: 'Tutoring', students: [
+    { id: 'tut-aeh', name: 'Aeh' },
+    { id: 'tut-mikii', name: 'Mikii' },
+    { id: 'tut-donut', name: 'Donut' },
+    { id: 'tut-jingjing', name: 'JingJing' },
+    { id: 'tut-pear', name: 'Pear' }
   ] }
 ];
 

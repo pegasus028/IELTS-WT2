@@ -1,5 +1,5 @@
 /* ===========================================================================
-   POSITION CONTROL — content.js  (core)
+   QUILLMOOR ACADEMY (was Position Control) — content.js  (core)
    IELTS Academic Writing Task 2 · Satriwithaya School EP (M4.1) and tutoring
    ---------------------------------------------------------------------------
    Sibling of Chart Control (Task 1). This file holds everything that is NOT
@@ -45,7 +45,7 @@
                     examples:[{s:'…', g:'…'}] },
            items:[ … ] }, …three subs…
        ],
-       check:{ id:'m02ck', name:'Systems Check', items:[ … ] } }]
+       check:{ id:'m02ck', name:'Examiner\'s gate', items:[ … ] } }]
    }
 
    ITEM TYPES  (engine.js renders and marks these)
@@ -116,36 +116,36 @@ var VARIABLES = [
    RANKS — one rung per band of module checks cleared (14 in total).
    -------------------------------------------------------------------------- */
 var RANKS = [
-  { min: 0,  name: 'Ground Crew',       note: 'Powered up. Nothing checked yet.' },
-  { min: 1,  name: 'Cadet',             note: 'First module online.' },
-  { min: 3,  name: 'Decoder',           note: 'You can read a prompt and say what it demands.' },
-  { min: 5,  name: 'Advocate',          note: 'Position, facets, mechanism — the matrix holds.' },
-  { min: 7,  name: 'Navigator',         note: 'The template is yours to bend.' },
-  { min: 9,  name: 'Flight Controller', note: 'Cohesion without linkers, complexity without errors.' },
-  { min: 11, name: 'Deputy Director',   note: 'Precise, accurate, adaptable.' },
-  { min: 14, name: 'Mission Director',  note: 'Every module green. Go for launch.' }
+  { min: 0,  name: 'Newcomer',    note: 'Your letter has arrived. No gates passed yet.' },
+  { min: 1,  name: 'First-year',  note: 'Your first class is passed.' },
+  { min: 3,  name: 'Second-year', note: 'You can read a prompt and say what it demands.' },
+  { min: 5,  name: 'Third-year',  note: 'Position, facets, mechanism: the map holds.' },
+  { min: 7,  name: 'Fourth-year', note: 'Your spellbook is yours to bend.' },
+  { min: 9,  name: 'Fifth-year',  note: 'Cohesion without linkers, complexity without errors.' },
+  { min: 11, name: 'Prefect',     note: 'Precise, accurate, adaptable.' },
+  { min: 14, name: 'Graduate',    note: 'Every class passed. Ready for the Grand Examination.' }
 ];
 
 /* --------------------------------------------------------------------------
    AWARDS
    -------------------------------------------------------------------------- */
 var BADGES = [
-  { id: 'poweron',   name: 'Power On',           perk: 'The console is yours.',                   how: 'Finish your first module.' },
-  { id: 'streak3',   name: 'Three-Day Burn',     perk: 'Momentum is a skill.',                    how: 'Study 3 days in a row.' },
-  { id: 'streak7',   name: 'Week in Orbit',      perk: 'Seven days, no drift.',                   how: 'Study 7 days in a row.' },
-  { id: 'allgreen',  name: 'All Green',          perk: 'A perfect module check.',                 how: 'Score 100% on any systems check.' },
-  { id: 'nohelp',    name: 'Manual Flight',      perk: 'No hints, no help.',                      how: 'Clear a systems check without using a hint.' },
-  { id: 'recovered', name: 'Fault Cleared',      perk: 'You fixed what you broke.',               how: 'Fix 5 questions on your Fault List.' },
-  { id: 'run10',     name: 'Clean Run',          perk: 'Ten in a row.',                           how: 'Answer 10 questions correctly in a row.' },
+  { id: 'poweron',   name: 'First Spark',        perk: 'Your wand is awake.',                     how: 'Finish your first class.' },
+  { id: 'streak3',   name: 'Three Candles',      perk: 'Habit is a kind of magic.',               how: 'Study 3 days in a row.' },
+  { id: 'streak7',   name: 'A Week of Candles',  perk: 'Seven candles, none blown out.',          how: 'Study 7 days in a row.' },
+  { id: 'allgreen',  name: 'Flawless Gate',      perk: 'A perfect examiner\'s gate.',             how: 'Score 100% on any examiner\'s gate.' },
+  { id: 'nohelp',    name: 'No Wand Needed',     perk: 'No hints, no help.',                      how: 'Pass an examiner\'s gate without using a hint.' },
+  { id: 'recovered', name: 'Mended',             perk: 'You mended what you broke.',              how: 'Fix 5 questions in the Mending Room.' },
+  { id: 'run10',     name: 'Ten Clean Spells',   perk: 'Ten in a row.',                           how: 'Answer 10 questions correctly in a row.' },
   { id: 'thesis',    name: 'Thesis Sniper',      perk: 'One sentence, one position.',             how: 'Write 10 thesis sentences that pass every rule.' },
-  { id: 'preflight', name: 'Pre-flight Perfect', perk: 'Nothing red on the panel.',               how: 'Submit an essay with zero red rows on the pre-flight check.' },
+  { id: 'preflight', name: 'All Ten Wards',      perk: 'Nothing red in the wards.',               how: 'Submit an essay with zero red rows on the Ten Wards.' },
   { id: 'fivetypes', name: 'Five Types',         perk: 'Opinion, discuss, weigh, solve, two-part.', how: 'Submit a passing essay of each of the five question types.' },
   { id: 'forty',     name: 'Forty Minutes',      perk: 'On the clock and on time.',               how: 'Submit a timed essay inside 40 minutes with 250+ words.' },
-  { id: 'unplugged', name: 'Unplugged',          perk: 'No frames, no cards — your own words.',   how: 'Submit a passing essay in exam mode (blank page).' },
+  { id: 'unplugged', name: 'Blank Parchment',    perk: 'No frames, no cards: your own words.',    how: 'Submit a passing essay in exam mode (blank page).' },
   { id: 'bandup',    name: 'Band Up',            perk: 'Half a band higher than your best.',      how: 'Get a band half a band above your previous best.' },
   { id: 'mock1',     name: 'First Mock',         perk: 'You have seen the whole task.',           how: 'Finish any timed mock.' },
-  { id: 'bootcamp',  name: 'Bootcamp Graduate',  perk: 'The whole matrix, three times over.',     how: 'Clear three Bootcamp missions.' },
-  { id: 'director',  name: 'Mission Director',   perk: 'Every module green.',                     how: 'Clear all 14 systems checks.' }
+  { id: 'bootcamp',  name: 'Duelling Champion',  perk: 'The whole matrix, three times over.',     how: 'Win three duels in the Duelling Hall.' },
+  { id: 'director',  name: 'Graduate',           perk: 'Every class passed.',                     how: 'Pass all 14 examiners\' gates.' }
 ];
 
 /* --------------------------------------------------------------------------
@@ -323,7 +323,7 @@ var REMEDIATION = {
   'lr-paraphrase': {
     name: 'Prompt copied, not paraphrased', gate: 'LR',
     principle: 'Before you use an idea from the question, say it in words the question did not use.',
-    reteach: '"Any copied rubric must be discounted." Paraphrase by changing the word class and the structure, not by swapping single synonyms: "governments should ban private cars" → "the regulation of private cars". Partner app: Nominalization Arena.',
+    reteach: '"Any copied rubric must be discounted." Paraphrase by changing the word class and the structure, not by swapping single synonyms: "governments should ban private cars" → "the regulation of private cars". Elective class: Nominalization Arena.',
     activities: ['Rewrite the prompt\'s first sentence three ways: noun phrase, passive, different subject.', 'Count runs of five copied words in your introduction.']
   },
 
@@ -331,13 +331,13 @@ var REMEDIATION = {
   'gra-tense': {
     name: 'Tense choice', gate: 'GRA',
     principle: 'Ask what time each sentence is about: a general truth, a change up to now, or a finished example.',
-    reteach: 'General claims in the present simple; change up to now in the present perfect ("Cities have grown"); a finished example in the past simple ("In 2011, Bangkok flooded"). Partner app: Postcards & Plans.',
+    reteach: 'General claims in the present simple; change up to now in the present perfect ("Cities have grown"); a finished example in the past simple ("In 2011, Bangkok flooded"). Elective class: Postcards & Plans.',
     activities: ['Label each sentence of a body paragraph: truth, change, or example.', 'Fix the tense in five example sentences.']
   },
   'gra-passive': {
     name: 'Passive and reporting verbs', gate: 'GRA',
     principle: 'Ask whether the doer matters to the argument, or only the action and its result.',
-    reteach: 'Formal argument often hides the doer: "It is often argued that …", "Stricter limits should be introduced". Form: be + past participle, with the right tense of be. Partner app: Voice Control.',
+    reteach: 'Formal argument often hides the doer: "It is often argued that …", "Stricter limits should be introduced". Form: be + past participle, with the right tense of be. Elective class: Voice Control.',
     activities: ['Turn three "people say" sentences into "It is argued that …".', 'Spot the missing "be" in five passives.']
   },
   'gra-relative': {
@@ -435,14 +435,14 @@ var REMEDIATION = {
   'struct-template': {
     name: 'Template used verbatim', gate: 'LR',
     principle: 'The frames are scaffolding. Edit every opener into your own words and put the weight of the essay inside the variables. An essay that is mostly frame text reads as memorised.',
-    reteach: 'The pre-flight check measures how much of the essay is unchanged frame text. Above a third is a warning; above half is red. Fade the scaffold: guided → skeleton → blank.',
+    reteach: 'The Ten Wards (the pre-submission check) measure how much of the essay is unchanged frame text. Above a third is a warning; above half is red. Fade the scaffold: guided → skeleton → blank.',
     activities: ['Own the frame: rewrite each opener in three ways.', 'Skeleton mode essay: slot labels only.']
   }
 };
 
 /* --------------------------------------------------------------------------
    The registry the topic files push into. The order here is the order on the
-   Modules screen and in the Flight plan.
+   Classes screen and in the Map Room.
    -------------------------------------------------------------------------- */
 var TOPICS = [];
 var MOCKS = [];

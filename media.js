@@ -1,6 +1,7 @@
 /* ===========================================================================
-   POSITION CONTROL — media.js
-   The introduction for each module: a podcast episode and a YouTube video.
+   QUILLMOOR ACADEMY (was Position Control) — media.js
+   The introduction for each module: a podcast episode (the Castle Wireless)
+   and a YouTube video (the Memory Basin).
    Loaded after the topic files and before engine.js. podcasts.html (the
    standalone listening page) loads this file and nothing else.
 

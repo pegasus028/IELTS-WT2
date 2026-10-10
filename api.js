@@ -1,6 +1,6 @@
 /* ===========================================================================
-   POSITION CONTROL — api.js
-   One client for both consoles.
+   QUILLMOOR ACADEMY (was Position Control) — api.js
+   One client for both consoles (the student app and the Staff Room).
 
    CLOUD MODE   Talks to the Google Apps Script Web App in Code.gs.
                 Requests are POST with Content-Type: text/plain so the browser
@@ -239,6 +239,35 @@
     return { ok: true, posts: (d.projector || []).filter(function (x) { return !row || !row.round || x.round === row.round; }) };
   }
 
+  /* ------------------------------------------------------------ house cup
+     The same sums as the `houses` action in Code.gs: story.hp per house and
+     the member count, for one cohort (all when none is given). No names. */
+  var HOUSE_IDS = ['compass', 'bridge', 'lexicon', 'loom'];
+  function cohortFor(s) {
+    var c = (s.progress && s.progress.cohort) || s.cohort || '';
+    if (!c && typeof ROSTER !== 'undefined') {
+      var r = ROSTER.filter(function (x) { return String(x.id).toLowerCase() === String(s.id).toLowerCase(); })[0];
+      if (r) c = r.cohort;
+    }
+    return String(c || '').trim().toLowerCase();
+  }
+  function localHouses(cohort) {
+    var d = db(), want = String(cohort || '').trim().toLowerCase(), totals = {}, members = {};
+    HOUSE_IDS.forEach(function (h) { totals[h] = 0; members[h] = 0; });
+    Object.keys(d.students).forEach(function (k) {
+      var s = d.students[k], prog = s && s.progress;
+      if (!prog || typeof prog !== 'object') return;
+      if (want && cohortFor(s) !== want) return;
+      var st = prog.story || {}, h = String(st.house || '').toLowerCase();
+      if (HOUSE_IDS.indexOf(h) < 0) return;
+      var hp = Number(st.hp);
+      if (!isFinite(hp) || hp < 0) hp = 0;
+      members[h] += 1;
+      totals[h] += Math.min(Math.round(hp), 100000);
+    });
+    return { ok: true, cohort: cohort || '', totals: totals, members: members };
+  }
+
   /* ------------------------------------------------------------------ API */
   var API = {
     get mode() { return state.mode; },
@@ -341,6 +370,8 @@
     assignments: function (kind, row) { return call('assignments', { kind: kind, row: row }, function () { return localAssignments(kind, row); }); },
     /* projector: kind = 'post' | 'list' | 'clear' */
     projector: function (kind, row) { return call('projector', { kind: kind, row: row }, function () { return localProjector(kind, row); }); },
+    /* House Cup: { ok, cohort, totals:{compass,bridge,lexicon,loom}, members:{…} } — totals only, no names. */
+    houses: function (cohort) { return call('houses', { cohort: cohort || '' }, function () { return localHouses(cohort); }); },
 
     localCount: function () { return Object.keys(db().students).length; }
   };

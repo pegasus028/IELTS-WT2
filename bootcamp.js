@@ -1,6 +1,6 @@
 /* ===========================================================================
-   POSITION CONTROL — bootcamp.js
-   A guided mission: the whole flight plan applied to one prompt, step by
+   QUILLMOOR ACADEMY (was Position Control) — bootcamp.js  (the Duelling Hall)
+   A guided duel ("mission" in the code): the whole flight plan applied to one prompt, step by
    step, thinking first and writing second. Every question is a drop-down
    with four or more options. Points: 10 for a clean first choice, 5 for a
    correct second choice, minus 3 if the hint was consulted. A mission is
@@ -30,8 +30,8 @@
     'Between 260 and 290 words, counted before the final five-minute check begins'
   ];
   var RANKS = [
-    { min: 0, name: 'Recruit' }, { min: 100, name: 'Cadet' }, { min: 250, name: 'Officer' },
-    { min: 450, name: 'Commander' }, { min: 700, name: 'Wing Leader' }, { min: 1000, name: 'Ace' }
+    { min: 0, name: 'Novice' }, { min: 100, name: 'Apprentice' }, { min: 250, name: 'Duellist' },
+    { min: 450, name: 'Adept' }, { min: 700, name: 'Master Duellist' }, { min: 1000, name: 'Champion' }
   ];
   var POINTS = { first: 10, second: 5, hint: 3, pass: 0.7 };
 
@@ -143,7 +143,7 @@
       'To sum up, ' + lc(strip(vars.position || 'this is the position')) + '. In addition, governments should also invest in education and technology, because these will solve every related problem in the future.',
       'In a nutshell, every coin has two sides, and ' + lc(strip(vars.core || 'this issue')) + ' is no exception. It really depends on the situation, so it is difficult to say which side is right.'];
     conD = pad(conD, conOK.length, PAD_C);
-    steps.push({ id: 'assemble', title: 'Assemble: the frames', brief: 'The eleven variables slot into four frames. Choose the sentence that fills the frame correctly — then, in the Writer, edit the frame into your own words.', questions: [
+    steps.push({ id: 'assemble', title: 'Assemble: the frames', brief: 'The eleven variables slot into four frames. Choose the sentence that fills the frame correctly — then, in the Scriptorium, edit the frame into your own words.', questions: [
       q('intro', 'Which introduction is best?', introOK, introD, 'Core Topic, both facets, and the position, in academic register, with no cliché and no copied prompt.', 'It names the Core Topic, both facets and the position. The others are a memorised opener, the copied prompt, or a fence-sitter.', 'tr-no-position'),
       q('nuance', 'Which nuance sentence belongs at the end of Body A?', nuOK, nuD, 'Nuance admits a limit and keeps the position. It does not switch sides, add a facet, or go informal.', 'A limit, admitted in formal register, with the position intact. The others contradict, add a new facet, or break register.', 'tr-no-nuance'),
       q('concl', 'Which conclusion is best?', conOK, conD, 'Core Topic, position in fresh words, rationale. Nothing new, no cliché.', 'It evaluates and restates with the rationale. The others only summarise, add a new idea, or use a memorised cliché.', 'tr-new-idea')
@@ -154,7 +154,7 @@
     chk.push(q('ck2', 'This sentence fails which check? "In a nutshell, this issue is a double-edged sword."', CHECKLIST[6], [CHECKLIST[1], CHECKLIST[4], CHECKLIST[8], CHECKLIST[2]], 'Two memorised phrases in one sentence.', 'Examiners discount memorised language. Say it plainly.', 'lr-memorised'));
     chk.push(q('ck3', 'This paragraph fails which check? "' + cap(strip(vars.facetA || 'The first view')) + ' is very important. It helps society in many ways. Many people agree with this."', CHECKLIST[3], [CHECKLIST[0], CHECKLIST[5], CHECKLIST[7], CHECKLIST[9]], 'Where is the mechanism? Where is the example?', 'Three claims, no mechanism, no example: over-generalised. That is the Band 7 ceiling.', 'tr-generalised'));
     chk.push(q('ck4', 'Your essay is 238 words with four minutes left. What now?', 'Add an example or the nuance to the thinner body paragraph, then check', ['Write a fifth paragraph with a completely new idea to reach the 250 mark', 'Add "In conclusion, I think it depends on the situation" to the end', 'Submit as it is — 238 words is close enough to the minimum to be safe'], 'Under 250 gives too little evidence; the cheapest safe words are an example or a nuance inside a body paragraph.', 'An example or a nuance adds words and TR credit at once. A new idea adds neither.', 'struct-length'));
-    steps.push({ id: 'check', title: 'The pre-flight check: last 5 minutes', brief: 'Ten checks, in order, every time. ' + CHECKLIST.map(function (c, i) { return (i + 1) + '. ' + c; }).join('  '), questions: chk, checklist: true });
+    steps.push({ id: 'check', title: 'The Ten Wards: last 5 minutes', brief: 'Ten wards, in order, every time. ' + CHECKLIST.map(function (c, i) { return (i + 1) + '. ' + c; }).join('  '), questions: chk, checklist: true });
 
     place(steps, hash(p.id + tier) % 4);
     return { steps: steps, total: steps.reduce(function (a, s) { return a + s.questions.length * POINTS.first; }, 0) };
@@ -185,7 +185,7 @@
             (a.wrongFirst != null && !a.done ? '<div class="bc-hint no">Not that one. Choose again — a correct second choice earns ' + POINTS.second + ' points.</div>' : '') +
             (a.done ? '<div class="bc-why ' + (a.correct ? 'ok' : 'no') + '"><b>' + (a.correct ? '✓ +' + a.gain : '✕ 0') + '</b> ' + (a.correct ? '' : 'Answer: ' + esc(String(qq.options[qq.answer]).replace(/\.$/, '')) + '. ') + esc(qq.why) + '</div>' : '') + '</div>';
         }).join('') +
-        '<div class="qfoot"><span class="tiny">' + step.questions.filter(function (qq) { return (st.answered[qq.id] || {}).done; }).length + ' of ' + step.questions.length + ' answered</span><span class="grow"></span><button class="btn primary" id="bc-next"' + (step.questions.every(function (qq) { return (st.answered[qq.id] || {}).done; }) ? '' : ' disabled') + '>' + (st.i + 1 >= mission.steps.length ? 'Finish mission' : 'Next step →') + '</button></div></div></div></div></div>';
+        '<div class="qfoot"><span class="tiny">' + step.questions.filter(function (qq) { return (st.answered[qq.id] || {}).done; }).length + ' of ' + step.questions.length + ' answered</span><span class="grow"></span><button class="btn primary" id="bc-next"' + (step.questions.every(function (qq) { return (st.answered[qq.id] || {}).done; }) ? '' : ' disabled') + '>' + (st.i + 1 >= mission.steps.length ? 'Finish the duel' : 'Next step →') + '</button></div></div></div></div></div>';
       host.innerHTML = html;
       host.querySelector('#bc-quit').addEventListener('click', function () { if (cfg.onQuit) cfg.onQuit(); });
       host.querySelectorAll('[data-hint]').forEach(function (b) { b.addEventListener('click', function () { var a = st.answered[b.dataset.hint] || (st.answered[b.dataset.hint] = {}); a.hinted = true; paint(); }); });

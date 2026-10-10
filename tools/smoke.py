@@ -33,6 +33,10 @@ with sync_playwright() as p:
     page.click('#tab-new'); page.fill('#f-id', 'smoke-01'); page.fill('#f-name', 'Ploy'); page.fill('#f-pw', 'test1234'); page.click('#btn-go')
     page.wait_for_selector('#screen-app:not(.hidden)', timeout=8000); shot(page, '01-plan')
     assert page.inner_text('#hdr-name') == 'Ploy'
+    # Quillmoor (Oct 2026): rooms open chapter by chapter, so open every tab for the rest of the walk.
+    page.evaluate("window.Story.unlockAll(window.PCHost.p); window.PCHost.paintHeader()"); page.wait_for_timeout(200)
+    hidden = page.evaluate("Array.from(document.querySelectorAll('.nav button[data-view]')).filter(b=>b.classList.contains('hidden')).map(b=>b.dataset.view)")
+    assert hidden == [], hidden
     n = page.evaluate("window.CONTENT.TOPICS.length"); assert n == 14, n
     items = page.evaluate("Object.keys(window.Engine.Bank.all()).length"); print('  items in bank:', items)
 
@@ -119,7 +123,7 @@ with sync_playwright() as p:
     m = ctx.new_page(); m.set_viewport_size({'width': 375, 'height': 800})
     m.on('pageerror', lambda e: errors.append('mobile ' + str(e)))
     m.goto(BASE + 'index.html#writer'); m.wait_for_timeout(500)
-    m.click('#tab-in'); m.fill('#f-id', 'smoke-01'); m.fill('#f-pw', 'test1234'); m.click('#btn-go'); m.wait_for_selector('#screen-app:not(.hidden)', timeout=8000)
+    m.click('#tab-in'); m.fill('#f-id', 'smoke-01'); m.fill('#f-pw', 'test1234'); m.click('#btn-go'); m.wait_for_selector('#screen-app:not(.hidden)', timeout=8000); m.wait_for_timeout(300)
     m.click('.nav button[data-view=writer]'); m.wait_for_timeout(300); m.click('[data-p=p-teen-jobs]'); m.wait_for_timeout(400); shot(m, '16-mobile-writer')
     sw = m.evaluate("document.documentElement.scrollWidth"); assert sw <= 380, 'horizontal overflow: %d' % sw
     m.close()

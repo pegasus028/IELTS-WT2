@@ -1,6 +1,6 @@
 /* ===========================================================================
-   POSITION CONTROL — Code.gs
-   Google Apps Script Web App behind index.html and teacher.html.
+   QUILLMOOR ACADEMY (was Position Control) — Code.gs
+   Google Apps Script Web App behind index.html and teacher.html (Staff Room).
 
    SET-UP (once)
    1. Create a Google Sheet. Extensions → Apps Script. Paste this file.
@@ -13,7 +13,7 @@
       Paste the /exec URL into window.PC_API_URL in index.html and teacher.html.
    4. AFTER EVERY EDIT: Deploy → Manage deployments → pencil → New version → Deploy.
       Saving alone does not update the live /exec endpoint.
-   AI marking of Writer essays is NOT done here: they are handed off to
+   AI marking of Scriptorium (Writer) essays is NOT done here: they are handed off to
    LevelUp English (https://pegasus028.github.io/LevelUp/). The Template Lab's
    AI coaching lives in Lab.gs (a second file in this project) and is reached
    through the LAB-HOOK line in doPost.
@@ -23,6 +23,12 @@
    token that teacherLogin returns. Student actions need the student's own
    token, and touch only that student's rows. Five wrong PINs or passwords in
    a row lock that door for 15 minutes.
+
+   HOUSE CUP (Oct 2026). `houses` needs no sign-in: it returns only the four
+   house totals and member counts for one cohort, never a name or an id, so
+   the student console can show the House Cup to everyone. Chapter unlocks and
+   re-sorts from the Staff Room travel as ordinary Assignments rows
+   ({kind:'unlock'} / {kind:'resort'}); no new sheet column is needed.
 
    Requests are POST with Content-Type text/plain (a "simple request", so no
    CORS preflight), body {action, payload}. Every reply is JSON {ok, …}.
@@ -38,7 +44,7 @@ var SHEETS = {
   Log: ['ts', 'what']
 };
 
-function doGet() { return out({ ok: true, app: 'Position Control', sheet: SpreadsheetApp.getActive().getName() }); }
+function doGet() { return out({ ok: true, app: 'Quillmoor Academy', sheet: SpreadsheetApp.getActive().getName() }); }
 
 function doPost(e) {
   var req;
@@ -76,6 +82,7 @@ function handle(action, p) {
     case 'assignments': return assignments(p, T);
     case 'projector': return projector(p, T);
     case 'assign': return T ? { ok: true } : denied();
+    case 'houses': return houses(p);
   }
   return { ok: false, error: 'Unknown action ' + action };
 }
@@ -302,4 +309,27 @@ function projector(p, T) {
   if (kind === 'post' && row) append('Projector', { ts: row.ts || new Date().toISOString(), round: row.round || '', kind: row.kind || 'post', json: JSON.stringify(row) });
   var posts = rows('Projector').filter(function (r) { return !row || !row.round || r.round === row.round; }).map(function (r) { return parse(r.json, null); }).filter(Boolean);
   return { ok: true, posts: posts.slice(-300) };
+}
+
+/* ------------------------------------------------------------- house cup */
+var HOUSE_IDS = ['compass', 'bridge', 'lexicon', 'loom'];
+/* Totals of story.hp per house, and how many students are in each, for one
+   cohort (all cohorts when none is given). Names and ids never leave here. */
+function houses(p) {
+  var want = String((p && p.cohort) || '').trim().toLowerCase();
+  var totals = {}, members = {};
+  HOUSE_IDS.forEach(function (h) { totals[h] = 0; members[h] = 0; });
+  rows('Students').forEach(function (s) {
+    var prog = parse(s.progress, null);
+    if (!prog || typeof prog !== 'object') return;
+    var coh = String(prog.cohort || s.cohort || '').trim().toLowerCase();
+    if (want && coh !== want) return;
+    var st = prog.story || {}, h = String(st.house || '').toLowerCase();
+    if (HOUSE_IDS.indexOf(h) < 0) return;
+    var hp = Number(st.hp);
+    if (!isFinite(hp) || hp < 0) hp = 0;
+    members[h] += 1;
+    totals[h] += Math.min(Math.round(hp), 100000);
+  });
+  return { ok: true, cohort: (p && p.cohort) || '', totals: totals, members: members };
 }

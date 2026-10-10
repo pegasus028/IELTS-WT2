@@ -1,4 +1,5 @@
-/* POSITION CONTROL — models.js · Nine model essays with dissect labels
+/* QUILLMOOR ACADEMY (was Position Control) — models.js · the Exemplar Archive:
+   nine model essays with dissect labels
    Each model is written for one prompt in the bank and uses that prompt's own
    eleven variables (C1 tier for the Band 8 models, B2 tier for the Band 7
    models), so the essays demonstrate the Matrix method exactly. Three carry a

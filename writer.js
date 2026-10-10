@@ -1,6 +1,7 @@
 /* ===========================================================================
-   POSITION CONTROL — writer.js
-   The timed Task 2 editor and the rule-based "pre-flight" structural check.
+   QUILLMOOR ACADEMY (was Position Control) — writer.js  (the Scriptorium)
+   The timed Task 2 editor and the rule-based structural check ("pre-flight" in
+   the code; shown to students as "the Ten Wards").
 
    Prompts.get(id) / Prompts.card(p, opts)      the prompt bank and its card
    Writer.preflight(text, promptOrId)           → { rows:[{id,tag,status,label,note}], words, paras, bad, warn, summary, ratio }
@@ -152,7 +153,7 @@
        (B2 track) or 30% (C1 track) under exam conditions. */
     var tr = T ? T.ratio(all) : 0, share = SHARES.indexOf(Number(opts.share)) >= 0 ? Number(opts.share) : 0.4, sh = Math.round(share * 100);
     var trS = tr <= share + 0.005 ? 'ok' : tr <= share + 0.05 && tr <= 0.6 ? 'warn' : 'bad';
-    add('template', 'struct-template', trS, 'Unchanged frame text: ' + Math.round(tr * 100) + '% (your share: ' + sh + '%)', trS === 'ok' ? 'Within your template share. The marks are inside the variables.' : 'Above your ' + sh + '% template share. Edit the openers into your own words and put the weight inside the variables.');
+    add('template', 'struct-template', trS, 'Unchanged frame text: ' + Math.round(tr * 100) + '% (your spellbook share: ' + sh + '%)', trS === 'ok' ? 'Within your spellbook (template) share. The marks are inside the variables.' : 'Above your ' + sh + '% spellbook (template) share. Edit the openers into your own words and put the weight inside the variables.');
 
     /* new idea in conclusion: a noun in the conclusion that appears nowhere else */
     if (concl && ps.length >= 4) {
@@ -164,7 +165,7 @@
     var bad = rows.filter(function (r) { return r.status === 'bad'; }).length;
     var warn = rows.filter(function (r) { return r.status === 'warn'; }).length;
     return { rows: rows, words: n, paras: ps.length, bad: bad, warn: warn, ratio: tr,
-      summary: bad === 0 && warn === 0 ? 'All green. Pre-flight perfect.' : bad === 0 ? 'No red rows — ' + warn + ' to look at.' : bad + ' red row' + (bad > 1 ? 's' : '') + ' to fix before you submit.' };
+      summary: bad === 0 && warn === 0 ? 'Every ward holds. Nothing red.' : bad === 0 ? 'No red rows — ' + warn + ' to look at.' : bad + ' red row' + (bad > 1 ? 's' : '') + ' to fix before you submit.' };
   }
 
   /* ------------------------------------------------ module free-text items */
@@ -291,7 +292,7 @@
                   '<textarea id="wr-t' + i + '" rows="' + (i === 0 || i === 3 ? 4 : 6) + '" spellcheck="false" placeholder="' + esc(pg.name) + ' …"></textarea></div>';
               }).join('')) +
           '<div class="qfoot"><span class="tiny" id="wr-note">Checks, not marks: the panel looks at structure only.</span><span class="grow"></span>' +
-          '<button class="btn primary" id="wr-check">Pre-flight check →</button></div>' +
+          '<button class="btn primary" id="wr-check">Check the Ten Wards →</button></div>' +
           '<div id="wr-panel"></div>' +
         '</div>' +
       '</div></div>';
@@ -318,7 +319,7 @@
       var filled = Object.keys(state.vars).filter(function (k) { return state.vars[k]; }).length;
       if (filled < 6 && !confirm('Only ' + filled + ' of 11 variables are filled. Fill the frames anyway?')) return;
       paras.forEach(function (pg, i) { if (!areas[i].value.trim() || confirm('Replace the ' + pg.name + ' box?')) areas[i].value = T.tidy(T.fill(frameText(pg), state.vars)); });
-      countW(); host.querySelector('#wr-note').textContent = 'Frames filled. Now edit every sentence into your own words — the pre-flight check measures how much is still template.';
+      countW(); host.querySelector('#wr-note').textContent = 'Frames filled. Now edit every sentence into your own words. The Ten Wards measure how much is still spellbook frame.';
     });
 
     function paintPhase() {
@@ -342,7 +343,7 @@
 
     function showPanel(pre, canRevise) {
       var pn = host.querySelector('#wr-panel');
-      pn.innerHTML = '<div class="card preflight"><div class="pf-h"><b>Pre-flight check</b><span class="pill ' + (pre.bad ? 'bad' : pre.warn ? 'gold' : 'good') + '">' + esc(pre.summary) + '</span></div>' +
+      pn.innerHTML = '<div class="card preflight"><div class="pf-h"><b>The Ten Wards</b><span class="pill ' + (pre.bad ? 'bad' : pre.warn ? 'gold' : 'good') + '">' + esc(pre.summary) + '</span></div>' +
         pre.rows.map(function (r) { return '<div class="pf-row ' + r.status + '"><span class="pf-dot"></span><div><b>' + esc(r.label) + '</b><p>' + esc(r.note) + '</p></div></div>'; }).join('') +
         '<div class="qfoot" style="margin-top:12px">' + (canRevise ? '<button class="btn" id="wr-revise">Revise once</button>' : '') + '<span class="grow"></span><button class="btn primary" id="wr-submit">Submit essay</button></div></div>';
       pn.scrollIntoView({ behavior: 'smooth', block: 'start' });

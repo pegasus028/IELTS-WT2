@@ -1,5 +1,5 @@
 /* ===========================================================================
-   POSITION CONTROL — template.js
+   QUILLMOOR ACADEMY (was Position Control) — template.js  (My Spellbook)
    The customisable Matrix template: four paragraph frames at two tiers,
    several openers per paragraph, playbooks that re-map the eleven variables
    for the other question types, the three structural swaps, and the tools the
@@ -25,7 +25,7 @@
   /* -------------------------------------------------------------- tiers */
   var TIERS = {
     B2: {
-      name: 'Band 7 track', cefr: 'B2', blurb: 'Plain frames, four moves per paragraph. The B2 Essay Engineering blueprint.',
+      name: 'Band 7 track', cefr: 'B2', blurb: 'Plain frames, four moves per paragraph. The B2 Essay Engineering spellbook.',
       paragraphs: [
         { key: 'intro', name: 'Introduction', target: 50, frames: [
           { id: 'b2-i1', name: 'Standard', text: 'People often discuss the topic of {core} because it has many different effects. While many people focus on {facetA}, it is also important to consider {facetB}. To fully understand this issue, we need to look at both sides carefully. Personally, I believe that {position}.' },

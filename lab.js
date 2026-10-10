@@ -1,6 +1,7 @@
 /* ===========================================================================
    POSITION CONTROL — lab.js
-   The Template Lab: a student builds her own Task 2 template line by line
+   QUILLMOOR ACADEMY: shown to students as the Spellbook Workshop (Design /
+   Cast it on a prompt / Spellbook record). The Template Lab: a student builds her own Task 2 template line by line
    (Blueprint Studio), fills its eleven variables for real prompts against
    the clock (Assembly Line), and compares template shares over time
    (Scorecard). Every submission is coached: errors, word budget, whether the
@@ -347,7 +348,7 @@
     });
     if (comp.slots.length && !comp.slots.some(function (k) { return r.cur[k]; })) notes.push({ kind: 'warn', msg: 'Your line has no slot yet, so no ideas can go in. Add ' + comp.slots.map(function (k) { return '[' + L.SLOT_LABEL[k] + ']'; }).join(' and ') + '.' });
     var auto = SCN.bandFor[t.level] || 7, band = driveBand(t);
-    if (band !== auto) notes.push({ kind: 'warn', msg: 'Your blueprint targets ' + levelInfo(t.level).name + '; these are Band ' + band + ' ideas. Does your frame sound like the same writer as the ideas? It should.' });
+    if (band !== auto) notes.push({ kind: 'warn', msg: 'Your spellbook design targets ' + levelInfo(t.level).name + '; these are Band ' + band + ' ideas. Does your frame sound like the same writer as the ideas? It should.' });
     return notes;
   }
   function paintDriveBuild(t, comp, overrideTok) {
@@ -384,7 +385,7 @@
     var band = driveBand(t), r = driveRender(driveTpl(t), st.drive.type, band, { gaps: true });
     var share = r.share, over = share * 100 > t.pct + 5;
     var gaps = L.COMPONENTS.filter(function (c) { return !((t.lines[c.id] || {}).text); }).length;
-    return '<div class="card lab-pad lab-drive-full" id="lab-drivefull"><p class="kicker">Test drive · ' + esc(SCN.title) + '</p><h3>Your blueprint on a real prompt</h3>' +
+    return '<div class="card lab-pad lab-drive-full" id="lab-drivefull"><p class="kicker">Test drive · ' + esc(SCN.title) + '</p><h3>Your spellbook design on a real prompt</h3>' +
       '<p class="tiny">' + esc(SCN.blurb) + ' Your fourteen lines are the frame; the ideas are the kind you would write into the slots in the exam. Switch the question type to see whether every line still works.</p>' +
       driveControls(t) + drivePrompt(st.drive.type) +
       '<div class="lab-kpis">' +
@@ -704,9 +705,9 @@
     var aiTxt = st.ai == null ? 'Checking the coach…' : st.aiNote;
     root.innerHTML =
       '<div class="lab">' +
-      '<div class="sect-h"><div><h2>Template Lab</h2><p>Build a Task 2 template in your own words, one line at a time, then test it on real prompts. Every line and every variable is coached, scored and saved to your ID.</p></div></div>' +
+      '<div class="sect-h"><div><h2>Spellbook Workshop</h2><p>Build your own Task 2 spellbook (your template) in your own words, one line at a time, then test it on real prompts. Every line and every variable is coached, scored and saved to your ID.</p></div></div>' +
       '<div class="lab-top"><div class="tabs lab-tabs">' +
-        [['studio', 'Blueprint Studio'], ['assembly', 'Assembly Line'], ['score', 'Scorecard']].concat(global.LabExamples ? [['examples', 'Examples']] : []).map(function (t) { return '<button class="tab' + (st.tab === t[0] ? ' on' : '') + '" data-ltab="' + t[0] + '">' + t[1] + '</button>'; }).join('') +
+        [['studio', 'Design'], ['assembly', 'Cast it on a prompt'], ['score', 'Spellbook record']].concat(global.LabExamples ? [['examples', 'Examples']] : []).map(function (t) { return '<button class="tab' + (st.tab === t[0] ? ' on' : '') + '" data-ltab="' + t[0] + '">' + t[1] + '</button>'; }).join('') +
       '</div><div class="lab-chips"><div class="chip lab-chipwrap"><b id="lab-chip-pts" class="lab-num">' + (s.points || 0) + '</b><span>Lab points</span></div><div class="chip"><b id="lab-chip-rank">' + esc(r.rank.name) + '</b><span>Lab rank</span></div></div></div>' +
       '<p class="lab-ai"><span class="pill' + aiCls + '">' + esc(aiTxt) + '</span>' + (Object.keys(st.data.dirty || {}).length ? ' <span class="pill gold">' + Object.keys(st.data.dirty).length + ' waiting to sync</span>' : '') + '</p>' +
       '<div id="lab-body"></div></div>';
@@ -748,19 +749,19 @@
 
   function paintStudio(el) {
     var list = st.data.templates.slice().sort(function (a, b) { return String(b.updatedAt).localeCompare(String(a.updatedAt)); });
-    var html = '<div class="lab-hero card"><div><p class="kicker">Blueprint Studio</p><h3>Your template, in your words</h3>' +
-      '<ol class="lab-steps"><li><b>Choose the share</b> of the essay your template will carry: 60, 50, 40 or 30%.</li><li><b>Choose your target</b> level and band.</li><li><b>Rewrite 14 lines</b>, each with a job to do. Study the examples, then write your own, and the coach checks each one. A <b>test drive</b> drops every line into a real essay on the Bangkok floods, so you can see your template at work.</li><li><b>Save it</b>, then take it to the Assembly Line.</li></ol></div>' +
-      '<button class="btn primary" id="lab-new">New blueprint →</button></div>';
-    if (!list.length) html += '<p class="tiny lab-empty">No blueprints yet. Your first one takes about 30–40 minutes: fourteen short lines, each coached.</p>';
+    var html = '<div class="lab-hero card"><div><p class="kicker">Design</p><h3>Your spellbook, in your words</h3>' +
+      '<ol class="lab-steps"><li><b>Choose the share</b> of the essay your spellbook will carry: 60, 50, 40 or 30%.</li><li><b>Choose your target</b> level and band.</li><li><b>Rewrite 14 lines</b>, each with a job to do. Study the examples, then write your own, and the coach checks each one. A <b>test drive</b> drops every line into a real essay on the Bangkok floods, so you can see your spellbook at work.</li><li><b>Save it</b>, then cast it on a prompt.</li></ol></div>' +
+      '<button class="btn primary" id="lab-new">New spellbook design →</button></div>';
+    if (!list.length) html += '<p class="tiny lab-empty">No spellbook designs yet. Your first one takes about 30–40 minutes: fourteen short lines, each coached.</p>';
     else html += '<div class="lab-grid">' + list.map(function (t) {
       var lv = levelInfo(t.level), done = tplDone(t), score = tplScore(t);
       return '<div class="card lab-tcard' + (t.status === 'complete' ? ' done' : '') + '">' +
         '<div class="lab-tcard-h"><b>' + esc(t.name) + '</b><span class="pill">v' + (t.version || 1) + '</span></div>' +
         '<div class="lab-pills"><span class="pill gold">' + t.pct + '% template</span><span class="pill">' + esc(lv.name) + '</span><span class="pill on">' + esc(bpTypeShort(t.type)) + '</span>' +
-        (t.status === 'complete' ? '<span class="pill good">Complete · ' + Math.round(score / (L.COMPONENTS.length * L.POINTS.lineMax) * 100) + '% blueprint score</span>' : '<span class="pill">Draft · ' + done + '/14 lines</span>') + '</div>' +
+        (t.status === 'complete' ? '<span class="pill good">Complete · ' + Math.round(score / (L.COMPONENTS.length * L.POINTS.lineMax) * 100) + '% spellbook design score</span>' : '<span class="pill">Draft · ' + done + '/14 lines</span>') + '</div>' +
         '<p class="tiny">' + templateFrameWords(t) + ' template words · updated ' + esc(fmtDate(t.updatedAt)) + '</p>' +
         '<div class="lab-acts">' + (t.status === 'complete'
-          ? '<button class="btn sm" data-topen="' + t.id + '">View</button><button class="btn sm" data-tver="' + t.id + '">New version</button><button class="btn sm" data-tcopy="' + t.id + '" title="Start a blueprint at another share from these lines">Copy at another share</button><button class="btn sm" data-tuse="' + t.id + '">Use on a prompt →</button><button class="btn sm ghost" data-twriter="' + t.id + '">Use in Writer</button>'
+          ? '<button class="btn sm" data-topen="' + t.id + '">View</button><button class="btn sm" data-tver="' + t.id + '">New version</button><button class="btn sm" data-tcopy="' + t.id + '" title="Start a spellbook design at another share from these lines">Copy at another share</button><button class="btn sm" data-tuse="' + t.id + '">Use on a prompt →</button><button class="btn sm ghost" data-twriter="' + t.id + '">Use in the Scriptorium</button>'
           : '<button class="btn sm primary" data-tcont="' + t.id + '">Continue</button><button class="btn sm ghost" data-tdel="' + t.id + '">Delete draft</button>') + '</div></div>';
     }).join('') + '</div>';
     el.innerHTML = html;
@@ -775,7 +776,7 @@
     $$('[data-tuse]').forEach(function (b) { b.addEventListener('click', function () { st.asmTemplate = b.dataset.tuse; st.filters.type = getTpl(b.dataset.tuse).type || 'all'; st.tab = 'assembly'; st.run = null; paint(); scrollTop(); }); });
     $$('[data-twriter]').forEach(function (b) { b.addEventListener('click', function () { useInWriter(getTpl(b.dataset.twriter)); }); });
     $$('[data-tdel]').forEach(function (b) { b.addEventListener('click', function () {
-      if (!confirm('Delete this draft blueprint? This cannot be undone.')) return;
+      if (!confirm('Delete this draft spellbook design? This cannot be undone.')) return;
       st.data.templates = st.data.templates.filter(function (t) { return t.id !== b.dataset.tdel; });
       delete st.data.dirty[b.dataset.tdel]; persist();
       server('lab.deleteTemplate', { id: b.dataset.tdel }, TIMEOUT_SAVE).catch(function () {});
@@ -788,16 +789,16 @@
     var s = st.setup, lv = levelInfo(s.level), src = s.from ? getTpl(s.from) : null;
     var fw = frameBudget(s.pct), own = L.ESSAY_WORDS - fw;
     var defName = lv.id + ' ' + bpTypeShort(s.type) + ' · ' + s.pct + '%';
-    var html = '<div class="lab-back"><button class="btn sm ghost" id="lab-cancel">← Blueprints</button></div>' +
+    var html = '<div class="lab-back"><button class="btn sm ghost" id="lab-cancel">← Spellbook designs</button></div>' +
       (src ? '<div class="card lab-pad lab-copynote"><p class="kicker">Copy at another share</p><p>Your ' + src.pct + '% lines from <b>' + esc(src.name) + '</b> will be copied in as drafts. Trim each one to the new word budget in your own way, then coach it again: the budget changes with the share, so every line is checked afresh.</p></div>' : '') +
       '<div class="card lab-pad"><p class="kicker">Step 1 · One template, or one per type</p><h3>Your Universal Spine: one template for all five question types</h3>' +
         '<p class="tiny">Build one template whose lines never name a question type. In the exam you read the instruction sentence, find its row on the Type Switch Card below, and give Facet A, Facet B and the nuances the job that row names. Your sentences stay the same.</p>' +
         '<div class="lab-types"><button class="lab-type' + (!s.type ? ' on' : '') + '" data-bt=""' + (src ? ' disabled' : '') + '><b>Universal Spine (recommended)</b><span class="tiny">All five types</span><span>One set of 14 lines, relabelled with the Type Switch Card.</span></button>' +
         (L.BP_TYPES || []).map(function (o) {
           var lock = !advanced(s.level);
-          return '<button class="lab-type' + (s.type === o.id ? ' on' : '') + '" data-bt="' + o.id + '"' + (src || lock ? ' disabled' : '') + ' title="' + (lock ? 'Typed blueprints open at the C1 or C2 target level (Step 3).' : '') + '"><b>' + esc(o.name) + '</b><span class="tiny">' + esc(o.signal) + '</span><span>' + esc(o.blurb) + '</span></button>';
+          return '<button class="lab-type' + (s.type === o.id ? ' on' : '') + '" data-bt="' + o.id + '"' + (src || lock ? ' disabled' : '') + ' title="' + (lock ? 'Typed spellbook designs open at the C1 or C2 target level (Step 3).' : '') + '"><b>' + esc(o.name) + '</b><span class="tiny">' + esc(o.signal) + '</span><span>' + esc(o.blurb) + '</span></button>';
         }).join('') + '</div>' +
-        (advanced(s.level) ? '<p class="tiny">Typed blueprints are for advanced writers (C1 or C2 target): one extra blueprint for a type you find hard, built after your Universal Spine.</p>' : '<p class="tiny">Typed blueprints open when you choose the C1 or C2 target in Step 3. Build the Universal Spine first.</p>') +
+        (advanced(s.level) ? '<p class="tiny">Typed spellbook designs are for advanced writers (C1 or C2 target): one extra spellbook design for a type you find hard, built after your Universal Spine.</p>' : '<p class="tiny">Typed spellbook designs open when you choose the C1 or C2 target in Step 3. Build the Universal Spine first.</p>') +
         typeSwitchCard() + '</div>' +
       '<div class="card lab-pad"><p class="kicker">Step 2 · Template share</p><h3>How much of the essay should your template carry?</h3>' +
       '<div class="lab-pcts">' + L.PCTS.map(function (o) {
@@ -808,7 +809,7 @@
       '<p class="tiny"><b>' + fw + '</b> template words + <b>' + own + '</b> words of your own ideas ≈ a ' + L.ESSAY_WORDS + '-word essay. A study of IELTS scripts by Chinese test-takers (Wray &amp; Pegg, 2009) proposed provisional alert levels of about 50% error-free language that is not generic or memorised for Band 7, and 59% for Band 8. Your own words have to be accurate to count.</p></div></div>' +
       '<div class="card lab-pad"><p class="kicker">Step 3 · Target level</p><h3>Which level are you writing at?</h3><p class="tiny">Pick your level now; each choice names the band to aim for next. On the official IELTS scale, Bands 4–5 are around B1, 5.5–6.5 around B2, 7–8 around C1 and 8.5+ around C2. Your template and your variables should be at the same level. A C1 frame around B1 ideas is the exact pattern examiners notice.</p>' +
       '<div class="filters lab-levels">' + L.LEVELS.map(function (l) { return '<button data-lv="' + l.id + '"' + (s.level === l.id ? ' class="on"' : '') + '>' + esc(l.name) + '</button>'; }).join('') + '</div><p class="tiny">' + esc(lv.note) + '</p></div>' +
-      '<div class="card lab-pad"><p class="kicker">Step 4 · Name</p><div class="field"><label for="lab-name">Blueprint name</label><input type="text" id="lab-name" maxlength="48" value="' + esc(s.name || defName) + '"></div></div>' +
+      '<div class="card lab-pad"><p class="kicker">Step 4 · Name</p><div class="field"><label for="lab-name">Spellbook design name</label><input type="text" id="lab-name" maxlength="48" value="' + esc(s.name || defName) + '"></div></div>' +
       '<p class="lab-cta"><button class="btn primary" id="lab-startbuild">Start building: 14 lines →</button></p>';
     el.innerHTML = html;
     $('#lab-cancel').addEventListener('click', function () { st.view = 'home'; paintBody(); });
@@ -817,7 +818,7 @@
     $$('[data-bt]').forEach(function (b) { b.addEventListener('click', function () { s.type = b.dataset.bt; s.name = ''; paintSetup(el); }); });
     $('#lab-name').addEventListener('input', function () { s.name = this.value; });
     $('#lab-startbuild').addEventListener('click', function () {
-      var t = { id: uid('T'), studentId: st.sid, name: (s.name || $('#lab-name').value || 'My blueprint').trim(), version: 1, parentId: '', rootId: '',
+      var t = { id: uid('T'), studentId: st.sid, name: (s.name || $('#lab-name').value || 'My spellbook').trim(), version: 1, parentId: '', rootId: '',
         pct: s.pct, level: s.level, type: advanced(s.level) ? (s.type || '') : '', status: 'draft', lines: {}, slotNotes: {}, createdAt: nowIso(), updatedAt: nowIso() };
       t.rootId = t.id;
       if (src) {
@@ -853,7 +854,7 @@
     });
     T.save(st.sid, { tier: tierOf(t.level), choice: {}, custom: custom, fromLab: t.id });
     if (host.p) host.p.tier = tierOf(t.level);
-    toast('"' + t.name + '" is now your template in the Writer (' + tierOf(t.level) + ' track).');
+    toast('"' + t.name + '" is now your spellbook in the Scriptorium (' + tierOf(t.level) + ' track).');
   }
 
   /* ------------------------------------------------------------- builder */
@@ -862,7 +863,7 @@
     var meanings = slotMeanings(t.type).filter(function (m) { return comp.slots.indexOf(m.key) >= 0; });
     var budget = compBudget(t.pct, comp.id), para = L.PARAS.filter(function (p) { return p.key === comp.para; })[0];
     var draft = ln.draft != null ? ln.draft : toLabels(ln.text || '');
-    var html = '<div class="lab-back"><button class="btn sm ghost" id="lab-bhome">← Blueprints</button><span class="tiny">' + esc(t.name) + ' · v' + (t.version || 1) + ' · ' + esc(bpTypeShort(t.type)) + ' · ' + t.pct + '% · ' + esc(lv.name) + '</span></div>';
+    var html = '<div class="lab-back"><button class="btn sm ghost" id="lab-bhome">← Spellbook designs</button><span class="tiny">' + esc(t.name) + ' · v' + (t.version || 1) + ' · ' + esc(bpTypeShort(t.type)) + ' · ' + t.pct + '% · ' + esc(lv.name) + '</span></div>';
     html += '<div class="lab-rail">' + L.PARAS.map(function (pg) {
       return '<div class="lab-rail-g"><span class="kicker">' + esc(pg.name.replace('Body paragraph', 'Body')) + '</span><div>' + L.COMPONENTS.filter(function (c) { return c.para === pg.key; }).map(function (c) {
         var l = t.lines[c.id], cls = c.n - 1 === b.idx ? ' cur' : (l && l.last ? (l.last.errors === 0 && l.last.fnv === 'meets' ? ' ok' : ' done') : '');
@@ -873,7 +874,7 @@
       '<p class="kicker">' + esc(para.name) + ' · line ' + comp.n + ' of ' + L.COMPONENTS.length + '</p>' +
       '<h3>' + esc(comp.name) + '</h3>' +
       '<p class="lab-fn">' + esc(comp.fn) + '</p>' +
-      (meanings.length ? '<p class="lab-typenote">' + esc(bpTypeInfo(t.type) ? bpTypeInfo(t.type).name : '') + ' blueprint: ' + meanings.map(function (m) { return '<b>[' + esc(m.generic) + ']</b> = ' + esc(m.meaning.toLowerCase()); }).join(' · ') + '</p>' : '') +
+      (meanings.length ? '<p class="lab-typenote">' + esc(bpTypeInfo(t.type) ? bpTypeInfo(t.type).name : '') + ' spellbook design: ' + meanings.map(function (m) { return '<b>[' + esc(m.generic) + ']</b> = ' + esc(m.meaning.toLowerCase()); }).join(' · ') + '</p>' : '') +
       '<div class="lab-why"><div class="lab-pills">' + comp.crit.map(function (k) { return '<span class="pill on">' + k + '</span>'; }).join('') + '<span class="pill gold">≈ ' + budget.target + ' template words (' + budget.lo + '–' + budget.hi + ')</span></div><p>' + esc(comp.why) + '</p><p class="tiny"><b>Watch out:</b> ' + esc(comp.tip) + '</p></div>' +
       '<div class="lab-ex"><div class="lab-ex-h"><b>Study these, then write your own</b><button class="linky" id="lab-othertier">' + (st.showOtherTier ? 'Hide' : 'Show') + ' the ' + (tier === 'C1' ? 'B2' : 'C1') + ' versions</button></div>' +
         comp.examples[tier].map(function (e) { return '<div class="lab-exrow">' + slotChips(e) + '</div>'; }).join('') +
@@ -890,7 +891,7 @@
     '</div>';
     html += '<div class="lab-nav"><button class="btn" id="lab-prev"' + (b.idx === 0 ? ' disabled' : '') + '>← Previous line</button><button class="btn ghost" id="lab-savedraft">Save draft</button>' +
       (b.idx < L.COMPONENTS.length - 1 ? '<button class="btn primary" id="lab-next"' + (ln.last ? '' : ' disabled title="Get coaching on this line first"') + '>Next line →</button>'
-        : '<button class="btn primary" id="lab-finishbp"' + (tplDone(t) === L.COMPONENTS.length ? '' : ' disabled title="Every line needs coaching first"') + '>Review the blueprint →</button>') + '</div>';
+        : '<button class="btn primary" id="lab-finishbp"' + (tplDone(t) === L.COMPONENTS.length ? '' : ' disabled title="Every line needs coaching first"') + '>Review the spellbook design →</button>') + '</div>';
     el.innerHTML = html;
 
     var ta = $('#lab-line');
@@ -1017,10 +1018,10 @@
     var b = st.build, t = b.tpl, lv = levelInfo(t.level), score = tplScore(t), max = L.COMPONENTS.length * L.POINTS.lineMax;
     var fw = templateFrameWords(t), clean = L.COMPONENTS.filter(function (c) { var l = t.lines[c.id]; return l && l.last && l.last.errors === 0; }).length;
     var predicted = fw / L.ESSAY_WORDS;
-    var html = '<div class="lab-back"><button class="btn sm ghost" id="lab-shome">← Blueprints</button></div>';
-    html += '<div class="card lab-pad"><p class="kicker">' + (t.status === 'complete' ? 'Blueprint' : 'Review before saving') + ' · v' + (t.version || 1) + ' · ' + esc(bpTypeInfo(t.type) ? bpTypeInfo(t.type).name : 'Universal Spine') + '</p><h3>' + esc(t.name) + '</h3>' +
+    var html = '<div class="lab-back"><button class="btn sm ghost" id="lab-shome">← Spellbook designs</button></div>';
+    html += '<div class="card lab-pad"><p class="kicker">' + (t.status === 'complete' ? 'Spellbook design' : 'Review before saving') + ' · v' + (t.version || 1) + ' · ' + esc(bpTypeInfo(t.type) ? bpTypeInfo(t.type).name : 'Universal Spine') + '</p><h3>' + esc(t.name) + '</h3>' +
       '<div class="lab-kpis">' +
-        kpi(Math.round(score / max * 100) + '%', 'Blueprint score', score + ' / ' + max + ' pts') +
+        kpi(Math.round(score / max * 100) + '%', 'Spellbook design score', score + ' / ' + max + ' pts') +
         kpi(fw, 'Template words', 'budget ≈ ' + frameBudget(t.pct)) +
         kpi(pctStr(predicted), 'Predicted template share', 'in a ' + L.ESSAY_WORDS + '-word essay (target ' + t.pct + '%)') +
         kpi(clean + '/14', 'Error-free lines', esc(lv.name)) +
@@ -1035,9 +1036,9 @@
       }).join('') + '</div>';
     }).join('');
     if (t.status === 'complete') {
-      html += '<div class="lab-nav"><button class="btn" id="lab-sver">New version</button><button class="btn ghost" id="lab-swriter">Use in Writer</button><button class="btn primary" id="lab-suse">Use on a prompt →</button></div>';
+      html += '<div class="lab-nav"><button class="btn" id="lab-sver">New version</button><button class="btn ghost" id="lab-swriter">Use in the Scriptorium</button><button class="btn primary" id="lab-suse">Use on a prompt →</button></div>';
     } else {
-      html += '<div class="lab-nav"><button class="btn" id="lab-sback">← Back to line 14</button><button class="btn primary" id="lab-save"' + (tplDone(t) === 14 ? '' : ' disabled') + '>Save blueprint (+' + L.POINTS.blueprint + ')</button></div>';
+      html += '<div class="lab-nav"><button class="btn" id="lab-sback">← Back to line 14</button><button class="btn primary" id="lab-save"' + (tplDone(t) === 14 ? '' : ' disabled') + '>Save spellbook design (+' + L.POINTS.blueprint + ')</button></div>';
     }
     el.innerHTML = html;
     if (driveOk()) bindDriveFull(t, function repaintDrive() {
@@ -1053,7 +1054,7 @@
       t.status = 'complete'; t.completedAt = nowIso(); t.score = tplScore(t); t.frameWords = templateFrameWords(t);
       var parent = t.parentId ? getTpl(t.parentId) : null;
       var bonus = !parent || t.score > (parent.score || tplScore(parent)) ? L.POINTS.blueprint : 0;
-      saveItem('template', t).then(function (ok) { toast(savedMsg(ok, 'Blueprint saved')); });
+      saveItem('template', t).then(function (ok) { toast(savedMsg(ok, 'Spellbook design saved')); });
       award(bonus);
       if (parent && !bonus) toast('Saved. No bonus this time: a new version earns it by scoring higher than version ' + parent.version + '.');
       afterMilestone();
@@ -1079,7 +1080,7 @@
     return lab;
   }
   function fitPill(type, tpl) {
-    if (tpl && tpl.type) return type === tpl.type ? '<span class="pill good">your ' + esc(bpTypeShort(tpl.type)) + ' blueprint</span>' : '<span class="pill bad">blueprint is for ' + esc(bpTypeShort(tpl.type)) + '</span>';
+    if (tpl && tpl.type) return type === tpl.type ? '<span class="pill good">your ' + esc(bpTypeShort(tpl.type)) + ' spellbook design</span>' : '<span class="pill bad">spellbook design is for ' + esc(bpTypeShort(tpl.type)) + '</span>';
     var f = L.TYPE_FIT[type];
     return f === 'good' ? '<span class="pill good">fits the frame</span>' : f === 'ok' ? '<span class="pill">needs a clear stance</span>' : '<span class="pill bad">harder fit: relabelled slots</span>';
   }
@@ -1087,7 +1088,7 @@
   function paintAsmHome(el) {
     var tpls = completeTemplates();
     if (!tpls.length) {
-      el.innerHTML = '<div class="card lab-pad lab-emptycard"><p class="kicker">Assembly Line</p><h3>Build a blueprint first</h3><p>The Assembly Line fills your own template with ideas for a real prompt. Save a complete blueprint in the Blueprint Studio, then come back.</p><button class="btn primary" id="lab-gostudio">Open Blueprint Studio →</button></div>' + draftRunsHtml();
+      el.innerHTML = '<div class="card lab-pad lab-emptycard"><p class="kicker">Cast it on a prompt</p><h3>Design a spellbook first</h3><p>Casting fills your own spellbook with ideas for a real prompt. Save a complete spellbook design in Design, then come back.</p><button class="btn primary" id="lab-gostudio">Open Design →</button></div>' + draftRunsHtml();
       $('#lab-gostudio').addEventListener('click', function () { st.tab = 'studio'; st.view = 'home'; paint(); });
       bindDraftRuns();
       return;
@@ -1098,10 +1099,10 @@
     var types = ['all'].concat(Object.keys(C.TYPES));
     var list = C.PROMPTS.filter(function (pr) { return st.filters.type === 'all' || pr.type === st.filters.type; });
     var html = draftRunsHtml();
-    html += '<div class="card lab-pad"><p class="kicker">Step 1 · Your blueprint</p><div class="lab-row2"><select id="lab-tsel" class="lab-select">' + tpls.map(function (x) {
+    html += '<div class="card lab-pad"><p class="kicker">Step 1 · Your spellbook design</p><div class="lab-row2"><select id="lab-tsel" class="lab-select">' + tpls.map(function (x) {
       return '<option value="' + x.id + '"' + (x.id === t.id ? ' selected' : '') + '>' + esc(x.name) + ' · v' + (x.version || 1) + ' · ' + esc(bpTypeShort(x.type)) + ' · ' + x.pct + '% · ' + esc(levelInfo(x.level).id) + '</option>';
     }).join('') + '</select><span class="pill gold">' + t.pct + '% template</span><span class="pill">' + esc(lv.name) + '</span></div>' +
-      '<p class="tiny">Your target is built into the blueprint: the coach checks every variable against ' + esc(lv.name) + '.</p></div>';
+      '<p class="tiny">Your target is built into the spellbook design: the coach checks every variable against ' + esc(lv.name) + '.</p></div>';
     html += '<div class="card lab-pad"><p class="kicker">Step 2 · Timing</p><div class="lab-timings">' + L.TIMINGS.map(function (o) {
       return '<label class="lab-timing' + (st.asmTiming === o.id ? ' on' : '') + '"><input type="radio" name="lab-timing" value="' + o.id + '"' + (st.asmTiming === o.id ? ' checked' : '') + '><b>' + esc(o.name) + '</b><span class="tiny">' + esc(o.blurb) + '</span></label>';
     }).join('') + '</div><p class="tiny">The clock pauses while the coach is reading and while you read its feedback.</p></div>';
@@ -1155,7 +1156,7 @@
   function maxVersion(rootId) { return st.data.attempts.reduce(function (m, x) { return (x.rootId === rootId || x.id === rootId) ? Math.max(m, x.version || 1) : m; }, 1); }
   function resumeRun(a, tpl, pr) {
     tpl = tpl || getTpl(a.templateId); pr = pr || PR.get(a.promptId);
-    if (!tpl || !pr) { toast('That run\'s blueprint or prompt is no longer available.'); return; }
+    if (!tpl || !pr) { toast('That run\'s spellbook design or prompt is no longer available.'); return; }
     var order = slotOrder(tpl), occ = occurrences(tpl), idx = 0;
     for (var i = 0; i < order.length; i++) { if (!(a.vars[order[i]] && a.vars[order[i]].last)) { idx = i; break; } if (i === order.length - 1) idx = i; }
     st.run = { a: a, tpl: tpl, pr: pr, order: order, occ: occ, idx: idx, tier: tierOf(a.level), labels: labelsFor(pr.type),
@@ -1260,7 +1261,7 @@
     var fi = $('#lab-vfinish'); if (fi) fi.addEventListener('click', function () { finishRun(); });
     var md = $('#lab-model'); if (md) md.addEventListener('click', function () { r.showModel = !r.showModel; paintRun(el); });
     var pv = $('#lab-rprev'); if (pv) pv.addEventListener('click', function () { gotoVar(r.idx - 1); });
-    $('#lab-rquit').addEventListener('click', function () { pauseClock(); saveItem('attempt', a); st.run = null; toast('Run saved. Continue it from the Assembly Line.'); paintBody(); });
+    $('#lab-rquit').addEventListener('click', function () { pauseClock(); saveItem('attempt', a); st.run = null; toast('Run saved. Continue it from Cast it on a prompt.'); paintBody(); });
     stickRunbar();
     paintClock();
     if (r.phase === 'edit' && !r.busy) { startClock(); if (!ta.value) try { ta.focus({ preventScroll: true }); } catch (e) {} }
@@ -1414,7 +1415,7 @@
   function attemptReportHtml(a, opts) {
     opts = opts || {};
     var lv = levelInfo(a.level), pr = PR.get(a.promptId) || { title: a.promptTitle, text: '' }, rt = a.rating;
-    var html = '<div class="lab-back"><button class="btn sm ghost" id="lab-rback">' + (opts.live ? '← Assembly Line' : '← Scorecard') + '</button><span class="tiny">' + esc(a.templateName) + ' v' + (a.templateVersion || 1) + ' · ' + a.pct + '% · ' + esc(lv.name) + ' · ' + esc(timingName(a.timing)) + (a.version > 1 ? ' · version ' + a.version : '') + '</span></div>';
+    var html = '<div class="lab-back"><button class="btn sm ghost" id="lab-rback">' + (opts.live ? '← Cast it on a prompt' : '← Spellbook record') + '</button><span class="tiny">' + esc(a.templateName) + ' v' + (a.templateVersion || 1) + ' · ' + a.pct + '% · ' + esc(lv.name) + ' · ' + esc(timingName(a.timing)) + (a.version > 1 ? ' · version ' + a.version : '') + '</span></div>';
     html += '<div class="card lab-pad lab-result">';
     if (opts.waiting) html += '<div class="lab-wait big"><span class="lab-spin"></span> The examiner-coach is rating your essay…</div>';
     else if (rt) {
@@ -1439,7 +1440,7 @@
        feedback on the whole essay even when the AI rating is unavailable. */
     if (a.essay && W && W.preflight && !opts.waiting) {
       var pre = W.preflight(a.essay, pr.id ? pr : a.promptId, { share: (Number(a.pct) || 40) / 100 }), probs = pre.rows.filter(function (r) { return r.status !== 'ok'; });
-      html += '<div class="card preflight"><div class="pf-h"><b>Pre-flight check</b><span class="pill ' + (pre.bad ? 'bad' : pre.warn ? 'gold' : 'good') + '">' + esc(pre.summary) + '</span></div>' +
+      html += '<div class="card preflight"><div class="pf-h"><b>The Ten Wards</b><span class="pill ' + (pre.bad ? 'bad' : pre.warn ? 'gold' : 'good') + '">' + esc(pre.summary) + '</span></div>' +
         (probs.length ? probs : pre.rows.slice(0, 3)).map(function (r) { return '<div class="pf-row ' + r.status + '"><span class="pf-dot"></span><div><b>' + esc(r.label) + '</b><p>' + esc(r.note) + '</p></div></div>'; }).join('') + '</div>';
     }
     html += '<div class="card lab-pad"><div class="lab-ex-h"><p class="kicker">Your essay</p><label class="tiny"><input type="checkbox" id="lab-hl"' + (st.highlightFrame ? ' checked' : '') + '> highlight your own words</label></div><div class="lab-essay' + (st.highlightFrame ? ' hl' : '') + '" id="lab-essay">' + (a.parasHtml || []).map(function (h) { return '<p>' + h + '</p>'; }).join('') + '</div>' +
@@ -1449,7 +1450,7 @@
       return '<div class="lab-varrow"><div class="lab-varrow-h"><b>' + esc((labelsFor(a.type) || {})[k] || L.SLOT_LABEL[k]) + '</b><span class="pill gold">' + v.last.points + ' pts</span>' + (v.last.cefr ? '<span class="pill">' + esc(v.last.cefr) + '</span>' : '') + (v.auto ? '<span class="pill bad">timed out</span>' : '') + '</div><p class="lab-varval">' + esc(v.text || '') + (v.text2 ? '<br><span class="tiny">2nd: </span>' + esc(v.text2) : '') + '</p>' + renderFeedback(v.last, { kind: 'var', level: a.level, stored: true }) + '</div>';
     }).join('') + '</details>';
     html += '<div class="lab-nav">' + (a.status === 'complete' ? '<button class="btn" id="lab-revise">Revise as version ' + (maxVersion(a.rootId || a.id) + 1) + '</button>' : '') +
-      '<button class="btn ghost" id="lab-copy">Copy essay</button><button class="btn ghost" id="lab-levelup">Send to LevelUp</button>' +
+      '<button class="btn ghost" id="lab-copy">Copy essay</button><button class="btn ghost" id="lab-levelup">Send to the examiners</button>' +
       (opts.live ? '<button class="btn primary" id="lab-again">New run →</button>' : '') + '</div>';
     return html;
   }
@@ -1480,7 +1481,7 @@
     var ag = $('#lab-again'); if (ag) ag.addEventListener('click', function () { st.run = null; paintBody(); scrollTop(); });
     var rv = $('#lab-revise'); if (rv) rv.addEventListener('click', function () {
       var tpl = getTpl(a.templateId), pr = PR.get(a.promptId);
-      if (!tpl || !pr) { toast('The blueprint for this run is not on this device.'); return; }
+      if (!tpl || !pr) { toast('The spellbook design for this run is not on this device.'); return; }
       st.review = null; startRun(tpl, pr, 'none', a);
     });
     var rn = $('#lab-ratenow'); if (rn) rn.addEventListener('click', function () {
@@ -1501,7 +1502,7 @@
     try { localStorage.setItem('lue_handoff', JSON.stringify(payload)); } catch (e) {}
     var packed = ''; try { packed = btoa(unescape(encodeURIComponent(JSON.stringify({ prompt: pr.text, essay: a.essay, name: p.displayName })))); } catch (e) {}
     var w = global.open(url0 + (url0.indexOf('?') >= 0 ? '&' : '?') + 'from=pc' + (packed ? '#pc=' + packed : ''), '_blank');
-    if (!w) toast('Pop-up blocked: allow pop-ups for this site, or copy the essay into LevelUp.');
+    if (!w) toast('Pop-up blocked: allow pop-ups for this site, or copy the essay into LevelUp, the examiners\' marking site.');
   }
 
   /* ============================================================ SCORECARD */
@@ -1521,10 +1522,10 @@
     var toNext = rk.next ? Math.round(((s.points || 0) - rk.rank.min) / (rk.next.min - rk.rank.min) * 100) : 100;
     var html = '<div class="lab-kpis lab-kpis-top">' +
       '<div class="lab-kpi"><b class="lab-num">' + (s.points || 0) + '</b><span>Lab points</span><small>' + esc(rk.rank.name) + (rk.next ? ' · ' + (rk.next.min - (s.points || 0)) + ' to ' + esc(rk.next.name) : ' · top rank') + '</small><div class="bar-line thin gold"><span style="width:' + toNext + '%"></span></div></div>' +
-      kpi(runs.length, 'Assembly runs', rated.length + ' rated') +
+      kpi(runs.length, 'Casting runs', rated.length + ' rated') +
       kpi(fmtBand(s.bestBand), 'Best band', 'estimated by the coach') +
       kpi(avg3 == null ? '—' : fmtBand(avg3), 'Last 3 runs', 'average band') +
-      kpi(completeTemplates().length, 'Blueprints', st.data.templates.length - completeTemplates().length + ' in draft') +
+      kpi(completeTemplates().length, 'Spellbook designs', st.data.templates.length - completeTemplates().length + ' in draft') +
       '</div>';
     /* per-share comparison */
     var rowsByPct = L.PCTS.map(function (o) {
@@ -1548,10 +1549,10 @@
       var d = a.rating && prev ? a.rating.overall - prev.rating.overall : null;
       return '<button class="lab-histrow" data-rev="' + a.id + '"><span class="lab-hist-d tiny">' + esc(fmtDate(a.completedAt || a.updatedAt)) + '</span><span class="lab-hist-t"><b>' + esc(a.promptTitle) + '</b><span class="lab-pills"><span class="pill gold">' + a.pct + '%</span><span class="pill">' + esc(timingName(a.timing)) + '</span>' + (a.version > 1 ? '<span class="pill">v' + a.version + '</span>' : '') + '</span></span>' +
         '<span class="lab-hist-b lab-num">' + (a.rating ? 'Band ' + fmtBand(a.rating.overall) : 'not rated') + (d != null ? ' <i class="' + (d > 0 ? 'up' : d < 0 ? 'down' : '') + '">' + sign(d, 1) + '</i>' : '') + '</span><span class="lab-hist-p lab-num">' + (a.points ? a.points.total : 0) + ' pts</span></button>';
-    }).join('') + '</div>' : '<p class="tiny">No finished runs yet. Take a blueprint to the Assembly Line.</p>') + '</div>';
+    }).join('') + '</div>' : '<p class="tiny">No finished runs yet. Cast a spellbook design on a prompt.</p>') + '</div>';
     /* blueprints */
     var tpls = st.data.templates.slice().sort(function (a, b) { return String(b.updatedAt).localeCompare(String(a.updatedAt)); });
-    if (tpls.length) html += '<div class="card lab-pad"><p class="kicker">Blueprints</p><div class="tbl-scroll"><table class="tbl lab-tbl"><thead><tr><th>Blueprint</th><th>Share</th><th>Level</th><th>Blueprint score</th><th>Runs</th><th>Average band</th></tr></thead><tbody>' + tpls.map(function (t) {
+    if (tpls.length) html += '<div class="card lab-pad"><p class="kicker">Spellbook designs</p><div class="tbl-scroll"><table class="tbl lab-tbl"><thead><tr><th>Spellbook design</th><th>Share</th><th>Level</th><th>Spellbook design score</th><th>Runs</th><th>Average band</th></tr></thead><tbody>' + tpls.map(function (t) {
       var rs = runs.filter(function (a) { return a.templateId === t.id; }), rt = rs.filter(function (a) { return a.rating && a.rating.overall != null; });
       var ab = rt.length ? rt.reduce(function (m, a) { return m + a.rating.overall; }, 0) / rt.length : null;
       return '<tr><td><b>' + esc(t.name) + '</b> <span class="tiny">v' + (t.version || 1) + (t.status !== 'complete' ? ' · draft' : '') + '</span></td><td class="lab-num">' + t.pct + '%</td><td>' + esc(t.level) + '</td><td class="lab-num">' + Math.round(tplScore(t) / (L.COMPONENTS.length * L.POINTS.lineMax) * 100) + '%</td><td class="lab-num">' + rs.length + '</td><td class="lab-num">' + fmtBand(ab) + '</td></tr>';
@@ -1656,8 +1657,8 @@
     /* Teacher demo: an account whose ID starts with "demo-" can load the
        examples as its own Lab data, so Assembly Line and Scorecard can be
        shown with real runs. Students never see this button. */
-    if (/^demo-/i.test(String(st.sid || ''))) html += '<div class="card lab-pad"><p class="kicker">Teacher demo account</p><p class="tiny">Load the examples into this account as its own blueprints and runs, to demonstrate the Assembly Line and the Scorecard.</p><div class="lab-acts">' +
-      Object.keys(E.students).map(function (k) { return '<button class="btn sm" data-exload="' + k + '">Load ' + esc(E.students[k].name) + '\'s 20 blueprints and runs</button>'; }).join('') + '</div></div>';
+    if (/^demo-/i.test(String(st.sid || ''))) html += '<div class="card lab-pad"><p class="kicker">Teacher demo account</p><p class="tiny">Load the examples into this account as its own spellbook designs and runs, to demonstrate Cast it on a prompt and the Spellbook record.</p><div class="lab-acts">' +
+      Object.keys(E.students).map(function (k) { return '<button class="btn sm" data-exload="' + k + '">Load ' + esc(E.students[k].name) + '\'s 20 spellbook designs and runs</button>'; }).join('') + '</div></div>';
     el.innerHTML = html;
     $$('[data-exload]').forEach(function (b) { b.addEventListener('click', function () {
       var file = 'examples/store/' + (b.dataset.exload === 'B1' ? 'demo-b1-nam' : 'demo-b2-fah') + '.json';
@@ -1670,7 +1671,7 @@
           if (r && !a.rating) a.rating = { tr: r.tr, cc: r.cc, lr: r.lr, gra: r.gra, overall: r.overall, cefr: r.cefr, summary: r.summary, strengths: [r.strength], priorities: r.priority ? [r.priority] : [], frameNote: '', ts: nowIso() };
           upsert(st.data.attempts, a);
         });
-        persist(); recompute(); toast('Loaded ' + (d.templates || []).length + ' blueprints and ' + (d.attempts || []).length + ' runs into this account.');
+        persist(); recompute(); toast('Loaded ' + (d.templates || []).length + ' spellbook designs and ' + (d.attempts || []).length + ' runs into this account.');
       }).catch(function () { toast('Could not load the examples on this device.'); });
     }); });
     $$('[data-exlv]').forEach(function (b) { b.addEventListener('click', function () { x.level = b.dataset.exlv; paintBody(); }); });
@@ -1682,7 +1683,7 @@
   }
   function exOneHtml(set, pct, stu) {
     var t = exTpl(set, pct), built = exBuilt(set, pct, true), plain = exBuilt(set, pct, false), rt = set.rating[pct], r0 = set.firstRating[pct];
-    var html = '<div class="card lab-pad lab-result"><p class="kicker">' + esc(stu.name) + ' · ' + esc(bpTypeInfo(set.type).name) + ' blueprint · ' + pct + '% template</p>';
+    var html = '<div class="card lab-pad lab-result"><p class="kicker">' + esc(stu.name) + ' · ' + esc(bpTypeInfo(set.type).name) + ' spellbook design · ' + pct + '% spellbook share</p>';
     if (rt) html += '<div class="lab-rating"><div class="score-ring" style="--p:' + Math.round(rt.overall / 9 * 100) + '"><i>' + fmtBand(rt.overall) + '</i></div><div><p class="kicker">Estimated band · not an official IELTS score</p><h3>Band ' + fmtBand(rt.overall) + ' · ' + esc(rt.cefr) + '</h3>' +
       '<div class="lab-crit">' + [['TR', 'tr', 'Task Response'], ['CC', 'cc', 'Coherence & Cohesion'], ['LR', 'lr', 'Lexical Resource'], ['GRA', 'gra', 'Grammar']].map(function (c) {
         return '<div class="lab-critrow"><span title="' + c[2] + '">' + c[0] + '</span><div class="bar-line"><span style="width:' + Math.round((rt[c[1]] || 0) / 9 * 100) + '%"></span></div><b class="lab-num">' + rt[c[1]] + '</b></div>';
@@ -1692,7 +1693,7 @@
     html += '<div class="lab-kpis">' + kpi(plain.words, 'Words', plain.words >= 250 ? 'at least 250 ✓' : 'under 250') + kpi(pctStr(plain.share), 'Template share', 'target ' + pct + '% · own words ' + pctStr(1 - plain.share)) +
       kpi(templateFrameWords(t), 'Template words', '14 lines') + kpi(r0 ? fmtBand(r0.overall) + ' → ' + (rt ? fmtBand(rt.overall) : '—') : '—', 'Before → after proofreading', r0 ? r0.errors + ' error' + (r0.errors === 1 ? '' : 's') + ' fixed' : '') + '</div></div>';
     /* the blueprint */
-    html += '<div class="card lab-pad"><p class="kicker">Step 1 · Her blueprint (Blueprint Studio)</p>' + L.PARAS.map(function (pg) {
+    html += '<div class="card lab-pad"><p class="kicker">Step 1 · Her spellbook design (Design)</p>' + L.PARAS.map(function (pg) {
       return '<div class="lab-para"><p class="kicker">' + esc(pg.name) + '</p>' + L.COMPONENTS.filter(function (c) { return c.para === pg.key; }).map(function (c) {
         return '<div class="lab-sline"><div class="lab-sline-t">' + slotChips(t.lines[c.id].text) + '</div><div class="lab-sline-m"><span class="tiny">' + c.n + '. ' + esc(compFor(set.type, c).name) + '</span><span class="pill">' + frameWords(t.lines[c.id].text) + ' words</span></div></div>';
       }).join('') + '</div>';
@@ -1705,7 +1706,7 @@
     }).join('') + '</div>';
     /* the variables and the essay */
     var labs = labelsFor(set.type), v = set.runs[pct];
-    html += '<div class="card lab-pad"><p class="kicker">Step 2 · Her variables for this prompt (Assembly Line)</p><div class="lab-exvars">' + slotOrder(t).map(function (k) {
+    html += '<div class="card lab-pad"><p class="kicker">Step 2 · Her variables for this prompt (Cast it on a prompt)</p><div class="lab-exvars">' + slotOrder(t).map(function (k) {
       return '<div class="lab-varrow"><div class="lab-varrow-h"><b>' + esc(labs[k] || L.SLOT_LABEL[k]) + '</b><span class="pill">' + words(v[k].text) + ' words</span></div><p class="lab-varval">' + esc(v[k].text) + (v[k].text2 ? '<br><span class="tiny">second mention: </span>' + esc(v[k].text2) : '') + '</p></div>';
     }).join('') + '</div></div>';
     html += '<div class="card lab-pad"><div class="lab-ex-h"><p class="kicker">Step 3 · The assembled essay</p><label class="tiny"><input type="checkbox" id="lab-exhl"' + (st.highlightFrame ? ' checked' : '') + '> highlight her own words</label></div><div class="lab-essay' + (st.highlightFrame ? ' hl' : '') + '" id="lab-exessay">' + built.paras.map(function (p) { return '<p>' + p.html + '</p>'; }).join('') + '</div></div>';

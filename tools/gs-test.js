@@ -1,5 +1,6 @@
 /* Runs Code.gs + Lab.gs in Node against an in-memory Google Sheet and a fake
-   Claude API, to check the Template Lab back end before deploying.
+   Claude API, to check the Template Lab back end, the access rules and the
+   Quillmoor House Cup (`houses`) and story orders before deploying.
    node tools/gs-test.js                                                   */
 'use strict';
 const fs = require('fs'), path = require('path'), vm = require('vm');
@@ -179,5 +180,30 @@ check('logout retires the token', lo.ok && post('reports', { studentId: 'ploy', 
 props.JOIN_CODE = 'swep41';
 check('join code required when set', post('register', { id: 'nok', pw: 'pw12' }).ok === false && post('register', { id: 'yes1', pw: 'pw12', code: 'SWEP41' }).ok === true);
 delete props.JOIN_CODE;
+
+/* ------------------------------------------- House Cup (Quillmoor, Oct 2026) */
+const hcs = [['hc1', 'Tutoring', 'compass', 120], ['hc2', 'Tutoring', 'bridge', 40], ['hc3', 'Tutoring', 'compass', 30],
+  ['hc4', 'M4.1', 'compass', 999], ['hc5', 'Tutoring', null, 50], ['hc6', 'Tutoring', 'loom', 'abc'], ['hc7', 'Tutoring', 'lexicon', -5]];
+hcs.forEach(([id, coh, house, hp]) => {
+  const r = post('register', { id, pw: 'pw12', name: 'Name-' + id });
+  post('save', { token: r.token, progress: { studentId: id, displayName: 'Name-' + id, cohort: coh, story: { house, hp, chapter: 2 } }, attempts: [] });
+});
+const hc = post('houses', { cohort: 'Tutoring' });
+check('houses needs no sign-in', hc.ok === true, hc);
+check('houses sums story.hp per house for the cohort', hc.totals && hc.totals.compass === 150 && hc.totals.bridge === 40 && hc.totals.loom === 0 && hc.totals.lexicon === 0, hc.totals);
+check('houses counts members (bad or negative hp counts as 0)', hc.members && hc.members.compass === 2 && hc.members.bridge === 1 && hc.members.loom === 1 && hc.members.lexicon === 1, hc.members);
+check('houses ignores other cohorts and unsorted students', hc.totals.compass === 150 && Object.values(hc.members).reduce((a, b) => a + b, 0) === 5);
+check('houses returns no names or ids', !/hc\d|Name-|ploy|mint/.test(JSON.stringify(hc)), hc);
+check('houses: cohort match ignores case', post('houses', { cohort: 'tutoring' }).totals.compass === 150);
+check('houses: other cohort', post('houses', { cohort: 'M4.1' }).totals.compass === 999);
+check('houses: an unknown cohort gives zeros', Object.values(post('houses', { cohort: 'Nobody' }).totals).every((v) => v === 0));
+const ul = post('assignments', { kind: 'set', tt: tl.tt, row: { id: 'U1', ts: '2026-10-11T00:00:00Z', kind: 'unlock', cohort: 'Tutoring', chapter: 7 } });
+check('teacher stores a chapter-unlock row through assignments', ul.ok && ul.assignments.some((a) => a.kind === 'unlock' && a.chapter === 7));
+const rs = post('assignments', { kind: 'set', tt: tl.tt, row: { id: 'U2', ts: '2026-10-11T00:00:00Z', kind: 'resort', studentId: 'hc1' } });
+check('teacher stores a re-sort row through assignments', rs.ok && rs.assignments.some((a) => a.kind === 'resort' && a.studentId === 'hc1'));
+const hcTok = post('login', { id: 'hc1', pw: 'pw12' }).token;
+check('a student sees unlock rows in the assignments list', post('assignments', { kind: 'list', token: hcTok }).assignments.some((a) => a.id === 'U1'));
+check('a student cannot set an unlock row', post('assignments', { kind: 'set', token: hcTok, row: { id: 'U3', kind: 'unlock', studentId: 'hc1', chapter: 7 } }).ok === false);
+
 console.log(fails ? fails + ' failure(s)' : 'all Code.gs + Lab.gs checks passed');
 process.exit(fails ? 1 : 0);

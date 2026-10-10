@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Flight Deck — Position Control</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2312557A'/%3E%3Cpath d='M9 8h14M9 16h14M9 24h9' fill='none' stroke='%23E5AE4A' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<title>Staff Room — Quillmoor Academy</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231F3A5F'/%3E%3Cpath d='M9 8h14M9 16h14M9 24h9' fill='none' stroke='%23C9A227' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap">
@@ -27,7 +27,7 @@ header.top{border-bottom:1px solid var(--rule);background:var(--surface);positio
 .tnav button{border:none;background:transparent;padding:7px 11px;border-radius:var(--r-m);cursor:pointer;font-family:var(--f-mono);font-size:10px;font-weight:600;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);white-space:nowrap}
 .tnav button.on{background:var(--accent-soft);color:var(--accent)}
 main{padding-block:20px 80px}
-.grid{display:grid;grid-template-columns:1fr;gap:16px}
+.grid{display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
 @media (min-width:1020px){.grid{grid-template-columns:minmax(0,1fr) minmax(0,1.4fr)}}
 .panel{padding:16px var(--pad) var(--pad)}
 .panel-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:12px;flex-wrap:wrap}
@@ -105,7 +105,7 @@ details.disc>summary .count{margin-left:auto;font-family:var(--f-mono);font-size
 .rep-n{display:block;font-weight:600;font-size:.93rem}
 .rep-s{display:block;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);margin-top:2px}
 .rep-b{font-family:var(--f-display);font-weight:800;font-size:1.1rem;color:var(--accent)}
-.mark{display:grid;grid-template-columns:1fr;gap:14px}
+.mark{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
 @media (min-width:1020px){.mark{grid-template-columns:1fr 1fr}}
 .mpara{padding:10px 12px;border-left:3px solid var(--rule);border-radius:0 var(--r-s) var(--r-s) 0;margin-bottom:8px;font-size:.95rem;line-height:1.65;background:var(--surface-2)}
 .num{background:var(--gold-soft);border-radius:3px;padding:0 3px}
@@ -154,19 +154,33 @@ details.disc>summary .count{margin-left:auto;font-family:var(--f-mono);font-size
 .modebar b{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase}
 #printable{display:none}
 @media print{body>*{display:none!important}#printable{display:block!important;font-family:Georgia,serif;color:#000;background:#fff;padding:0}#printable .pg{page-break-after:always;padding:24pt}#printable h2{font-size:16pt;margin:0 0 6pt}#printable .meta{font-size:10pt;color:#444;margin-bottom:12pt}#printable table{border-collapse:collapse;font-size:11pt;margin:6pt 0 12pt}#printable td,#printable th{border:1px solid #999;padding:3pt 8pt}#printable p{font-size:11pt;line-height:1.5}}
+.hchip{display:inline-block;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;padding:2px 8px;border-radius:99px;color:#fff;border:1.5px solid transparent;font-weight:600;white-space:nowrap}
+.hchip.none{background:var(--surface-2);color:var(--ink-3);border-color:var(--rule)}
+.cup{border:1px solid var(--rule-soft);border-radius:var(--r-m);padding:10px 12px;margin-bottom:10px}
+.cup-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.cup-h .btn{margin-left:auto}
+.cup-row{display:grid;grid-template-columns:96px 1fr 64px 84px;gap:10px;align-items:center;font-size:.85rem;margin-bottom:5px}
+.cup-bar{height:10px;background:var(--surface-3);border-radius:99px;overflow:hidden}
+.cup-bar i{display:block;height:100%}
+.cup-pts{font-family:var(--f-mono);font-size:10.5px;text-align:right;font-variant-numeric:tabular-nums}
+.cup-m{font-family:var(--f-mono);font-size:9.5px;color:var(--ink-3)}
+@media (max-width:520px){.cup-row{grid-template-columns:84px 1fr 56px}.cup-m{display:none}}
+.story-acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.story-acts select{padding:6px 8px;border-radius:var(--r-s);border:1px solid var(--rule);background:var(--surface);color:var(--ink);font:inherit;font-size:.85rem;max-width:100%}
+.assignrow.order{border-style:dashed}
 .prompt-card{background:var(--surface);border:1px solid var(--rule-soft);border-left:4px solid var(--gold);border-radius:var(--r-m);padding:12px 14px;margin-bottom:12px}.prompt-meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:6px}.prompt-title{font-family:var(--f-display);font-weight:700;font-size:.95rem;margin-left:4px}.prompt-text{font-size:.95rem;line-height:1.6}.prompt-demand{font-size:.84rem;color:var(--ink-2);margin-top:6px}
 </style>
 </head>
 <body>
 <div id="gate">
   <div class="card gatecard">
-    <p class="kicker">Position Control · IELTS Task 2</p>
-    <h1>Flight Deck</h1>
-    <p style="color:var(--ink-2);font-size:.92rem">Teacher console. Every report the class has written, where they are losing marks, and what to do about it on Monday.</p>
+    <p class="kicker">Quillmoor Academy · IELTS Task 2</p>
+    <h1>Staff Room</h1>
+    <p style="color:var(--ink-2);font-size:.92rem">Teacher console. Every report your students have written, where they are losing marks, the House Cup, and the story chapters each one has reached.</p>
     <div class="field"><label for="pin">Teacher PIN</label><input type="password" id="pin" placeholder="••••" autocomplete="current-password"></div>
     <div class="field"><label for="url">Class server address</label><input type="text" id="url" placeholder="https://script.google.com/macros/s/…/exec" spellcheck="false"></div>
     <div id="gate-msg" class="msg bad hidden"></div>
-    <button class="btn primary wide" id="gate-go">Open the deck</button>
+    <button class="btn primary wide" id="gate-go">Open the Staff Room</button>
     <p class="tiny">Clear the address to read whatever is stored in this browser instead; the offline PIN is <strong>1234</strong>.</p>
   </div>
 </div>
@@ -174,7 +188,7 @@ details.disc>summary .count{margin-left:auto;font-family:var(--f-mono);font-size
 <div id="app" class="hidden">
   <header class="top">
     <div class="top-in">
-      <div><h1>Flight Deck</h1><span class="sub" id="top-sub">—</span></div>
+      <div><h1>Staff Room</h1><span class="sub" id="top-sub">—</span></div>
       <div class="tools">
         <button class="btn sm" id="t-refresh">Refresh</button>
         <button class="btn sm" id="t-csv">Export CSV</button>
@@ -185,7 +199,7 @@ details.disc>summary .count{margin-left:auto;font-family:var(--f-mono);font-size
     <nav class="tnav">
       <button data-view="class" class="on">Class</button>
       <button data-view="marking">Marking<span id="nav-queue"></span></button>
-      <button data-view="assign">Assignments</button>
+      <button data-view="assign">Assignments · owl post</button>
       <button data-view="projector">Projector</button>
     </nav>
   </header>
@@ -193,6 +207,7 @@ details.disc>summary .count{margin-left:auto;font-family:var(--f-mono);font-size
   <main class="wrap">
     <section id="view-class">
       <div class="stat5" id="stats"></div>
+      <div class="card panel" style="margin-bottom:16px"><div class="panel-h"><h2>House Cup</h2><span class="kicker">house points by cohort</span></div><div id="housecup"></div></div>
       <div class="grid">
         <div class="card panel">
           <div class="panel-h"><h2>Class roster</h2><span class="kicker" id="roster-n"></span></div>
@@ -201,9 +216,9 @@ details.disc>summary .count{margin-left:auto;font-family:var(--f-mono);font-size
           <div class="roster-scroll"><table class="roster" id="roster"></table></div>
           <div style="margin-top:18px"><div class="panel-h"><h2 style="font-size:.98rem">Where the class is losing marks</h2></div><div class="heat" id="heat"></div></div>
           <div style="margin-top:18px"><div class="panel-h"><h2 style="font-size:.98rem">Error tags × students</h2></div><div class="heatmap" id="heatmap"></div></div>
-          <div style="margin-top:18px"><div class="panel-h"><h2 style="font-size:.98rem">The fourteen modules, class mean</h2></div><div class="sysbars" id="sysbars"></div></div>
+          <div style="margin-top:18px"><div class="panel-h"><h2 style="font-size:.98rem">The fourteen classes (modules), cohort mean</h2></div><div class="sysbars" id="sysbars"></div></div>
         </div>
-        <div class="card panel" id="detail"><div class="empty">Select a student to see their modules, reports, diagnosis and to set them an essay.</div></div>
+        <div class="card panel" id="detail"><div class="empty">Select a student to see her classes, reports, diagnosis and story chapter, to set her an essay, or to unlock chapters.</div></div>
       </div>
     </section>
     <section id="view-marking" class="hidden"></section>
@@ -218,11 +233,11 @@ details.disc>summary .count{margin-left:auto;font-family:var(--f-mono);font-size
 <!-- CLASS SERVER — paste your /exec URL between the quotes (same as index.html). -->
 <script>window.PC_API_URL = 'https://script.google.com/macros/s/AKfycbwWYlHLqxONWoQkm1ELgEHMicHsZfkCI-bE-Gqf8eTU-aUDaUuIEK4bD54AtPLP1nLdIQ/exec';</script>
 <script>window.PC_LEVELUP_URL = 'https://pegasus028.github.io/LevelUp/';</script>
-<script src="roster.js?v=1"></script>
-<script src="content.js?v=20261011"></script>
+<script src="roster.js?v=20261012"></script>
+<script src="content.js?v=20261012"></script>
 <script src="prompts.js?v=1"></script>
 <script src="prompts-2.js?v=1"></script>
-<script src="template.js?v=20261011"></script>
+<script src="template.js?v=20261012"></script>
 <script src="models.js?v=1"></script>
 <script src="mocks.js?v=1"></script>
 <script src="topic-00.js?v=20261011"></script><script src="topic-01.js?v=1"></script><script src="topic-02.js?v=20261011"></script>
@@ -231,10 +246,11 @@ details.disc>summary .count{margin-left:auto;font-family:var(--f-mono);font-size
 <script src="topic-09.js?v=1"></script><script src="topic-10.js?v=20261011"></script><script src="topic-11.js?v=20261011"></script>
 <script src="topic-12.js?v=20261011"></script><script src="topic-13.js?v=1"></script>
 <script src="media.js?v=1"></script>
-<script src="writer.js?v=20261011"></script>
-<script src="bootcamp.js?v=1"></script>
+<script src="writer.js?v=20261012"></script>
+<script src="bootcamp.js?v=20261012"></script>
 <script src="engine.js?v=20261011"></script>
-<script src="api.js?v=20261011"></script>
-<script src="teacher.js?v=20261011"></script>
+<script src="story-content.js?v=20261012"></script>
+<script src="api.js?v=20261012"></script>
+<script src="teacher.js?v=20261012"></script>
 </body>
 </html>

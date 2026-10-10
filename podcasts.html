@@ -3,22 +3,22 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Position Control — Podcasts</title>
-<meta name="description" content="The fourteen module introductions for IELTS Academic Writing Task 2. Listen anywhere.">
+<title>Castle Wireless — Quillmoor Academy</title>
+<meta name="description" content="Quillmoor Academy's Castle Wireless: the fourteen class introductions for IELTS Academic Writing Task 2. Listen anywhere.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='13'>&#127911;</text></svg>">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Figtree:wght@400;500;600&display=swap">
 <style>
-/* A page for the bus. No sign-in, no navigation, nothing to decide: eight
-   names and eight play buttons. It loads media.js and nothing else, so it is
+/* A page for the bus. No sign-in, no navigation, nothing to decide: fourteen
+   names and fourteen play buttons. It loads media.js and nothing else, so it is
    a few kilobytes over mobile data rather than the whole item bank. */
 :root{
-  --navy:#0B2545; --ink:#12202E; --ink-2:#4A5C6E; --ink-3:#7C8A98;
-  --bg:#EEF2F6; --surface:#FFFFFF; --rule:#DCE3EA; --accent:#12557A;
+  --navy:#1F3A5F; --ink:#1E1A24; --ink-2:#4F4858; --ink-3:#7E7686;
+  --bg:#F4EFE4; --surface:#FFFDF8; --rule:#E2D9C6; --accent:#5B2A5E; --gold:#C9A227;
   --r:14px;
 }
 @media (prefers-color-scheme:dark){
-  :root{ --ink:#E8EEF4; --ink-2:#A8B6C2; --ink-3:#7C8A98;
-         --bg:#0E1620; --surface:#16212D; --rule:#26323F; --accent:#7FC2E8; }
+  :root{ --ink:#EFE9DD; --ink-2:#BDB4C4; --ink-3:#8C8496;
+         --bg:#15131B; --surface:#201D28; --rule:#332E3D; --accent:#D9B8DB; }
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
@@ -28,7 +28,7 @@ body{
   line-height:1.5;padding-bottom:40px;
 }
 .ribbon{
-  background:var(--navy);color:#fff;padding:11px 16px;text-align:center;
+  background:var(--navy);color:#fff;padding:11px 16px;text-align:center;border-bottom:3px solid var(--gold);
   font-weight:600;font-size:.98rem;
 }
 .ribbon a{
@@ -65,13 +65,13 @@ footer a{color:var(--accent)}
 </div>
 
 <main>
-  <h1>IELTS Writing Task 2 — the fourteen introductions</h1>
-  <p class="sub">One episode for each module. Nothing to answer — put them on for the ride to school.</p>
+  <h1>Castle Wireless</h1>
+  <p class="sub">Quillmoor Academy · IELTS Writing Task 2. One episode for each of the fourteen classes. Nothing to answer: put them on for the ride to school.</p>
   <ol id="list"></ol>
 </main>
 
 <footer>
-  <p>Working on the questions instead? <a href="index.html">Open the study portal</a>.</p>
+  <p>Ready for your classes instead? <a href="index.html">Go back to Quillmoor Academy</a>.</p>
 </footer>
 
 <script src="media.js?v=1"></script>
@@ -87,7 +87,7 @@ footer a{color:var(--accent)}
     var h = document.createElement('h2');
     var tag = document.createElement('span');
     var parts = String(m.title || id).split(' · ');
-    tag.textContent = parts.length > 1 ? parts[0].toUpperCase() : 'MODULE';
+    tag.textContent = parts.length > 1 ? parts[0].toUpperCase() : 'CLASS';
     h.appendChild(tag);
     h.appendChild(document.createTextNode(parts.length > 1 ? parts.slice(1).join(' · ') : (m.title || id)));
     li.appendChild(h);

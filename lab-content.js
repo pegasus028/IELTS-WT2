@@ -1,6 +1,6 @@
 /* ===========================================================================
    POSITION CONTROL — lab-content.js
-   Content for the Template Lab: the fourteen template components a student
+   Content for the Template Lab (shown to students as the Spellbook Workshop): the fourteen template components a student
    rewrites in her own words, the four template shares, the target levels,
    the guidance for filling each variable, the Lab ranks and awards, and the
    quick-check word lists used when the AI coach is offline.
@@ -410,11 +410,11 @@
 
   /* -------------------------------------------------------------- ranks */
   LAB.RANKS = [
-    { min: 0, name: 'Apprentice' },
-    { min: 400, name: 'Draughtsman' },
-    { min: 1200, name: 'Engineer' },
-    { min: 2500, name: 'Architect' },
-    { min: 5000, name: 'Chief Engineer' }
+    { min: 0, name: 'Apprentice Scribe' },
+    { min: 400, name: 'Scribe' },
+    { min: 1200, name: 'Spellwright' },
+    { min: 2500, name: 'Enchanter' },
+    { min: 5000, name: 'Master Spellwright' }
   ];
 
   /* ------------------------------------------------------------- awards
@@ -422,19 +422,19 @@
      progress object's `lab` summary. */
   function lab(p) { return p.lab || {}; }
   LAB.BADGES = [
-    { id: 'lab-first', name: 'First Blueprint', perk: 'A template in your own words.', how: 'Save your first complete template in the Template Lab.',
+    { id: 'lab-first', name: 'First Spellbook', perk: 'A spellbook in your own words.', how: 'Save your first complete spellbook design in the Spellbook Workshop.',
       test: function (p) { return (lab(p).templatesComplete || 0) >= 1; } },
-    { id: 'lab-clean', name: 'Clean Blueprint', perk: 'Fourteen lines, zero errors.', how: 'Finish a template with every line coached error-free.',
+    { id: 'lab-clean', name: 'Spotless Spellbook', perk: 'Fourteen lines, zero errors.', how: 'Finish a spellbook design with every line coached error-free.',
       test: function (p) { return (lab(p).cleanTemplates || 0) >= 1; } },
-    { id: 'lab-lean', name: 'Lean Frame', perk: 'Seventy per cent of it is you.', how: 'Finish an Assembly run with a 30% template, every variable filled.',
+    { id: 'lab-lean', name: 'Lean Frame', perk: 'Seventy per cent of it is you.', how: 'Cast a 30% spellbook on a prompt, every variable filled.',
       test: function (p) { return ((lab(p).fullPcts || {})['30'] || 0) >= 1; } },
-    { id: 'lab-spectrum', name: 'Full Spectrum', perk: 'You know which share suits you.', how: 'Finish an Assembly run at 60%, 50%, 40% and 30%, every variable filled.',
+    { id: 'lab-spectrum', name: 'Full Spectrum', perk: 'You know which share suits you.', how: 'Cast your spellbook on a prompt at 60%, 50%, 40% and 30%, every variable filled.',
       test: function (p) { var s = lab(p).fullPcts || {}; return ['60', '50', '40', '30'].every(function (k) { return (s[k] || 0) >= 1; }); } },
     { id: 'lab-beat', name: 'Beat Your Best', perk: 'Your own record, broken.', how: 'Beat your best band at the same template share.',
       test: function (p) { return (lab(p).beatBest || 0) >= 1; } },
     { id: 'lab-clock', name: 'Beat the Clock', perk: 'Eleven cards, no timeouts.', how: 'Finish a 2-minutes-per-variable run without a card timing out.',
       test: function (p) { return (lab(p).clockClean || 0) >= 1; } },
-    { id: 'lab-draft3', name: 'Third Draft', perk: 'Writers revise.', how: 'Save version 3 of an Assembly run.',
+    { id: 'lab-draft3', name: 'Third Draft', perk: 'Writers revise.', how: 'Save version 3 of a casting run.',
       test: function (p) { return (lab(p).maxVersion || 0) >= 3; } }
   ];
 

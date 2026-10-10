@@ -1,6 +1,8 @@
 /* ===========================================================================
-   POSITION CONTROL — partners.js
-   T.Chris's grammar and vocabulary apps that Position Control points to.
+   QUILLMOOR ACADEMY (was Position Control) — partners.js
+   T.Chris's grammar and vocabulary apps that Quillmoor points to, shown to
+   students as "Elective classes". The app names are the real names of the
+   sites they open, so they are not re-themed.
    Edit this file to change a link or what an app is used for; no code change
    is needed. `tags` are REMEDIATION tags: when a student's Fault list holds
    one of them, the app offers the partner next to it. `step` places the app
