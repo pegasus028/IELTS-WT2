@@ -35,9 +35,13 @@
   function esc(s) {
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
-  function today() { return new Date().toISOString().slice(0, 10); }
+  /* Dates are Bangkok calendar dates (UTC+7, no daylight saving), whatever
+     the device clock's zone, so a 06:30 lesson and a 23:30 review fall on the
+     right school day. Arithmetic is done on the ISO date string in UTC. */
+  var TZ_MS = 7 * 3600000;
+  function today() { return new Date(Date.now() + TZ_MS).toISOString().slice(0, 10); }
   function daysBetween(a, b) {
-    return Math.round((new Date(b + 'T00:00:00') - new Date(a + 'T00:00:00')) / 86400000);
+    return Math.round((Date.parse(b + 'T00:00:00Z') - Date.parse(a + 'T00:00:00Z')) / 86400000);
   }
 
   /* ----------------------------------------------------------------- bank
@@ -986,10 +990,10 @@
      right again and it is retired. */
   var BOX_DAYS = { 1: 1, 2: 3 };
   function addDays(iso, n) {
-    var d = iso ? new Date(iso + 'T00:00:00') : new Date();
-    d.setDate(d.getDate() + n);
-    return d.toISOString().slice(0, 10);
+    var base = iso ? Date.parse(iso + 'T00:00:00Z') : Date.parse(today() + 'T00:00:00Z');
+    return new Date(base + n * 86400000).toISOString().slice(0, 10);
   }
+
   function scheduleReview(p, itemId, correct) {
     var r = p.review[itemId];
     if (!correct) {

@@ -64,13 +64,12 @@ function LAB_handle(action, p) {
 /* ------------------------------------------------------------ helpers */
 function LAB_prop_(k) { return PropertiesService.getScriptProperties().getProperty(k) || LAB_DEFAULTS[k] || ''; }
 function LAB_key_() { var sp = PropertiesService.getScriptProperties(); return sp.getProperty('ANTHROPIC_API_KEY') || sp.getProperty('CLAUDE_API_KEY') || ''; }
-/* Same rule as Code.gs auth(): the student must exist and, when both sides
-   hold a token, the tokens must match. */
+/* Same rule as Code.gs auth(): the student must exist and send her own token. */
 function LAB_auth_(p) {
   if (!p || !p.studentId) return null;
   var s = findStudent(p.studentId);
   if (!s) return null;
-  if (p.token && s.token && String(p.token) !== String(s.token)) return null;
+  if (!p.token || !s.token || String(p.token) !== String(s.token)) return null;
   return s;
 }
 function LAB_sheet_(name) {
@@ -295,9 +294,9 @@ function LAB_coachVariable_(p) {
 function LAB_rate_(p) {
   var pr = p.prompt || {};
   var user = [
-    'TASK: Rate this IELTS Academic Writing Task 2 essay against the public band descriptors (updated May 2023): one band per criterion, 1 to 9 in steps of 0.5.',
+    'TASK: Rate this IELTS Academic Writing Task 2 essay against the public band descriptors (updated May 2023): one whole band per criterion, 1 to 9 (examiners rate each criterion in whole bands; only the average can end in .5).',
     'The student assembled it from her own template (fixed wording listed below) plus her own ideas. Do not penalise the template for existing. Judge the essay as an examiner would: does the frame read as memorised or mechanical, does it fit this prompt, are the ideas developed and precise, is the position clear from the introduction to the conclusion?',
-    'Essays under 250 words lose Task Response marks. Be honest; do not inflate.',
+    'There is no fixed deduction for under 250 words: judge a short essay on the evidence it gives (too little evidence limits the higher bands; a significantly under-length essay may meet the Band 3 LR and GRA lines). Be honest; do not inflate.',
     '',
     'Student target: ' + p.level + ' (Band ' + p.band + '). Template share: ' + Math.round((Number(p.share) || 0) * 100) + '% of the words (chosen target ' + p.pct + '%).',
     '',
@@ -313,14 +312,14 @@ function LAB_rate_(p) {
     '',
     'Report tr, cc, lr, gra; cefr for the essay as a whole; summary (two sentences to the student); strengths (two, each quoting the essay); priorities (two or three, each with the criterion TR, CC, LR or GRA and one concrete action that would raise it by half a band); frameNote (one sentence on how her template helps or shows).'
   ].join('\n');
-  var band = { type: 'number', description: '1 to 9 in steps of 0.5' };
+  var band = { type: 'integer', description: 'whole band, 1 to 9' };
   var tool = { name: 'rate_essay', description: 'Band estimate for one Task 2 essay', input_schema: { type: 'object', properties: {
     tr: band, cc: band, lr: band, gra: band, cefr: LAB_LEVEL.cefr, summary: { type: 'string' },
     strengths: { type: 'array', items: { type: 'string' } },
     priorities: { type: 'array', items: { type: 'object', properties: { crit: { type: 'string', enum: ['TR', 'CC', 'LR', 'GRA'] }, text: { type: 'string' } }, required: ['crit', 'text'] } },
     frameNote: { type: 'string' } }, required: ['tr', 'cc', 'lr', 'gra', 'cefr', 'summary', 'strengths', 'priorities', 'frameNote'] } };
   var r = LAB_claude_('LAB_RATE_MODELS', user, tool, 1400);
-  ['tr', 'cc', 'lr', 'gra'].forEach(function (k) { var n = Number(r[k]); r[k] = isNaN(n) ? null : Math.max(1, Math.min(9, Math.round(n * 2) / 2)); });
+  ['tr', 'cc', 'lr', 'gra'].forEach(function (k) { var n = Number(r[k]); r[k] = isNaN(n) ? null : Math.max(1, Math.min(9, Math.round(n))); });
   if (!/^(A1|A2|B1|B2|C1|C2)$/.test(r.cefr)) r.cefr = '';
   r.strengths = (r.strengths || []).slice(0, 3); r.priorities = (r.priorities || []).slice(0, 3);
   return r;

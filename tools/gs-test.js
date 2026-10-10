@@ -52,7 +52,7 @@ const ctx = {
   SpreadsheetApp: { getActive: () => book },
   LockService: { getScriptLock: () => ({ waitLock() {}, releaseLock() {} }) },
   PropertiesService: { getScriptProperties: () => ({ getProperty: (k) => props[k] || null }) },
-  CacheService: { getScriptCache: () => ({ get: (k) => cacheStore[k] || null, put: (k, v) => { cacheStore[k] = v; } }) },
+  CacheService: { getScriptCache: () => ({ get: (k) => cacheStore[k] || null, put: (k, v) => { cacheStore[k] = v; }, remove: (k) => { delete cacheStore[k]; } }) },
   UrlFetchApp: { fetch: fakeFetch },
   Utilities: {
     computeDigest: (alg, s) => Array.from(require('crypto').createHash('sha256').update(s).digest()).map((b) => (b > 127 ? b - 256 : b)),
@@ -100,15 +100,15 @@ check('coach frame ok', fr.ok && fr.coach.fn.verdict === 'meets', fr);
 check('band rounded to a half band', fr.coach.band === 7.5, fr.coach.band);
 check('no-op "errors" dropped', fr.coach.errors.length === 1, fr.coach.errors);
 const lastCall = calls[calls.length - 1];
-check('uses tool_choice + the coach model', lastCall.tool_choice.name === 'coach_line' && lastCall.model === 'claude-haiku-4-5-20251001', lastCall.model);
+check('uses tool_choice + the coach model', lastCall.tool_choice.name === 'coach_line' && lastCall.model === 'claude-haiku-5-5', lastCall.model);
 check('prompt contains the student line', lastCall.messages[0].content.indexOf('Few questions divide opinion') > 0);
 
 const va = post('lab.coach', { studentId: 'ploy', token: tok, kind: 'variable', level: 'C1', band: '7.5–8', pct: 40, prompt: { text: 'Some argue…', type: 'Discuss both views', demand: 'd' }, variable: { key: 'mechA', label: 'Mechanism A', does: 'd', form: 'f' }, value: 'removing cars', value2: null, words: 2, budget: { lo: 8, hi: 20 }, inContext: ['p'], filled: [] });
 check('coach variable ok, reword dropped when no second mention', va.ok && va.coach.fn.verdict === 'partly' && !va.coach.reword && va.coach.fit.ok === false, va);
 
-failModel = 'claude-sonnet-4-6';
+failModel = 'claude-sonnet-5-5';
 const rt = post('lab.rate', { studentId: 'ploy', token: tok, level: 'C1', band: '7.5–8', pct: 40, prompt: { text: 'x', type: 'Discuss', demand: 'd' }, essay: 'e'.repeat(1200), words: 260, share: 0.3, frame: ['a', 'b', 'c', 'd'] });
-check('rate falls back to the next model when one is unavailable', rt.ok && calls[calls.length - 1].model === 'claude-haiku-4-5-20251001', calls.slice(-2).map((c) => c.model));
+check('rate falls back to the next model when one is unavailable', rt.ok && calls[calls.length - 1].model === 'claude-sonnet-4-6', calls.slice(-2).map((c) => c.model));
 check('rating bands rounded, strengths capped at 3', rt.rating.tr === 7 && rt.rating.strengths.length === 3, rt.rating);
 failModel = null;
 
@@ -124,5 +124,60 @@ check('no key: coach refuses cleanly', nk.ok === false && /key/i.test(nk.error),
 check('existing actions still work (ping)', post('ping', {}).ok === true);
 check('delete own attempt', post('lab.deleteAttempt', { studentId: 'ploy', token: tok, id: 'A1' }).ok && book.sheets.LabAttempts.rows.length === 1);
 
-console.log(fails ? fails + ' failure(s)' : 'all Lab.gs checks passed');
+
+/* ------------------------------------------------- access (Oct 2026) */
+const sub = (id, sid, tk) => post('submitReport', { token: tk, report: { id, studentId: sid, text: 'essay ' + id, words: 260, preflight: {} } });
+check('student submits her own report', sub('R1', 'ploy', tok).ok);
+check('student cannot submit as another student', sub('R2', 'mint', tok).ok === false);
+check('no token: submit refused', sub('R3', 'ploy', undefined).ok === false);
+check('roster refused without teacher token', post('roster', {}).ok === false);
+check('detail refused without teacher token', post('detail', { id: 'ploy' }).ok === false);
+check('all reports refused without teacher token', post('reports', { studentId: '' }).ok === false);
+check('student cannot read another student\'s reports', post('reports', { studentId: 'ploy', token: mintTok }).ok === false);
+check('student reads her own reports', post('reports', { studentId: 'ploy', token: tok }).reports.length === 1);
+check('markReport refused without teacher token', post('markReport', { id: 'R1', mark: { released: true, teacher: { bands: { overall: 9 } } } }).ok === false);
+check('student cannot mark her own essay', post('markReport', { id: 'R1', token: tok, mark: { released: true } }).ok === false);
+check('assignment set refused for a student', post('assignments', { kind: 'set', token: tok, row: { id: 'A9' } }).ok === false);
+check('projector clear refused for a student', post('projector', { kind: 'clear', token: tok }).ok === false);
+check('student can list assignments', post('assignments', { kind: 'list', token: tok }).ok === true);
+check('student posts to the projector as herself', post('projector', { kind: 'post', token: tok, row: { kind: 'post', studentId: 'ploy', round: 'r1' } }).ok === true);
+check('student cannot post as another student', post('projector', { kind: 'post', token: tok, row: { kind: 'post', studentId: 'mint', round: 'r1' } }).ok === false);
+const save0 = post('save', { progress: { studentId: 'ploy' }, attempts: [] });
+check('save refused with no token', save0.ok === false);
+check('save refused with another student\'s token', post('save', { token: mintTok, progress: { studentId: 'ploy' }, attempts: [] }).ok === false);
+check('wrong PIN refused', post('teacherLogin', { pin: '0000' }).ok === false);
+const tl = post('teacherLogin', { pin: '4821' });
+check('teacher login returns a token', tl.ok && tl.tt);
+check('teacher reads roster', post('roster', { tt: tl.tt }).ok === true);
+check('teacher reads all reports, unstripped', post('reports', { studentId: '', tt: tl.tt }).reports.length === 1);
+check('teacher marks and releases', post('markReport', { tt: tl.tt, id: 'R1', mark: { released: true, status: 'released', teacher: { bands: { overall: 7 } } } }).ok === true);
+check('markReport refuses unknown fields', post('markReport', { tt: tl.tt, id: 'R1', mark: { studentId: 'mint' } }).ok === false);
+check('a forged teacher token is refused', post('roster', { tt: 'forged' }).ok === false);
+for (let i = 0; i < 5; i++) post('teacherLogin', { pin: 'x' + i });
+check('PIN locks after five misses', /Too many/.test(post('teacherLogin', { pin: '4821' }).error || ''));
+for (const k of Object.keys(cacheStore)) if (k.indexOf('lock:') === 0) delete cacheStore[k];
+delete props.TEACHER_PIN;
+check('no PIN set: console refuses (no 1234 default)', post('teacherLogin', { pin: '1234' }).ok === false);
+props.TEACHER_PIN = '4821';
+const st = book.sheets.Students.rows.find((r) => r[0] === 'ploy');
+check('new passwords are salted (v2)', /^v2\$/.test(st[2]));
+const legacyHash = Array.from(require('crypto').createHash('sha256').update('old1|position-control').digest()).map((b) => ('0' + b.toString(16)).slice(-2)).join('');
+book.sheets.Students.rows.push(['legacy', 'Legacy', legacyHash, '', '', 'tok-legacy', '{}']);
+const lg = post('login', { id: 'legacy', pw: 'old1' });
+check('legacy password still logs in, keeps its token', lg.ok && lg.token === 'tok-legacy');
+check('legacy password upgraded to v2 on login', /^v2\$/.test(book.sheets.Students.rows.find((r) => r[0] === 'legacy')[2]));
+check('second login keeps the same token (two devices)', post('login', { id: 'ploy', pw: 'pw1234' }).token === tok);
+for (let i = 0; i < 5; i++) post('login', { id: 'mint', pw: 'bad' + i });
+check('five wrong passwords lock the account', /Too many/.test(post('login', { id: 'mint', pw: 'pw9999' }).error || ''));
+check('teacher can unlock it', post('unlock', { tt: tl.tt, id: 'mint' }).ok && post('login', { id: 'mint', pw: 'pw9999' }).ok);
+check('a student cannot unlock', post('unlock', { token: tok, id: 'mint' }).ok === false);
+check('student projector list needs a round', post('projector', { kind: 'list', token: tok, row: {} }).ok === false);
+const pr2 = post('projector', { kind: 'post', token: tok, row: { kind: 'post', studentId: 'ploy', round: 'r2', text: 'x'.repeat(2000), win: true } });
+check('student posts are trimmed and whitelisted', pr2.ok && pr2.posts.slice(-1)[0].text.length === 900 && pr2.posts.slice(-1)[0].win === undefined);
+const lo = post('logout', { token: tok });
+check('logout retires the token', lo.ok && post('reports', { studentId: 'ploy', token: tok }).ok === false);
+props.JOIN_CODE = 'swep41';
+check('join code required when set', post('register', { id: 'nok', pw: 'pw12' }).ok === false && post('register', { id: 'yes1', pw: 'pw12', code: 'SWEP41' }).ok === true);
+delete props.JOIN_CODE;
+console.log(fails ? fails + ' failure(s)' : 'all Code.gs + Lab.gs checks passed');
 process.exit(fails ? 1 : 0);

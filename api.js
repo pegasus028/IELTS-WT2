@@ -41,6 +41,7 @@
     sessionId: null,
     sessionStart: 0,
     token: null,
+    tt: null,          /* teacher token: memory only, gone when the console reloads */
     lastError: null
   };
   try { state.token = localStorage.getItem(LS_TOKEN) || null; } catch (e) {}
@@ -75,8 +76,9 @@
   /* ---------------------------------------------------------------- cloud */
   var TIMEOUT_MS = 14000;
 
-  function post(action, payload) {
+  function post(action, payload, keep) {
     if (state.token) payload.token = state.token;
+    if (state.tt) payload.tt = state.tt;
     var ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
     var timer;
     var req = fetch(state.url, {
@@ -84,6 +86,7 @@
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify({ action: action, payload: payload || {} }),
       redirect: 'follow',
+      keepalive: !!keep,
       signal: ctrl ? ctrl.signal : undefined
     }).then(function (r) {
       if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -103,7 +106,11 @@
 
   function call(action, payload, localFn) {
     if (state.mode !== 'cloud') return Promise.resolve(localFn());
-    return post(action, payload).catch(function (err) {
+    return post(action, payload).then(function (r) {
+      /* The teacher token expired or was dropped: ask for the PIN again. */
+      if (r && r.auth === 'teacher') { state.tt = null; if (global.API && typeof global.API.onTeacherAuth === 'function') global.API.onTeacherAuth(); }
+      return r;
+    }, function (err) {
       state.lastError = String(err.message || err);
       state.mode = 'demo';
       if (global.API && typeof global.API.onModeChange === 'function') global.API.onModeChange('demo', state.lastError);
@@ -255,8 +262,8 @@
         .catch(function (e) { return { ok: false, mode: 'cloud', error: String(e.message || e) }; });
     },
 
-    register: function (id, pw, name) {
-      return call('register', { id: id, pw: pw, name: name }, function () { return localRegister(id, pw, name); })
+    register: function (id, pw, name, code) {
+      return call('register', { id: id, pw: pw, name: name, code: code || '' }, function () { return localRegister(id, pw, name); })
         .then(keepToken);
     },
     login: function (id, pw) {
@@ -320,7 +327,7 @@
         var d = db();
         var want = d.teacherPin || '1234';
         return want === String(pin) ? { ok: true } : { ok: false, error: 'Wrong teacher PIN. The offline PIN is 1234.' };
-      });
+      }).then(function (r) { if (r && r.ok && r.tt) state.tt = r.tt; return r; });
     },
     roster: function () { return call('roster', {}, localRoster); },
     detail: function (id) { return call('detail', { id: id }, function () { return localDetail(id); }); },
@@ -346,6 +353,7 @@
     return r;
   }
   API.clearToken = function () {
+    if (state.mode === 'cloud' && state.token) { try { post('logout', {}, true).catch(function () {}); } catch (e) {} }
     state.token = null;
     try { localStorage.removeItem(LS_TOKEN); } catch (e) {}
   };

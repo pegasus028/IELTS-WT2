@@ -24,7 +24,8 @@
   function bandKey(b, k) { return b[k] != null ? b[k] : (k === 'tr' ? b.ta : undefined); }
   function markOf(r) { return r.released && r.teacher && r.teacher.bands ? r.teacher : (r.ai && r.ai.bands ? r.ai : null); }
   function bandsOf(r) { var m = markOf(r); return m ? m.bands : null; }
-  function cefrOf(b) { return b >= 8.5 ? 'C2' : b >= 7.5 ? 'C1' : b >= 6.5 ? 'B2+' : b >= 6 ? 'B2' : b >= 5.5 ? 'B1+' : b >= 4.5 ? 'B1' : 'A2'; }
+  /* ielts.org CEFR alignment: 4–5 ≈ B1, 5.5–6.5 ≈ B2, 7–8 ≈ C1, 8.5+ ≈ C2 ("around", never "is"). */
+  function cefrOf(b) { return b >= 8.5 ? 'C2' : b >= 7 ? 'C1' : b >= 5.5 ? 'B2' : b >= 4 ? 'B1' : 'A2'; }
 
   /* ------------------------------------------------------------- sign in */
   try { $('#url').value = api.url || ''; } catch (e) {}
@@ -38,6 +39,11 @@
     });
   }
   $('#gate-go').addEventListener('click', enter);
+  /* Oct 2026: the server asks for the PIN again when the teacher token has expired. */
+  api.onTeacherAuth = function () {
+    $('#app').classList.add('hidden'); $('#gate').classList.remove('hidden');
+    var m = $('#gate-msg'); m.classList.remove('hidden'); m.textContent = 'Your session has ended. Enter the PIN again.';
+  };
   $('#pin').addEventListener('keydown', function (e) { if (e.key === 'Enter') enter(); });
   $('#t-out').addEventListener('click', function () { location.reload(); });
   $('#t-refresh').addEventListener('click', function () { load(); toast('Refreshed.'); });
@@ -283,7 +289,7 @@
     }
     $('#mk-save').addEventListener('click', function () { save(false); });
     $('#mk-release').addEventListener('click', function () { save(true); });
-    var un = $('#mk-unrelease'); if (un) un.addEventListener('click', function () { api.markReport(id, { released: false, status: 'marked' }).then(function () { r.released = false; toast('Withdrawn.'); paintMarking(); }); });
+    var un = $('#mk-unrelease'); if (un) un.addEventListener('click', function () { api.markReport(id, { released: false, status: 'marked' }).then(function (res) { if (!res || !res.ok) { toast('Could not withdraw: ' + ((res && res.error) || 'try again')); return; } r.released = false; toast('Withdrawn.'); paintMarking(); }); });
     $('#mk-levelup').addEventListener('click', function () {
       var payload = { source: 'position-control', ts: new Date().toISOString(), studentId: r.studentId, name: r.name, cohort: r.cohort || '', promptId: r.promptId, prompt: pr.text || r.promptDesc || '', essay: r.text, reportId: r.id, teacher: true };
       try { localStorage.setItem('lue_handoff', JSON.stringify(payload)); } catch (e) {}
@@ -294,7 +300,7 @@
       var txt = W.markingPrompt(pr, r.text, { rows: (pre.rows || []).map(function (x) { return { status: x.status, label: x.label }; }) });
       try { navigator.clipboard.writeText(txt); toast('Marking prompt copied — paste it into Claude.'); } catch (e) { prompt('Copy this prompt', txt); }
     });
-    var vis2 = $('#mk-aivis'); if (vis2) vis2.addEventListener('change', function () { api.markReport(id, { aiVisible: vis2.checked }).then(function () { r.aiVisible = vis2.checked; toast(vis2.checked ? 'Estimate visible to the student.' : 'Estimate hidden.'); }); });
+    var vis2 = $('#mk-aivis'); if (vis2) vis2.addEventListener('change', function () { api.markReport(id, { aiVisible: vis2.checked }).then(function (res) { if (!res || !res.ok) { toast('Could not save: ' + ((res && res.error) || 'try again')); vis2.checked = !vis2.checked; return; } r.aiVisible = vis2.checked; toast(vis2.checked ? 'Estimate visible to the student.' : 'Estimate hidden.'); }); });
   }
 
   /* --------------------------------------------------------- assignments */
