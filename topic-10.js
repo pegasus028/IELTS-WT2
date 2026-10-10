@@ -30,7 +30,7 @@
             ]
           },
           items: [
-            { id: 'm10s1q1', type: 'choose', tag: 'lr-collocation', level: 'B1', prompt: 'p-prisons',
+            { id: 'm10s1q1', type: 'choose', tag: 'lr-collocation', level: 'C1', prompt: 'p-prisons',
   hint: 'One verb is the fixed partner of "as a deterrent"; the other three are everyday verbs that never take this noun.',
               stem: 'Complete the collocation: "Long sentences ___ as a deterrent only when offenders expect to be caught."',
               options: ['make', 'act', 'do', 'play'], answer: 1,
@@ -223,12 +223,12 @@
 
       /* ------------------------------------------------------------ check */
       check: { id: 'm10ck', name: 'Systems Check', items: [
-        { id: 'm10ckq1', type: 'choose', tag: 'lr-collocation', level: 'B1', prompt: 'p-prisons',
+        { id: 'm10ckq1', type: 'choose', tag: 'lr-collocation', level: 'C1', prompt: 'p-prisons',
           stem: 'Complete the crime-kit pair: "Prisons that teach a trade lower ___ rates after release."',
           options: ['recidivism', 'repetition', 'returning', 'relapse'], answer: 0,
           why: '"Recidivism rates" is the crime-kit phrase for how many offenders reoffend. "Relapse" belongs to health, and "repetition" and "returning" are plain words that do not pair with "rates" in this sense. The kit gives you the precise word; use it only in its domain.' },
         { id: 'm10ckq2', type: 'sort', tag: 'lr-domain', level: 'B2',
-  hint: 'Ask who would use each phrase: a minister, a historian or a doctor.',
+  hint: 'Ask which part of a newspaper each phrase would usually appear in.',
           stem: 'Sort each collocation into its domain kit.',
           bins: [{ key: 'gov', label: 'Government', hint: 'funds, welfare' }, { key: 'cul', label: 'Culture', hint: 'heritage, identity' }, { key: 'hea', label: 'Health', hint: 'body, medicine' }],
           items: [

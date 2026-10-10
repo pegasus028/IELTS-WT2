@@ -198,10 +198,10 @@
       /* ------------------------------------------------------------ check */
       check: { id: 'm07ck', name: 'Systems Check', items: [
         { id: 'm07ckq1', type: 'choose', tag: 'cc-reference', level: 'B1', prompt: 'p-school-snacks',
-          stem: '"Some schools have stopped selling sugary drinks. ___ has changed what students reach for at break." Which fits?',
+          stem: '"Our school stopped selling sugary drinks last term. ___ has changed what students reach for at break." Which fits?',
           options: ['This trend', 'Such a ban', 'The former', 'These students'], answer: 1,
           hint: 'What kind of thing did the first sentence describe: a decision, a trend, or a group of people?',
-          why: 'The sentence is about the decision to stop selling, so the summarising noun must name a decision: "such a ban". A school policy is not a trend, "the former" needs two things named, and the students are the people affected, not the thing that changed their choices.' },
+          why: 'The first sentence is about one school\'s decision to stop selling, so the summarising noun must name a decision: "such a ban". One school\'s policy is not a trend, "the former" needs two things named, and the students are the people affected, not the thing that changed their choices.' },
         { id: 'm07ckq2', type: 'spot', tag: 'cc-linker-overuse', level: 'B2', prompt: 'p-tourism',
           stem: 'Tap the linker that adds nothing, because the join is already made.',
           words: ['Foreign visitors spend money', 'in local shops and hotels,', 'and this spending', 'raises local incomes.', 'Furthermore,', 'these incomes pay for roads', 'through tax.'], answer: 4,

@@ -92,7 +92,7 @@ function checkSet(file, opts) {
     if (built.words < 250 || built.words > 310) bad(where, 'essay is ' + built.words + ' words (aim 260–290)');
     else if (built.words < 258 || built.words > 300) warn(where, 'essay is ' + built.words + ' words (aim 260–290)');
     if (Math.abs(share - (+pct)) > 5) bad(where, 'actual template share ' + share + '% (target ' + pct + '%, allowed ±5)');
-    const pf = WR.preflight(built.essay, pr);
+    const pf = WR.preflight(built.essay, pr, { share: +pct / 100 });
     pf.rows.filter(function (r) { return r.status === 'bad'; }).forEach(function (r) { bad(where + ' pre-flight', r.label + ' — ' + r.note); });
     pf.rows.filter(function (r) { return r.status === 'warn'; }).forEach(function (r) { warn(where + ' pre-flight', r.label); });
     summary.push(pct + '%: frame ' + fw + ' words · essay ' + built.words + ' words · share ' + share + '% · pre-flight ' + pf.bad + ' red / ' + pf.warn + ' amber');

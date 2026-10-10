@@ -62,6 +62,7 @@
   ];
 
   /* ----------------------------------------------------------- preflight */
+  var SHARES = [0.6, 0.5, 0.4, 0.3];
   function preflight(text, promptOrId, opts) {
     opts = opts || {};
     var p = promptOf(promptOrId) || {};
@@ -73,7 +74,7 @@
 
     /* length */
     add('length', 'struct-length', n < 250 ? 'bad' : n <= 320 ? 'ok' : 'warn', 'Length: ' + n + ' words',
-      n < 250 ? 'Under 250 words: too little evidence for the higher bands. Develop the nuance or the example in a body paragraph.' : n <= 320 ? 'In the 250–320 target.' : 'Over 320 words costs checking time and multiplies errors. Cut the weakest sentence in each body paragraph.');
+      n < 250 ? 'Under 250 words: too little evidence for the higher bands. Develop the nuance or the example in a body paragraph.' : n <= 320 ? 'At least 250 words. The method aims at 260–290; up to 320 is fine.' : 'Over 320 words costs checking time and multiplies errors. Cut the weakest sentence in each body paragraph.');
 
     /* format */
     var bullets = ps.filter(function (q) { return /^(\s*[-•*]|\s*\d+[.)]\s)/.test(q); }).length;
@@ -100,10 +101,15 @@
     /* coverage of the prompt */
     if (p.keyNouns && p.keyNouns.length) {
       var lt = lower(all), missing = p.keyNouns.filter(function (k) { return lt.indexOf(String(k).toLowerCase()) < 0; });
-      add('coverage', 'tr-off-topic', missing.length === 0 ? 'ok' : missing.length < p.keyNouns.length ? 'warn' : 'bad', missing.length ? 'Prompt words not used: ' + missing.join(', ') : 'The essay stays on the prompt', missing.length ? 'Every body paragraph should connect back to the key nouns of the prompt. Missing them is the first sign of an off-topic essay.' : 'The key nouns of the prompt appear in the essay.');
+      add('coverage', 'tr-off-topic', missing.length === 0 ? 'ok' : 'warn', missing.length ? 'Prompt words not used: ' + missing.join(', ') : 'The essay stays on the prompt', missing.length ? 'Every body paragraph should connect back to the key nouns of the prompt. A paraphrase is fine (urban for city); a paragraph that never touches the prompt is the first sign of an off-topic essay.' : 'The key nouns of the prompt appear in the essay.');
     }
     if (type === 'PROBLEM') {
       var hasCause = /\b(cause[sd]?|because|due to|stems? from|result of|reason|root|driven by|arises? from)\b/i.test(all), hasSol = /\b(solution|solve|tackle|address|measure|should|could|must|govern\w+ (should|could|must)|introduce|invest|ban|tax|subsidi[sz]e|provide|require)\b/i.test(all);
+      /* plurals: "causes" and "measures" ask for at least two of each. Amber only: the rule looks for an explicit second one. */
+      var ptxt = lower(p.text || '');
+      var two = function (re) { return re.test(all); };
+      if (/\b(causes|reasons)\b/.test(ptxt) && !two(/\b(second|another|a further|an additional|also)\s+(main\s+)?(cause|factor|reason|driver)\b|\b(causes|factors|reasons) (are|include)\b/i)) add('plural-c', 'tr-partial', 'warn', 'The prompt asks for causes (plural): no second cause found', 'Name a second cause, for example in Nuance A: "A second cause is …".');
+      if (/\b(measures|solutions|steps)\b/.test(ptxt) && !two(/\b(second|another|a further|an additional)\s+(measure|step|solution|remedy|response|answer)\b|\b(measures|steps|solutions) (are|include|such as)\b/i)) add('plural-s', 'tr-partial', 'warn', 'The prompt asks for measures (plural): no second measure found', 'Add a second measure, for example in Nuance B: "… so a second step is …".');
       add('parts', 'tr-partial', hasCause && hasSol ? 'ok' : 'bad', hasCause && hasSol ? 'Causes and solutions both present' : (hasCause ? 'No solutions found' : 'No causes found'), 'A problem/solution prompt has two parts. Name the cause with its mechanism, then a solution that answers that cause.');
     }
 
@@ -140,8 +146,13 @@
     if (iCount >= 6) add('ipron', 'lr-register', 'warn', '"I" appears ' + iCount + ' times', '"I believe" belongs in the thesis and the conclusion. Body paragraphs argue with impersonal subjects.');
 
     /* template ratio */
-    var tr = T ? T.ratio(all) : 0;
-    add('template', 'struct-template', tr > 0.5 ? 'bad' : tr > 0.33 ? 'warn' : 'ok', 'Unchanged frame text: ' + Math.round(tr * 100) + '%', tr > 0.33 ? 'Too much of the essay is the template word for word. Edit the openers into your own words and put the weight inside the variables.' : 'The frames have been made your own.');
+    /* One standard (Oct 2026): the template share the student chose in the
+       Template Lab — 60, 50, 40 or 30%. Green at or under it, amber up to 5
+       points over, red beyond that or above 60%. Without a choice: 40%
+       (B2 track) or 30% (C1 track) under exam conditions. */
+    var tr = T ? T.ratio(all) : 0, share = SHARES.indexOf(Number(opts.share)) >= 0 ? Number(opts.share) : 0.4, sh = Math.round(share * 100);
+    var trS = tr <= share + 0.005 ? 'ok' : tr <= share + 0.05 && tr <= 0.6 ? 'warn' : 'bad';
+    add('template', 'struct-template', trS, 'Unchanged frame text: ' + Math.round(tr * 100) + '% (your share: ' + sh + '%)', trS === 'ok' ? 'Within your template share. The marks are inside the variables.' : 'Above your ' + sh + '% template share. Edit the openers into your own words and put the weight inside the variables.');
 
     /* new idea in conclusion: a noun in the conclusion that appears nowhere else */
     if (concl && ps.length >= 4) {
@@ -158,6 +169,14 @@
 
   /* ------------------------------------------------ module free-text items */
   function cliches(t) { return CLICHE.filter(function (re) { return re.test(t); }).length; }
+  /* Oct 2026: free-text gates. A position needs a stance word, not just "is";
+     a sentence that only describes the topic is refused; generic filler is
+     counted. These are still heuristics and are labelled as such on screen. */
+  var STANCE = /\b(should|must|ought to|need(s)? to|outweighs?|on balance|heavier|more (important|serious|significant|harmful|beneficial|valuable)|greater than|agree|disagree|support|oppose|better|worse|benefit(s)? .{0,30} more|positive development|negative development)\b/i;
+  var REASON = /\b(because|since|as long as|provided( that)?|so that|so (they|it|we|students|schools|governments|cities)|given (that|the)|unless|only if|only as|only when|on condition|in order to|which means|due to|owing to|as \w+|when|while|if)\b/i;
+  var EMPTY = /\b(there is a lot to (say|talk)|(is|are) (a |an )?(very |really |quite )?(interesting|important|big|hot|popular|good) (topic|issue|subject|question|thing)|the topic is|many people have (different )?(ideas|opinions|views)|in the world today|people have different opinions)\b/i;
+  var VAGUE = [/\bmany ways\b/i, /\bmany people\b/i, /\b(some|many) (small )?problems\b/i, /\bother places\b/i, /\beverywhere\b/i, /\bdaily life\b/i, /\bthings\b/i, /\bthe big thing\b/i, /\ba lot of things\b/i, /\bin the world\b/i];
+  function vague(t) { return VAGUE.filter(function (re) { return re.test(t); }).length; }
   function bans(t) { return BANNED.filter(function (b) { return b.re.test(t); }); }
   function checkThesis(text, item) {
     var notes = [], ok = true, t = String(text || '').trim(), n = words(t), lt = lower(t);
@@ -165,7 +184,10 @@
     if (sentences(t).length > 2) { ok = false; notes.push('One sentence (two at most). A thesis is a single clear claim.'); }
     if (n < min) { ok = false; notes.push('Too short: ' + n + ' words. Name the position and the reason.'); }
     if (n > max) { ok = false; notes.push('Too long: ' + n + ' words. A thesis is one claim, not the whole essay.'); }
-    if (!POSITION.test(t) && !/\b(should|must|ought|is|are|outweigh)\b/i.test(t)) { ok = false; notes.push('No position word. Try "I believe that …", "This essay argues that …", "… should …".'); }
+    var stance = POSITION.test(t) || STANCE.test(t);
+    if (!stance && EMPTY.test(t)) { ok = false; notes.push('That describes the topic. A thesis takes a side: say what should happen, or which side is heavier.'); }
+    else if (!stance) { ok = false; notes.push('No position word. Try "I believe that …", "This essay argues that …", "… should …", "… outweigh …".'); }
+    if (/\b(why|reason|because|condition)\b/i.test(item.stem || '') && !REASON.test(t)) { ok = false; notes.push('Add the reason or the condition: "… because …", "… provided that …", "… as long as …".'); }
     if (/\b(some people (think|believe|say)|it depends|both sides|hard to say|difficult to decide)\b/i.test(t) && !/\b(but|however|although|while)\b/i.test(t)) { ok = false; notes.push('That is a description of the debate, not a position. Say what YOU think.'); }
     (item.must || []).forEach(function (group) { if (!group.some(function (k) { return lt.indexOf(k.toLowerCase()) >= 0; })) { ok = false; notes.push('Mention ' + group[0] + ' — the thesis must name the topic.'); } });
     if (cliches(t)) { ok = false; notes.push('Drop the memorised phrase; say it plainly.'); }
@@ -186,6 +208,7 @@
     if (/^(in conclusion|to conclude|to sum up|overall)\b/i.test(t)) { ok = false; notes.push('This is a body paragraph, not the conclusion.'); }
     if (cliches(t)) { ok = false; notes.push('Drop the memorised phrase; say it plainly.'); }
     var b = bans(t); if (b.length) { ok = false; notes.push(b[0].note); }
+    if (vague(t) >= 4) { ok = false; notes.push('Too general: name the people, the place and the result instead of "many people", "many ways", "everywhere".'); }
     if (item.keyNouns) { var lt = lower(t), miss = item.keyNouns.filter(function (k) { return lt.indexOf(k.toLowerCase()) < 0; }); if (miss.length === item.keyNouns.length) { ok = false; notes.push('Connect the paragraph to the prompt: mention ' + item.keyNouns.slice(0, 2).join(' or ') + '.'); } }
     if (ok) notes.push('Facet, mechanism, example, nuance — a developed body paragraph.');
     return { ok: ok, notes: notes };
@@ -198,6 +221,8 @@
     (item.must || []).forEach(function (group) { if (!group.some(function (k) { return new RegExp('\\b' + k.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b').test(lt); })) { ok = false; notes.push('Use ' + group.slice(0, 3).join(' / ') + '.'); } });
     (item.ban || []).forEach(function (k) { if (new RegExp('\\b' + k.toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b').test(lt)) { ok = false; notes.push('Do not use "' + k + '".'); } });
     if (item.noClause && /\b(because|since|when|although|which|that|so)\b/i.test(t)) { ok = false; notes.push('No subordinate clause — pack the idea into a noun phrase.'); }
+    if (item.tag === 'lr-nominal' && /^\s*[a-z]+ing\b/i.test(t) && !/^\s*(during|nothing|something|anything|everything|king)\b/i.test(t)) { ok = false; notes.push('Start with a noun, not an -ing verb: "the regulation of …", "the restriction of …".'); }
+    if (vague(t) >= 2) { ok = false; notes.push('Too general: keep the real nouns from the sentence.'); }
     if (cliches(t)) { ok = false; notes.push('Drop the memorised phrase.'); }
     var b = bans(t); if (b.length) { ok = false; notes.push(b[0].note); }
     if (ok) notes.push(item.praise || 'That is the target structure.');
@@ -211,7 +236,7 @@
       'Coherence and Cohesion: 5→6 clear overall progression; 6→7 logical organisation, clear progression, one central topic per paragraph, reference and substitution used; 7→8 message followed with ease, cohesion well managed; 9 cohesion very rarely attracts attention.',
       'Lexical Resource: 5→6 adequate range; 6→7 some flexibility and precision, less common items, awareness of style and collocation; 7→8 wide resource used fluently and flexibly for precise meaning, skilful uncommon items; memorised language and clichés are discounted.',
       'Grammatical Range and Accuracy: 5→6 mix of simple and complex forms; 6→7 a variety of complex structures, error-free sentences frequent; 7→8 wide range flexibly and accurately used, the majority of sentences error-free.',
-      'Deductions: under 250 words → cap TR at 5; bullet points or notes → cap TR at 5; off-topic → TR 4–5; memorised essay → TR 0–3.'
+      'Length and penalties, as the public descriptors and ielts.org state them: there is NO fixed deduction for writing under 250 words; a short essay is judged on the evidence it gives ("if your answer is too short, there may not be enough evidence of the language features needed in order to award higher bands"), and a significantly under-length script may meet the Band 3 lines for LR ("significantly underlength") and GRA ("length may be insufficient to provide evidence of control"). 20 words or fewer = Band 1. Copied rubric is discounted before judging. Notes or bullet points and off-topic writing are penalised under Task Response; memorised phrases count against LR (Band 3 "over-dependence on … memorised language", Band 4 "inappropriate use of lexical chunks"), and Band 0 is only for proof that the whole answer was memorised. A personalised template whose slots are filled for this prompt is not a memorised answer.'
     ];
     return 'You are an IELTS Academic Writing Task 2 examiner and a warm English teacher (T.Chris) at a Thai secondary school. ' +
       'Mark the student essay below against the public band descriptors. Walk each criterion up its gates and stop at the first unmet gate.\n\n' +
@@ -219,7 +244,7 @@
       (pre ? pre.rows.map(function (r) { return '- [' + r.status + '] ' + r.label; }).join('\n') : '') +
       '\n\nSTUDENT ESSAY (' + words(text) + ' words)\n' + text +
       '\n\nReturn ONLY JSON: {"tr":6.0,"cc":6.0,"lr":6.0,"gra":6.0,"overall":6.0,"cefr":"B2","errors":[{"quote":"…","tag":"gra-agreement","fix":"…"}],"comment":"…"}. ' +
-      'Bands in half steps. "errors": up to five, each quoting the student\'s words, a tag from this list [' + Object.keys(C.REMEDIATION).join(', ') + '] and a concrete fix. ' +
+      'Rate tr, cc, lr and gra in WHOLE bands, as examiners do; overall = their mean rounded to the nearest half band (.25 and .75 round up). "errors": up to five, each quoting the student\'s words, a tag from this list [' + Object.keys(C.REMEDIATION).join(', ') + '] and a concrete fix. ' +
       '"comment": 100–150 words in T.Chris\'s voice: open with the student\'s nickname, a comma, then one specific praise ending with an exclamation mark; quote the student\'s own words in single quotes; state the level plainly ("Your writing is around B2 level"); name error types by grammatical label; give replacement words; pivot with "However," / "Just ensure" / "Also look at" / "Finally,"; frame improvement as the next gate; close warmly. No markdown.';
   }
 
@@ -230,6 +255,8 @@
     var p = promptOf(cfg.prompt);
     var mode = cfg.mode || 'guided', guided = mode === 'guided', skeleton = mode === 'skeleton', exam = mode === 'exam';
     var tier = cfg.tier || 'B2', type = p.type || 'DISCUSS';
+    /* guided mode is practice (60%); skeleton and exam use the chosen share or the track default */
+    var share = guided ? 0.6 : (SHARES.indexOf(Number(cfg.share)) >= 0 ? Number(cfg.share) : tier === 'C1' ? 0.3 : 0.4);
     var minutes = cfg.minutes || 40, total = minutes * 60;
     var my = T.load(cfg.studentId); if (!my.choice) my.choice = {}; if (!my.custom) my.custom = {};
     var state = { t0: Date.now(), left: total, done: false, revision: 0, tick: null, vars: {}, choice: {}, custom: {} };
@@ -326,12 +353,12 @@
     host.querySelector('#wr-check').addEventListener('click', function () {
       var t = text();
       if (words(t) < 40) { host.querySelector('#wr-note').textContent = 'Write at least a few sentences first.'; return; }
-      showPanel(preflight(t, p), state.revision === 0);
+      showPanel(preflight(t, p, { share: share }), state.revision === 0);
     });
     function finish(timedOut, pre) {
       if (state.done) return;
       state.done = true; stop();
-      var t = text(); pre = pre || preflight(t, p);
+      var t = text(); pre = pre || preflight(t, p, { share: share });
       areas.forEach(function (a) { a.disabled = true; });
       var secs = Math.min(total, Math.round((Date.now() - state.t0) / 1000));
       if (cfg.onSubmit) cfg.onSubmit({ promptId: p.id, mode: mode, tier: tier, text: t, words: words(t), seconds: secs, timedOut: !!timedOut,

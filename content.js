@@ -320,8 +320,32 @@ var REMEDIATION = {
     reteach: 'Band 5 LR: "frequent simplifications and/or repetitions". A synonym chain of three per key noun is enough.',
     activities: ['Synonym chain: three alternatives for each prompt noun.', 'Repeat count on a Band 6 paragraph.']
   },
+  'lr-paraphrase': {
+    name: 'Prompt copied, not paraphrased', gate: 'LR',
+    principle: 'Before you use an idea from the question, say it in words the question did not use.',
+    reteach: '"Any copied rubric must be discounted." Paraphrase by changing the word class and the structure, not by swapping single synonyms: "governments should ban private cars" → "the regulation of private cars". Partner app: Nominalization Arena.',
+    activities: ['Rewrite the prompt\'s first sentence three ways: noun phrase, passive, different subject.', 'Count runs of five copied words in your introduction.']
+  },
 
   /* ---------------------------------------- Grammar */
+  'gra-tense': {
+    name: 'Tense choice', gate: 'GRA',
+    principle: 'Ask what time each sentence is about: a general truth, a change up to now, or a finished example.',
+    reteach: 'General claims in the present simple; change up to now in the present perfect ("Cities have grown"); a finished example in the past simple ("In 2011, Bangkok flooded"). Partner app: Postcards & Plans.',
+    activities: ['Label each sentence of a body paragraph: truth, change, or example.', 'Fix the tense in five example sentences.']
+  },
+  'gra-passive': {
+    name: 'Passive and reporting verbs', gate: 'GRA',
+    principle: 'Ask whether the doer matters to the argument, or only the action and its result.',
+    reteach: 'Formal argument often hides the doer: "It is often argued that …", "Stricter limits should be introduced". Form: be + past participle, with the right tense of be. Partner app: Voice Control.',
+    activities: ['Turn three "people say" sentences into "It is argued that …".', 'Spot the missing "be" in five passives.']
+  },
+  'gra-relative': {
+    name: 'Relative clauses', gate: 'GRA',
+    principle: 'Check what the clause describes and whether the reader needs it to know which one you mean.',
+    reteach: 'who / which / that for defining clauses; a comma and which for extra information ("Bangkok, which floods most years, …"). No "which" after a comma to mean a whole sentence unless the meaning is clear.',
+    activities: ['Join pairs of sentences with who / which.', 'Add the commas a non-defining clause needs.']
+  },
   'gra-nominalisation': {
     name: 'Nominalisation and noun phrases', gate: 'GRA',
     principle: 'Turn clauses into noun phrases: "Because prices rose, people bought less" → "Rising prices reduced consumption". Dense noun phrases are the Band 8 grammar driver.',

@@ -43,10 +43,10 @@
 
   /* ------------------------------------------------------ target levels */
   LAB.LEVELS = [
-    { id: 'B1', band: '5.5–6', bandLo: 5.5, bandHi: 6, tier: 'B2', name: 'B1 · Band 5.5–6', note: 'Clear, accurate sentences with everyday academic words.' },
-    { id: 'B2', band: '6.5–7', bandLo: 6.5, bandHi: 7, tier: 'B2', name: 'B2 · Band 6.5–7', note: 'The Band 7 track: plain frames, precise ideas, few errors.' },
-    { id: 'C1', band: '7.5–8', bandLo: 7.5, bandHi: 8, tier: 'C1', name: 'C1 · Band 7.5–8', note: 'The Band 8 track: nominalised noun phrases, flexible structures, rare errors.' },
-    { id: 'C2', band: '8.5–9', bandLo: 8.5, bandHi: 9, tier: 'C1', name: 'C2 · Band 8.5–9', note: 'Natural, precise, effortless to follow. Cohesion the examiner does not notice.' }
+    { id: 'B1', band: '5.5–6', bandLo: 5.5, bandHi: 6, tier: 'B2', name: 'From B1 · aim for Band 5.5–6', note: 'Clear, accurate sentences with everyday academic words.' },
+    { id: 'B2', band: '6.5–7', bandLo: 6.5, bandHi: 7, tier: 'B2', name: 'From B2 · aim for Band 6.5–7', note: 'The Band 7 track: plain frames, precise ideas, few errors.' },
+    { id: 'C1', band: '7.5–8', bandLo: 7.5, bandHi: 8, tier: 'C1', name: 'From C1 · aim for Band 7.5–8', note: 'The Band 8 track: nominalised noun phrases, flexible structures, rare errors.' },
+    { id: 'C2', band: '8.5–9', bandLo: 8.5, bandHi: 9, tier: 'C1', name: 'From C2 · aim for Band 8.5–9', note: 'Natural, precise, effortless to follow. Cohesion the examiner does not notice.' }
   ];
   LAB.CEFR_ORDER = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 
@@ -124,15 +124,15 @@
       why: 'Band 6–7 essays make general claims. Explaining the mechanism is what "well extended and supported" ideas look like (Task Response).',
       tip: 'Your lead-in decides the grammar of the slot. After "by" or "through", Mechanism A must start with an -ing verb.',
       examples: {
-        B2: ['This idea works by {mechA}.', 'It works by {mechA}.', 'This happens because {mechA}.'],
-        C1: ['This dynamic operates primarily by {mechA}.', 'Its influence stems from {mechA}.', 'The argument rests on the fact that {mechA}.']
+        B2: ['This idea works by {mechA}.', 'It works by {mechA}.', 'This happens through {mechA}.'],
+        C1: ['This dynamic operates primarily by {mechA}.', 'Its influence stems from {mechA}.', 'The argument rests on {mechA}.']
       } },
     { id: 'a-example', para: 'bodyA', name: 'Example A lead-in', slots: ['exA'], weight: 0.8, crit: ['TR'],
       fn: 'Leads into a specific, real example that proves Facet A.',
       why: 'The Band 7 limit is "a tendency to over-generalise". A named, concrete example is the cure.',
       tip: 'Avoid a bare "For example,". Choose a lead-in that fits a noun phrase or a clause, and remember which one it needs.',
       examples: {
-        B2: ['We can see this happening in the real world when {exA}.', 'A clear example is {exA}.', 'This is easy to see in {exA}.'],
+        B2: ['We can see this happening in the real world in {exA}.', 'A clear example is {exA}.', 'This is easy to see in {exA}.'],
         C1: ['Such a trajectory frequently manifests in real-world scenarios, such as {exA}.', 'It is within cases like {exA} that this dynamic is most visible.', 'The clearest evidence of this is {exA}.']
       } },
     { id: 'a-nuance', para: 'bodyA', name: 'Nuance A pivot', slots: ['nuanceA'], weight: 1.2, crit: ['TR', 'GRA'],
@@ -156,7 +156,7 @@
       why: 'Same job as Mechanism A: an idea is only "extended" when the reader sees how it works.',
       tip: 'Vary it from Mechanism A. If A used "by + -ing", try "through + -ing" or "because + clause" here.',
       examples: {
-        B2: ['This side is based on {mechB}.', 'It works through {mechB}.', 'Supporters point out that {mechB}.'],
+        B2: ['This side is based on {mechB}.', 'It works through {mechB}.', 'Supporters point to {mechB}.'],
         C1: ['This dimension functions through {mechB}.', 'The underlying process is {mechB}.', 'Its force derives from {mechB}.']
       } },
     { id: 'b-example', para: 'bodyB', name: 'Example B lead-in', slots: ['exB'], weight: 0.8, crit: ['TR'],
@@ -164,8 +164,8 @@
       why: 'Support at Band 8 is specific: a place, a policy, a figure you know is true, or your own experience.',
       tip: 'Make it a different structure from Example A so the paragraphs do not read like a copy.',
       examples: {
-        B2: ['This usually leads to results like {exB}.', '{exB} is a good example of this.', 'We see this in {exB}.'],
-        C1: ['This is evidenced by {exB}.', '{exB} illustrates the point clearly.', 'The effect is visible in {exB}.']
+        B2: ['This usually leads to results like {exB}.', 'A good example of this is {exB}.', 'We see this in {exB}.'],
+        C1: ['This is evidenced by {exB}.', 'The point is clearly illustrated by {exB}.', 'The effect is visible in {exB}.']
       } },
     { id: 'b-nuance', para: 'bodyB', name: 'Nuance B pivot', slots: ['nuanceB'], weight: 1.2, crit: ['TR', 'GRA'],
       fn: 'Turns to a limit of Facet B, keeping the essay balanced before the conclusion.',
@@ -232,6 +232,16 @@
     PROBLEM: 'Facet A becomes the main cause and Facet B the solution that answers it. Your frame lines were written for two sides, so check that every sentence still makes sense.',
     TWOPART: 'Two direct questions: Facet A answers question 1 and Facet B answers question 2, with equal weight.'
   };
+  /* The Type Switch Card (Oct 2026): what each slot of the Universal Spine
+     means in each type. The student's sentences stay the same; only the job
+     of the slots changes. */
+  LAB.TYPE_SWITCH = [
+    { id: 'DISCUSS', name: 'Discuss both views', a: 'View A', na: 'Limit of view A', b: 'View B', nb: 'Limit of view B', pos: 'Your view: one side favoured, or the terms on which you combine them', trap: 'Both views get a full paragraph' },
+    { id: 'OPINION', name: 'Opinion (agree / disagree)', a: 'Reason 1, or the part you accept', na: 'Limit of reason 1', b: 'Reason 2, or the part you reject', nb: 'Its limit, or your rebuttal', pos: 'Agree, disagree or partly agree, and how far', trap: '"Partly" must name both parts' },
+    { id: 'ADVANTAGE', name: 'Advantages / disadvantages', a: 'The main advantage', na: 'Limit of the advantage', b: 'The main disadvantage', nb: 'How far it can be managed', pos: 'Which side outweighs', trap: 'A verdict even when the prompt does not say "outweigh"' },
+    { id: 'PROBLEM', name: 'Problem / solution', a: 'The main cause', na: 'A second cause', b: 'The solution that answers it', nb: 'Its limit, plus a second measure', pos: 'What must happen first', trap: 'Two causes and two measures when the prompt is plural' },
+    { id: 'TWOPART', name: 'Two-part question', a: 'Answer to question 1', na: 'Limit of that answer', b: 'Answer to question 2', nb: 'Limit of that answer', pos: 'The direct answer to the evaluative question', trap: 'Each question in its own paragraph' }
+  ];
   LAB.TYPE_FIT = { DISCUSS: 'good', ADVANTAGE: 'good', OPINION: 'ok', PROBLEM: 'hard', TWOPART: 'hard' };
 
   /* ------------------------------------------- blueprints for one type
@@ -344,8 +354,8 @@
       'b-mech': { name: 'How the solution answers the cause', fn: 'Leads into how the solution works against the cause you named.',
         examples: { B2: ['It works by {mechB}, which answers the cause above.', 'This helps by {mechB}.', 'This would work by {mechB}.'],
           C1: ['It succeeds by {mechB}, thereby targeting the source rather than the symptom.', 'Its value lies in {mechB}.', 'The measure works by {mechB}.'] } },
-      'b-example': { name: 'Where it has worked', examples: { B2: ['{exB} shows that this can succeed.', 'This has already worked in {exB}.', 'A good model is {exB}.'],
-          C1: ['{exB} offers evidence of its effect.', 'Its effect can already be seen in {exB}.', 'Instructive here is {exB}.'] } },
+      'b-example': { name: 'Where it has worked', examples: { B2: ['Success can already be seen in {exB}.', 'This has already worked in {exB}.', 'A good model is {exB}.'],
+          C1: ['The evidence of its effect lies in {exB}.', 'Its effect can already be seen in {exB}.', 'Instructive here is {exB}.'] } },
       'b-nuance': { name: 'Its limit (and a second measure)', fn: 'Admits the limit of the solution and adds a second measure or a second actor.',
         tip: 'Plural "measures" in the prompt: the second one fits here.',
         examples: { B2: ['Admittedly, {nuanceB}, so it is not a complete answer.', 'This will not solve everything, because {nuanceB}.', 'It also needs support, since {nuanceB}.'],

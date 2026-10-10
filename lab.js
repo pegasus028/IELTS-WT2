@@ -40,7 +40,16 @@
   }
   function bpTypeInfo(id) { return (L.BP_TYPES || []).filter(function (x) { return x.id === id; })[0] || null; }
   var BP_SHORT = { DISCUSS: 'Discuss', OPINION: 'Opinion', ADVANTAGE: 'Adv/Disadv', PROBLEM: 'Problem', TWOPART: 'Two-part' };
-  function bpTypeShort(id) { return BP_SHORT[id] || 'All-purpose'; }
+  function bpTypeShort(id) { return BP_SHORT[id] || 'Universal'; }
+  /* Oct 2026 (T.Chris): one Universal Spine for everyone; typed blueprints only at the C1 / C2 target. */
+  function advanced(level) { return level === 'C1' || level === 'C2'; }
+  function typeSwitchCard() {
+    var rows = L.TYPE_SWITCH || [];
+    if (!rows.length) return '';
+    return '<details class="disc" open><summary>Type Switch Card</summary><div class="lab-switch" style="overflow-x:auto"><table class="lab-switch-t" style="width:100%;border-collapse:collapse;font-size:.85rem"><thead><tr><th style="text-align:left">Type</th><th style="text-align:left">Facet A</th><th style="text-align:left">Nuance A</th><th style="text-align:left">Facet B</th><th style="text-align:left">Nuance B</th><th style="text-align:left">Position says</th><th style="text-align:left">Easy to miss</th></tr></thead><tbody>' +
+      rows.map(function (r) { return '<tr>' + [r.name, r.a, r.na, r.b, r.nb, r.pos, r.trap].map(function (c, k) { return '<td style="vertical-align:top;padding:6px 8px 6px 0;border-top:1px solid var(--line)">' + (k ? '' : '<b>') + esc(c) + (k ? '' : '</b>') + '</td>'; }).join('') + '</tr>'; }).join('') +
+      '</tbody></table></div></details>';
+  }
   /* What each relabelled slot means in a blueprint of this type. */
   function slotMeanings(type) {
     var pb = ((T.PLAYBOOKS || {})[type] || {}).labels || {};
@@ -428,6 +437,7 @@
   }
   function saveItem(kind, obj) {
     obj.updatedAt = nowIso();
+    if (kind === 'template' && obj.pct) { try { localStorage.setItem('pc.share.' + st.sid, String(obj.pct)); } catch (e) {} }
     upsert(st.data[kind === 'template' ? 'templates' : 'attempts'], obj);
     /* No class server configured (demo mode): this device is the store. */
     if (!(global.API && global.API.url)) { persist(); return Promise.resolve(true); }
@@ -754,10 +764,10 @@
           : '<button class="btn sm primary" data-tcont="' + t.id + '">Continue</button><button class="btn sm ghost" data-tdel="' + t.id + '">Delete draft</button>') + '</div></div>';
     }).join('') + '</div>';
     el.innerHTML = html;
-    $('#lab-new').addEventListener('click', function () { st.setup = { pct: 40, level: host.tier ? (host.tier() === 'C1' ? 'C1' : 'B2') : 'B2', type: 'DISCUSS', name: '' }; st.view = 'setup'; paintBody(); scrollTop(); });
+    $('#lab-new').addEventListener('click', function () { st.setup = { pct: 40, level: host.tier ? (host.tier() === 'C1' ? 'C1' : 'B2') : 'B2', type: '', name: '' }; st.view = 'setup'; paintBody(); scrollTop(); });
     $$('[data-tcopy]').forEach(function (b) { b.addEventListener('click', function () {
       var src = getTpl(b.dataset.tcopy), next = [60, 50, 40, 30].filter(function (x) { return x < src.pct; })[0] || [60, 50, 40, 30].filter(function (x) { return x !== src.pct; })[0];
-      st.setup = { pct: next, level: src.level, type: src.type || 'DISCUSS', name: '', from: src.id }; st.view = 'setup'; paintBody(); scrollTop();
+      st.setup = { pct: next, level: src.level, type: src.type || '', name: '', from: src.id }; st.view = 'setup'; paintBody(); scrollTop();
     }); });
     $$('[data-tcont]').forEach(function (b) { b.addEventListener('click', function () { openBuild(getTpl(b.dataset.tcont)); }); });
     $$('[data-topen]').forEach(function (b) { b.addEventListener('click', function () { var tp = getTpl(b.dataset.topen); st.drive.type = tp.type || st.drive.type; st.build = { tpl: tp, idx: 0, readOnly: true }; st.view = 'summary'; paintBody(); scrollTop(); }); });
@@ -780,30 +790,35 @@
     var defName = lv.id + ' ' + bpTypeShort(s.type) + ' · ' + s.pct + '%';
     var html = '<div class="lab-back"><button class="btn sm ghost" id="lab-cancel">← Blueprints</button></div>' +
       (src ? '<div class="card lab-pad lab-copynote"><p class="kicker">Copy at another share</p><p>Your ' + src.pct + '% lines from <b>' + esc(src.name) + '</b> will be copied in as drafts. Trim each one to the new word budget in your own way, then coach it again: the budget changes with the share, so every line is checked afresh.</p></div>' : '') +
-      '<div class="card lab-pad"><p class="kicker">Step 1 · Question type</p><h3>Which question type is this blueprint for?</h3><p class="tiny">One blueprint per type keeps every line doing the right job: in a Problem/solution blueprint the first body paragraph is the cause and the second the solution that answers it.</p>' +
-        '<div class="lab-types">' + (L.BP_TYPES || []).map(function (o) {
-          return '<button class="lab-type' + (s.type === o.id ? ' on' : '') + '" data-bt="' + o.id + '"' + (src ? ' disabled' : '') + '><b>' + esc(o.name) + '</b><span class="tiny">' + esc(o.signal) + '</span><span>' + esc(o.blurb) + '</span></button>';
-        }).join('') + '</div></div>' +
+      '<div class="card lab-pad"><p class="kicker">Step 1 · One template, or one per type</p><h3>Your Universal Spine: one template for all five question types</h3>' +
+        '<p class="tiny">Build one template whose lines never name a question type. In the exam you read the instruction sentence, find its row on the Type Switch Card below, and give Facet A, Facet B and the nuances the job that row names. Your sentences stay the same.</p>' +
+        '<div class="lab-types"><button class="lab-type' + (!s.type ? ' on' : '') + '" data-bt=""' + (src ? ' disabled' : '') + '><b>Universal Spine (recommended)</b><span class="tiny">All five types</span><span>One set of 14 lines, relabelled with the Type Switch Card.</span></button>' +
+        (L.BP_TYPES || []).map(function (o) {
+          var lock = !advanced(s.level);
+          return '<button class="lab-type' + (s.type === o.id ? ' on' : '') + '" data-bt="' + o.id + '"' + (src || lock ? ' disabled' : '') + ' title="' + (lock ? 'Typed blueprints open at the C1 or C2 target level (Step 3).' : '') + '"><b>' + esc(o.name) + '</b><span class="tiny">' + esc(o.signal) + '</span><span>' + esc(o.blurb) + '</span></button>';
+        }).join('') + '</div>' +
+        (advanced(s.level) ? '<p class="tiny">Typed blueprints are for advanced writers (C1 or C2 target): one extra blueprint for a type you find hard, built after your Universal Spine.</p>' : '<p class="tiny">Typed blueprints open when you choose the C1 or C2 target in Step 3. Build the Universal Spine first.</p>') +
+        typeSwitchCard() + '</div>' +
       '<div class="card lab-pad"><p class="kicker">Step 2 · Template share</p><h3>How much of the essay should your template carry?</h3>' +
       '<div class="lab-pcts">' + L.PCTS.map(function (o) {
         return '<label class="lab-pct' + (s.pct === o.pct ? ' on' : '') + '"><input type="radio" name="lab-pct" value="' + o.pct + '"' + (s.pct === o.pct ? ' checked' : '') + '>' +
           '<span class="lab-pct-n">' + o.pct + '%</span><span class="lab-pct-t"><b>' + esc(o.name) + '</b><span>' + esc(o.blurb) + '</span><span class="tiny">' + esc(o.research) + '</span><span class="pill">' + esc(o.suits) + '</span></span></label>';
       }).join('') + '</div>' +
       '<div class="lab-split"><div class="lab-split-bar"><span class="f" style="width:' + s.pct + '%"></span><span class="o" style="width:' + (100 - s.pct) + '%"></span></div>' +
-      '<p class="tiny"><b>' + fw + '</b> template words + <b>' + own + '</b> words of your own ideas ≈ a ' + L.ESSAY_WORDS + '-word essay. Research on memorised IELTS scripts proposes at least 50% self-written language for Band 7 and 59% for Band 8 (Wray &amp; Pegg, 2009).</p></div></div>' +
-      '<div class="card lab-pad"><p class="kicker">Step 3 · Target level</p><h3>Which level are you writing at?</h3><p class="tiny">Your template and your variables should be at the same level. A C1 frame around B1 ideas is the exact pattern examiners notice.</p>' +
+      '<p class="tiny"><b>' + fw + '</b> template words + <b>' + own + '</b> words of your own ideas ≈ a ' + L.ESSAY_WORDS + '-word essay. A study of IELTS scripts by Chinese test-takers (Wray &amp; Pegg, 2009) proposed provisional alert levels of about 50% error-free language that is not generic or memorised for Band 7, and 59% for Band 8. Your own words have to be accurate to count.</p></div></div>' +
+      '<div class="card lab-pad"><p class="kicker">Step 3 · Target level</p><h3>Which level are you writing at?</h3><p class="tiny">Pick your level now; each choice names the band to aim for next. On the official IELTS scale, Bands 4–5 are around B1, 5.5–6.5 around B2, 7–8 around C1 and 8.5+ around C2. Your template and your variables should be at the same level. A C1 frame around B1 ideas is the exact pattern examiners notice.</p>' +
       '<div class="filters lab-levels">' + L.LEVELS.map(function (l) { return '<button data-lv="' + l.id + '"' + (s.level === l.id ? ' class="on"' : '') + '>' + esc(l.name) + '</button>'; }).join('') + '</div><p class="tiny">' + esc(lv.note) + '</p></div>' +
       '<div class="card lab-pad"><p class="kicker">Step 4 · Name</p><div class="field"><label for="lab-name">Blueprint name</label><input type="text" id="lab-name" maxlength="48" value="' + esc(s.name || defName) + '"></div></div>' +
       '<p class="lab-cta"><button class="btn primary" id="lab-startbuild">Start building: 14 lines →</button></p>';
     el.innerHTML = html;
     $('#lab-cancel').addEventListener('click', function () { st.view = 'home'; paintBody(); });
     $$('input[name=lab-pct]').forEach(function (r) { r.addEventListener('change', function () { s.pct = +r.value; s.name = ''; paintSetup(el); }); });
-    $$('[data-lv]').forEach(function (b) { b.addEventListener('click', function () { s.level = b.dataset.lv; s.name = ''; paintSetup(el); }); });
+    $$('[data-lv]').forEach(function (b) { b.addEventListener('click', function () { s.level = b.dataset.lv; if (!advanced(s.level)) s.type = ''; s.name = ''; paintSetup(el); }); });
     $$('[data-bt]').forEach(function (b) { b.addEventListener('click', function () { s.type = b.dataset.bt; s.name = ''; paintSetup(el); }); });
     $('#lab-name').addEventListener('input', function () { s.name = this.value; });
     $('#lab-startbuild').addEventListener('click', function () {
       var t = { id: uid('T'), studentId: st.sid, name: (s.name || $('#lab-name').value || 'My blueprint').trim(), version: 1, parentId: '', rootId: '',
-        pct: s.pct, level: s.level, type: s.type || 'DISCUSS', status: 'draft', lines: {}, slotNotes: {}, createdAt: nowIso(), updatedAt: nowIso() };
+        pct: s.pct, level: s.level, type: advanced(s.level) ? (s.type || '') : '', status: 'draft', lines: {}, slotNotes: {}, createdAt: nowIso(), updatedAt: nowIso() };
       t.rootId = t.id;
       if (src) {
         t.copiedFrom = src.id;
@@ -1003,7 +1018,7 @@
     var fw = templateFrameWords(t), clean = L.COMPONENTS.filter(function (c) { var l = t.lines[c.id]; return l && l.last && l.last.errors === 0; }).length;
     var predicted = fw / L.ESSAY_WORDS;
     var html = '<div class="lab-back"><button class="btn sm ghost" id="lab-shome">← Blueprints</button></div>';
-    html += '<div class="card lab-pad"><p class="kicker">' + (t.status === 'complete' ? 'Blueprint' : 'Review before saving') + ' · v' + (t.version || 1) + ' · ' + esc(bpTypeInfo(t.type) ? bpTypeInfo(t.type).name : 'All-purpose') + '</p><h3>' + esc(t.name) + '</h3>' +
+    html += '<div class="card lab-pad"><p class="kicker">' + (t.status === 'complete' ? 'Blueprint' : 'Review before saving') + ' · v' + (t.version || 1) + ' · ' + esc(bpTypeInfo(t.type) ? bpTypeInfo(t.type).name : 'Universal Spine') + '</p><h3>' + esc(t.name) + '</h3>' +
       '<div class="lab-kpis">' +
         kpi(Math.round(score / max * 100) + '%', 'Blueprint score', score + ' / ' + max + ' pts') +
         kpi(fw, 'Template words', 'budget ≈ ' + frameBudget(t.pct)) +
@@ -1423,7 +1438,7 @@
     /* The ten-point pre-flight runs on every finished run, so a student gets
        feedback on the whole essay even when the AI rating is unavailable. */
     if (a.essay && W && W.preflight && !opts.waiting) {
-      var pre = W.preflight(a.essay, pr.id ? pr : a.promptId), probs = pre.rows.filter(function (r) { return r.status !== 'ok'; });
+      var pre = W.preflight(a.essay, pr.id ? pr : a.promptId, { share: (Number(a.pct) || 40) / 100 }), probs = pre.rows.filter(function (r) { return r.status !== 'ok'; });
       html += '<div class="card preflight"><div class="pf-h"><b>Pre-flight check</b><span class="pill ' + (pre.bad ? 'bad' : pre.warn ? 'gold' : 'good') + '">' + esc(pre.summary) + '</span></div>' +
         (probs.length ? probs : pre.rows.slice(0, 3)).map(function (r) { return '<div class="pf-row ' + r.status + '"><span class="pf-dot"></span><div><b>' + esc(r.label) + '</b><p>' + esc(r.note) + '</p></div></div>'; }).join('') + '</div>';
     }
@@ -1626,7 +1641,7 @@
   function paintExamples(el) {
     var E = global.LabExamples, x = st.ex, set = exSet(), stu = E.students[x.level], pr = PR.get(set.promptId) || { title: '', text: '' };
     var pcts = ['60', '50', '40', '30'];
-    var html = '<div class="card lab-pad lab-exhero"><p class="kicker">Worked examples</p><h3>Two students, five question types, four template shares</h3><p class="tiny">' + esc(E.note) + '</p>' +
+    var html = '<div class="card lab-pad lab-exhero"><p class="kicker">Worked examples <span class="pill">AI-simulated</span></p><h3>Two AI-simulated students, five question types, four template shares</h3><p class="tiny">' + esc(E.note) + '</p>' +
       '<div class="lab-exstu">' + Object.keys(E.students).map(function (k) { var s0 = E.students[k]; return '<button class="lab-type' + (x.level === k ? ' on' : '') + '" data-exlv="' + k + '"><b>' + esc(s0.name) + ' · ' + esc(s0.level) + '</b><span class="tiny">' + esc(s0.target) + ' target</span><span>' + esc(s0.blurb) + '</span></button>'; }).join('') + '</div>' +
       '<div class="filters" style="margin-top:12px">' + E.sets.filter(function (q) { return q.level === x.level; }).map(function (q) { return '<button data-extype="' + q.type + '"' + (q.type === x.type ? ' class="on"' : '') + '>' + esc(bpTypeShort(q.type)) + '</button>'; }).join('') + '</div>' +
       '<div class="filters" style="margin-top:8px">' + pcts.map(function (p) { return '<button data-expct="' + p + '"' + (x.view === 'one' && x.pct === p ? ' class="on"' : '') + '>' + p + '%</button>'; }).join('') + '<button data-exview="compare"' + (x.view === 'compare' ? ' class="on"' : '') + '>Compare the four shares</button></div></div>';

@@ -72,8 +72,11 @@ def build_blueprint(page, s, pct, src_id, coaching, first_ever):
     page.click('[data-ltab=studio]'); page.wait_for_timeout(150)
     if src_id is None:
         page.click('#lab-new'); page.wait_for_selector('.lab-types')
-        page.click('[data-bt=%s]' % s['type'])
-        page.click('label.lab-pct:has(input[value="%s"])' % pct); page.click('[data-lv=%s]' % s['level'])
+        page.click('[data-lv=%s]' % s['level'])
+        # Oct 2026: typed blueprints open only at the C1/C2 target; below that the example is rebuilt on the Universal Spine
+        if page.is_enabled('[data-bt=%s]' % s['type']): page.click('[data-bt=%s]' % s['type'])
+        else: page.click('[data-bt=""]')
+        page.click('label.lab-pct:has(input[value="%s"])' % pct)
         if first_ever: shot(page, '02-setup-type', '.lab-types', 260); shot(page, '03-setup-share', '.lab-pcts', 250); shot(page, '03b-setup-level', '.lab-levels', 300)
     else:
         page.click('[data-tcopy="%s"]' % src_id); page.wait_for_selector('.lab-copynote')

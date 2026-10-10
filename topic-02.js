@@ -159,7 +159,7 @@
               stem: 'Build a thesis sentence for this prompt.',
               tiles: ['I believe', 'all students', 'should gain', 'some work experience', 'before leaving school,', 'because', 'paid work builds', 'independence.'],
               solution: 'I believe all students should gain some work experience before leaving school, because paid work builds independence.', alt: [],
-              why: 'Marker ("I believe"), claim ("all students should gain some work experience before leaving school"), reason ("because paid work builds independence"). Nineteen words, one sentence, and the examiner can quote it.' },
+              why: 'Marker ("I believe"), claim ("all students should gain some work experience before leaving school"), reason ("because paid work builds independence"). Seventeen words, one sentence, and the examiner can quote it.' },
             { id: 'm02s3q3', type: 'thesis', tag: 'tr-no-position', level: 'B2', prompt: 'p-cars-city',
               stem: 'Write a one-sentence position on this prompt: a marker, the cars and the city, and a reason.',
               must: [['car', 'drive'], ['city', 'pollution']],

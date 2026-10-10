@@ -95,6 +95,7 @@
     $('#wrap-pick').classList.toggle('hidden', m !== 'fast');
     $('#wrap-id').classList.toggle('hidden', m === 'fast');
     $('#wrap-name').classList.toggle('hidden', m !== 'new');
+    $('#wrap-code').classList.toggle('hidden', m === 'in');
     $('#btn-go').textContent = m === 'in' ? 'Log in' : m === 'new' ? 'Create my account' : 'Go';
     $('#f-pw').setAttribute('autocomplete', m === 'in' ? 'current-password' : 'new-password');
     $('#login-tip').textContent = m === 'fast'
@@ -115,6 +116,7 @@
     var pick = $('#f-pick'), fast = mode === 'fast';
     var id = fast ? pick.value : $('#f-id').value.trim().toLowerCase();
     var pw = $('#f-pw').value;
+    var code = ($('#f-code') && $('#f-code').value.trim()) || '';
     var name = fast ? (pick.selectedIndex > 0 ? pick.options[pick.selectedIndex].dataset.name : '') : $('#f-name').value.trim();
     if (fast && !id) return say('Find your name in the list first.', true);
     if (!id) return say('Enter a student ID.', true);
@@ -130,11 +132,11 @@
     if (fast) {
       api.login(id, pw).then(function (r) {
         if (r && r.ok) return done(r);
-        api.register(id, pw, name).then(function (r2) { if (r2 && r2.ok) return done(r2); failed((r && r.error) || (r2 && r2.error)); }).catch(crashed);
+        api.register(id, pw, name, code).then(function (r2) { if (r2 && r2.ok) return done(r2); failed(r && r.error && !/No account/.test(r.error) ? r.error : (r2 && r2.error) || (r && r.error)); }).catch(crashed);
       }).catch(crashed);
       return;
     }
-    var req = mode === 'new' ? api.register(id, pw, name) : api.login(id, pw);
+    var req = mode === 'new' ? api.register(id, pw, name, code) : api.login(id, pw);
     req.then(function (r) { if (!r || !r.ok) return failed(r && r.error); done(r); }).catch(crashed);
   }
   $('#btn-go').addEventListener('click', go);
@@ -253,6 +255,33 @@
     }
     return null;
   }
+  /* Oct 2026: partner apps and the band ladder (data in partners.js). */
+  /* The template share of the student's latest Template Lab blueprint (lab.js keeps it). */
+  function myShare() { try { var v = Number(localStorage.getItem('pc.share.' + S.p.studentId)); return v ? v / 100 : null; } catch (e) { return null; } }
+  function partnerLink(tag) {
+    var ps = C.partnerFor ? C.partnerFor(tag) : [];
+    if (!ps.length) return '';
+    return ' <a class="tiny" href="' + esc(ps[0].url) + '" target="_blank" rel="noopener" title="' + esc(ps[0].use) + '">· practise in ' + esc(ps[0].name) + ' ↗</a>';
+  }
+  function ladderCard(p) {
+    if (!C.LADDER) return '';
+    var best = p.bestBand || 0, target = tier() === 'C1' ? 8 : 7;
+    var rows = C.LADDER.map(function (r) {
+      var b = parseFloat(String(r.band).split('–')[0]), goal = b === target;
+      var apps = (r.apps || []).map(function (id) { var a = C.partner(id); return a ? '<a href="' + esc(a.url) + '" target="_blank" rel="noopener">' + esc(a.name) + ' ↗</a>' : ''; }).filter(Boolean).join(' · ');
+      return '<tr' + (goal ? ' style="background:rgba(200,160,60,.12)"' : '') + '><td style="white-space:nowrap;vertical-align:top;padding:8px 10px 8px 4px;border-top:1px solid var(--line)"><b>Band ' + esc(r.band) + '</b><br><span class="pill">' + esc(r.cefr) + '</span>' + (goal ? '<br><span class="pill gold">your track</span>' : '') + '</td>' +
+        '<td style="vertical-align:top;padding:8px 4px 8px 0;border-top:1px solid var(--line)"><span>' + esc(r.gate) + '</span><br><span class="tiny"><b>Language:</b> ' + esc(r.lang) + (apps ? ' · ' + apps : '') + '</span></td></tr>';
+    }).join('');
+    return '<div class="card" style="padding:14px 16px;margin-bottom:16px"><div class="sect-h" style="margin-bottom:6px"><div><h2 style="font-size:1.05rem">Your band ladder</h2><p>Each step with the CEFR level IELTS aligns it with: Bands 4–5 around B1, 5.5–6.5 around B2, 7–8 around C1. ' + (best ? 'Your best marked essay so far: Band ' + esc(best) + '. ' : '') + 'Your template gives you the structure; the language line is what moves you up a step.</p></div></div>' +
+      '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:.9rem">' + rows + '</table></div></div>';
+  }
+  function partnersCard() {
+    if (!C.PARTNERS) return '';
+    return '<div class="card" style="padding:14px 16px;margin-bottom:16px"><div class="sect-h" style="margin-bottom:6px"><div><h2 style="font-size:1.05rem">Grammar and vocabulary partners</h2><p>Grammar and vocabulary are built outside this app. Your Fault list points to the right one when a fault keeps coming back.</p></div></div>' +
+      '<div style="display:flex;flex-direction:column;gap:8px">' + C.PARTNERS.map(function (a) {
+        return '<a class="pcard" style="text-decoration:none" href="' + esc(a.url) + '" target="_blank" rel="noopener"><span class="pcard-t">' + esc(a.name) + ' ↗</span><span class="pcard-m"><span class="pill gold">' + esc(a.topic) + '</span><span class="pill">' + esc(a.format) + '</span></span><span class="pcard-r">' + esc(a.use) + '</span></a>';
+      }).join('') + '</div></div>';
+  }
   function paintPlan() {
     var p = S.p, g = P.gateReadiness(p), next = nextAction(p);
     var html = '';
@@ -276,7 +305,9 @@
         '<div><button class="btn primary" data-assign="' + esc(a.id) + '">Start the essay →</button></div></div>';
     });
 
+    html += ladderCard(p);
     html += '<div class="card" style="padding:14px 16px;margin-bottom:16px"><div class="sect-h" style="margin-bottom:6px"><div><h2 style="font-size:1.05rem">Pre-flight check — the last five minutes</h2><p>Run these ten checks before you submit any essay. Bootcamp drills them; the Writer runs them for you.</p></div><button class="btn sm" id="plan-boot">Open Bootcamp →</button></div><ol class="bc-list">' + window.Bootcamp.CHECKLIST.map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') + '</ol></div>';
+    html += partnersCard();
     html += '<div class="sect-h"><div><h2>Fourteen modules</h2><p>' + esc(P.rank(p).note) + '</p></div><span class="pill on">' + P.checksCleared(p) + ' of ' + C.TOPICS.length + ' green</span></div>';
     html += '<div class="plan-grid">';
     C.TOPICS.forEach(function (t) {
@@ -669,7 +700,7 @@
   function startWrite(cfg) {
     var host = $('#view-write');
     show('write');
-    S.write = W.mount(host, { prompt: cfg.promptId, mode: cfg.uiMode, minutes: cfg.minutes, tier: tier(), studentId: S.p.studentId,
+    S.write = W.mount(host, { prompt: cfg.promptId, mode: cfg.uiMode, minutes: cfg.minutes, tier: tier(), studentId: S.p.studentId, share: myShare(),
       onQuit: function () { S.write = null; show('writer'); },
       onSubmit: function (res) { S.write = null; submitReport(cfg, res); } });
   }
@@ -742,7 +773,7 @@
   var ROLES = ['intro', 'bodyA', 'bodyB', 'conclusion'];
   var ROLE_NAME = { intro: 'Introduction', bodyA: 'Body A', bodyB: 'Body B', conclusion: 'Conclusion' };
   function paintModels() {
-    var html = '<div class="sect-h"><div><h2>Model essays</h2><p>Read one, then dissect it: find the four paragraphs, the position, the nuance and the reference words. Then rebuild it from the prompt with the model hidden.</p></div></div>';
+    var html = '<div class="sect-h"><div><h2>Model essays</h2><p><span class="pill">AI-written</span> These models were written by AI for teaching. Each band is the level the model was written to show, not an examiner\'s mark. Read one, then dissect it: find the four paragraphs, the position, the nuance and the reference words. Then rebuild it from the prompt with the model hidden.</p></div></div>';
     if (!S.modelOpen) {
       html += '<div class="mgrid">' + C.MODELS.map(function (m) {
         var pr = PR.get(m.promptId) || {};
@@ -855,7 +886,7 @@
     else {
       html += '<div class="card" style="padding:var(--pad);display:flex;flex-direction:column;gap:12px"><div style="display:flex;gap:14px;flex-wrap:wrap"><span class="pill' + (due.length ? ' bad' : ' good') + '">' + due.length + ' due now</span><span class="pill">' + all.length + ' on the list</span><span class="pill gold">' + (S.p.reclaimed || 0) + ' cleared</span></div>';
       var tagCount = {}; all.forEach(function (id) { var t = E.Bank.item(id).tag; tagCount[t] = (tagCount[t] || 0) + 1; });
-      html += '<div style="display:flex;flex-direction:column;gap:7px">' + Object.keys(tagCount).sort(function (a, b) { return tagCount[b] - tagCount[a]; }).map(function (t) { return '<div style="display:flex;justify-content:space-between;gap:12px;font-size:.9rem"><span>' + esc((C.REMEDIATION[t] || {}).name || t) + '</span><span style="color:var(--ink-3);font-family:var(--f-mono);font-size:.82rem">' + tagCount[t] + '</span></div>'; }).join('') + '</div>';
+      html += '<div style="display:flex;flex-direction:column;gap:7px">' + Object.keys(tagCount).sort(function (a, b) { return tagCount[b] - tagCount[a]; }).map(function (t) { return '<div style="display:flex;justify-content:space-between;gap:12px;font-size:.9rem"><span>' + esc((C.REMEDIATION[t] || {}).name || t) + partnerLink(t) + '</span><span style="color:var(--ink-3);font-family:var(--f-mono);font-size:.82rem">' + tagCount[t] + '</span></div>'; }).join('') + '</div>';
       html += due.length ? '<button class="btn primary wide" id="fx-go">Clear ' + Math.min(due.length, 12) + ' now</button>' : '<p class="tiny">Nothing is due yet. Questions come back after a day or two.</p>';
       html += '</div>';
       html += faultChecklist(all, due);
@@ -1008,7 +1039,7 @@
     $('#view-live').innerHTML = html;
     $('#lv-post').addEventListener('click', function () {
       var t = $('#lv-text').value.trim(); if (!t) return;
-      api.projector('post', { kind: 'post', id: uid('P'), round: L.round.round, team: L.team, studentId: S.p.studentId, text: t.slice(0, 900), ts: new Date().toISOString() }).then(function () { L.posts++; $('#lv-text').value = ''; $('#lv-n').textContent = L.posts + ' posted.'; toast('Posted.'); });
+      api.projector('post', { kind: 'post', id: uid('P'), round: L.round.round, team: L.team, studentId: S.p.studentId, text: t.slice(0, 900), ts: new Date().toISOString() }).then(function (res) { if (res && res.ok === false) { toast('Not posted: ' + (res.error || 'try again')); return; } L.posts++; $('#lv-text').value = ''; $('#lv-n').textContent = L.posts + ' posted.'; toast('Posted.'); });
     });
     $('#lv-leave').addEventListener('click', function () { L.round = null; paintLive(); });
   }

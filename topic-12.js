@@ -175,7 +175,7 @@
                 { text: 'Bigger drains and more powerful pumping stations across the city.', bin: 'sol' },
                 { text: 'Rules that require green space in every new development.', bin: 'sol' }
               ],
-              why: 'The prompt has two parts, causes and measures, and each needs its own paragraph. Sorting first shows which solution answers which cause: absorbent surfaces and green-space rules answer the concrete; bigger pumps answer nothing, they only move the same water faster.' },
+              why: 'The prompt has two parts, causes and measures, and each needs its own paragraph. Sorting first shows which solution answers which cause: absorbent surfaces and green-space rules answer the concrete; bigger drains and pumps are a measure too, but they move the water away faster rather than letting less of it reach the drains, so they are the weaker answer to the concrete.' },
             { id: 'm12s3q2', type: 'select', tag: 'tr-solution-mismatch', level: 'B2', prompt: 'p-teen-sleep',
               stem: 'The cause named in Body A: early start times clash with the teenage body clock. Tick the 2 solutions that answer it.',
               options: ['Move the first lesson later for older students.', 'Take phones away from students at bedtime.', 'Set less homework on weekday evenings.', 'Start assembly later and run the school buses on a later timetable.', 'Fit air conditioning in every classroom.', 'Teach the importance of sleep in health lessons.'], answers: [0, 3], k: 2,

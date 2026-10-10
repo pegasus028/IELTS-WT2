@@ -33,13 +33,13 @@
           { id: 'b2-i3', name: 'Plain', text: 'In recent years, {core} has become an important debate. On one side there is {facetA}; on the other there is {facetB}. In my view, {position}, and this essay explains why.' }
         ] },
         { key: 'bodyA', name: 'Body A', target: 95, frames: [
-          { id: 'b2-a1', name: 'Standard', text: 'One important part of this issue is {facetA}. This idea works by {mechA}. We can see this happening in the real world when {exA}. However, looking only at this side misses an important point; in reality, {nuanceA}, which shows that this is not a perfect solution.' },
+          { id: 'b2-a1', name: 'Standard', text: 'One important part of this issue is {facetA}. This idea works by {mechA}. We can see this happening in the real world in {exA}. However, looking only at this side misses an important point; in reality, {nuanceA}, which shows that this is not a perfect solution.' },
           { id: 'b2-a2', name: 'Cause first', text: 'The first side of the debate is {facetA}. It works by {mechA}. A clear example is {exA}. Even so, {nuanceA}, so this argument has its limits.' },
           { id: 'b2-a3', name: 'Example first', text: 'Consider {exA}. This shows the importance of {facetA}, which works by {mechA}. It would be a mistake, though, to stop here: {nuanceA}.' }
         ] },
         { key: 'bodyB', name: 'Body B', target: 95, frames: [
           { id: 'b2-b1', name: 'Standard', text: 'Another very important part of the debate is {facetB}. This side is based on {mechB}, which usually leads to results like {exB}. Still, we must also be careful with this view. Even though it has a big impact, we must remember that {nuanceB}.' },
-          { id: 'b2-b2', name: 'Contrast', text: 'On the other side of the argument is {facetB}. Supporters point out that {mechB}; {exB} is a good illustration of this. Yet {nuanceB}, which means this view cannot be accepted without question.' },
+          { id: 'b2-b2', name: 'Contrast', text: 'On the other side of the argument is {facetB}. Supporters point to {mechB}; a good illustration of this is {exB}. Yet {nuanceB}, which means this view cannot be accepted without question.' },
           { id: 'b2-b3', name: 'Equally', text: 'Just as important is {facetB}. It works through {mechB}, and we see this in {exB}. At the same time, {nuanceB}, so the picture is more complicated than it first appears.' }
         ] },
         { key: 'conclusion', name: 'Conclusion', target: 45, frames: [
@@ -60,7 +60,7 @@
         { key: 'bodyA', name: 'Body A', target: 95, frames: [
           { id: 'c1-a1', name: 'The Standard', text: 'A fundamental dimension of this issue is its relationship to {facetA}. This dynamic operates primarily by {mechA}, which leads to {exA}. Yet viewing this element in a vacuum overlooks critical context; indeed, {nuanceA}.' },
           { id: 'c1-a2', name: 'Causality focus', text: 'At the core of this phenomenon lies the undeniable impact of {facetA}. Its influence stems from {mechA}, and this trajectory frequently manifests in real-world scenarios such as {exA}. Notwithstanding this reality, an overreliance on this perspective ignores the fact that {nuanceA}.' },
-          { id: 'c1-a3', name: 'Argumentative', text: 'The primary justification often cited within this context is {facetA}. The argument rests on {mechA}; {exA} illustrates the point. However, this approach fails to account for {nuanceA}.' }
+          { id: 'c1-a3', name: 'Argumentative', text: 'The primary justification often cited within this context is {facetA}. The argument rests on {mechA}; The point is illustrated by {exA}. However, this approach fails to account for {nuanceA}.' }
         ] },
         { key: 'bodyB', name: 'Body B', target: 95, frames: [
           { id: 'c1-b1', name: 'The Standard', text: 'Equally significant is the phenomenon\'s relationship to {facetB}. This dimension functions through {mechB}, as evidenced by {exB}. Nevertheless, {nuanceB}, a consideration that tempers any uncritical endorsement of this view.' },
@@ -87,8 +87,8 @@
       frames: {
         B2: {
           intro: 'It is sometimes claimed that {core} is the right approach. I strongly agree with this view, because of {facetA} and {facetB}. This essay explains both reasons and concludes that {position}.',
-          bodyA: 'The first reason is {facetA}. It works by {mechA}. We can see this when {exA}. Admittedly, {nuanceA}, but this does not weaken the main point.',
-          bodyB: 'The second reason is {facetB}. It works through {mechB}, as {exB} shows. It is true that {nuanceB}; even so, the overall benefit remains.',
+          bodyA: 'The first reason is {facetA}. It works by {mechA}. We can see this in {exA}. Admittedly, {nuanceA}, but this does not weaken the main point.',
+          bodyB: 'The second reason is {facetB}. It works through {mechB}, as can be seen in {exB}. It is true that {nuanceB}; even so, the overall benefit remains.',
           conclusion: 'In conclusion, {position}. Given {facetA} and {facetB}, this is the most sensible view, because {rationale}.'
         },
         C1: {
@@ -104,14 +104,14 @@
       frames: {
         B2: {
           intro: 'The topic of {core} has both benefits and drawbacks. The main advantage is {facetA}, while the main disadvantage is {facetB}. In my opinion, {position}.',
-          bodyA: 'The clearest benefit is {facetA}. This comes about by {mechA}. For example, {exA}. Of course, {nuanceA}, but the advantage is still real.',
+          bodyA: 'The clearest benefit is {facetA}. This comes about by {mechA}. A clear example is {exA}. Of course, {nuanceA}, but the advantage is still real.',
           bodyB: 'The most serious drawback is {facetB}. The problem arises from {mechB}, which can be seen in {exB}. However, {nuanceB}, so this drawback can be managed.',
           conclusion: 'To conclude, when {facetA} is weighed against {facetB}, {position}. The reason is that {rationale}.'
         },
         C1: {
           intro: 'The emergence of {core} has generated both considerable benefits and genuine costs. Its principal advantage lies in {facetA}, whereas its most significant drawback is {facetB}. On balance, this essay argues that {position}.',
           bodyA: 'The foremost benefit is {facetA}. This advantage arises from {mechA}, a pattern evident in {exA}. Admittedly, {nuanceA}; nonetheless, the gain is substantial.',
-          bodyB: 'Set against this is {facetB}. The difficulty stems from {mechB}, as {exB} demonstrates. It should be noted, however, that {nuanceB}, which means the cost is neither inevitable nor unmanageable.',
+          bodyB: 'Set against this is {facetB}. The difficulty stems from {mechB}, as is evident in {exB}. It should be noted, however, that {nuanceB}, which means the cost is neither inevitable nor unmanageable.',
           conclusion: 'In conclusion, once {facetA} is weighed against {facetB}, {position}. This judgement rests on the fact that {rationale}.'
         }
       }
@@ -122,13 +122,13 @@
         B2: {
           intro: 'The problem of {core} is a serious one in many countries. Its main cause is {facetA}, and the most effective response is {facetB}. This essay examines the cause and then the solution, arguing that {position}.',
           bodyA: 'The root of the problem is {facetA}. It creates the problem by {mechA}. We can see the effect in {exA}. Unfortunately, {nuanceA}, which makes the problem hard to solve.',
-          bodyB: 'The most effective solution is {facetB}. It works by {mechB}, which directly answers the cause above. {exB} shows that this can succeed. Admittedly, {nuanceB}, so it is not a complete answer.',
+          bodyB: 'The most effective solution is {facetB}. It works by {mechB}, which directly answers the cause above. Success can already be seen in {exB}. Admittedly, {nuanceB}, so it is not a complete answer.',
           conclusion: 'In conclusion, because {core} is driven mainly by {facetA}, the answer must be {facetB}. {position}, since {rationale}.'
         },
         C1: {
           intro: 'The issue of {core} has become increasingly pressing. Its primary cause is {facetA}, and the most promising remedy is {facetB}. This essay examines the causal mechanism before evaluating the solution, concluding that {position}.',
           bodyA: 'At the root of the problem lies {facetA}. The mechanism is straightforward: the cause operates by {mechA}. The consequences are visible in {exA}. Compounding the difficulty, {nuanceA}, which renders the problem resistant to simple intervention.',
-          bodyB: 'The remedy that most directly addresses this cause is {facetB}. It succeeds by {mechB}, thereby targeting the source rather than the symptom; {exB} offers evidence of its effect. It must be conceded that {nuanceB}, so the measure is necessary rather than sufficient.',
+          bodyB: 'The remedy that most directly addresses this cause is {facetB}. It succeeds by {mechB}, thereby targeting the source rather than the symptom; the evidence of its effect lies in {exB}. It must be conceded that {nuanceB}, so the measure is necessary rather than sufficient.',
           conclusion: 'In conclusion, since {core} stems principally from {facetA}, {facetB} is the logical response. {position}, because {rationale}.'
         }
       }
@@ -138,14 +138,14 @@
       frames: {
         B2: {
           intro: 'The issue of {core} raises two questions. The first is answered by {facetA}, and the second by {facetB}. This essay deals with each in turn and argues that {position}.',
-          bodyA: 'In answer to the first question, {facetA}. This works by {mechA}. A good example is {exA}. It should be said that {nuanceA}, but the main answer stands.',
-          bodyB: 'Turning to the second question, {facetB}. It operates by {mechB}, as {exB} shows. Even so, {nuanceB}, which is worth remembering.',
+          bodyA: 'The answer to the first question is {facetA}. This works by {mechA}. A good example is {exA}. It should be said that {nuanceA}, but the main answer stands.',
+          bodyB: 'Turning to the second question, the answer is {facetB}. It operates by {mechB}, as can be seen in {exB}. Even so, {nuanceB}, which is worth remembering.',
           conclusion: 'In conclusion, {facetA} answers the first question and {facetB} the second. Taken together, {position}, because {rationale}.'
         },
         C1: {
           intro: 'The question of {core} invites two distinct enquiries. This essay responds to the first with {facetA} and to the second with {facetB}, before arguing that {position}.',
           bodyA: 'With regard to the first question, the answer lies in {facetA}. This follows from {mechA}, a relationship clearly observable in {exA}. Granted, {nuanceA}; the central answer nevertheless holds.',
-          bodyB: 'As for the second question, {facetB} is the decisive factor. Its influence operates through {mechB}, as {exB} illustrates. That {nuanceB} qualifies but does not overturn this answer.',
+          bodyB: 'As for the second question, {facetB} is the decisive factor. Its influence operates through {mechB}, as illustrated by {exB}. That {nuanceB} qualifies but does not overturn this answer.',
           conclusion: 'In conclusion, {facetA} resolves the first question and {facetB} the second. Considered together, {position}, since {rationale}.'
         }
       }

@@ -11,3 +11,5 @@
 9. Template Lab: `node tools/lab-validate.js` prints `OK` (it also checks the five Test Drive prompts × three bands in `lab-scenario.js`); `node tools/gs-test.js` prints `all Lab.gs checks passed`; `python3 tools/lab-smoke.py` and `python3 tools/lab-smoke.py --mock` print `console errors: 0` with no horizontal overflow at 375 px.
 10. Template Lab live check after deploying `Lab.gs`: the Lab's status pill reads "AI coach online". Coach one line and one variable, finish a run and confirm a band appears and a row lands in `LabTemplates` and `LabAttempts`.
 11. Worked examples: `node tools/lab-examples-check.js --all` prints `OK — 0 red`; after any change to `examples/*.json` run `node tools/build-examples.js`, and `python3 tools/lab-walkthrough.py` prints `console errors / mismatches: 0`.
+12. Dates: `node tools/date-test.js` prints `all date checks passed` (spaced review and streaks use Bangkok dates in any device time zone).
+13. Back-end access: `node tools/gs-test.js` also covers teacher tokens, student tokens, lockouts, logout and salted passwords; it prints `all Code.gs + Lab.gs checks passed`.
