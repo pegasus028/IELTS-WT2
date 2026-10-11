@@ -350,3 +350,13 @@ input::placeholder{color:var(--ink-3)}
 .artband svg.art{display:block;width:100%;height:100%}
 
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* Type Switch Card (Oct 2026) */
+.switch-card{margin:0 0 12px;min-width:0;max-width:100%}
+.switch-card>div{max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.wr-left,.wr-right{min-width:0}
+.switch-card summary{cursor:pointer;font-weight:600}
+.switch-t{width:100%;min-width:560px;border-collapse:collapse;font-size:.84rem;margin-top:6px}
+.switch-t th,.switch-t td{text-align:left;vertical-align:top;padding:6px 8px 6px 0;border-top:1px solid var(--line)}
+.switch-t th{font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3);border-top:0}
+.switch-t tr.on td{background:rgba(201,162,39,.12)}

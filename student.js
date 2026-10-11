@@ -786,6 +786,8 @@
     var paras = T.paragraphs(tr, S.tplType), labels = T.labels(S.tplType);
     var html = '<div class="sect-h"><div><h2>My Spellbook</h2><p>The eleven keys slot into four frames. Choose an opener for each paragraph and edit it into your own words: that version follows you into the Scriptorium. Frames are scaffolding; the marks are inside the keys.</p></div><span class="pill on">' + esc(T.TIERS[tr].name) + '</span></div>';
     html += '<div class="filters">' + Object.keys(C.TYPES).map(function (k) { return '<button data-tt="' + k + '"' + (S.tplType === k ? ' class="on"' : '') + '>' + esc(C.TYPES[k].name) + '</button>'; }).join('') + '</div>';
+    if (my.fromLab) html += '<div class="card" style="padding:12px 16px;margin-bottom:14px"><p class="kicker">From the Spellbook Workshop</p><p class="tiny">Your frames below are the spellbook you built in the Workshop. Edit them here or build a new version there; the Scriptorium uses whatever is here.</p></div>';
+    html += T.switchCard(S.tplType);
     html += '<div class="card" style="padding:14px 16px;margin-bottom:14px"><p class="kicker">The eleven keys · ' + esc(typeName(S.tplType)) + '</p><ol class="bc-list">' + C.VARIABLES.map(function (v) { return '<li><b>' + esc(labels[v.key]) + '</b> — ' + esc(v.hint) + '</li>'; }).join('') + '</ol></div>';
     paras.forEach(function (pg) {
       var chosen = my.choice[pg.key] || pg.frames[0].id, fr = pg.frames.filter(function (f) { return f.id === chosen; })[0] || pg.frames[0];

@@ -277,6 +277,7 @@
       '</div>' +
       '<div class="wr-grid">' +
         '<div class="wr-left">' + Prompts.card(p, { demand: !exam }) +
+          (!exam ? T.switchCard(type) : '') +
           (!exam ? '<div class="card wr-plan"><div class="wr-boxh"><b>The matrix</b><span class="tiny">plan — not counted</span>' + (guided ? '<button class="btn sm" id="wr-fill">Fill the frames →</button>' : '') + '</div>' +
             C.VARIABLES.map(function (v) { return '<div class="wr-planrow"><label for="wr-v-' + v.key + '" title="' + esc(v.hint) + '">' + v.n + ' · ' + esc(labels[v.key]) + '</label><input id="wr-v-' + v.key + '" data-var="' + v.key + '" placeholder="' + esc(v.hint) + '"></div>'; }).join('') + '</div>' : '') +
         '</div>' +

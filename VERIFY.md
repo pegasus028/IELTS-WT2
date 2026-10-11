@@ -13,3 +13,4 @@
 11. Worked examples: `node tools/lab-examples-check.js --all` prints `OK — 0 red`; after any change to `examples/*.json` run `node tools/build-examples.js`, and `python3 tools/lab-walkthrough.py` prints `console errors / mismatches: 0`.
 12. Dates: `node tools/date-test.js` prints `all date checks passed` (spaced review and streaks use Bangkok dates in any device time zone).
 13. Back-end access: `node tools/gs-test.js` also covers teacher tokens, student tokens, lockouts, logout and salted passwords; it prints `all Code.gs + Lab.gs checks passed`.
+14. Spellbook frames: `node tools/template-test.js` prints `0 failure(s)` (every prompt composes at both tracks; example and mechanism slots sit only in noun-phrase / -ing positions).

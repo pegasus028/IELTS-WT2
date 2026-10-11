@@ -28,21 +28,25 @@
       name: 'Band 7 track', cefr: 'B2', blurb: 'Plain frames, four moves per paragraph. The B2 Essay Engineering spellbook.',
       paragraphs: [
         { key: 'intro', name: 'Introduction', target: 50, frames: [
+          { id: 'b2-u-i', name: 'Universal Spine', text: 'The question of {core} matters to many people today. The first key point is {facetA}, and the second is {facetB}. This essay looks at both and argues that {position}.' },
           { id: 'b2-i1', name: 'Standard', text: 'People often discuss the topic of {core} because it has many different effects. While many people focus on {facetA}, it is also important to consider {facetB}. To fully understand this issue, we need to look at both sides carefully. Personally, I believe that {position}.' },
           { id: 'b2-i2', name: 'Question first', text: 'The question of {core} is one that many people feel strongly about. Some point to {facetA}, while others are more concerned with {facetB}. This essay looks at both sides before arguing that {position}.' },
           { id: 'b2-i3', name: 'Plain', text: 'In recent years, {core} has become an important debate. On one side there is {facetA}; on the other there is {facetB}. In my view, {position}, and this essay explains why.' }
         ] },
         { key: 'bodyA', name: 'Body A', target: 95, frames: [
+          { id: 'b2-u-a', name: 'Universal Spine', text: 'The first key point is {facetA}. It works by {mechA}. We can see this clearly in {exA}. However, {nuanceA}, so this point has its limits.' },
           { id: 'b2-a1', name: 'Standard', text: 'One important part of this issue is {facetA}. This idea works by {mechA}. We can see this happening in the real world in {exA}. However, looking only at this side misses an important point; in reality, {nuanceA}, which shows that this is not a perfect solution.' },
           { id: 'b2-a2', name: 'Cause first', text: 'The first side of the debate is {facetA}. It works by {mechA}. A clear example is {exA}. Even so, {nuanceA}, so this argument has its limits.' },
           { id: 'b2-a3', name: 'Example first', text: 'Consider {exA}. This shows the importance of {facetA}, which works by {mechA}. It would be a mistake, though, to stop here: {nuanceA}.' }
         ] },
         { key: 'bodyB', name: 'Body B', target: 95, frames: [
+          { id: 'b2-u-b', name: 'Universal Spine', text: 'The second key point is {facetB}. It operates through {mechB}, and the effect is visible in {exB}. Even so, {nuanceB}, which is worth remembering.' },
           { id: 'b2-b1', name: 'Standard', text: 'Another very important part of the debate is {facetB}. This side is based on {mechB}, which usually leads to results like {exB}. Still, we must also be careful with this view. Even though it has a big impact, we must remember that {nuanceB}.' },
           { id: 'b2-b2', name: 'Contrast', text: 'On the other side of the argument is {facetB}. Supporters point to {mechB}; a good illustration of this is {exB}. Yet {nuanceB}, which means this view cannot be accepted without question.' },
           { id: 'b2-b3', name: 'Equally', text: 'Just as important is {facetB}. It works through {mechB}, and we see this in {exB}. At the same time, {nuanceB}, so the picture is more complicated than it first appears.' }
         ] },
         { key: 'conclusion', name: 'Conclusion', target: 45, frames: [
+          { id: 'b2-u-c', name: 'Universal Spine', text: 'In conclusion, {position}. Taking {facetA} together with {facetB}, this is the most reasonable view, because {rationale}.' },
           { id: 'b2-c1', name: 'Standard', text: 'To sum up, simply looking at {core} from one side is not enough to show the whole picture. A better way to look at it is that {position}. This view makes the most sense because {rationale}.' },
           { id: 'b2-c2', name: 'Verdict', text: 'In conclusion, both sides of {core} have real strengths and real limits. My own position is that {position}, mainly because {rationale}.' },
           { id: 'b2-c3', name: 'Plain', text: 'Overall, {core} cannot be judged from one side alone. The most reasonable position is that {position}, since {rationale}.' }
@@ -207,12 +211,27 @@
   function tidy(s) {
     return String(s).replace(/\.\s*\./g, '.').replace(/,\s*,/g, ',').replace(/\s+/g, ' ').replace(/\s+([.,;:])/g, '$1').trim();
   }
+  /* Oct 2026 (T.Chris): one Universal Spine for everyone. Typed playbook
+     frames (one set per question type) are an advanced option: they are
+     offered on the C1 track only, and never as the default. */
+  /* The Type Switch Card: what each slot of the Universal Spine means in
+     each question type (data: LabContent.TYPE_SWITCH). The student's frame
+     sentences stay the same; only the job of the slots changes. */
+  function switchCard(current) {
+    var L = global.LabContent, rows = (L && L.TYPE_SWITCH) || [];
+    if (!rows.length) return '';
+    var th = ['Type', 'Facet A', 'Nuance A', 'Facet B', 'Nuance B', 'Position says', 'Easy to miss'];
+    return '<details class="disc switch-card"' + (current ? ' open' : '') + '><summary>Type Switch Card · one spellbook, five question types</summary><p class="tiny">Read the instruction sentence, find its row, and give the slots the job that row names. Your sentences do not change.</p><div style="overflow-x:auto"><table class="switch-t"><thead><tr>' +
+      th.map(function (h) { return '<th>' + esc(h) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+      rows.map(function (r) { return '<tr' + (r.id === current ? ' class="on"' : '') + '>' + [r.name, r.a, r.na, r.b, r.nb, r.pos, r.trap].map(function (c, k) { return '<td>' + (k ? '' : '<b>') + esc(c) + (k ? '' : '</b>') + '</td>'; }).join('') + '</tr>'; }).join('') +
+      '</tbody></table></div></details>';
+  }
   function paragraphs(tier, type) {
     var t = TIERS[tier] || TIERS.B2, pb = PLAYBOOKS[type] || {};
-    var over = pb.frames && pb.frames[tier];
+    var over = tier === 'C1' && pb.frames && pb.frames[tier];
     return t.paragraphs.map(function (p) {
       var frames = p.frames.slice();
-      if (over && over[p.key]) frames.unshift({ id: tier.toLowerCase() + '-' + type.toLowerCase() + '-' + p.key, name: (C.TYPES[type] || {}).name + ' playbook', text: over[p.key] });
+      if (over && over[p.key]) frames.push({ id: tier.toLowerCase() + '-' + type.toLowerCase() + '-' + p.key, name: (C.TYPES[type] || {}).name + ' playbook', text: over[p.key] });
       return { key: p.key, name: p.name, target: p.target, frames: frames, slots: tokens(frames[0].text) };
     });
   }
@@ -271,6 +290,6 @@
   function load(studentId) { try { return JSON.parse(localStorage.getItem(key(studentId))) || { tier: 'B2', choice: {}, custom: {} }; } catch (e) { return { tier: 'B2', choice: {}, custom: {} }; } }
   function save(studentId, custom) { try { localStorage.setItem(key(studentId), JSON.stringify(custom)); } catch (e) {} }
 
-  global.Template = { TIERS: TIERS, PLAYBOOKS: PLAYBOOKS, SWAPS: SWAPS, FADE: FADE, LABEL: LABEL,
+  global.Template = { switchCard: switchCard, TIERS: TIERS, PLAYBOOKS: PLAYBOOKS, SWAPS: SWAPS, FADE: FADE, LABEL: LABEL,
     labels: labels, tokens: tokens, fill: fill, tidy: tidy, paragraphs: paragraphs, compose: compose, ratio: ratio, frameWords: frameWords, load: load, save: save, esc: esc };
 })(window);
