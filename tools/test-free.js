@@ -60,5 +60,15 @@ each(function (it) {
     console.log('     contrast ' + m.id + ' · ' + cp.bad + ' red · ' + cp.warn + ' amber');
   }
 });
+
+/* Oct 2026: language hints. No model essay may trigger one (precision first); seeded slips must. */
+(C.MODELS || []).forEach(function (m) {
+  n++; var r = W.preflight(m.paragraphs.map(function (p) { return p.text; }).join('\n\n'), m.promptId).rows.filter(function (x) { return x.id === 'lang'; })[0];
+  if (r) { fails++; console.log('FAIL language hint on a model: ' + m.id + ' → ' + r.note.slice(0, 120)); }
+});
+var seeded = 'Supporters of ban argues that canteens shape habits. The number of students have risen. Every students wants a phone. Students is tired. A information is useful. He have a lot of work. Government should act. In Bangkok, fry snack are sold.';
+n++; var sr = W.preflight(seeded, 'p-school-snacks').rows.filter(function (x) { return x.id === 'lang'; })[0];
+if (!sr || !/Language hints: [5-9]/.test(sr.label)) { fails++; console.log('FAIL seeded slips not caught: ' + (sr ? sr.label : 'no row')); }
+
 console.log(n + ' checks, ' + fails + ' failure(s)');
 process.exit(fails ? 1 : 0);

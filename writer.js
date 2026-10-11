@@ -94,6 +94,15 @@
       var verdict = VERDICT.test(intro) || VERDICT.test(concl);
       add('verdict', 'tr-listing', verdict ? 'ok' : (POSITION.test(intro) || POSITION.test(concl)) ? 'warn' : 'bad', verdict ? 'A verdict is stated' : 'No verdict: which side outweighs?', verdict ? '"Outweigh" is answered.' : '"Do the advantages outweigh the disadvantages?" is an opinion question. Say which side is heavier — "the benefits clearly outweigh the drawbacks" — in the introduction and the conclusion.');
     }
+    /* type-aware (Oct 2026): "to what extent" wants an extent word; a two-part prompt wants both questions answered */
+    if (type === 'OPINION' && /to what extent/i.test(p.text || '')) {
+      var extent = /\b(largely|partly|partially|entirely|completely|wholly|to some extent|to a large extent|to a limited extent|mostly|mainly|strongly|firmly|only (if|when|as long as)|provided( that)?|as long as|on condition)\b/i.test(intro + ' ' + concl);
+      add('extent', 'tr-partial', extent ? 'ok' : 'warn', extent ? 'The extent of agreement is stated' : 'How far do you agree?', extent ? '"To what extent" is answered.' : '"To what extent" asks for a degree: "I largely agree …", "I agree only if …", "partly".');
+    }
+    if (type === 'TWOPART') {
+      var qs2 = (String(p.text || '').match(/\?/g) || []).length, bodyN = body.length;
+      add('twopart', 'tr-partial', bodyN >= 2 ? 'ok' : 'bad', bodyN >= 2 ? 'Each question has its own paragraph' : 'Two questions, ' + bodyN + ' body paragraph' + (bodyN === 1 ? '' : 's'), qs2 >= 2 ? 'The prompt asks two questions: answer the first in Body A and the second in Body B, each with a mechanism and an example.' : 'Answer each question in its own paragraph.');
+    }
     if (!posAny) add('position', 'tr-no-position', 'bad', 'No clear position found', 'The examiner must be able to say what you think. Add one sentence in paragraph one: "I believe that …" / "This essay argues that …".');
     else if (!posIntro && posConcl) add('position', 'tr-position-late', type === 'DISCUSS' || type === 'OPINION' || type === 'ADVANTAGE' ? 'bad' : 'warn', 'Position appears only at the end', 'State the position in the introduction as well. An opinion that first appears in the conclusion reads as an afterthought.');
     else if (posIntro && !posConcl && ps.length >= 3) add('position', 'tr-no-position', 'warn', 'Position not restated in the conclusion', 'Echo the thesis in the last paragraph in fresh words: "For these reasons, …".');
@@ -146,6 +155,23 @@
     var iCount = count(/\bI\b/g, all);
     if (iCount >= 6) add('ipron', 'lr-register', 'warn', '"I" appears ' + iCount + ' times', '"I believe" belongs in the thesis and the conclusion. Body paragraphs argue with impersonal subjects.');
 
+    /* language hints (Oct 2026): a light screen for the errors B1/B2 Thai writers make most.
+       Labelled as hints: the rules cannot see every case, and an unflagged essay is not error-free. */
+    var hints = [];
+    var PLUR = 'students|people|children|parents|teachers|governments|companies|cities|countries|schools|workers|citizens|teenagers|families|supporters|critics|employers|employees|authorities|residents|consumers|tourists|visitors|adults|individuals';
+    var m1 = all.match(/\b(the number|the amount|the level|the rate|the proportion) of \w+ (have|are|were)\b/i); if (m1) hints.push('"' + m1[0] + '": the head noun is singular (the number … is / has)');
+    var m3 = all.match(/\b(a|an) (information|advice|research|equipment|furniture|traffic|homework|evidence|progress|news|pollution|money|accommodation|transport)\b/i); if (m3) hints.push('"' + m3[0] + '": uncountable noun, no a / an');
+    var m4 = all.match(/(^|[.;:]\s+)(government|economy|environment|majority|minority|internet) (of|is|has|should|must|can|will|does)\b/i); if (m4) hints.push('"' + m4[2] + ' ' + m4[3] + '": singular countable noun with no article (the ' + m4[2].toLowerCase() + ' …)');
+    var m5 = all.match(/\b(each|every) (\w+[a-rt-z]s)\b/i); if (m5 && !/\b(each|every) (\w*(ss|us|is|ics|ews|eans|hs))\b/i.test(m5[0])) hints.push('"' + m5[0] + '": each / every take a singular noun');
+    var re6 = new RegExp('(^|[.;,]\\s+|\\b(the|many|most|some|these|those|all|few|young|thai|local|older|other|such)\\s+(\\w+\\s+)?)(' + PLUR + ')\\s+(is|was|has|does|argues|believes|thinks|wants|needs|uses|says|prefers|tends|spends|gets|makes|goes|takes)\\b', 'i'), m6 = all.match(re6);
+    if (m6 && !/\b(of|between|among|for|with|in|to|by|from)\s+[^.;,]{0,40}$/i.test(all.slice(Math.max(0, m6.index - 40), m6.index))) hints.push('"' + (m6[4] + ' ' + m6[5]) + '": plural subject, singular verb');
+    var m6b = all.match(new RegExp('\\b(' + PLUR + ')\\s+of\\s+\\w+\\s+(argues|believes|thinks|wants|needs|uses|says|prefers|tends|spends|gets|makes|goes|takes|is|has)\\b', 'i')); if (m6b) hints.push('"' + m6b[0] + '": the subject is plural (' + m6b[1].toLowerCase() + ' …), so the verb has no -s');
+    var m7 = all.match(/\b(he|she|it)\s+(have|do|were)\b(?!\s+(been|to|not))/i); if (m7) hints.push('"' + m7[0] + '": singular subject, plural verb');
+    var m7b = all.match(/\b(a|an|one|this|that) (student|school|child|parent|teacher|government|company|city|country|worker|teenager|family|canteen|shop|person|camera|phone)\s+(have|do|were|are)\b(?!\s+(been|to|not))/i); if (m7b) hints.push('"' + m7b[0] + '": singular subject, plural verb');
+    var m8 = all.match(/\b(a lot of|lots of|kids|stuff|really|gonna|wanna|okay|OK)\b/); if (m8) hints.push('"' + m8[0] + '": informal; use many / a great deal of, children, …');
+    var m9 = all.match(/\b(fry|bake|grill|boil|freeze|cook) (snack|food|chicken|fish|rice)s?\b/i); if (m9) hints.push('"' + m9[0] + '": past participle as adjective (fried, baked, grilled …)');
+    if (hints.length) add('lang', 'gra-agreement', 'warn', 'Language hints: ' + hints.length + ' possible slip' + (hints.length > 1 ? 's' : ''), hints.slice(0, 5).join(' · ') + ' — hints only: the Wards cannot see every error, and no hint does not mean no errors.');
+
     /* template ratio */
     /* One standard (Oct 2026): the template share the student chose in the
        Template Lab — 60, 50, 40 or 30%. Green at or under it, amber up to 5
@@ -165,7 +191,7 @@
     var bad = rows.filter(function (r) { return r.status === 'bad'; }).length;
     var warn = rows.filter(function (r) { return r.status === 'warn'; }).length;
     return { rows: rows, words: n, paras: ps.length, bad: bad, warn: warn, ratio: tr,
-      summary: bad === 0 && warn === 0 ? 'Every ward holds. Nothing red.' : bad === 0 ? 'No red rows — ' + warn + ' to look at.' : bad + ' red row' + (bad > 1 ? 's' : '') + ' to fix before you submit.' };
+      summary: bad === 0 && warn === 0 ? 'Every ward holds. Nothing red (structure only: the Wards do not mark grammar).' : bad === 0 ? 'No red rows — ' + warn + ' to look at.' : bad + ' red row' + (bad > 1 ? 's' : '') + ' to fix before you submit.' };
   }
 
   /* ------------------------------------------------ module free-text items */
