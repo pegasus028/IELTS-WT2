@@ -414,6 +414,7 @@
     /* the current chapter card (or the finale) */
     if (allDone(pr)) {
       html += '<div class="chcard card done"><p class="kicker">The year is over</p><h3>Verba vincunt</h3><p class="chcard-blurb">' + esc(STORY().finale.text) + '</p>' + sayBtn(STORY().finale.text) +
+        (opts.next ? '<button class="resume" id="resume"><span class="resume-t"><span class="kicker">' + esc(opts.next.kicker || 'Next') + '</span><span class="resume-n">' + esc(opts.next.label) + '</span><span class="resume-s">' + esc(opts.next.sub || '') + '</span></span><span class="resume-go">' + esc(opts.next.go || 'Go →') + '</span></button>' : '') +
         '<div class="chcard-acts"><button class="btn" data-open-ch="' + cur + '">Read the last chapter again</button></div></div>';
     } else if (ch) {
       var list = missions(pr, ch), doneN = list.filter(function (m) { return m._info.done; }).length;

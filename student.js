@@ -319,11 +319,29 @@
       return { kind: 'mission', chapter: nm.chapter, mission: m, kicker: kick, label: i.label, sub: i.sub, go: m.kind === 'sub' ? 'Start →' : 'Open →' };
     }
     if (nm && nm.gate) return { kind: 'gate', chapter: nm.chapter, kicker: 'Chapter ' + nm.chapter.n, label: 'Pass the gate', sub: nm.chapter.gate.intro || '', go: 'Go →' };
+    /* Oct 2026: when only the 7.5 mark is missing, or every chapter is done, the path continues as
+       one timed examination a week (Bangkok week, Monday to Sunday) on a prompt she has not written. */
+    if (!nm || (nm.gateItem && nm.gateItem.id === 'best-band')) {
+      var wk = weeklyExam(p);
+      if (wk) return wk;
+    }
     if (nm && nm.gateItem) return { kind: 'gateitem', chapter: nm.chapter, item: nm.gateItem, kicker: 'Still needed for chapter ' + nm.chapter.n, label: nm.gateItem.label, sub: nm.gateItem.note || nm.gateItem.detail || '', go: 'Open →' };
     return nextAction(p);
   }
+  function weekKey(iso) { var d = new Date(iso + 'T00:00:00Z'), day = (d.getUTCDay() + 6) % 7; d.setUTCDate(d.getUTCDate() - day); return d.toISOString().slice(0, 10); }
+  function weeklyExam(p) {
+    var thisWeek = weekKey(E.today()), sent = (p.reports || []).filter(function (r) { return r.ts && weekKey(String(r.ts).slice(0, 10)) === thisWeek; }).length;
+    var written = {}; (p.reports || []).forEach(function (r) { written[r.promptId] = 1; });
+    var pool = C.PROMPTS.filter(function (pr) { return !written[pr.id]; });
+    if (!pool.length) pool = C.PROMPTS.slice();
+    var pick = pool[Math.floor(((p.studentId || '').length + Number(thisWeek.replace(/-/g, ''))) % pool.length)];
+    if (sent >= 1) return { kind: 'weekdone', kicker: 'The Examination Hall', label: 'This week\'s examination is sent', sub: 'One timed essay a week keeps the spellbook sharp. The next one opens on Monday; the Mending Room and the elective classes are open meanwhile.', go: 'Mending Room →' };
+    return { kind: 'weekexam', promptId: pick.id, kicker: 'The Examination Hall', label: 'This week\'s examination: ' + (pick.title || typeName(pick.type)), sub: 'Forty minutes, a blank page and the clock, on a prompt you have not written. Then send it to the examiners.', go: 'Sit it →' };
+  }
   function goNext(next) {
     if (!next) return;
+    if (next.kind === 'weekexam') { startWrite({ promptId: next.promptId, uiMode: 'exam', minutes: 40, kind: 'weekly' }); return; }
+    if (next.kind === 'weekdone') { show('faults'); return; }
     if (next.kind === 'sub') { S.returnTo = 'plan'; openSub(next.id); }
     else if (next.kind === 'check') { S.returnTo = 'plan'; startCheck(next.id); }
     else if (next.kind === 'faults') show('faults');

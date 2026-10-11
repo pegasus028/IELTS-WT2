@@ -861,7 +861,7 @@
   };
 
   /* ------------------------------------------------------------- progress */
-  var XP_CORRECT = 10, XP_HINT_PENALTY = 4, XP_SUB = 40, XP_CHECK = 120, XP_MOCK = 250;
+  var XP_CORRECT = 10, XP_HINT_PENALTY = 4, XP_SUB = 40, XP_CHECK = 120, XP_MOCK = 250, XP_ESSAY = 150, XP_ESSAY_SHORT = 60, XP_BAND_TARGET = 200;
   var XP_SPEED = 6, SPEED_MS = 7000;
   var PASS_SUB = 0.6, PASS_CHECK = 0.75;
 
@@ -963,7 +963,8 @@
     if (summary.bad === 0 && summary.warn === 0) p.preflightPerfect = (p.preflightPerfect || 0) + 1;
     if (rep.seconds <= 2400 && rep.words >= 250) p.onTime = (p.onTime || 0) + 1;
     if (rep.kind === 'mock') { if (!p.mocks) p.mocks = {}; p.mocks[rep.mockId || rep.promptId] = { best: passing ? 1 : 0.5, at: summary.ts }; }
-    p.xp += rep.kind === 'mock' ? XP_MOCK : 80;
+    /* Oct 2026: an essay outranks taps. A full essay (250+ words) earns 150 merits, a short one 60; a mock 250. */
+    p.xp += rep.kind === 'mock' ? XP_MOCK : (rep.words >= 250 ? XP_ESSAY : XP_ESSAY_SHORT);
     return summary;
   }
   /* The AI or the teacher marks later; the band arrives by id. */
@@ -972,6 +973,9 @@
     (p.reports || []).forEach(function (r) { if (r.id === reportId) { r.bands = bands; hit = r; } });
     if (hit && bands && bands.overall) {
       if (bands.overall >= (p.bestBand || 0) + 0.5 && p.bestBand) p.bandUp = true;
+      /* a marked essay at or above her track's target band (7 on the B2 track, 8 on C1) earns 200 merits, once per essay */
+      var target = p.tier === 'C1' ? 8 : 7;
+      if (bands.overall >= target && !hit.targetXp) { hit.targetXp = 1; p.xp = (p.xp || 0) + XP_BAND_TARGET; }
       p.bestBand = Math.max(p.bestBand || 0, bands.overall);
     }
     return hit;

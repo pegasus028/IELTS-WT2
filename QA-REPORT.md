@@ -15,6 +15,18 @@ Audited at commit 5c417e7 (Quillmoor story, narration, Map Room backdrop) agains
 
 Estimated in-app time by chapter (now shown on each chapter card): ch1 80 min, ch2 50, ch3 90, ch4 175, ch5 120, ch6 90, ch7 225; about 13.8 hours in all, plus roughly 20% for re-running lessons that miss the 60% pass mark. Four weeks of lesson plus homework give 12–16 hours, so chapters 1–6 fit a month if lesson time is spent in the app; chapter 7's three mocks and the Band 7.5 mark belong to the months after.
 
+### Work packages shipped later the same day (Fable 5.1)
+
+| WP | Commit | What changed |
+| --- | --- | --- |
+| 3 One spellbook everywhere | bfaa116 | Universal Spine frames are the B2 default in My Spellbook and the Scriptorium; typed playbook frames only on the C1 track; Type Switch Card in both; `tools/template-test.js` composes all 37 prompts at both tracks |
+| 9 Phone layout | eeccd28 | Bottom bar of up to five rooms plus More on phones; 44 px targets; 11 px minimum text; Memory Basin hidden until a module has a video; speed bonus only on short recall items; lab-smoke unlocks rooms |
+| 5 Checklists | 883fc4b | The Plan Wards (eight planning checks; shape lines tick themselves; guided boxes open when green or after ten minutes) and the Landing Check (ten lines, submit waits for her own ticks, calibration recorded; exam mode asks afterwards); top fault families shown |
+| 4 Type-aware Wards | 26580b4 | Extent word for "to what extent"; two paragraphs for two-part prompts; a language-hints row (agreement, articles, uncountables, each/every, informal words) with zero hits on the nine model essays; honest all-green line |
+| 6 Path after the chapters | this commit | One timed examination a week (Bangkok week) on an unwritten prompt once only the 7.5 mark is missing or every chapter is done; a full essay earns 150 merits (short 60, mock 250) and a marked essay at the track's target band 200 more |
+
+Pass marks were left as they are (lesson 60%, examiner's gate 75%, Duelling Hall 70%): they read as a ladder, not an inconsistency. Judgement call for T.Chris.
+
 ### Changes made
 
 | Change | Why |
