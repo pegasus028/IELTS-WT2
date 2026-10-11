@@ -1035,7 +1035,9 @@
     var gain = 0;
     if (correct) {
       gain = hinted ? XP_CORRECT - XP_HINT_PENALTY : XP_CORRECT;
-      if (fast) { gain += XP_SPEED; p.speedBonuses = (p.speedBonuses || 0) + 1; }
+      /* Oct 2026: the speed bonus rewards recall, not skimming: only short choose / judge / spot items earn it. */
+      var recall = (item.type === 'judge' || item.type === 'spot' || item.type === 'choose') && String(item.stem || '').split(/\s+/).length <= 14 && !item.given;
+      if (fast && recall) { gain += XP_SPEED; p.speedBonuses = (p.speedBonuses || 0) + 1; }
     }
     p.xp += gain;
     p.lastGain = gain;

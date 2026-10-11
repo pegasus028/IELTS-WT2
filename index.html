@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500;1,600&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap">
 <link rel="stylesheet" href="theme.css?v=20261011b">
-<link rel="stylesheet" href="lab.css?v=2026-10-11t">
+<link rel="stylesheet" href="lab.css?v=20261011c">
 <link rel="stylesheet" href="story.css?v=2026-10-11t">
 <style>
 /* ======================= STUDENT CONSOLE ============================== */
@@ -63,6 +63,21 @@
 .nav button.on{color:var(--ink);border-bottom-color:var(--brass)}
 .nav button:hover{color:var(--ink)}
 .nav button.hidden{display:none!important}
+/* Phone (Oct 2026): the tabs become a bottom bar of up to five rooms plus More. */
+.nav .nav-more{display:none}
+@media (max-width:640px){
+  .nav{position:fixed;left:0;right:0;bottom:0;z-index:40;max-width:none;margin:0;padding:4px 6px calc(4px + env(safe-area-inset-bottom));gap:0;background:var(--surface);border-top:1px solid var(--rule-soft);overflow:visible;justify-content:space-around}
+  .nav button{flex:1 1 0;min-height:48px;min-width:44px;padding:4px 2px;font-size:.78rem;line-height:1.1;white-space:normal;border-bottom:0;border-top:2px solid transparent;border-radius:0}
+  .nav button.on{border-top-color:var(--brass)}
+  .nav button.nav-overflow{display:none!important}
+  .nav .nav-more{display:block}
+  .nav.open button.nav-overflow{display:block!important}
+  .nav.open{flex-wrap:wrap;max-height:70vh;overflow-y:auto;box-shadow:0 -8px 24px rgba(0,0,0,.18)}
+  .nav.open button{flex:1 1 30%}
+  main{padding-block:16px 96px}
+  .btn,.filters button,.tabs .tab,.ckrow,.opt,.lab-type,.lab-pct,.pcard{min-height:44px}
+  .btn.sm{min-height:40px}
+}
 main{padding-block:22px 72px}
 .sect-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
 .sect-h h2{font-size:1.45rem}
@@ -565,13 +580,13 @@ body{padding-top:var(--ribbon-h)}
 <script src="media.js?v=2026-10-11t"></script>
 <script src="writer.js?v=20261011b"></script>
 <script src="bootcamp.js?v=2026-10-11t"></script>
-<script src="engine.js?v=2026-10-11t"></script>
+<script src="engine.js?v=20261011c"></script>
 <script src="api.js?v=2026-10-11t"></script>
 <script src="lab.js?v=2026-10-11t"></script>
 <script src="story-content.js?v=2026-10-11t"></script>
 <script src="audio/story/index.js?v=2026-10-11t"></script>
 <script src="sorting.js?v=2026-10-11t"></script>
 <script src="story.js?v=2026-10-11t"></script>
-<script src="student.js?v=20261011b"></script>
+<script src="student.js?v=20261011c"></script>
 </body>
 </html>

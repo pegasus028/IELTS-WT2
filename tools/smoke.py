@@ -36,7 +36,8 @@ with sync_playwright() as p:
     # Quillmoor (Oct 2026): rooms open chapter by chapter, so open every tab for the rest of the walk.
     page.evaluate("window.Story.unlockAll(window.PCHost.p); window.PCHost.paintHeader()"); page.wait_for_timeout(200)
     hidden = page.evaluate("Array.from(document.querySelectorAll('.nav button[data-view]')).filter(b=>b.classList.contains('hidden')).map(b=>b.dataset.view)")
-    assert hidden == [], hidden
+    # the Memory Basin stays hidden until a module has a video (media.js)
+    assert hidden == [] or hidden == ['vids'], hidden
     n = page.evaluate("window.CONTENT.TOPICS.length"); assert n == 14, n
     items = page.evaluate("Object.keys(window.Engine.Bank.all()).length"); print('  items in bank:', items)
 

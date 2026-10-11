@@ -103,6 +103,8 @@ with sync_playwright() as pw:
     page.click('#tab-new'); page.fill('#f-id', 'lab-01'); page.fill('#f-name', 'Ploy'); page.fill('#f-pw', 'test1234'); page.click('#btn-go')
     page.wait_for_selector('#screen-app:not(.hidden)', timeout=10000)
     page.evaluate("document.getElementById('modal-slot').innerHTML=''")
+    # Quillmoor: the Workshop opens in chapter 4, so unlock every room for the walk
+    page.evaluate("window.Story.unlockAll(window.PCHost.p); window.PCHost.paintHeader()"); page.wait_for_timeout(200)
 
     step('open the Template Lab')
     page.click('.nav button[data-view=lab]'); page.wait_for_selector('#view-lab .lab', timeout=5000); page.wait_for_timeout(600)

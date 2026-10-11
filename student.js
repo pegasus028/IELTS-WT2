@@ -210,10 +210,31 @@
   /* Which rooms are on her map: the story engine decides (chapters reached,
      what her progress already earned, owl post, the Mending Room when it fills). */
   function visibleViews() { return ST && S.p ? ST.visibleViews(S.p, openAssignments()) : VIEWS; }
+  /* Phone bottom bar: the first PRIMARY rooms that are visible stay on the bar;
+     the rest sit behind More. On wider screens every tab shows as before. */
+  var PRIMARY = ['plan', 'map', 'writer', 'faults', 'record', 'bootcamp', 'template', 'lab'];
   function applyTabs() {
     if (!S.p) return;
     var vis = visibleViews();
-    document.querySelectorAll('.nav button[data-view]').forEach(function (b) { b.classList.toggle('hidden', vis.indexOf(b.dataset.view) < 0); });
+    var hasVideo = window.MEDIA && Object.keys(window.MEDIA).some(function (k) { return window.MEDIA[k] && window.MEDIA[k].video; });
+    var nav = document.querySelector('.nav'), shown = [];
+    nav.querySelectorAll('button[data-view]').forEach(function (b) {
+      var v = b.dataset.view, hide = vis.indexOf(v) < 0 || (v === 'vids' && !hasVideo);
+      b.classList.toggle('hidden', hide);
+      if (!hide) shown.push(b);
+    });
+    var cur = (location.hash || '').replace('#', ''), curNav = NAV_OF[cur] || cur;
+    var primary = PRIMARY.filter(function (v) { return shown.some(function (b) { return b.dataset.view === v; }); }).slice(0, shown.length > 5 ? 4 : 5);
+    if (shown.length > 5 && primary.indexOf(curNav) < 0 && shown.some(function (b) { return b.dataset.view === curNav; })) primary[primary.length - 1] = curNav;
+    shown.forEach(function (b) { b.classList.toggle('nav-overflow', shown.length > 5 && primary.indexOf(b.dataset.view) < 0); });
+    var more = nav.querySelector('.nav-more');
+    if (!more) {
+      more = document.createElement('button'); more.className = 'nav-more'; more.type = 'button'; more.setAttribute('aria-expanded', 'false');
+      more.addEventListener('click', function () { var open = nav.classList.toggle('open'); more.setAttribute('aria-expanded', String(open)); more.textContent = open ? 'Close' : 'More'; });
+      nav.appendChild(more);
+    }
+    more.textContent = nav.classList.contains('open') ? 'Close' : 'More';
+    more.classList.toggle('hidden', shown.length <= 5);
   }
 
   /* --------------------------------------------------------------- views */
@@ -226,6 +247,7 @@
     stopAllAudio();
     VIEWS.forEach(function (x) { $('#view-' + x).classList.toggle('hidden', x !== v); });
     document.querySelectorAll('.nav button[data-view]').forEach(function (b) { b.classList.toggle('on', b.dataset.view === v || NAV_OF[v] === b.dataset.view); });
+    var navEl = document.querySelector('.nav'); if (navEl && navEl.classList.contains('open')) { navEl.classList.remove('open'); var mb = navEl.querySelector('.nav-more'); if (mb) { mb.textContent = 'More'; mb.setAttribute('aria-expanded', 'false'); } }
     try { if (location.hash.replace('#', '') !== v) history.replaceState(null, '', '#' + v); } catch (e) {}
     if (ST && S.p) ST.markVisited(v);
     applyTabs();
