@@ -65,7 +65,7 @@
           {
             img: 'story/ch1-03.webp',
             alt: 'An old wooden tram with brass lamps climbing a road across a windy moor, a black lake below and a castle above.',
-            text: "Two weeks later you stand on a windy moor. An old wooden tram waits at the bottom of the hill. Brass lamps hang from its roof. A girl with short hair jumps on after you. 'I'm Juno,' she says. 'Juno Marlowe. Are you nervous? I am. But nervous is fine, because it means you care.' The tram climbs the moor road. Below you, a black lake shines like ink. Above you, a castle grows out of the rock."
+            text: "Two weeks later you stand on a windy moor. An old wooden tram waits at the bottom of the hill. Brass lamps hang from its roof. A girl with curly hair jumps on after you. 'I'm Juno,' she says. 'Juno Marlowe. Are you nervous? I am. But nervous is fine, because it means you care.' The tram climbs the moor road. Below you, a black lake shines like ink. Above you, a castle grows out of the rock."
           },
           {
             img: 'story/ch1-04.webp',
