@@ -315,6 +315,15 @@
     });
     var done = Math.max(0, cur - 1);
     var html = '<svg class="castle-map" viewBox="0 0 ' + W + ' ' + H + '" role="group" aria-label="The map of Quillmoor">';
+    /* the illustrated map (story/map-bg.webp): one drawing per chapter on the side
+       opposite its stop; chapters not reached yet stay under parchment fog */
+    html += '<defs><filter id="map-fog" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur stdDeviation="8"/></filter><clipPath id="map-clip"><rect width="' + W + '" height="' + H + '" rx="12"/></clipPath></defs>';
+    html += '<g class="map-art" clip-path="url(#map-clip)" aria-hidden="true"><image class="map-bg" href="story/map-bg.webp" x="0" y="0" width="' + W + '" height="' + H + '" preserveAspectRatio="xMidYMid slice"/><rect class="map-wash" width="' + W + '" height="' + H + '"/>';
+    pts.forEach(function (q, i) {
+      if (q.c.n <= to) return;
+      html += '<ellipse class="map-fog" cx="' + (i % 2 === 0 ? W * 0.74 : W * 0.26) + '" cy="' + q.y + '" rx="' + (W * 0.3) + '" ry="' + (step * 0.62) + '" filter="url(#map-fog)"/>';
+    });
+    html += '</g>';
     html += '<path class="map-trail" d="' + d + '"/>';
     var L = list.length - 1;
     if (done > 0) html += '<path class="map-trail lit" d="' + d + '" pathLength="' + L + '" style="stroke-dasharray:' + L + ' ' + L + ';stroke-dashoffset:' + (L - done) + '"/>';
