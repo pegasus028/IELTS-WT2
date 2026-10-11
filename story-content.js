@@ -55,22 +55,22 @@
           {
             img: 'story/ch1-01.webp',
             alt: 'A wet grey owl on a Bangkok balcony in heavy rain, holding a letter with a dark blue wax seal.',
-            text: "It is August in Bangkok, and the rain has not stopped for three days. You sit by the window with your homework. Then a grey owl lands on the balcony. She is wet and a little grumpy. In her beak is a letter with a dark blue [[seal|a wax stamp that closes a letter|ตราประทับ]]. The letter has your name on it. Your mother says, 'Owls do not deliver letters.' This one does."
+            text: "It is October in Bangkok, and the rain has not stopped for three days. You sit by the window with your homework. Then a grey owl lands on the balcony. She is wet and a little grumpy. In her beak is a letter with a dark blue [[seal|a wax stamp that closes a letter|ตราประทับ]]. The letter has your name on it. Your mother says, 'Owls do not deliver letters.' This one does."
           },
           {
             img: 'story/ch1-02.webp',
             alt: 'An open letter on a desk, written in dark ink, with the seal broken beside it.',
-            text: "The letter says:\n\n'Dear Student,\n\nQuillmoor Academy teaches argument-craft: the art of holding a [[position|what you think, said clearly|จุดยืน]] and defending it with reasons. You have been chosen for one year of study. Term begins on 1 September.\n\nThe year ends with the Grand Examination: one essay, forty minutes, four [[examiners|the people who mark an exam|ผู้ตรวจข้อสอบ]]. A pass at the Band 7.5 standard earns the Quillmoor seal.\n\nWe look forward to meeting you.\n\nProfessor Marisol Penhallow, Head of Examinations\n\nP.S. The owl is called Nutmeg. Please dry her.'"
+            text: "The letter says:\n\n'Dear Student,\n\nQuillmoor Academy teaches argument-craft: the art of holding a [[position|what you think, said clearly|จุดยืน]] and defending it with reasons. You have been chosen for one year of study. Term begins on 29 October.\n\nThe year ends with the Grand Examination: one essay, forty minutes, four [[examiners|the people who mark an exam|ผู้ตรวจข้อสอบ]]. A pass at the Band 7.5 standard earns the Quillmoor seal.\n\nWe look forward to meeting you.\n\nProfessor Marisol Penhallow, Head of Examinations\n\nP.S. The owl is called Nutmeg. Please dry her.'"
           },
           {
             img: 'story/ch1-03.webp',
             alt: 'An old wooden tram with brass lamps climbing a road across a windy moor, a black lake below and a castle above.',
-            text: "Two weeks later you stand on a windy moor. An old wooden tram waits at the bottom of the hill. Brass lamps hang from its roof. A girl with curly hair jumps on after you. 'I'm Juno,' she says. 'Juno Marlowe. Are you nervous? I am. But nervous is fine, because it means you care.' The tram climbs the moor road. Below you, a black lake shines like ink. Above you, a castle grows out of the rock."
+            text: "The following week you stand on a windy moor. An old wooden tram waits at the bottom of the hill. Brass lamps hang from its roof. A girl with curly hair jumps on after you. 'I'm Juno,' she says. 'Juno Marlowe. Are you nervous? I am. But nervous is fine, because it means you care.' The tram climbs the moor road. Below you, a black lake shines like ink. Above you, a castle grows out of the rock."
           },
           {
             img: 'story/ch1-04.webp',
             alt: 'A great hall filled with hundreds of floating paper lanterns; a tall woman in a grey robe addresses the new students.',
-            text: "The Hall of Lanterns is full of floating paper lanterns. Hundreds of them. A tall woman in a grey robe steps forward. 'I am Professor Penhallow,' she says. 'Here we teach one thing: how to win with words. Not loud words. Clear ones.' A boy with a camera takes your photo. 'Felix Okafor, school paper,' he whispers. 'Where's your [[evidence|facts or examples that show something is true|หลักฐาน]] that you belong here?' He grins. 'Joke. The Lantern decides.'"
+            text: "After arriving at the school, everyone is guided to a big hall. The Hall of Lanterns is full of floating paper lanterns. Hundreds of them. A tall woman in a grey robe steps forward. 'I am Professor Penhallow,' she says. 'Here we teach one thing: how to win with words. Not loud words. Clear ones.' A boy with a camera takes your photo. 'Felix Okafor, school paper,' he whispers. 'Where's your [[evidence|facts or examples that show something is true|หลักฐาน]] that you belong here?' He grins. 'Joke. The Lantern decides.'"
           },
           {
             img: 'story/ch1-05.webp',
@@ -81,7 +81,7 @@
           {
             img: 'story/ch1-06.webp',
             alt: 'Long breakfast tables with toast and timetables; a thin grey newspaper sheet lies on every plate.',
-            text: "Next morning the long tables are covered with toast and timetables. Juno is in Bridge, and she is already drawing arrows on hers. Your first classes are The Test and Decode the Prompt. 'Numbers first,' Penhallow says. 'Forty minutes. At least 250 words. Four examiners, and each one counts the same. Then learn to read the [[instruction|the sentence that tells you what to do|คำสั่ง]].' A thin grey sheet lands on every plate: The Whisper. 'Firstly, the new students are weak. Moreover, nobody knows why.' No name. No example. Felix frowns. 'Who writes this thing?'"
+            text: "Next morning the long tables are covered with toast and timetables. Juno is in Bridge, and she is already drawing arrows on her timetable. Juno grabs your timetable and starts reading: 'Your first classes are \"The Test\" and \"Decode the Prompt\".' 'Numbers first,' Penhallow says. 'Forty minutes. At least 250 words. Four examiners, and each one is equally important. Then you have the \"Learn to read the [[instruction|the sentence that tells you what to do|คำสั่ง]]\" class.' A thin grey sheet lands on every plate: The Whisper. 'Firstly, the new students are weak. Moreover, nobody knows why.' No name. No example. Felix frowns. 'Who writes like this?'"
           }
         ],
         missions: [

@@ -1,5 +1,13 @@
 # Position Control / Quillmoor Academy — QA report
 
+## Word cards, Chapter 1 text and lesson audio — 11 October 2026 (Claude Opus 5.5)
+
+Requested by T.Chris (11 Oct 2026, evening):
+- **Keyword pop-ups** now show a picture, gloss, Thai, example, and three synonyms and three antonyms (B1, B2, C1). Each synonym/antonym of a keyword opens its own full card (325 cards: 51 keywords + 274 linked words). Drafted in seven batches, then four independent adversarial review passes fixed 111 cards (wrong-sense synonyms such as *witnesses* for *sources*, *referees* for *examiners*; dishonest levels; Thai in the wrong sense such as นั่งร้าน for *scaffolding*; examples that said "four examiners read one essay"). Pictures are Lucide icons (ISC), not Gemini. Third-level words (on linked cards) open a card only where one exists (1,402 of 1,950 chips); the rest show in a dashed box.
+- **Chapter 1 text:** p1 "It is October…", p2 "Term begins on 29 October.", p3 "The following week you stand on a windy moor.", p4 bridging sentence before the Hall of Lanterns, p6 rewritten as given (two small edits: "my timetable" → "your timetable" to keep the second-person story voice, and the class names put in double quotes inside the spoken line with Penhallow's speech closed). Narration re-recorded for the five pages.
+- **Lessons:** *Listen to this lesson* button (recorded, 84 texts), podcast row before the lessons in Classes and in each chapter's missions, and *Back to the map* (Map Room) instead of *Back to the classes*.
+- Checks: `tools/story-validate.js` OK; `tools/words-smoke.py` passes at 1100 px and 390 px (cards, linked cards, back trail, page text, podcast rows, Listen, Back to the map).
+
 ## Audit for the one-month tutoring run — 11 October 2026 (Claude Fable 5.1)
 
 Audited at commit 5c417e7 (Quillmoor story, narration, Map Room backdrop) against the goal: five Thai tutees aged 13–17 at B1/B2, one month of 2-hour online lessons plus 1–2 hours of homework a week, aiming at Band 7.5 over one to two years.

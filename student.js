@@ -21,8 +21,9 @@
     filters: { type: 'all', domain: 'all' }, uiMode: 'guided', reports: null, assignments: [], modelOpen: null, modelMode: 'read', tplType: 'DISCUSS'
   };
   /* Where "back" goes after a lesson or a gate: the Classes, the Map Room or the chapter page. */
-  function homeView() { return { story: 'story', plan: 'plan', faults: 'faults' }[S.returnTo] || 'map'; }
-  function homeLabel() { return { story: 'Chapter', plan: 'Map Room', faults: 'Mending Room' }[S.returnTo] || 'Classes'; }
+  /* After a lesson opened from the Classes list, the way back is the map (T.Chris, Oct 2026). */
+  function homeView() { return { story: 'story', faults: 'faults' }[S.returnTo] || 'plan'; }
+  function homeLabel() { return { story: 'Chapter', faults: 'Mending Room' }[S.returnTo] || 'Map Room'; }
 
   /* ------------------------------------------------------------- helpers */
   function toast(msg, ms) {
@@ -65,7 +66,9 @@
     setReturn: function (v) { S.returnTo = v; },
     openSub: function (id) { openSub(id); },
     startCheck: function (levelId) { startCheck(levelId); },
-    startAssignment: function (id) { startAssignment(id); }
+    startAssignment: function (id) { startAssignment(id); },
+    podInfo: function (topicId) { var t = E.Bank.topic(topicId), md = mdOf(topicId); return t ? { has: !!t.podcast, done: !!md.done, seconds: md.seconds || 0, code: t.code, name: t.name } : null; },
+    togglePod: function (drop, topicId) { togglePodcast(drop, E.Bank.topic(topicId)); }
   };
   setInterval(function () {
     if (!S.p) return;
@@ -245,6 +248,7 @@
     if (v !== 'lab' && window.Lab) window.Lab.leave();
     $('#modal-slot').innerHTML = '';
     stopAllAudio();
+    lsayStop();
     VIEWS.forEach(function (x) { $('#view-' + x).classList.toggle('hidden', x !== v); });
     document.querySelectorAll('.nav button[data-view]').forEach(function (b) { b.classList.toggle('on', b.dataset.view === v || NAV_OF[v] === b.dataset.view); });
     var navEl = document.querySelector('.nav'); if (navEl && navEl.classList.contains('open')) { navEl.classList.remove('open'); var mb = navEl.querySelector('.nav-more'); if (mb) { mb.textContent = 'More'; mb.setAttribute('aria-expanded', 'false'); } }
@@ -437,7 +441,7 @@
         '<span class="sys-blurb">' + esc(t.blurb) + '</span><span class="sys-prog"><span class="bar-line"><span style="width:' + tp + '%"></span></span><span class="sys-pct">' + tp + '%</span></span></span><span class="caret">›</span></button>';
       html += resStrip(t);
       if (open) {
-        html += '<div class="sys-body">' + lv.subs.map(function (s) {
+        html += '<div class="sys-body">' + podRow(t, 'row-' + t.id, 'mrow') + lv.subs.map(function (s) {
           var rec = p.subs[s.id], done = rec && rec.best >= E.PASS_SUB;
           return '<button class="mrow' + (done ? ' done' : '') + '" data-sub="' + s.id + '"><span class="mrow-tick"></span><span class="mrow-txt"><span class="mrow-name">' + esc(s.name) + '</span><span class="mrow-sub">' + esc(s.cefr) + ' · ' + s.items.length + ' questions</span></span><span class="mrow-score">' + (rec ? pct(rec.best) + '%' : '') + '</span></button>';
         }).join('');
@@ -474,6 +478,12 @@
   function stopAllAudio() { document.querySelectorAll('audio').forEach(function (a) { try { a.pause(); } catch (e) {} }); }
   function mediaDrop(key) { return '<div class="res-drop" id="drop-' + key + '"></div>'; }
 
+  /* The podcast row that sits before a class's lessons (Classes list). */
+  function podRow(t, key, cls) {
+    if (!t.podcast) return '';
+    var md = mdOf(t.id);
+    return '<button class="' + cls + ' podrow-btn' + (md.done ? ' done' : '') + '" data-pod="' + t.id + '" data-drop="' + key + '"><span class="mrow-tick"></span><span class="mrow-txt"><span class="mrow-name">Podcast: ' + esc(t.name) + '</span><span class="mrow-sub">Castle Wireless · listen before the lessons' + (md.done ? ' · listened' : md.seconds ? ' · ' + Math.round(md.seconds / 60) + ' min in' : '') + '</span></span><span class="mrow-score">' + (md.done ? '✓' : '♪') + '</span></button>' + mediaDrop(key);
+  }
   /* The pill strip under a class header on the Classes screen. */
   function resStrip(t) {
     var md = mdOf(t.id), lv = t.levels[0];
@@ -616,20 +626,72 @@
     });
   }
 
+  /* ---------------------------------------------------- LESSON READ-ALOUD
+     The Listen button on each lesson reads the name, the key sentence and the
+     explanation (full or simple, whichever is showing). Recorded audio comes
+     from audio/lessons (tools/build-lesson-audio.py, same voice as the story);
+     a lesson edited since the last build falls back to the browser's voice.
+     lessonSpeech() must stay identical to the copy in that tool. */
+  var LSAY = { audio: null, h: null };
+  function lfnv(s) { var h = 0x811c9dc5; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
+  function plainSpeech(h) { return String(h || '').replace(/<s>[\s\S]*?<\/s>/g, '').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/→/g, ' to ').replace(/\s+/g, ' ').trim(); }
+  function lessonSpeech(s, simple) { var paras = (simple && s.theory.simple && s.theory.simple.length) ? s.theory.simple : s.theory.body; return [plainSpeech(s.name) + '.', plainSpeech(s.theory.key)].concat(paras.map(plainSpeech)).join('\n'); }
+  function lsaySlow() { try { return localStorage.getItem('qm.lsay.slow') === '1'; } catch (e) { return false; } }
+  function lsayStop() {
+    if (LSAY.audio) { try { LSAY.audio.pause(); } catch (e) {} LSAY.audio = null; }
+    try { if (window.speechSynthesis) window.speechSynthesis.cancel(); } catch (e) {}
+    LSAY.h = null;
+    document.querySelectorAll('.lsay').forEach(function (b) { b.classList.remove('playing'); b.querySelector('.lsay-ico').textContent = '▶'; b.querySelector('.lsay-lbl').textContent = 'Listen to this lesson'; });
+  }
+  function lsayPlay(btn, text) {
+    var h = lfnv(text);
+    if (LSAY.h === h) { lsayStop(); return; }
+    lsayStop(); stopAllAudio();
+    LSAY.h = h; btn.classList.add('playing'); btn.querySelector('.lsay-ico').textContent = '❚❚'; btn.querySelector('.lsay-lbl').textContent = 'Stop reading';
+    var A = window.QM_LESSON_AUDIO, rate = lsaySlow() ? 0.85 : 1;
+    function browserVoice() {
+      try {
+        var ss = window.speechSynthesis; if (!ss) { lsayStop(); toast('This browser cannot read aloud.'); return; }
+        var u = new SpeechSynthesisUtterance(text.replace(/\n/g, ' ')); u.lang = 'en-GB'; u.rate = 0.95 * rate;
+        var v = (ss.getVoices() || []).filter(function (x) { return /^en-GB/i.test(x.lang); })[0]; if (v) u.voice = v;
+        u.onend = function () { if (LSAY.h === h) lsayStop(); };
+        ss.speak(u);
+      } catch (e) { lsayStop(); }
+    }
+    if (A && A.files && A.files[h]) {
+      var a = new Audio(A.base + h + '.mp3'); LSAY.audio = a; a.playbackRate = rate;
+      a.addEventListener('ended', function () { if (LSAY.h === h) lsayStop(); });
+      a.addEventListener('error', function () { if (LSAY.h === h && LSAY.audio === a) { LSAY.audio = null; browserVoice(); } });
+      a.play().catch(function () { if (LSAY.h === h && LSAY.audio === a) { LSAY.audio = null; browserVoice(); } });
+    } else browserVoice();
+  }
+  function lsayBar() {
+    var slow = lsaySlow();
+    return '<div class="lsay-bar"><button class="lsay" type="button" id="p-say" aria-label="Listen to this lesson read aloud"><span class="lsay-ico" aria-hidden="true">▶</span><span class="lsay-lbl">Listen to this lesson</span></button>' +
+      '<button class="lsay-opt' + (slow ? ' on' : '') + '" type="button" id="p-say-slow" aria-pressed="' + slow + '">Slower</button></div>';
+  }
+
   function openSub(subId) {
+    lsayStop();
     var s = E.Bank.sub(subId), t = E.Bank.topic(s.topicId);
     var paras = (S.simple && s.theory.simple && s.theory.simple.length) ? s.theory.simple : s.theory.body;
     var html = '<div class="play"><div class="play-top"><button class="btn ghost sm" id="p-back">← ' + homeLabel() + '</button><span style="flex:1"></span><span class="qcount">' + esc(t.code) + '</span></div>' +
-      '<div class="card theory">' + E.artBand(t.art) + '<p class="kicker">' + esc(s.cefr) + ' · ' + esc(t.name) + '</p><h3>' + esc(s.name) + '</h3><p class="key">' + s.theory.key + '</p>' +
+      '<div class="card theory">' + E.artBand(t.art) + '<p class="kicker">' + esc(s.cefr) + ' · ' + esc(t.name) + '</p><h3>' + esc(s.name) + '</h3>' + lsayBar() + '<p class="key">' + s.theory.key + '</p>' +
       '<button class="btn sm simple-btn" id="p-simple">' + (S.simple ? 'Show the full explanation' : 'Explain this more simply') + '</button>' +
       '<div class="prose">' + paras.map(function (x) { return '<p>' + x + '</p>'; }).join('') + '</div>';
     if (s.theory.examples && s.theory.examples.length) html += '<div class="exlist">' + s.theory.examples.map(function (x) { return '<div><div class="s">' + x.s + '</div><div class="g">' + esc(x.g) + '</div></div>'; }).join('') + '</div>';
     html += '<button class="btn primary wide" id="p-start">Start the ' + s.items.length + ' questions →</button></div></div>';
     $('#view-play').innerHTML = html;
     show('play');
-    $('#p-back').addEventListener('click', function () { show(homeView()); });
+    $('#p-back').addEventListener('click', function () { lsayStop(); show(homeView()); });
     $('#p-simple').addEventListener('click', function () { S.simple = !S.simple; openSub(subId); });
-    $('#p-start').addEventListener('click', function () { startRun('module', s.items, { subId: subId, title: s.name }); });
+    $('#p-start').addEventListener('click', function () { lsayStop(); startRun('module', s.items, { subId: subId, title: s.name }); });
+    $('#p-say').addEventListener('click', function () { lsayPlay($('#p-say'), lessonSpeech(s, S.simple)); });
+    $('#p-say-slow').addEventListener('click', function () {
+      var on = !lsaySlow(); try { localStorage.setItem('qm.lsay.slow', on ? '1' : '0'); } catch (e) {}
+      this.classList.toggle('on', on); this.setAttribute('aria-pressed', on);
+      if (LSAY.audio) LSAY.audio.playbackRate = on ? 0.85 : 1;
+    });
   }
 
   /* =====================================================================
@@ -723,7 +785,7 @@
     var misses = r.results.filter(function (x) { return !x.correct; });
     var html = '<div class="play"><div class="card result"><div class="score-ring" style="--p:' + pct(score) + '"><i>' + pct(score) + '%</i></div><h3>' + esc(head) + '</h3><p>' + esc(note) + '</p>';
     if (misses.length) html += '<div class="misslist">' + misses.map(function (m) { var rem = C.REMEDIATION[m.item.tag]; return '<div class="miss"><b>' + esc(rem ? rem.name : m.item.tag) + '</b>' + m.item.why + '</div>'; }).join('') + '</div>';
-    html += '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn primary" id="r-map">' + (S.returnTo === 'story' ? 'Back to the chapter' : S.returnTo === 'plan' ? 'Back to the Map Room' : S.returnTo === 'faults' ? 'Back to the Mending Room' : 'Back to the classes') + '</button>' + (r.kind === 'module' || r.kind === 'check' ? '<button class="btn" id="r-again">Try again</button>' : '') + '</div></div></div>';
+    html += '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn primary" id="r-map">' + (S.returnTo === 'story' ? 'Back to the chapter' : S.returnTo === 'faults' ? 'Back to the Mending Room' : 'Back to the map') + '</button>' + (r.kind === 'module' || r.kind === 'check' ? '<button class="btn" id="r-again">Try again</button>' : '') + '</div></div></div>';
     $('#view-play').innerHTML = html;
     var earned = P.checkBadges(S.p);
     paintHeader(); sync();

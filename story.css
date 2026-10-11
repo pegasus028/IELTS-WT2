@@ -140,6 +140,34 @@
 .kw-word{font-size:1.8rem}
 .kw-gloss{font-size:1rem;color:var(--ink-2)}
 .kw-thai{font-size:1.15rem;color:var(--ink)}
+/* word cards (keyword pop-ups): picture, gloss, Thai, example, synonyms, antonyms */
+.modal-card:has(.wcard){max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px);overflow-y:auto;max-width:460px}
+.wcard{display:flex;flex-direction:column;gap:10px;align-items:center;width:100%}
+.wcard-art{width:100%;max-width:320px;height:auto;display:block}
+.wa-bg{fill:var(--surface-2)}
+.wa-wire line{stroke:var(--ink-3);opacity:.55}
+.wa-wire2 line{stroke:var(--accent)}
+.wa-pins circle{fill:var(--brass)}
+.wa-tile{fill:#1F2A44}
+.wa-ico{stroke:#F1E6CC}
+.wcard-head{display:flex;align-items:center;gap:8px;justify-content:center}
+.wcard-head .kw-word{margin:0}
+.wsay{border:1px solid var(--rule);background:var(--surface);border-radius:999px;width:34px;height:34px;cursor:pointer;font-size:15px;line-height:1}
+.wsay:hover{background:var(--gold-soft)}
+.wcard-meta{display:flex;gap:6px;justify-content:center;margin:0}
+.wcard-ex{font-style:italic;color:var(--ink-2);font-size:.95rem;border-left:3px solid var(--brass);padding:2px 0 2px 10px;text-align:left;margin:0;align-self:stretch}
+.wrow{align-self:stretch;text-align:left;border-top:1px solid var(--rule-soft);padding-top:8px}
+.wrow-h{font-weight:700;font-size:.9rem;margin:0 0 6px}
+.wrow-h span{font-weight:400;color:var(--ink-3);font-size:.82rem;margin-left:4px}
+.wrow-note{font-size:.82rem;color:var(--ink-3);margin:6px 0 0}
+.wchips{display:flex;flex-wrap:wrap;gap:6px}
+.wchip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--brass);background:var(--surface);color:var(--gold);font:inherit;font-weight:700;font-size:.95rem;border-radius:999px;padding:5px 10px;cursor:pointer}
+button.wchip:hover{background:var(--gold-soft)}
+.wchip.flat{border-style:dashed;border-color:var(--rule);color:var(--ink-2);font-weight:400;cursor:default}
+.wchip-lv{font-size:.72rem;font-weight:700;color:var(--ink-3);border:1px solid var(--rule);border-radius:4px;padding:0 4px}
+.wcard-tip{font-size:.8rem;color:var(--ink-3);margin:0}
+.wcard-acts{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;width:100%}
+.wcard-acts .btn{flex:1 1 140px}
 .story-choice{display:flex;flex-direction:column;gap:8px;padding-top:10px;border-top:1px solid var(--rule-soft)}
 .story-choice .btn{text-align:left;justify-content:flex-start;white-space:normal;line-height:1.35}
 .choice-made{font-size:.95rem;color:var(--ink-2)}
@@ -196,4 +224,13 @@
 .say-opt{min-height:34px;padding:.3rem .7rem;border-radius:999px;border:1px solid var(--rule);background:transparent;color:var(--ink);font-family:var(--f-ui);font-size:.85rem;cursor:pointer;opacity:.85}
 .say-opt.on{border-color:var(--brass);background:var(--gold-soft);font-weight:700;opacity:1}
 .say-opt.on::before{content:'\2713  '}
+/* lesson read-aloud (student.js) */
+.lsay-bar{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;margin:.2rem 0 .6rem}
+.lsay{display:inline-flex;align-items:center;gap:.45rem;min-height:40px;padding:.45rem .95rem;border-radius:999px;border:2px solid var(--brass);background:var(--surface);color:var(--ink);font:inherit;font-family:var(--f-ui);font-weight:700;cursor:pointer}
+.lsay:hover{background:var(--gold-soft)}
+.lsay.playing{background:var(--house);border-color:var(--house);color:#fff}
+.lsay-opt{min-height:34px;padding:.3rem .7rem;border-radius:999px;border:1px solid var(--rule);background:transparent;color:var(--ink);font-family:var(--f-ui);font-size:.85rem;cursor:pointer;opacity:.85}
+.lsay-opt.on{border-color:var(--brass);background:var(--gold-soft);font-weight:700;opacity:1}
+.lsay-opt.on::before{content:'\2713  '}
+.lsay:focus-visible,.lsay-opt:focus-visible{outline:3px solid var(--accent-line);outline-offset:2px}
 .map-head .say-bar,.gatebox .say-bar,.chcard .say-bar{margin:.4rem 0 .5rem}

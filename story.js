@@ -594,9 +594,77 @@
         var pr = p(), s = ensure(pr), w = b.dataset.w.toLowerCase();
         var fresh = !s.words[w];
         if (fresh) { s.words[w] = nowIso(); pr.xp = (pr.xp || 0) + WORD_XP; if (host.paintHeader) host.paintHeader(); if (host.syncSoon) host.syncSoon(); }
-        host.modal('<p class="kicker">Keyword</p><h3 class="kw-word">' + esc(b.dataset.w) + '</h3><p class="kw-gloss">' + esc(b.dataset.g) + '</p><p class="kw-thai" lang="th">' + esc(b.dataset.t) + '</p>' + (fresh ? '<p class="tiny">+' + WORD_XP + ' merits for a new word</p>' : '') + '<button class="btn primary wide" data-close>Close</button>');
+        WCARD.trail = [];
+        openWordCard(w, { w: b.dataset.w, g: b.dataset.g, t: b.dataset.t }, fresh, 'Keyword');
       });
     });
+  }
+
+  /* ------------------------------------------------ WORD CARDS
+     Each keyword pop-up shows a picture, the gloss, the Thai, an example and
+     three synonyms and three antonyms (B1, B2, C1) from story-words.js. A
+     synonym or antonym that has its own card opens it in the same pop-up;
+     "← back" walks the trail. Only story keywords earn merits (essays over taps). */
+  var WCARD = { trail: [] };
+  function wordData(key) { var W = global.QM_WORDS; return W && W.words ? W.words[String(key).toLowerCase()] : null; }
+  function wordArt(icon) {
+    var W = global.QM_WORDS, inner = (W && W.icons && W.icons[icon]) || (W && W.icons && W.icons['book-open']) || '';
+    var dots = '<line x1="34" y1="62" x2="96" y2="62"/><line x1="224" y1="62" x2="286" y2="62"/><line x1="58" y1="80" x2="96" y2="80"/><line x1="224" y1="80" x2="262" y2="80"/>';
+    return '<svg class="wcard-art" viewBox="0 0 320 140" role="img" aria-hidden="true">' +
+      '<rect width="320" height="140" rx="12" class="wa-bg"/>' +
+      '<g class="wa-wire" stroke-width="2" stroke-linecap="round">' + dots + '</g>' +
+      '<g class="wa-pins"><circle cx="100" cy="62" r="4"/><circle cx="220" cy="80" r="4"/><circle cx="100" cy="98" r="4"/><circle cx="220" cy="44" r="4"/></g>' +
+      '<g class="wa-wire2" stroke-width="2.4" stroke-linecap="round"><line x1="100" y1="62" x2="114" y2="62"/><line x1="100" y1="98" x2="114" y2="98"/><line x1="206" y1="80" x2="220" y2="80"/><line x1="206" y1="44" x2="220" y2="44"/></g>' +
+      '<rect x="114" y="22" width="92" height="96" rx="14" class="wa-tile"/>' +
+      '<g class="wa-ico" transform="translate(130 40) scale(2.5)" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' + inner + '</g></svg>';
+  }
+  function wordChips(list) {
+    return '<div class="wchips">' + (list || []).map(function (x) {
+      var has = !!wordData(x[0]);
+      return has ? '<button class="wchip" type="button" data-wnext="' + esc(x[0]) + '"><span class="wchip-w">' + esc(x[0]) + '</span><span class="wchip-lv">' + esc(x[1]) + '</span></button>'
+        : '<span class="wchip flat"><span class="wchip-w">' + esc(x[0]) + '</span><span class="wchip-lv">' + esc(x[1]) + '</span></span>';
+    }).join('') + '</div>';
+  }
+  function speakWord(text) {
+    try {
+      var ss = global.speechSynthesis; if (!ss) return;
+      ss.cancel(); var u = new SpeechSynthesisUtterance(text); u.lang = 'en-GB'; u.rate = 0.9;
+      var v = (ss.getVoices() || []).filter(function (x) { return /^en-GB/i.test(x.lang); })[0]; if (v) u.voice = v;
+      ss.speak(u);
+    } catch (e) {}
+  }
+  function openWordCard(key, fallback, fresh, kicker) {
+    var d = wordData(key);
+    var html;
+    if (!d) {
+      html = '<p class="kicker">' + esc(kicker || 'Keyword') + '</p><h3 class="kw-word">' + esc(fallback.w) + '</h3><p class="kw-gloss">' + esc(fallback.g || '') + '</p>' + (fallback.t ? '<p class="kw-thai" lang="th">' + esc(fallback.t) + '</p>' : '');
+    } else {
+      html = '<div class="wcard"><p class="kicker">' + esc(kicker || 'Keyword') + '</p>' + wordArt(d.i) +
+        '<div class="wcard-head"><h3 class="kw-word">' + esc(fallback && fallback.w ? fallback.w : d.w) + '</h3><button class="wsay" type="button" data-wsay="' + esc(d.w) + '" aria-label="Hear the word">🔊</button></div>' +
+        '<p class="wcard-meta"><span class="pill">' + esc(d.pos) + '</span><span class="pill gold">' + esc(d.lv) + '</span></p>' +
+        '<p class="kw-gloss">' + esc(d.g) + '</p><p class="kw-thai" lang="th">' + esc(d.t) + '</p>' +
+        (d.ex ? '<p class="wcard-ex">' + esc(d.ex) + '</p>' : '') +
+        '<div class="wrow" data-rel="Synonym of "><p class="wrow-h">Synonyms <span>similar meaning</span></p>' + wordChips(d.syn) + '</div>' +
+        '<div class="wrow" data-rel="Antonym of "><p class="wrow-h">Antonyms <span>opposite meaning</span></p>' + wordChips(d.ant) + (d.an ? '<p class="wrow-note">' + esc(d.an) + '</p>' : '') + '</div>' +
+        '<p class="wcard-tip">Tap a word to open its own card.' + (/wchip flat/.test(wordChips(d.syn) + wordChips(d.ant)) ? ' Words in a dashed box do not have a card yet.' : '') + '</p></div>';
+    }
+    html += (fresh ? '<p class="tiny">+' + WORD_XP + ' merits for a new word</p>' : '') +
+      '<div class="wcard-acts">' + (WCARD.trail.length ? '<button class="btn" type="button" data-wback>← ' + esc(WCARD.trail[WCARD.trail.length - 1].label) + '</button>' : '') + '<button class="btn primary" data-close>Close</button></div>';
+    WCARD.cur = { key: key, fallback: fallback, kicker: kicker, label: d ? d.w : fallback.w };
+    host.modal(html);
+    var slot = document.getElementById('modal-slot'); if (!slot) return;
+    var card = slot.querySelector('.modal-card'); if (card) card.scrollTop = 0;
+    $$('[data-wnext]', slot).forEach(function (b) {
+      b.addEventListener('click', function () {
+        var cur = WCARD.cur, rel = (b.closest('.wrow') || {}).dataset ? b.closest('.wrow').dataset.rel : '';
+        WCARD.trail.push(cur);
+        openWordCard(b.dataset.wnext, null, false, rel + (cur.label || ''));
+      });
+    });
+    var bk = slot.querySelector('[data-wback]');
+    if (bk) bk.addEventListener('click', function () { var prev = WCARD.trail.pop(); openWordCard(prev.key, prev.fallback, false, prev.kicker); });
+    var sy = slot.querySelector('[data-wsay]');
+    if (sy) sy.addEventListener('click', function () { speakWord(sy.dataset.wsay); });
   }
   function artHtml(ch, pg, label) {
     return '<figure class="story-art">' + (pg.img ? '<img src="' + esc(pg.img) + '" alt="' + esc(pg.alt || '') + '" loading="lazy" decoding="async">' : '') + placeholderHtml(ch, label) + '</figure>';
@@ -649,7 +717,7 @@
     html += '<div class="chapter-head"><p class="kicker">Chapter ' + ch.n + ' · ' + esc(ch.place) + '</p><h2>' + esc(ch.title) + '</h2><p class="chcard-blurb">' + esc(ch.blurb) + '</p><div class="chapter-acts"><button class="btn sm" id="ch-read">' + ((s.seen[ch.id] || []).length ? 'Read the pages again' : 'Read the pages') + '</button></div></div>';
     html += '<div class="card missions"><h3>Missions</h3><p class="tiny">Each one opens the class, the gate or the room it names. Come back here when you are done.</p>' + estimateHtml(ch) + '<div class="ckstack">' + list.map(function (m) {
       var i = m._info, dis = !i.ok || i.locked;
-      return '<button class="ckrow' + (i.done ? ' done' : '') + '" data-mi="' + m._i + '"' + (dis ? ' disabled' : '') + '><span class="ck-box">' + (i.done ? '✓' : '') + '</span><span class="ck-txt"><span class="ck-name">' + esc(i.label) + '</span><span class="ck-sub">' + esc(i.sub) + '</span></span><span class="ck-go">' + (dis ? 'locked' : (i.done ? 'again' : 'open') + ' →') + '</span></button>';
+      return missionPodRow(m) + '<button class="ckrow' + (i.done ? ' done' : '') + '" data-mi="' + m._i + '"' + (dis ? ' disabled' : '') + '><span class="ck-box">' + (i.done ? '✓' : '') + '</span><span class="ck-txt"><span class="ck-name">' + esc(i.label) + '</span><span class="ck-sub">' + esc(i.sub) + '</span></span><span class="ck-go">' + (dis ? 'locked' : (i.done ? 'again' : 'open') + ' →') + '</span></button>';
     }).join('') + '</div></div>';
     html += '<div class="card gatebox big"><p class="kicker">The gate</p>' + sayBtn(ch.gate.intro) + '<p class="gate-intro">' + esc(ch.gate.intro || '') + '</p><ul class="gate-list">' + g.items.map(function (it) {
       return '<li class="' + (it.ok ? 'ok' : '') + '"><span class="gate-pip">' + (it.ok ? '✓' : '') + '</span><span>' + esc(it.label) + (it.note ? '<span class="tiny"> — ' + esc(it.note) + '</span>' : '') + (it.detail && !it.ok ? ' <span class="tiny">· ' + esc(it.detail) + '</span>' : '') + '</span></li>';
@@ -660,6 +728,18 @@
     $('#ch-read', el).addEventListener('click', function () { st.screen = 'page'; st.page = 0; resume(); });
     var gb = $('#ch-gate', el); if (gb) gb.addEventListener('click', function () { st.screen = 'ending'; resume(); });
     $$('[data-mi]', el).forEach(function (b) { b.addEventListener('click', function () { launch(ch, list[Number(b.dataset.mi)]); }); });
+    $$('[data-mpod]', el).forEach(function (b) { b.addEventListener('click', function () { host.togglePod(document.getElementById('drop-mpod-' + b.dataset.mpod), b.dataset.mpod); }); });
+  }
+  /* A podcast row before the first lesson of each class in the missions list.
+     Rendered only (not a mission), so mission keys, gates and estimates are unchanged. */
+  var podSeen = {};
+  function missionPodRow(m) {
+    if (m._i === 0) podSeen = {};
+    if (m.kind !== 'sub' || !host.podInfo) return '';
+    var sb = E().Bank.sub(m.id); if (!sb || podSeen[sb.topicId]) return '';
+    podSeen[sb.topicId] = 1;
+    var pi = host.podInfo(sb.topicId); if (!pi || !pi.has) return '';
+    return '<button class="ckrow pod-mission' + (pi.done ? ' done' : '') + '" data-mpod="' + esc(sb.topicId) + '"><span class="ck-box">' + (pi.done ? '✓' : '') + '</span><span class="ck-txt"><span class="ck-name">Podcast: ' + esc(pi.name) + '</span><span class="ck-sub">' + esc(pi.code) + ' · ' + esc(pi.name) + ' · on the Castle Wireless, before the lessons' + (pi.done ? '' : pi.seconds ? ' · ' + Math.round(pi.seconds / 60) + ' min in' : '') + '</span></span><span class="ck-go">' + (pi.done ? 'again' : 'listen') + ' ♪</span></button><div class="res-drop" id="drop-mpod-' + esc(sb.topicId) + '"></div>';
   }
   function launch(ch, m) {
     var pr = p(), s = ensure(pr);
