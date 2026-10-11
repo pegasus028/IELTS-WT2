@@ -340,6 +340,11 @@
   }
   /* Oct 2026: partner apps and the band ladder (data in partners.js). */
   /* The template share of the student's latest Spellbook Workshop design (lab.js keeps it). */
+  /* The student's five most frequent fault families (names), for the Landing Check. */
+  function topFaultTags() {
+    var count = {}; Object.keys((S.p && S.p.review) || {}).forEach(function (id) { var it = E.Bank.item(id); if (it && it.tag) count[it.tag] = (count[it.tag] || 0) + 1; });
+    return Object.keys(count).sort(function (a, b) { return count[b] - count[a]; }).slice(0, 5).map(function (t) { return (C.REMEDIATION[t] || {}).name || t; });
+  }
   function myShare() { try { var v = Number(localStorage.getItem('pc.share.' + S.p.studentId)); return v ? v / 100 : null; } catch (e) { return null; } }
   function partnerLink(tag) {
     var ps = C.partnerFor ? C.partnerFor(tag) : [];
@@ -761,7 +766,7 @@
   function startWrite(cfg) {
     var host = $('#view-write');
     show('write');
-    S.write = W.mount(host, { prompt: cfg.promptId, mode: cfg.uiMode, minutes: cfg.minutes, tier: tier(), studentId: S.p.studentId, share: myShare(),
+    S.write = W.mount(host, { prompt: cfg.promptId, mode: cfg.uiMode, minutes: cfg.minutes, tier: tier(), studentId: S.p.studentId, share: myShare(), faultTags: topFaultTags(),
       onQuit: function () { S.write = null; show('writer'); },
       onSubmit: function (res) { S.write = null; submitReport(cfg, res); } });
   }

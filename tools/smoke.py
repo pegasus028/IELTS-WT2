@@ -97,9 +97,17 @@ with sync_playwright() as p:
     vars_ = page.evaluate("(function(){var p=window.Prompts.get('p-tourism'),o={};Object.keys(p.vars.B2).forEach(function(k){o[k]=p.vars.B2[k].ok});return o;})()")
     for k, v in vars_.items(): page.fill('#wr-v-' + k, v)
     page.once('dialog', lambda d: d.accept())
+    # Plan Wards (Oct 2026): the keys tick the shape lines; the student ticks the rest, which opens the boxes
+    page.evaluate("document.querySelectorAll('#wr-planlist input[data-ward]:not([disabled])').forEach(cb=>{cb.checked=true;cb.dispatchEvent(new Event('change',{bubbles:true}))})")
+    page.wait_for_timeout(200); planscore = page.inner_text('#wr-planscore'); print('  plan wards:', planscore)
+    assert planscore.startswith('8 of'), planscore
+    assert page.evaluate("document.querySelectorAll('.wr-box.wr-locked').length") == 0, 'boxes still locked'
     page.click('#wr-fill'); page.wait_for_timeout(300); shot(page, '09-writer-filled')
     wc = page.inner_text('#wr-words'); print('  words after fill:', wc)
     page.click('#wr-check'); page.wait_for_selector('#wr-submit', timeout=4000); shot(page, '10-preflight')
+    assert page.is_disabled('#wr-submit'), 'submit should wait for the Landing Check'
+    page.evaluate("document.querySelectorAll('#wr-landlist input[data-ward]:not([disabled])').forEach(cb=>{cb.checked=true;cb.dispatchEvent(new Event('change',{bubbles:true}))})")
+    page.wait_for_timeout(200); print('  landing check:', page.inner_text('#wr-landscore'))
     page.click('#wr-submit'); page.wait_for_selector('#w-levelup', timeout=4000); shot(page, '11-submitted')
     reps = page.evaluate("JSON.parse(localStorage.getItem('pc.local.v1')).reports.length"); assert reps == 1, reps
 

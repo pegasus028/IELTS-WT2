@@ -170,6 +170,57 @@
 
   /* ------------------------------------------------ module free-text items */
   function cliches(t) { return CLICHE.filter(function (re) { return re.test(t); }).length; }
+  /* ------------------------------------------------ the Plan Wards (Oct 2026)
+     Eight planning checks before the essay. Where the app can judge a slot's
+     shape it ticks the line itself; the rest are the student's own ticks. */
+  var PLAN_WARDS = [
+    { id: 'type', text: 'I named the question type from the instruction sentence and read its row on the Type Switch Card.', manual: true },
+    { id: 'parts', text: 'I counted the parts and circled every plural (causes, measures, reasons, both views).', manual: true },
+    { id: 'core', text: 'My Core Topic is one noun phrase that covers every part: no clause, no "should", not a copy of the prompt.' },
+    { id: 'facets', text: 'Facet A and Facet B are two obvious ideas I can develop.' },
+    { id: 'mech', text: 'Each facet has a mechanism (an -ing phrase) and an example I can picture or check.' },
+    { id: 'nuance', text: 'Each facet has a nuance that limits it without changing my position.' },
+    { id: 'position', text: 'My position is a full clause with a stance word that fits the type (outweigh, how far, which view, what must happen).' },
+    { id: 'budget', text: 'I know the budget (50 / 95 / 95 / 45), chose at most one structural swap per body paragraph, and listed two words not to repeat.', manual: true }
+  ];
+  function planWards(vars, promptText) {
+    var v = vars || {}, out = {};
+    var has = function (k, min) { return String(v[k] || '').trim().split(/\s+/).filter(Boolean).length >= (min || 2); };
+    var core = String(v.core || '').trim();
+    out.core = has('core', 3) && !/^\s*\w+ing\b/i.test(core) && !/\b(should|must|because|which|that|when)\b/i.test(core) && !(promptText && lower(promptText).indexOf(lower(core).replace(/[.]$/, '')) >= 0 && core.split(/\s+/).length > 5);
+    out.facets = has('facetA') && has('facetB');
+    out.mech = /^\s*(by |through )?\w+ing\b/i.test(v.mechA || '') && /^\s*(by |through )?\w+ing\b/i.test(v.mechB || '') && has('exA') && has('exB');
+    out.nuance = has('nuanceA', 5) && has('nuanceB', 5);
+    out.position = has('position', 5) && (POSITION.test(v.position || '') || STANCE.test(v.position || ''));
+    return out;
+  }
+  /* The Landing Check: ten lines before submitting, ordered by marks per minute.
+     `auto` lines are ticked from the Ten Wards rows; the others are hers. */
+  var LANDING = [
+    { id: 'position', text: 'Position clear in paragraph one and restated in new words in paragraph four, with no new idea.', rows: ['position', 'newidea'] },
+    { id: 'parts', text: 'Every part and every plural answered; each solution answers a named cause.', rows: ['parts', 'plural-c', 'plural-s', 'coverage'] },
+    { id: 'moves', text: 'In each body paragraph I can underline the mechanism, the example and the nuance.', rows: ['b0mech', 'b0ex', 'b0nu', 'b1mech', 'b1ex', 'b1nu'] },
+    { id: 'length', text: 'The essay is 250 words or more (aim 260–290).', rows: ['length'] },
+    { id: 'faults', text: 'I checked the top five faults on my own Mending Room list, one at a time.', manual: true },
+    { id: 'articles', text: 'Every noun phrase has its article or plural right.', manual: true },
+    { id: 'agreement', text: 'Every subject agrees with its verb, and the tense fits the sentence\'s job.', manual: true },
+    { id: 'linkers', text: 'No more than a third of my sentences start with a linker, and no sentence runs on with a comma.', rows: ['linkers'] },
+    { id: 'register', text: 'No contractions, no "you", no "I think" more than once, no rhetorical question.', rows: ['rhetorical', 'ipron'] },
+    { id: 'spelling', text: 'Capital letters, full stops and spellings checked on a last slow read.', manual: true }
+  ];
+  function landingAuto(pre) {
+    var byId = {}; (pre.rows || []).forEach(function (r) { byId[r.id] = r.status; });
+    var out = {};
+    LANDING.forEach(function (l) { if (l.rows) out[l.id] = l.rows.every(function (id) { return !byId[id] || byId[id] === 'ok'; }); });
+    return out;
+  }
+  function wardList(cls, items, state, auto) {
+    return '<ul class="wards ' + cls + '">' + items.map(function (w) {
+      var ok = w.manual ? !!state[w.id] : !!auto[w.id];
+      return '<li class="' + (ok ? 'ok' : '') + (w.manual ? ' manual' : ' auto') + '"><label><input type="checkbox" data-ward="' + w.id + '"' + (ok ? ' checked' : '') + (w.manual ? '' : ' disabled') + '><span>' + esc(w.text) + '</span></label></li>';
+    }).join('') + '</ul>';
+  }
+
   /* Oct 2026: free-text gates. A position needs a stance word, not just "is";
      a sentence that only describes the topic is refused; generic filler is
      counted. These are still heuristics and are labelled as such on screen. */
@@ -260,7 +311,7 @@
     var share = guided ? 0.6 : (SHARES.indexOf(Number(cfg.share)) >= 0 ? Number(cfg.share) : tier === 'C1' ? 0.3 : 0.4);
     var minutes = cfg.minutes || 40, total = minutes * 60;
     var my = T.load(cfg.studentId); if (!my.choice) my.choice = {}; if (!my.custom) my.custom = {};
-    var state = { t0: Date.now(), left: total, done: false, revision: 0, tick: null, vars: {}, choice: {}, custom: {} };
+    var state = { t0: Date.now(), left: total, done: false, revision: 0, tick: null, vars: {}, choice: {}, custom: {}, planTicks: {}, landTicks: {}, planOpen: !guided, planOpenedAt: null };
     var paras = T.paragraphs(tier, type), labels = T.labels(type);
     paras.forEach(function (pg) { state.choice[pg.key] = my.choice[pg.key] || pg.frames[0].id; if (my.custom[pg.key]) state.custom[pg.key] = my.custom[pg.key]; });
     var PHASES = [['Decode', 0], ['Matrix', 90], ['Write', 300], ['Check', total - 300]];
@@ -280,6 +331,7 @@
           (!exam ? T.switchCard(type) : '') +
           (!exam ? '<div class="card wr-plan"><div class="wr-boxh"><b>The matrix</b><span class="tiny">plan — not counted</span>' + (guided ? '<button class="btn sm" id="wr-fill">Fill the frames →</button>' : '') + '</div>' +
             C.VARIABLES.map(function (v) { return '<div class="wr-planrow"><label for="wr-v-' + v.key + '" title="' + esc(v.hint) + '">' + v.n + ' · ' + esc(labels[v.key]) + '</label><input id="wr-v-' + v.key + '" data-var="' + v.key + '" placeholder="' + esc(v.hint) + '"></div>'; }).join('') + '</div>' : '') +
+          (!exam ? '<div class="card wr-wards" id="wr-planwards"><div class="wr-boxh"><b>The Plan Wards</b><span class="tiny" id="wr-planscore"></span></div><p class="tiny">Grey lines tick themselves from the eleven keys. The others are yours to tick honestly.</p><div id="wr-planlist"></div>' + (guided ? '<p class="tiny" id="wr-plannote">The paragraph boxes open when the Plan Wards are green, or after ten minutes.</p>' : '') + '</div>' : '') +
         '</div>' +
         '<div class="wr-right">' +
           (exam
@@ -308,7 +360,24 @@
     }
     areas.forEach(function (a) { a.addEventListener('input', countW); });
     host.querySelectorAll('[data-card]').forEach(function (b) { b.addEventListener('click', function () { host.querySelector('#wr-card' + b.dataset.card).classList.toggle('hidden'); }); });
-    host.querySelectorAll('[data-var]').forEach(function (inp) { inp.addEventListener('input', function () { state.vars[inp.dataset['var']] = inp.value.trim(); }); });
+    host.querySelectorAll('[data-var]').forEach(function (inp) { inp.addEventListener('input', function () { state.vars[inp.dataset['var']] = inp.value.trim(); paintPlanWards(); }); });
+    function planGreen() { var a = planWards(state.vars, p.text); return PLAN_WARDS.every(function (w) { return w.manual ? !!state.planTicks[w.id] : !!a[w.id]; }); }
+    function openBoxes(why) {
+      if (state.planOpen) return;
+      state.planOpen = true; state.planOpenedAt = Math.round((Date.now() - state.t0) / 1000); state.planHow = why;
+      host.querySelectorAll('.wr-box[data-para]').forEach(function (b) { b.classList.remove('wr-locked'); });
+      var note = host.querySelector('#wr-plannote'); if (note) note.textContent = why === 'green' ? 'Plan Wards green: the boxes are open. Fill the frames, then edit every sentence into your own words.' : 'Ten minutes are up: the boxes are open. Finish the plan as you write.';
+    }
+    function paintPlanWards() {
+      var box = host.querySelector('#wr-planlist'); if (!box) return;
+      var a = planWards(state.vars, p.text), n = PLAN_WARDS.filter(function (w) { return w.manual ? !!state.planTicks[w.id] : !!a[w.id]; }).length;
+      box.innerHTML = wardList('plan', PLAN_WARDS, state.planTicks, a);
+      host.querySelector('#wr-planscore').textContent = n + ' of ' + PLAN_WARDS.length;
+      box.querySelectorAll('[data-ward]').forEach(function (cb) { cb.addEventListener('change', function () { state.planTicks[cb.dataset.ward] = cb.checked; paintPlanWards(); }); });
+      if (guided && n === PLAN_WARDS.length) openBoxes('green');
+    }
+    if (guided) { host.querySelectorAll('.wr-box[data-para]').forEach(function (b) { b.classList.add('wr-locked'); }); }
+    paintPlanWards();
     host.querySelectorAll('[data-pick]').forEach(function (sel) { sel.addEventListener('change', function () {
       var key = sel.dataset.pick; state.choice[key] = sel.value; delete state.custom[key];
       var pg = paras.filter(function (x) { return x.key === key; })[0], ta = host.querySelector('[data-frame="' + key + '"]'); if (ta) ta.value = frameOf(pg).text;
@@ -334,6 +403,7 @@
       c.textContent = mmss(state.left);
       c.classList.toggle('low', state.left <= 300);
       paintPhase();
+      if (guided && !state.planOpen && total - state.left >= 600) openBoxes('time');
       if (state.left === 0 && !state.done) finish(true);
     }, 500);
     function stop() { clearInterval(state.tick); }
@@ -346,7 +416,18 @@
       var pn = host.querySelector('#wr-panel');
       pn.innerHTML = '<div class="card preflight"><div class="pf-h"><b>The Ten Wards</b><span class="pill ' + (pre.bad ? 'bad' : pre.warn ? 'gold' : 'good') + '">' + esc(pre.summary) + '</span></div>' +
         pre.rows.map(function (r) { return '<div class="pf-row ' + r.status + '"><span class="pf-dot"></span><div><b>' + esc(r.label) + '</b><p>' + esc(r.note) + '</p></div></div>'; }).join('') +
+        '<div class="wr-wards" style="margin-top:14px"><div class="wr-boxh"><b>The Landing Check</b><span class="tiny" id="wr-landscore"></span></div><p class="tiny">' + (exam ? 'Which of these did you do in the last five minutes? Tick honestly: the app compares your ticks with the Wards.' : 'Grey lines come from the Wards. Tick the rest yourself before you submit' + (cfg.faultTags && cfg.faultTags.length ? ' (your top faults: ' + esc(cfg.faultTags.slice(0, 5).join(', ')) + ')' : '') + '.') + '</p><div id="wr-landlist"></div></div>' +
         '<div class="qfoot" style="margin-top:12px">' + (canRevise ? '<button class="btn" id="wr-revise">Revise once</button>' : '') + '<span class="grow"></span><button class="btn primary" id="wr-submit">Submit essay</button></div></div>';
+      var auto = landingAuto(pre), items = exam ? LANDING.map(function (l) { return { id: l.id, text: l.text, manual: true }; }) : LANDING;
+      function paintLanding() {
+        var box = pn.querySelector('#wr-landlist'), n = items.filter(function (l) { return l.manual ? !!state.landTicks[l.id] : !!auto[l.id]; }).length;
+        box.innerHTML = wardList('landing', items, state.landTicks, auto);
+        pn.querySelector('#wr-landscore').textContent = n + ' of ' + items.length;
+        box.querySelectorAll('[data-ward]').forEach(function (cb) { cb.addEventListener('change', function () { state.landTicks[cb.dataset.ward] = cb.checked; paintLanding(); }); });
+        var sub = pn.querySelector('#wr-submit'), manualDone = items.every(function (l) { return !l.manual || !!state.landTicks[l.id]; });
+        if (!exam) { sub.disabled = !manualDone; sub.title = manualDone ? '' : 'Tick every line of the Landing Check first.'; }
+      }
+      paintLanding();
       pn.scrollIntoView({ behavior: 'smooth', block: 'start' });
       var rv = pn.querySelector('#wr-revise');
       if (rv) rv.addEventListener('click', function () { state.revision = 1; state.firstText = text(); state.firstPre = pre; pn.innerHTML = ''; areas[0].focus(); });
@@ -365,7 +446,13 @@
       var secs = Math.min(total, Math.round((Date.now() - state.t0) / 1000));
       if (cfg.onSubmit) cfg.onSubmit({ promptId: p.id, mode: mode, tier: tier, text: t, words: words(t), seconds: secs, timedOut: !!timedOut,
         preflight: pre, revision: state.revision, firstText: state.firstText || '', firstPreflight: state.firstPre || null,
-        plan: exam ? null : { vars: state.vars, choice: state.choice, custom: state.custom } });
+        plan: exam ? { landing: state.landTicks, calibration: calibration(pre) } : { vars: state.vars, choice: state.choice, custom: state.custom, planWards: state.planTicks, planOpenedAt: state.planOpenedAt, planHow: state.planHow || null, landing: state.landTicks, calibration: calibration(pre) } });
+      /* how well her own ticks match the Wards: agreements over the lines the app can judge */
+      function calibration(pre0) {
+        var auto = landingAuto(pre0), keys = Object.keys(auto); if (!keys.length) return null;
+        var agree = keys.filter(function (k) { return !!state.landTicks[k] === !!auto[k]; }).length;
+        return { agree: agree, of: keys.length };
+      }
     }
     return { stop: stop, text: text };
   }
