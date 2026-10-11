@@ -369,7 +369,7 @@
       '<details class="hb-cup"><summary>The House Cup</summary><div id="cup-slot">' + cupHtml(pr, st.cupFor === (pr.cohort || '') ? st.cup : null) + '</div></details>' +
       '</div>';
 
-    html += '<div class="map-head"><h2>The Map Room</h2><p>' + esc(STORY().mapIntro || '') + '</p></div>';
+    html += '<div class="map-head"><h2>The Map Room</h2>' + sayBtn(STORY().mapIntro) + '<p>' + esc(STORY().mapIntro || '') + '</p></div>';
     html += '<div class="map-wrap card">' + mapSvg(pr) + '</div>';
 
     /* owl post */
@@ -383,7 +383,7 @@
 
     /* the current chapter card (or the finale) */
     if (allDone(pr)) {
-      html += '<div class="chcard card done"><p class="kicker">The year is over</p><h3>Verba vincunt</h3><p class="chcard-blurb">' + esc(STORY().finale.text) + '</p>' +
+      html += '<div class="chcard card done"><p class="kicker">The year is over</p><h3>Verba vincunt</h3><p class="chcard-blurb">' + esc(STORY().finale.text) + '</p>' + sayBtn(STORY().finale.text) +
         '<div class="chcard-acts"><button class="btn" data-open-ch="' + cur + '">Read the last chapter again</button></div></div>';
     } else if (ch) {
       var list = missions(pr, ch), doneN = list.filter(function (m) { return m._info.done; }).length;
@@ -394,7 +394,7 @@
       if (next) {
         html += '<button class="resume" id="resume"><span class="resume-t"><span class="kicker">' + esc(next.kicker || 'Next') + '</span><span class="resume-n">' + esc(next.label) + '</span><span class="resume-s">' + esc(next.sub || '') + '</span></span><span class="resume-go">' + esc(next.go || 'Go →') + '</span></button>';
       }
-      html += '<div class="gatebox"><p class="kicker">The gate</p><p class="gate-intro">' + esc(ch.gate.intro || '') + '</p><ul class="gate-list">' + g.items.map(function (it) {
+      html += '<div class="gatebox"><p class="kicker">The gate</p>' + sayBtn(ch.gate.intro) + '<p class="gate-intro">' + esc(ch.gate.intro || '') + '</p><ul class="gate-list">' + g.items.map(function (it) {
         return '<li class="' + (it.ok ? 'ok' : '') + '"><span class="gate-pip">' + (it.ok ? '✓' : '') + '</span><span>' + esc(it.label) + (it.detail && !it.ok ? ' <span class="tiny">· ' + esc(it.detail) + '</span>' : '') + '</span></li>';
       }).join('') + '</ul>' + (g.ok && !hasKeepsake(pr, ch.keepsake.id) ? '<button class="btn primary" data-gate-ch="' + ch.n + '">Pass the gate →</button>' : '') + '</div>';
       html += '<div class="chcard-acts"><button class="btn sm" data-open-ch="' + ch.n + '">Chapter ' + ch.n + ': missions and pages</button>' + (readAll ? '<button class="btn sm ghost" data-read-ch="' + ch.n + '">Read the pages again</button>' : '') + '</div>';
@@ -488,8 +488,64 @@
     return '<div class="story-top"><button class="btn ghost sm" id="st-back">← ' + esc(backLabel || 'Map Room') + '</button><span class="story-crumb">' + (ch ? 'Chapter ' + ch.n + ' · ' + esc(ch.place) : '') + '</span><span class="story-right">' + (right || '') + '</span></div>';
   }
   function wireBack(el, fn) { var b = $('#st-back', el); if (b) b.addEventListener('click', fn || function () { host.show('plan'); }); }
+  /* ---------------------------------------------------------- narration
+     Pre-recorded narration (audio/story/index.js lists the files). A text has a
+     Listen button only if its exact wording was recorded, so edited text simply
+     loses its button until tools/build-narration.py is run again. */
+  var SAY = { audio: null, btn: null, h: '', autoTick: 0 };
+  function sayPref(k, v) {
+    try { if (v === undefined) return global.localStorage.getItem('qm.say.' + k); global.localStorage.setItem('qm.say.' + k, v); } catch (e) { return null; }
+  }
+  function fnv(s) { var h = 0x811c9dc5; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
+  function sayLabel(b, state) {
+    if (!b) return;
+    var ico = b.querySelector('.say-ico'), lbl = b.querySelector('.say-lbl');
+    b.classList.toggle('playing', state === 'play');
+    if (ico) ico.textContent = state === 'play' ? '❚❚' : '▶';
+    if (lbl) lbl.textContent = state === 'play' ? 'Pause' : state === 'paused' ? 'Resume' : state === 'end' ? 'Listen again' : 'Listen';
+  }
+  function sayStop() { if (SAY.audio) { try { SAY.audio.pause(); } catch (e) {} } sayLabel(SAY.btn, 'idle'); SAY.btn = null; SAY.h = ''; }
+  function sayRate() { return sayPref('slow') === '1' ? 0.85 : 1; }
+  function sayPlay(b) {
+    var A = global.QM_AUDIO, h = b.dataset.say;
+    if (!A) return;
+    if (SAY.h === h && SAY.audio && SAY.btn === b) {
+      if (SAY.audio.paused) { SAY.audio.play().catch(function () {}); sayLabel(b, 'play'); } else { SAY.audio.pause(); sayLabel(b, 'paused'); }
+      return;
+    }
+    sayStop();
+    if (!SAY.audio) {
+      SAY.audio = new Audio();
+      SAY.audio.addEventListener('ended', function () { sayLabel(SAY.btn, 'end'); SAY.h = ''; });
+      SAY.audio.addEventListener('timeupdate', function () { if (SAY.btn && !document.body.contains(SAY.btn)) sayStop(); });
+    }
+    SAY.audio.src = (A.base || 'audio/story/') + h + '.mp3';
+    SAY.audio.playbackRate = sayRate();
+    SAY.btn = b; SAY.h = h;
+    SAY.audio.play().then(function () { sayLabel(b, 'play'); }).catch(function () { sayLabel(b, 'idle'); });
+  }
+  function sayBtn(text, auto) {
+    var A = global.QM_AUDIO; if (!A || !text) return '';
+    var h = fnv(String(text)); if (!A.files[h]) return '';
+    var slow = sayPref('slow') === '1', on = sayPref('auto') === '1';
+    if (auto && on) { var tick = ++SAY.autoTick; setTimeout(function () { if (tick !== SAY.autoTick) return; var b = document.querySelector('.say-btn[data-say="' + h + '"]'); if (b) sayPlay(b); }, 60); }
+    return '<div class="say-bar"><button class="say-btn" type="button" data-say="' + h + '" aria-label="Listen to this text read aloud"><span class="say-ico" aria-hidden="true">▶</span><span class="say-lbl">Listen</span></button>' +
+      (auto ? '<button class="say-opt' + (slow ? ' on' : '') + '" type="button" data-sayopt="slow" aria-pressed="' + slow + '">Slower</button><button class="say-opt' + (on ? ' on' : '') + '" type="button" data-sayopt="auto" aria-pressed="' + on + '">Read every page aloud</button>' : '') + '</div>';
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.say-btn');
+    if (b) { sayPlay(b); return; }
+    var o = e.target.closest && e.target.closest('.say-opt');
+    if (o) {
+      var k = o.dataset.sayopt, on = sayPref(k) !== '1';
+      sayPref(k, on ? '1' : '0');
+      $$('.say-opt[data-sayopt="' + k + '"]').forEach(function (x) { x.classList.toggle('on', on); x.setAttribute('aria-pressed', on); });
+      if (k === 'slow' && SAY.audio) SAY.audio.playbackRate = sayRate();
+      if (k === 'auto' && on && !SAY.h) { var first = document.querySelector('.say-btn'); if (first) sayPlay(first); }
+    }
+  });
   function renderText(text) {
-    return String(text || '').split(/\n\n+/).map(function (para) {
+    return sayBtn(text, true) + String(text || '').split(/\n\n+/).map(function (para) {
       var out = '', re = /\[\[([^\[\]|]+)\|([^\[\]|]+)\|([^\[\]|]+)\]\]/g, last = 0, m;
       while ((m = re.exec(para))) {
         out += esc(para.slice(last, m.index));
@@ -563,7 +619,7 @@
       var i = m._info, dis = !i.ok || i.locked;
       return '<button class="ckrow' + (i.done ? ' done' : '') + '" data-mi="' + m._i + '"' + (dis ? ' disabled' : '') + '><span class="ck-box">' + (i.done ? '✓' : '') + '</span><span class="ck-txt"><span class="ck-name">' + esc(i.label) + '</span><span class="ck-sub">' + esc(i.sub) + '</span></span><span class="ck-go">' + (dis ? 'locked' : (i.done ? 'again' : 'open') + ' →') + '</span></button>';
     }).join('') + '</div></div>';
-    html += '<div class="card gatebox big"><p class="kicker">The gate</p><p class="gate-intro">' + esc(ch.gate.intro || '') + '</p><ul class="gate-list">' + g.items.map(function (it) {
+    html += '<div class="card gatebox big"><p class="kicker">The gate</p>' + sayBtn(ch.gate.intro) + '<p class="gate-intro">' + esc(ch.gate.intro || '') + '</p><ul class="gate-list">' + g.items.map(function (it) {
       return '<li class="' + (it.ok ? 'ok' : '') + '"><span class="gate-pip">' + (it.ok ? '✓' : '') + '</span><span>' + esc(it.label) + (it.note ? '<span class="tiny"> — ' + esc(it.note) + '</span>' : '') + (it.detail && !it.ok ? ' <span class="tiny">· ' + esc(it.detail) + '</span>' : '') + '</span></li>';
     }).join('') + '</ul>' + (g.ok ? '<button class="btn primary" id="ch-gate">' + (got ? 'Read the ending again' : 'Pass the gate →') + '</button>' : '<p class="tiny">The gate opens when every line above is ticked.</p>') + '</div>';
     html += '<p class="tiny newsroom"><b>The newsroom:</b> ' + esc(ch.newsroom || '') + '</p>';
@@ -702,7 +758,7 @@
     var t = s.sort || {};
     html += '<div class="card sorting result"><div class="lantern-wrap">' + lanternSvg({ TR: 1, CC: 1, LR: 1, GRA: 1 }, h ? h.crit : null) + '</div>' +
       '<p class="kicker">' + esc(h && so.results && so.results[h.id] ? so.results[h.id] : 'The Lantern glows ' + (h ? h.name.toLowerCase() : '')) + '</p><h2 class="house-name">' + (h ? crestSvg(h.id, 44) + ' ' + esc(h.name) : '') + '</h2>' +
-      (h ? '<p class="house-motto">' + esc(h.motto) + '</p><div class="story-text"><p>' + esc(h.welcome) + '</p><p class="tiny">' + esc(h.head) + ', head of ' + esc(h.name) + '</p></div>' : '') +
+      (h ? '<p class="house-motto">' + esc(h.motto) + '</p><div class="story-text">' + sayBtn(h.welcome) + '<p>' + esc(h.welcome) + '</p><p class="tiny">' + esc(h.head) + ', head of ' + esc(h.name) + '</p></div>' : '') +
       '<div class="sort-bars">' + CRITS.map(function (k) { var hh = STORY().houses.filter(function (x) { return x.crit === k; })[0]; var v = Number(t[k]) || 0; return '<div class="sort-bar"><span>' + esc(hh ? hh.name : k) + ' · ' + v + ' of 3</span><span class="sort-track"><i style="--w:' + Math.round(100 * v / 3) + '%;background:' + (hh ? hh.main : '') + '"></i></span></div>'; }).join('') + '</div>' +
       (wh ? '<div class="challenge"><p class="kicker">Your challenge</p><p>' + esc(wh.challengeLine) + '</p></div>' : '') +
       '<button class="btn primary wide" id="sort-done">Continue the story →</button></div>';

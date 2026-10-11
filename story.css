@@ -179,3 +179,15 @@
 /* ------------------------------------------------------------- crest, seals */
 .crest{display:inline-block;vertical-align:middle;flex:0 0 auto}
 .seal-svg{display:inline-block;vertical-align:middle;flex:0 0 auto}
+
+/* ---------------------------------------------------------- narration */
+.say-bar{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;margin:0 0 .75rem}
+.say-btn{display:inline-flex;align-items:center;gap:.45rem;min-height:40px;padding:.45rem .95rem;border-radius:999px;border:2px solid var(--brass);background:var(--surface);color:var(--ink);font:inherit;font-family:var(--f-ui);font-weight:700;cursor:pointer}
+.say-btn:hover{background:var(--gold-soft)}
+.say-btn:focus-visible,.say-opt:focus-visible{outline:3px solid var(--accent-line);outline-offset:2px}
+.say-btn.playing{background:var(--house);border-color:var(--house);color:#fff}
+.say-ico{font-size:.8rem;line-height:1;width:1em;text-align:center}
+.say-opt{min-height:34px;padding:.3rem .7rem;border-radius:999px;border:1px solid var(--rule);background:transparent;color:var(--ink);font-family:var(--f-ui);font-size:.85rem;cursor:pointer;opacity:.85}
+.say-opt.on{border-color:var(--brass);background:var(--gold-soft);font-weight:700;opacity:1}
+.say-opt.on::before{content:'\2713  '}
+.map-head .say-bar,.gatebox .say-bar,.chcard .say-bar{margin:.4rem 0 .5rem}
