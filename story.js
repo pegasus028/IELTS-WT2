@@ -728,6 +728,7 @@
     $('#ch-read', el).addEventListener('click', function () { st.screen = 'page'; st.page = 0; resume(); });
     var gb = $('#ch-gate', el); if (gb) gb.addEventListener('click', function () { st.screen = 'ending'; resume(); });
     $$('[data-mi]', el).forEach(function (b) { b.addEventListener('click', function () { launch(ch, list[Number(b.dataset.mi)]); }); });
+    $$('[data-mvid]', el).forEach(function (b) { b.addEventListener('click', function () { if (host.playVid) host.playVid(b.dataset.mvid); }); });
     $$('[data-mpod]', el).forEach(function (b) { b.addEventListener('click', function () { host.togglePod(document.getElementById('drop-mpod-' + b.dataset.mpod), b.dataset.mpod); }); });
   }
   /* A podcast row before the first lesson of each class in the missions list.
@@ -739,7 +740,7 @@
     var sb = E().Bank.sub(m.id); if (!sb || podSeen[sb.topicId]) return '';
     podSeen[sb.topicId] = 1;
     var pi = host.podInfo(sb.topicId); if (!pi || !pi.has) return '';
-    return '<button class="ckrow pod-mission' + (pi.done ? ' done' : '') + '" data-mpod="' + esc(sb.topicId) + '"><span class="ck-box">' + (pi.done ? '✓' : '') + '</span><span class="ck-txt"><span class="ck-name">Podcast: ' + esc(pi.name) + '</span><span class="ck-sub">' + esc(pi.code) + ' · ' + esc(pi.name) + ' · on the Castle Wireless, before the lessons' + (pi.done ? '' : pi.seconds ? ' · ' + Math.round(pi.seconds / 60) + ' min in' : '') + '</span></span><span class="ck-go">' + (pi.done ? 'again' : 'listen') + ' ♪</span></button><div class="res-drop" id="drop-mpod-' + esc(sb.topicId) + '"></div>';
+    return '<div class="podpair"><button class="ckrow pod-mission' + (pi.done ? ' done' : '') + '" data-mpod="' + esc(sb.topicId) + '"><span class="ck-box">' + (pi.done ? '✓' : '') + '</span><span class="ck-txt"><span class="ck-name">Podcast: ' + esc(pi.name) + '</span><span class="ck-sub">' + esc(pi.code) + ' · ' + esc(pi.name) + ' · on the Castle Wireless, before the lessons' + (pi.done ? '' : pi.seconds ? ' · ' + Math.round(pi.seconds / 60) + ' min in' : '') + '</span></span><span class="ck-go">' + (pi.done ? 'again' : 'listen') + ' ♪</span></button>' + (pi.video ? '<button class="vidbtn' + (pi.watched ? ' done' : '') + '" type="button" data-mvid="' + esc(sb.topicId) + '" title="' + esc(pi.name) + ' — in the Memory Basin"><span class="res-i">▶</span><span>Video</span></button>' : '') + '</div><div class="res-drop" id="drop-mpod-' + esc(sb.topicId) + '"></div>';
   }
   function launch(ch, m) {
     var pr = p(), s = ensure(pr);

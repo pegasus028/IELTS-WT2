@@ -67,7 +67,8 @@
     openSub: function (id) { openSub(id); },
     startCheck: function (levelId) { startCheck(levelId); },
     startAssignment: function (id) { startAssignment(id); },
-    podInfo: function (topicId) { var t = E.Bank.topic(topicId), md = mdOf(topicId); return t ? { has: !!t.podcast, done: !!md.done, seconds: md.seconds || 0, code: t.code, name: t.name } : null; },
+    podInfo: function (topicId) { var t = E.Bank.topic(topicId), md = mdOf(topicId); return t ? { has: !!t.podcast, done: !!md.done, seconds: md.seconds || 0, code: t.code, name: t.name, video: !!t.video, watched: !!md.videoOpens } : null; },
+    playVid: function (topicId) { playVideo(E.Bank.topic(topicId)); },
     togglePod: function (drop, topicId) { togglePodcast(drop, E.Bank.topic(topicId)); }
   };
   setInterval(function () {
@@ -482,7 +483,13 @@
   function podRow(t, key, cls) {
     if (!t.podcast) return '';
     var md = mdOf(t.id);
-    return '<button class="' + cls + ' podrow-btn' + (md.done ? ' done' : '') + '" data-pod="' + t.id + '" data-drop="' + key + '"><span class="mrow-tick"></span><span class="mrow-txt"><span class="mrow-name">Podcast: ' + esc(t.name) + '</span><span class="mrow-sub">Castle Wireless · listen before the lessons' + (md.done ? ' · listened' : md.seconds ? ' · ' + Math.round(md.seconds / 60) + ' min in' : '') + '</span></span><span class="mrow-score">' + (md.done ? '✓' : '♪') + '</span></button>' + mediaDrop(key);
+    return '<div class="podpair"><button class="' + cls + ' podrow-btn' + (md.done ? ' done' : '') + '" data-pod="' + t.id + '" data-drop="' + key + '"><span class="mrow-tick"></span><span class="mrow-txt"><span class="mrow-name">Podcast: ' + esc(t.name) + '</span><span class="mrow-sub">Castle Wireless · listen before the lessons' + (md.done ? ' · listened' : md.seconds ? ' · ' + Math.round(md.seconds / 60) + ' min in' : '') + '</span></span><span class="mrow-score">' + (md.done ? '✓' : '♪') + '</span></button>' + vidBtn(t) + '</div>' + mediaDrop(key);
+  }
+  /* The Video button that sits in the same row as a podcast row (Classes, chapter missions). */
+  function vidBtn(t) {
+    if (!t.video) return '';
+    var md = mdOf(t.id);
+    return '<button class="vidbtn' + (md.videoOpens ? ' done' : '') + '" type="button" data-vid="' + t.id + '" title="' + esc(t.name) + ' — in the Memory Basin"><span class="res-i">▶</span><span>Video</span></button>';
   }
   /* The pill strip under a class header on the Classes screen. */
   function resStrip(t) {

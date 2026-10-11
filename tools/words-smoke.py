@@ -69,6 +69,12 @@ with sync_playwright() as p:
         assert names.index('Podcast: The Test') == names.index('The facts') - 1, names
         rows[0].click(); page.wait_for_timeout(250); assert page.query_selector('#drop-mpod-m00 audio'), 'no player'
         shot(page, tag + '-missions')
+        vids = [v.get_attribute('data-mvid') for v in page.query_selector_all('[data-mvid]')]; assert vids == ['m00', 'm01'], vids
+        assert page.evaluate("document.querySelector('[data-mvid=m00]').parentNode === document.querySelector('[data-mpod=m00]').parentNode"), 'video not in the podcast row'
+        page.click('[data-mvid=m01]'); page.wait_for_timeout(300)
+        src = page.get_attribute('#modal-slot iframe', 'src'); assert 'EqIclbS4E-I' in src, src
+        shot(page, tag + '-video-modal')
+        page.click('#modal-slot [data-close]'); page.wait_for_timeout(150)
 
         step(tag + ': podcast row in the Classes list')
         page.click('.nav button[data-view=map]') if tag == 'desk' else page.evaluate("document.querySelector('.nav button[data-view=map]').click()")
@@ -76,6 +82,7 @@ with sync_playwright() as p:
         if not page.query_selector('#view-map .sys.exp'): page.evaluate("document.querySelector('[data-sys=m00]').click()"); page.wait_for_timeout(200)
         body = page.query_selector('#view-map .sys.exp .sys-body'); first_row = body.query_selector('button')
         assert 'Podcast:' in first_row.inner_text(), first_row.inner_text()
+        assert body.query_selector('.podpair [data-vid=m00]'), 'no video in the Classes podcast row'
         shot(page, tag + '-classes')
 
         step(tag + ': lesson Listen button and Back to the map')
@@ -117,6 +124,14 @@ with sync_playwright() as p:
         page.click('#r-map'); page.wait_for_timeout(300)
         assert not page.query_selector('#view-plan').evaluate("e => e.classList.contains('hidden')"), 'did not return to the Map Room'
         shot(page, tag + '-back-map')
+        step(tag + ': Memory Basin tab and Mending Room video buttons')
+        page.evaluate("document.querySelector('.nav button[data-view=vids]').click()"); page.wait_for_timeout(300)
+        assert not page.evaluate("document.querySelector('.nav button[data-view=vids]').classList.contains('hidden')"), 'Memory Basin tab hidden'
+        ids = [f.get_attribute('src') for f in page.query_selector_all('#view-vids iframe')]; assert len(ids) == 2 and 'QSuRCff1lRc' in ids[0], ids
+        shot(page, tag + '-basin')
+        page.evaluate("document.querySelector('.nav button[data-view=faults]').click()"); page.wait_for_timeout(300)
+        fv = [x.get_attribute('data-vid') for x in page.query_selector_all('#view-faults [data-vid]')]; print('  Mending Room video buttons:', fv)
+        if fv: shot(page, tag + '-mending')
         ctx.close()
     b.close()
 httpd.shutdown()

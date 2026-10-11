@@ -224,6 +224,13 @@ button.wchip:hover{background:var(--gold-soft)}
 .say-opt{min-height:34px;padding:.3rem .7rem;border-radius:999px;border:1px solid var(--rule);background:transparent;color:var(--ink);font-family:var(--f-ui);font-size:.85rem;cursor:pointer;opacity:.85}
 .say-opt.on{border-color:var(--brass);background:var(--gold-soft);font-weight:700;opacity:1}
 .say-opt.on::before{content:'\2713  '}
+/* podcast row + video button in one row (Classes, chapter missions) */
+.podpair{display:flex;gap:8px;align-items:stretch;width:100%}
+.podpair>.ckrow,.podpair>.mrow{flex:1 1 auto;min-width:0}
+.vidbtn{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;padding:8px 14px;min-height:44px;border:1px solid var(--rule);border-radius:var(--r-m);background:var(--surface);color:var(--ink);font:inherit;font-size:.9rem;font-weight:700;cursor:pointer}
+.vidbtn:hover{border-color:var(--accent-line);background:var(--accent-soft)}
+.vidbtn.done{border-color:var(--ok);color:var(--ok)}
+.vidbtn.done .res-i{background:var(--ok)}
 /* lesson read-aloud (student.js) */
 .lsay-bar{display:flex;flex-wrap:wrap;align-items:center;gap:.4rem;margin:.2rem 0 .6rem}
 .lsay{display:inline-flex;align-items:center;gap:.45rem;min-height:40px;padding:.45rem .95rem;border-radius:999px;border:2px solid var(--brass);background:var(--surface);color:var(--ink);font:inherit;font-family:var(--f-ui);font-weight:700;cursor:pointer}
