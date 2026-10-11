@@ -35,7 +35,7 @@
 .castle-map{display:block;width:100%;max-width:560px;height:auto;margin:0 auto;overflow:visible}
 .map-art .map-bg{opacity:.92}
 .map-art .map-wash{fill:var(--surface);opacity:.18}
-.map-art .map-fog{fill:var(--surface);opacity:.93}
+.map-art .map-fog{fill:var(--surface);opacity:.96}
 .mnode .node-t,.mnode .node-p{paint-order:stroke;stroke:var(--surface);stroke-width:4px;stroke-linejoin:round}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .map-art .map-bg{opacity:.55}}
 :root[data-theme="dark"] .map-art .map-bg{opacity:.55}

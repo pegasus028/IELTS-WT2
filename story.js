@@ -339,10 +339,11 @@
        opposite its stop; chapters not reached yet stay under parchment fog */
     html += '<defs><filter id="map-fog" x="-25%" y="-25%" width="150%" height="150%"><feGaussianBlur stdDeviation="8"/></filter><clipPath id="map-clip"><rect width="' + W + '" height="' + H + '" rx="12"/></clipPath></defs>';
     html += '<g class="map-art" clip-path="url(#map-clip)" aria-hidden="true"><image class="map-bg" href="story/map-bg.webp" x="0" y="0" width="' + W + '" height="' + H + '" preserveAspectRatio="xMidYMid slice"/><rect class="map-wash" width="' + W + '" height="' + H + '"/>';
-    pts.forEach(function (q, i) {
-      if (q.c.n <= to) return;
-      html += '<ellipse class="map-fog" cx="' + (i % 2 === 0 ? W * 0.74 : W * 0.26) + '" cy="' + q.y + '" rx="' + (W * 0.3) + '" ry="' + (step * 0.62) + '" filter="url(#map-fog)"/>';
-    });
+    var lastOpen = -1; pts.forEach(function (q, i) { if (q.c.n <= to) lastOpen = i; });
+    if (lastOpen < pts.length - 1) {
+      var fogTop = lastOpen < 0 ? 0 : pts[lastOpen].y + step * 1.0;
+      html += '<rect class="map-fog" x="-30" y="' + fogTop + '" width="' + (W + 60) + '" height="' + (H - fogTop + 40) + '" filter="url(#map-fog)"/>';
+    }
     html += '</g>';
     html += '<path class="map-trail" d="' + d + '"/>';
     var L = list.length - 1;
