@@ -90,7 +90,7 @@
     if (!x) return true;
     switch (x.id) {
       case 'lab-design': return labDesigned(pr);
-      case 'essay-sent': return essaysSent(pr) >= 1;
+      case 'essay-sent': return essaysSent(pr) >= (x.min || 1);
       case 'faults-under-5': return P().dueReview(pr).length < 5;
       case 'best-band': return (Number(pr[x.field || 'bestBand']) || 0) >= (x.min || TARGET_BAND);
       default: return !!(ensure(pr).flags[x.id]);
@@ -100,7 +100,7 @@
     switch (x.id) {
       case 'faults-under-5': return P().dueReview(pr).length + ' due now';
       case 'best-band': return pr.bestBand ? 'best so far: Band ' + pr.bestBand : 'no marked essay yet';
-      case 'essay-sent': return essaysSent(pr) ? essaysSent(pr) + ' sent' : 'none yet';
+      case 'essay-sent': return essaysSent(pr) + ' of ' + (x.min || 1) + ' sent';
       default: return '';
     }
   }
@@ -130,6 +130,26 @@
   function reached(pr, n) { return n <= reachedTo(pr); }
   function allDone(pr) { return chapters().length > 0 && chapters().every(function (c) { return gateStatus(pr, c).ok && hasKeepsake(pr, c.keepsake.id); }); }
   function hasKeepsake(pr, id) { return ensure(pr).keepsakes.indexOf(id) >= 0; }
+
+  /* ------------------------------------------------- time estimate
+     Rough minutes per chapter, so a tutee and her teacher can plan the week:
+     a lesson (sub) about 7 minutes, an examiner's gate 9, the Sorting 10,
+     a room visit 20, a full essay 45 (the three mocks 135), reading 1.5 a page. */
+  function estimateMinutes(ch) {
+    var min = (ch.pages || []).length * 1.5 + 2;
+    (ch.missions || []).forEach(function (m) {
+      if (m.kind === 'sub') min += 7;
+      else if (m.kind === 'check') min += 9;
+      else if (m.kind === 'event') min += 10;
+      else if (m.kind === 'view') min += m.view === 'lab' ? 40 : 20;
+      else if (m.kind === 'writing') min += /three/i.test(m.label || '') ? 135 : ch.n === 2 ? 10 : 45;
+    });
+    return Math.round(min / 5) * 5;
+  }
+  function estimateHtml(ch) {
+    var m = estimateMinutes(ch);
+    return '<p class="tiny ch-est">About ' + (m >= 90 ? (Math.round(m / 30) / 2) + ' hours' : m + ' minutes') + ' of work in this chapter.</p>';
+  }
 
   /* --------------------------------------------------------- missions */
   function missionInfo(pr, m) {
@@ -399,6 +419,7 @@
       var g = gateStatus(pr, ch), seen = (s.seen[ch.id] || []).length, pagesN = (ch.pages || []).length, readAll = seen >= pagesN;
       var next = opts.next;
       html += '<div class="chcard card"><div class="chcard-top"><div><p class="kicker">Chapter ' + ch.n + ' · ' + esc(ch.place) + '</p><h3>' + esc(ch.title) + '</h3><p class="chcard-blurb">' + esc(ch.blurb) + '</p></div><div class="chcard-ring" style="--p:' + Math.round(100 * doneN / Math.max(1, list.length)) + '"><i>' + doneN + '/' + list.length + '</i></div></div>';
+      html += estimateHtml(ch);
       if (!readAll) html += '<button class="btn primary wide chcard-read" data-read-ch="' + ch.n + '">' + (seen ? 'Continue reading chapter ' + ch.n + ' →' : 'Read chapter ' + ch.n + ' →') + '</button>';
       if (next) {
         html += '<button class="resume" id="resume"><span class="resume-t"><span class="kicker">' + esc(next.kicker || 'Next') + '</span><span class="resume-n">' + esc(next.label) + '</span><span class="resume-s">' + esc(next.sub || '') + '</span></span><span class="resume-go">' + esc(next.go || 'Go →') + '</span></button>';
@@ -624,7 +645,7 @@
     var list = missions(pr, ch), g = gateStatus(pr, ch), got = hasKeepsake(pr, ch.keepsake.id);
     var html = topBar(ch, (s.seen[ch.id] || []).length + ' / ' + ch.pages.length + ' pages read');
     html += '<div class="chapter-head"><p class="kicker">Chapter ' + ch.n + ' · ' + esc(ch.place) + '</p><h2>' + esc(ch.title) + '</h2><p class="chcard-blurb">' + esc(ch.blurb) + '</p><div class="chapter-acts"><button class="btn sm" id="ch-read">' + ((s.seen[ch.id] || []).length ? 'Read the pages again' : 'Read the pages') + '</button></div></div>';
-    html += '<div class="card missions"><h3>Missions</h3><p class="tiny">Each one opens the class, the gate or the room it names. Come back here when you are done.</p><div class="ckstack">' + list.map(function (m) {
+    html += '<div class="card missions"><h3>Missions</h3><p class="tiny">Each one opens the class, the gate or the room it names. Come back here when you are done.</p>' + estimateHtml(ch) + '<div class="ckstack">' + list.map(function (m) {
       var i = m._info, dis = !i.ok || i.locked;
       return '<button class="ckrow' + (i.done ? ' done' : '') + '" data-mi="' + m._i + '"' + (dis ? ' disabled' : '') + '><span class="ck-box">' + (i.done ? '✓' : '') + '</span><span class="ck-txt"><span class="ck-name">' + esc(i.label) + '</span><span class="ck-sub">' + esc(i.sub) + '</span></span><span class="ck-go">' + (dis ? 'locked' : (i.done ? 'again' : 'open') + ' →') + '</span></button>';
     }).join('') + '</div></div>';
@@ -811,7 +832,7 @@
     nextMission: nextMission, missions: missions, housePoints: housePoints, essaysSent: essaysSent,
     visibleViews: visibleViews, applyUnlocks: applyUnlocks, isUnlockRow: isUnlockRow, unlockAll: unlockAll,
     markVisited: markVisited, applyHouseAttr: applyHouseAttr,
-    paintMap: paintMap, keepsakesHtml: keepsakesHtml, crestSvg: crestSvg, sealSvg: sealSvg,
+    paintMap: paintMap, estimateMinutes: estimateMinutes, keepsakesHtml: keepsakesHtml, crestSvg: crestSvg, sealSvg: sealSvg,
     open: open, resume: resume, openSorting: openSorting, openEvent: openEvent, labDesigned: labDesigned,
     reset: function () { st.screen = null; st.cup = null; st.cupFor = ''; }
   };

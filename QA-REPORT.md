@@ -1,6 +1,37 @@
-# Position Control — QA report
+# Position Control / Quillmoor Academy — QA report
 
-## Review and fixes — 11 October 2026 (Claude Opus 5.5)
+## Audit for the one-month tutoring run — 11 October 2026 (Claude Fable 5.1)
+
+Audited at commit 5c417e7 (Quillmoor story, narration, Map Room backdrop) against the goal: five Thai tutees aged 13–17 at B1/B2, one month of 2-hour online lessons plus 1–2 hours of homework a week, aiming at Band 7.5 over one to two years.
+
+### Load and run
+
+- Every `.js` and `.gs` file parses (acorn, ES2022). No Harry Potter names anywhere in the app.
+- Suites: validate, story-validate (7 chapters, 12 sorting items), test-free (108), audit, lab-validate, lab-examples-check, gs-test, date-test all pass. smoke.py and lab-smoke.py pass on a copy with the server address blanked.
+- First-run walk as `tut-aeh` at 390 px: roster sign-in → Map Room → six pages of chapter 1 → the Sorting (tie → house choice) → the gate list. No page-width overflow.
+- **One 404 on every view: `story/map-bg.webp`.** `story.js` and the 5c417e7 commit message reference it, but the file is not in the repository. The Map Room shows fog instead; nothing breaks. The art session owns that file.
+
+### Feasibility (the one-month question)
+
+Estimated in-app time by chapter (now shown on each chapter card): ch1 80 min, ch2 50, ch3 90, ch4 175, ch5 120, ch6 90, ch7 225; about 13.8 hours in all, plus roughly 20% for re-running lessons that miss the 60% pass mark. Four weeks of lesson plus homework give 12–16 hours, so chapters 1–6 fit a month if lesson time is spent in the app; chapter 7's three mocks and the Band 7.5 mark belong to the months after.
+
+### Changes made
+
+| Change | Why |
+| --- | --- |
+| Chapter 7 gate now lists "Three mock examinations sent to the examiners" (3 of 3 progress) before the 7.5 mark, and the 7.5 line says it can take months after the classes end | A B1/B2 tutee cannot reach 7.5 in a month; the gate should read as the long-term standard, not a failed month |
+| `Story.estimateMinutes`: "About N minutes of work in this chapter" on the Map Room card and the chapter page | Lets the tutees and T.Chris plan the week's homework |
+
+No narrated story text changed, so the narration was not rebuilt. No item, key, action or storage name changed.
+
+### For T.Chris
+
+1. Commit `story/map-bg.webp` (or remove the reference) when the art session finishes.
+2. The ch7 7.5 gate stays a real gate: after the month, keep setting one timed essay every two or three weeks by owl post and mark it in the Staff Room; the seal arrives when a mark reaches 7.5.
+
+---
+
+## Earlier review — 11 October 2026 (Claude Opus 5.5)
 
 Follows the student-eye evaluation by Claude Sonnet 5.5 (10 October 2026) and T.Chris's five decisions. Item ids, localStorage keys, Sheet columns and Apps Script action names are unchanged, so progress, review queues and reports are safe. New actions were added (`logout`, `unlock`); none was renamed.
 

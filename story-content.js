@@ -457,7 +457,10 @@
         ],
         gate: {
           checks: ['m12l1', 'm13l1'], checkIds: ['m12ck', 'm13ck'],
-          extra: [{ id: 'best-band', label: 'An essay marked at 7.5 or above', note: 'One essay sent to the examiners and marked at Band 7.5 or higher (your best band).', min: 7.5, field: 'bestBand' }],
+          extra: [
+            { id: 'essay-sent', label: 'Three mock examinations sent to the examiners', note: 'Three forty-minute essays, each sent to the examiners.', min: 3 },
+            { id: 'best-band', label: 'An essay marked at 7.5 or above', note: 'This is the standard of the real test, and it can take months of mock examinations after the classes end. Keep sending essays: your best band is kept, and the seal arrives by owl the day the examiners agree.', min: 7.5, field: 'bestBand' }
+          ],
           intro: "Penhallow stands alone before the table. 'Two gates, and then the only thing that matters: one essay, marked by the four examiners at the 7.5 standard. Everything else was practice for this.'",
           pass: "Four verdicts come back by owl. The average is 7.5 or above. Penhallow presses the Quillmoor seal into warm wax. 'Clear, flexible, precise, controlled. Your own words. Verba vincunt.'"
         },
