@@ -32,8 +32,8 @@
 var MEDIA = {
   m00: { title: 'Module 00 · The Test',                                podcast: 'audio/module-00.mp3', video: 'https://youtu.be/QSuRCff1lRc' },
   m01: { title: 'Module 01 · Decode the Prompt',                       podcast: 'audio/module-01.mp3', video: 'https://youtu.be/EqIclbS4E-I' },
-  m02: { title: 'Module 02 · Position',                                podcast: 'audio/module-02.mp3', video: 'https://youtu.be/Pzn56efLShQ' },
-  m03: { title: 'Module 03 · Matrix I — Core Topic and Facets',        podcast: 'audio/module-03.mp3', video: 'https://youtu.be/WvxF2dF7Rlw' },
+  m02: { title: 'Module 02 · Position',                                podcast: 'audio/module-02.mp3', video: 'https://youtu.be/WvxF2dF7Rlw' },
+  m03: { title: 'Module 03 · Matrix I — Core Topic and Facets',        podcast: 'audio/module-03.mp3', video: 'https://youtu.be/Pzn56efLShQ' },
   m04: { title: 'Module 04 · Matrix II — Mechanism, Example, Nuance',  podcast: 'audio/module-04.mp3', video: 'https://youtu.be/nJTWKD3FYtM' },
   m05: { title: 'Module 05 · The Template',                            podcast: 'audio/module-05.mp3', video: 'https://youtu.be/FwPSqYVBH-k' },
   m06: { title: 'Module 06 · Synthesis',                               podcast: 'audio/module-06.mp3', video: 'https://youtu.be/J_Y9T9QzqJU' },
