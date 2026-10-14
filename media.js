@@ -42,8 +42,8 @@ var MEDIA = {
   m09: { title: 'Module 09 · Structural Swaps',                        podcast: 'audio/module-09.mp3', video: 'https://youtu.be/yw_Phbd8vkc' },
   m10: { title: 'Module 10 · Collocation and Register',                podcast: 'audio/module-10.mp3', video: 'https://youtu.be/vaVsqxMN1co' },
   m11: { title: 'Module 11 · Accuracy',                                podcast: 'audio/module-11.mp3', video: 'https://youtu.be/7Pe002PqmW4' },
-  m12: { title: 'Module 12 · Playbooks',                               podcast: 'audio/module-12.mp3', video: '' },
-  m13: { title: 'Module 13 · Exam Day',                                podcast: 'audio/module-13.mp3', video: '' }
+  m12: { title: 'Module 12 · Playbooks',                               podcast: 'audio/module-12.mp3', video: 'https://youtu.be/SH7XRq4QsjU' },
+  m13: { title: 'Module 13 · Exam Day',                                podcast: 'audio/module-13.mp3', video: 'https://youtu.be/FQjDkbz1gr8' }
 };
 
 /* Attach the media to each module, when the full app is loaded. */
