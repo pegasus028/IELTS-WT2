@@ -21,11 +21,20 @@ function auditMcq(where, stem, options, answer, stats, hint) {
   var dup = {}; options.forEach(function (o) { var k = norm(o); if (dup[k]) flags.push(where + ': duplicate option "' + strip(o).slice(0, 40) + '"'); dup[k] = 1; });
 }
 var report = [];
+var sel = { n: 0, pos: {}, last: 0 };
 C.TOPICS.forEach(function (t) {
   var st = { n: 0, longest: 0, pos: {} }, jt = { t: 0, f: 0, c: 0 };
   function item(it, where) {
     if (it.type === 'choose') auditMcq(where + ' ' + it.id, it.stem, it.options, it.answer, st, it.hint || (C.REMEDIATION[it.tag] || {}).principle);
     if (it.type === 'select') it.answers.forEach(function (a) { if (overlap(it.options[a], it.hint || (C.REMEDIATION[it.tag] || {}).principle) >= 0.6 && words(it.options[a]).length >= 3) flags.push(where + ' ' + it.id + ': hint may reveal a select answer'); });
+    if (it.type === 'select') {
+      /* Tick-k items: the keys must not sit in a pattern a student can learn
+         without reading — the first k options, or every other option. */
+      var ks = it.answers.slice().sort(function (a, b) { return a - b; });
+      sel.n++; ks.forEach(function (a) { sel.pos[a] = (sel.pos[a] || 0) + 1; }); if (ks[ks.length - 1] === it.options.length - 1) sel.last++;
+      if (ks.every(function (a, i) { return a === i; })) flags.push(where + ' ' + it.id + ': select keys are the first ' + ks.length + ' options');
+      else if (ks.length >= 2 && ks[0] <= 1 && ks.every(function (a, i) { return a === ks[0] + 2 * i; })) flags.push(where + ' ' + it.id + ': select keys alternate down the list (' + ks.join(',') + ')');
+    }
     if (it.type === 'judge' && it.answer === 0 && overlap(it.given, it.hint || (C.REMEDIATION[it.tag] || {}).principle) >= 0.7 && words(it.given).length >= 4) flags.push(where + ' ' + it.id + ': hint restates the given statement');
     if (it.hint && it.type !== 'choose' && it.type !== 'select' && it.type !== 'judge') { var key = it.type === 'spot' ? it.fix : it.type === 'build' ? it.solution : ''; if (key && overlap(key, it.hint) >= 0.6 && words(key).length >= 2) flags.push(where + ' ' + it.id + ': hint may reveal the ' + it.type + ' answer'); }
     if (it.type === 'judge') { jt[['t', 'f', 'c'][it.answer]]++; }
@@ -40,6 +49,11 @@ C.TOPICS.forEach(function (t) {
   if (st.n >= 8 && st.longest / st.n > 0.3) flags.push(t.id + ': correct-is-longest ' + Math.round(100 * st.longest / st.n) + '%');
   if (jt.t + jt.f >= 4 && (jt.t === 0 || jt.f === 0)) flags.push(t.id + ': all judge items have the same answer');
 });
+/* tick-k (select) items across the whole app: option 1 should not be a key
+   in most of them, and the last option should be a key in some of them */
+report.push('select items ' + sel.n + ' · key positions ' + Object.keys(sel.pos).sort().map(function (k) { return (+k + 1) + ':' + sel.pos[k]; }).join(' ') + ' · last option a key in ' + sel.last);
+if (sel.n >= 6 && (sel.pos[0] || 0) / sel.n > 0.5) flags.push('select: option 1 is a key in ' + Math.round(100 * sel.pos[0] / sel.n) + '% of items');
+if (sel.n >= 6 && sel.last / sel.n < 0.2) flags.push('select: the last option is a key in only ' + sel.last + ' of ' + sel.n + ' items');
 /* prompt variables as MCQs (the Bootcamp draws on them) */
 var pv = { n: 0, longest: 0 };
 C.PROMPTS.forEach(function (p) { ['B2', 'C1'].forEach(function (tier) { Object.keys(p.vars[tier]).forEach(function (k) { var v = p.vars[tier][k]; var lens = [v.ok].concat(v.d).map(function (x) { return x.length; }); pv.n++; if (lens[0] === Math.max.apply(null, lens) && lens.filter(function (l) { return l === lens[0]; }).length === 1) pv.longest++; }); }); });

@@ -134,7 +134,7 @@
               why: 'The last option chains: the start → sleep → that extra hour → class, with a reference phrase as the only join. The first two count and add, and the third repeats the full noun phrase three times, which is the fault reference words exist to fix.' },
             { id: 'm07s2q7', type: 'select', tag: 'cc-linker-overuse', level: 'B2', prompt: 'p-fast-food-tax',
               stem: 'Tick the three sentences that link back by reference rather than by a listed linker.',
-              options: ['Moreover, a tax on fast food raises its price.', 'This higher price pushes shoppers towards cheaper, healthier options.', 'In addition, healthy food should be made cheaper.', 'Such a change only works when a cheap, healthy option exists nearby.', 'Furthermore, people should be free to choose what they eat.', 'Doing so protects choice while removing the worst ingredients.'], answers: [1, 3, 5], k: 3,
+              options: ['Moreover, a tax on fast food raises its price.', 'In addition, healthy food should be made cheaper.', 'This higher price pushes shoppers towards cheaper, healthier options.', 'Such a change only works when a cheap, healthy option exists nearby.', 'Furthermore, people should be free to choose what they eat.', 'Doing so protects choice while removing the worst ingredients.'], answers: [2, 3, 5], k: 3,
               hint: 'A reference phrase cannot be understood without the sentence before it; a counter or adder can.',
               why: '"This higher price", "such a change" and "doing so" each carry the last sentence into this one. "Moreover", "in addition" and "furthermore" announce a new sentence and connect nothing; a paragraph built on them reads as mechanical.' }
           ] },
@@ -226,7 +226,7 @@
           why: 'False. Two benefits are two facets, and the second has no mechanism, example or nuance behind it. Band 7 Coherence asks for "a clear central topic within each paragraph": develop the sleep idea fully here, and give the buses their own paragraph or leave them out.' },
         { id: 'm07ckq6', type: 'select', tag: 'cc-reference', level: 'B2',
           stem: 'Tick the three phrases that stand for a thing or an action named in the sentence before.',
-          options: ['this policy', 'in conclusion', 'doing so', 'on the other hand', 'the latter', 'firstly', 'nevertheless'], answers: [0, 2, 4], k: 3,
+          options: ['in conclusion', 'on the other hand', 'this policy', 'doing so', 'firstly', 'nevertheless', 'the latter'], answers: [2, 3, 6], k: 3,
           hint: 'A reference phrase means nothing on its own; try reading each phrase with no sentence before it.',
           why: '"This policy", "doing so" and "the latter" cannot be understood without the sentence before them, which is what makes them cohesive. The other four are signposts: they tell the reader where the essay is going without carrying any meaning across the join.' },
         { id: 'm07ckq7', type: 'choose', tag: 'cc-progression', level: 'B2', prompt: 'p-space',

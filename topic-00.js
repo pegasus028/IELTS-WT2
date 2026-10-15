@@ -171,7 +171,7 @@
               why: 'Off topic. The official rules say candidates are penalised for not answering the question set, and a memorised essay is discounted as well. Good grammar cannot rescue an answer to a different prompt.' },
             { id: 'm00s3q3', type: 'select', tag: 'lr-register', level: 'B2',
               stem: 'Tick the three things that break the formal register of an essay.',
-              options: ['Contractions such as "isn\'t"', 'The phrase "I believe" in the thesis', 'Addressing the reader as "you"', 'A concrete example from Thailand', 'Rhetorical questions', 'The passive voice', 'A position stated in paragraph one'], answers: [0, 2, 4], k: 3,
+              options: ['The phrase "I believe" in the thesis', 'Contractions such as "isn\'t"', 'A concrete example from Thailand', 'The passive voice', 'A position stated in paragraph one', 'Addressing the reader as "you"', 'Rhetorical questions'], answers: [1, 5, 6], k: 3,
               hint: 'Ask which of these you would hear in conversation but never read in a formal report.',
               why: 'Contractions, "you" and rhetorical questions belong to speech. "I believe" in the thesis, a Thai example, the passive and an early position are all features of a good essay.' },
             { id: 'm00s3q4', type: 'judge', tag: 'struct-length', level: 'B2',
