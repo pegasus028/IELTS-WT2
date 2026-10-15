@@ -143,12 +143,14 @@
       return api.assignments('list');
     }).then(function (r) {
       T.assignments = (r && r.assignments) || [];
+      T.loaded = true;
       paintStats(); paintCohorts(); paintHouseCup(); paintRoster(); paintHeat(); paintHeatmap(); paintSystems();
       var q = T.reports.filter(function (x) { return !x.released; }).length;
       $('#nav-queue').textContent = q ? ' (' + q + ')' : '';
       if (T.sel) openStudent(T.sel);
       if (T.view === 'marking') paintMarking();
       if (T.view === 'assign') paintAssign();
+      drainLevelUp();
     });
   }
   function cohortOf(s) { return (s.progress && s.progress.cohort) || s.cohort || (function () { var r = (typeof ROSTER !== 'undefined' ? ROSTER : []).filter(function (x) { return String(x.id).toLowerCase() === String(s.id).toLowerCase(); })[0]; return r ? r.cohort : ''; })() || 'Other'; }
@@ -355,7 +357,7 @@
     var list = T.reports.filter(function (r) { return T.markFilter === 'all' || (T.markFilter === 'queue' ? !r.released : r.released); });
     if (T.cohort !== 'all') { var ids = {}; visible().forEach(function (s) { ids[s.id] = 1; }); list = list.filter(function (r) { return ids[r.studentId]; }); }
     var html = '<div class="panel-h"><h2>Marking</h2><div class="filters" style="margin:0">' + ['queue', 'released', 'all'].map(function (k) { return '<button data-mf="' + k + '"' + (T.markFilter === k ? ' class="on"' : '') + '>' + k + '</button>'; }).join('') + '</div></div>';
-    html += '<div class="mark"><div class="card panel"><div class="replist">' + (list.length ? list.map(function (r) { var pr = PR.get(r.promptId) || {}, b = bandsOf(r); return '<button class="rep' + (T.markSel === r.id ? ' sel' : '') + '" data-mk="' + esc(r.id) + '"><span class="rep-t"><span class="rep-n">' + esc(r.name || r.studentId) + ' — ' + esc(pr.title || r.promptId) + '</span><span class="rep-s">' + esc(String(r.ts).slice(0, 10) + ' · ' + typeName(r.type) + ' · ' + r.words + ' w · ' + ((r.preflight || {}).bad || 0) + ' red · ' + (r.kind || 'practice') + ' · ' + (r.released ? 'released' : r.teacher ? 'marked' : r.ai ? 'AI estimate' : 'unmarked')) + '</span></span><span class="rep-b">' + (b ? fmtBand(b.overall) : '—') + '</span></button>'; }).join('') : '<div class="empty">Nothing here.</div>') + '</div></div><div class="card panel" id="mk-detail"><div class="empty">Pick a report.</div></div></div>';
+    html += '<div class="mark"><div class="card panel"><div class="replist">' + (list.length ? list.map(function (r) { var pr = PR.get(r.promptId) || {}, b = bandsOf(r); return '<button class="rep' + (T.markSel === r.id ? ' sel' : '') + '" data-mk="' + esc(r.id) + '"><span class="rep-t"><span class="rep-n">' + esc(r.name || r.studentId) + ' — ' + esc(pr.title || r.promptId) + '</span><span class="rep-s">' + esc(String(r.ts).slice(0, 10) + ' · ' + typeName(r.type) + ' · ' + r.words + ' w · ' + ((r.preflight || {}).bad || 0) + ' red · ' + (r.kind || 'practice') + ' · ' + (r.released ? 'released' : r.teacher ? 'marked' : r.ai ? 'AI estimate' : 'unmarked')) + '</span></span><span class="rep-b">' + (b ? fmtBand(b.overall) : (r.ai && r.ai.cefr ? esc(r.ai.cefr) : (LV.pending[r.id] ? '⏳' : '—'))) + '</span></button>'; }).join('') : '<div class="empty">Nothing here.</div>') + '</div></div><div class="card panel" id="mk-detail"><div class="empty">Pick a report.</div></div></div>';
     $('#view-marking').innerHTML = html;
     $('#view-marking').querySelectorAll('[data-mf]').forEach(function (b) { b.addEventListener('click', function () { T.markFilter = b.dataset.mf; paintMarking(); }); });
     $('#view-marking').querySelectorAll('[data-mk]').forEach(function (b) { b.addEventListener('click', function () { T.markSel = b.dataset.mk; paintMarking(); }); });
@@ -374,7 +376,8 @@
     if (r.firstText) h += '<details class="disc"><summary>First draft (before revision)</summary><div class="disc-body" style="padding-top:10px">' + W.paragraphs(r.firstText).map(function (t) { return '<div class="mpara">' + esc(t) + '</div>'; }).join('') + '</div></details>';
     h += '<details class="disc"><summary>The Ten Wards (structure rows)<span class="count">' + ((pre.rows || []).length) + '</span></summary><div class="disc-body" style="padding-top:10px">' + (pre.rows || []).map(function (row) { return '<div class="pf-row ' + row.status + '">' + esc(row.label) + '</div>'; }).join('') + '</div></details>';
     if (r.plan && r.plan.vars) { var vv = r.plan.vars, keys = Object.keys(vv).filter(function (k) { return vv[k]; }); if (keys.length) h += '<details class="disc"><summary>The matrix the student planned<span class="count">' + keys.length + ' of 11</span></summary><div class="disc-body" style="padding-top:10px"><ol class="bc-list">' + C.VARIABLES.map(function (v) { return vv[v.key] ? '<li><b>' + esc(v.name) + '</b> — ' + esc(vv[v.key]) + '</li>' : ''; }).join('') + '</ol></div></details>'; }
-    if (r.ai) h += '<details class="disc" open><summary>AI estimate<span class="count">' + (r.ai.bands ? fmtBand(r.ai.bands.overall) : '—') + (r.ai.second ? ' · second pass ' + fmtBand(r.ai.second.overall) + (Math.abs(r.ai.second.overall - r.ai.bands.overall) > 0.5 ? ' ⚠ divergent' : '') : '') + '</span></summary><div class="disc-body" style="padding-top:10px">' + (r.ai.comment ? '<div class="aibox">' + esc(r.ai.comment) + '</div>' : '') + (r.ai.errors ? '<div class="errs">' + r.ai.errors.map(function (e) { var rem = C.REMEDIATION[e.tag] || {}; return '<div class="err"><b>' + esc(rem.name || e.tag) + '</b><q>' + esc(e.quote) + '</q> → ' + esc(e.fix) + '</div>'; }).join('') + '</div>' : '') + '<p class="tiny" style="margin-top:8px"><label><input type="checkbox" id="mk-aivis"' + (r.aiVisible ? ' checked' : '') + '> Let the student see this estimate before I release my mark</label></p></div></details>';
+    if (LV.pending[r.id]) h += '<p class="tiny" style="margin:10px 0">⏳ With the examiners in LevelUp since ' + esc(bkkStamp(new Date(LV.pending[r.id]).toISOString()).slice(11)) + ' — the Overall CEFR and examiner feedback will appear here by themselves.</p>';
+    if (r.ai) h += '<details class="disc" open><summary>AI estimate<span class="count">' + (r.ai.bands ? fmtBand(r.ai.bands.overall) : (r.ai.cefr ? 'CEFR ' + esc(r.ai.cefr) : '—')) + (r.ai.second ? ' · second pass ' + fmtBand(r.ai.second.overall) + (Math.abs(r.ai.second.overall - r.ai.bands.overall) > 0.5 ? ' ⚠ divergent' : '') : '') + '</span></summary><div class="disc-body" style="padding-top:10px">' + (r.ai.source === 'levelup' ? '<p style="margin:0 0 8px"><b>Overall CEFR (LevelUp): ' + esc(r.ai.cefr || '—') + '</b><span class="tiny"> · Respondent ID ' + esc(r.ai.respondentId || '') + (r.ai.at ? ' · marked ' + esc(bkkStamp(r.ai.at)) : '') + '</span></p><div class="tiny" style="margin-bottom:4px">Examiner feedback</div>' : '') + (r.ai.comment ? '<div class="aibox">' + esc(r.ai.comment) + '</div>' : '') + (r.ai.errors ? '<div class="errs">' + r.ai.errors.map(function (e) { var rem = C.REMEDIATION[e.tag] || {}; return '<div class="err"><b>' + esc(rem.name || e.tag) + '</b><q>' + esc(e.quote) + '</q> → ' + esc(e.fix) + '</div>'; }).join('') + '</div>' : '') + '<p class="tiny" style="margin-top:8px"><label><input type="checkbox" id="mk-aivis"' + (r.aiVisible ? ' checked' : '') + '> Let the student see this estimate before I release my mark</label></p></div></details>';
     h += '<div class="panel-h" style="margin-top:14px"><h2>Your mark</h2><span class="tiny">Half bands. Overall = average of the four.</span></div><div class="bands">' + ['tr', 'cc', 'lr', 'gra'].map(function (k) { return '<div class="band"><select id="mk-' + k + '">' + opts(bandKey(tb, k)) + '</select><span>' + k.toUpperCase() + '</span></div>'; }).join('') + '<div class="band"><b id="mk-overall">' + (tb.overall ? fmtBand(tb.overall) : '—') + '</b><span>Overall · <i id="mk-cefr">' + (tb.overall ? cefrOf(tb.overall) : '') + '</i></span></div></div>';
     h += '<textarea class="comment" id="mk-comment" placeholder="Nickname, then one specific praise! Quote their words in single quotes. State the level plainly. Name the error types. However, … Just ensure … Finally, … Warm close.">' + esc((r.teacher && r.teacher.comment) || (r.ai && r.ai.comment) || '') + '</textarea>';
     h += '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" id="mk-save">Save mark</button><button class="btn primary" id="mk-release">Save and release to student</button>' + (r.released ? '<button class="btn ghost" id="mk-unrelease">Withdraw</button>' : '') + '<button class="btn" id="mk-levelup" title="Open LevelUp with this essay and prompt filled in">Send to the examiners →</button><button class="btn ghost" id="mk-copyprompt" title="Copy the marking prompt to paste into Claude">Copy AI prompt</button></div>';
@@ -400,18 +403,75 @@
     $('#mk-save').addEventListener('click', function () { save(false); });
     $('#mk-release').addEventListener('click', function () { save(true); });
     var un = $('#mk-unrelease'); if (un) un.addEventListener('click', function () { api.markReport(id, { released: false, status: 'marked' }).then(function (res) { if (!res || !res.ok) { toast('Could not withdraw: ' + ((res && res.error) || 'try again')); return; } r.released = false; toast('Withdrawn.'); paintMarking(); }); });
-    $('#mk-levelup').addEventListener('click', function () {
-      var payload = { source: 'position-control', ts: new Date().toISOString(), studentId: r.studentId, name: r.name, cohort: r.cohort || '', promptId: r.promptId, prompt: pr.text || r.promptDesc || '', essay: r.text, reportId: r.id, teacher: true };
-      try { localStorage.setItem('lue_handoff', JSON.stringify(payload)); } catch (e) {}
-      var packed = ''; try { packed = btoa(unescape(encodeURIComponent(JSON.stringify({ prompt: payload.prompt, essay: r.text, name: r.name })))); } catch (e) {}
-      window.open(LEVELUP.replace(/index\.html$/, '') + 'teacher.html?from=pc' + (packed ? '#pc=' + packed : ''), '_blank');
-    });
+    $('#mk-levelup').addEventListener('click', function () { sendToLevelUp(r, pr); });
     $('#mk-copyprompt').addEventListener('click', function () {
       var txt = W.markingPrompt(pr, r.text, { rows: (pre.rows || []).map(function (x) { return { status: x.status, label: x.label }; }) });
       try { navigator.clipboard.writeText(txt); toast('Marking prompt copied — paste it into Claude.'); } catch (e) { prompt('Copy this prompt', txt); }
     });
     var vis2 = $('#mk-aivis'); if (vis2) vis2.addEventListener('change', function () { api.markReport(id, { aiVisible: vis2.checked }).then(function (res) { if (!res || !res.ok) { toast('Could not save: ' + ((res && res.error) || 'try again')); vis2.checked = !vis2.checked; return; } r.aiVisible = vis2.checked; toast(vis2.checked ? 'Estimate visible to the student.' : 'Estimate hidden.'); }); });
   }
+
+  /* ---------------------------------------------------- LevelUp round trip
+     "Send to the examiners" opens LevelUp's teacher console with the
+     Respondent's ID (name + Bangkok date and time of submission), the prompt
+     and the essay filled in, and LevelUp submits it for analysis by itself.
+     LevelUp puts its Overall CEFR and examiner feedback in a queue in
+     localStorage (both apps are on pegasus028.github.io, so they share it) and
+     nudges this tab; each result is saved into its report as `ai` through
+     markReport, then taken off the queue. A result that arrives while the
+     Staff Room is closed waits there for the next load. */
+  var LV = { key: 'lue_results', pending: {}, busy: false };
+  function bkkStamp(iso) {
+    var d = new Date(iso); if (isNaN(d)) return String(iso || '');
+    var t = new Date(d.getTime() + 7 * 3600000).toISOString(); /* Asia/Bangkok is UTC+7 all year */
+    return t.slice(0, 10) + ' ' + t.slice(11, 16);
+  }
+  function respondentId(r) { return String(r.name || r.studentId || 'Student').trim() + ' ' + bkkStamp(r.ts); }
+  function sendToLevelUp(r, pr) {
+    var payload = { v: 2, source: 'position-control', auto: true, ts: new Date().toISOString(), reportId: r.id, studentId: r.studentId, name: r.name, respondentId: respondentId(r), promptId: r.promptId, prompt: pr.text || r.promptDesc || '', essay: r.text, targetWords: 250 };
+    try { localStorage.setItem('lue_handoff', JSON.stringify(payload)); } catch (e) {}
+    var packed = ''; try { packed = btoa(unescape(encodeURIComponent(JSON.stringify(payload)))); } catch (e) {}
+    var w = window.open(LEVELUP.replace(/index\.html$/, '') + 'teacher.html?from=pc&auto=1' + (packed ? '#pc=' + packed : ''), '_blank');
+    if (!w) { toast('Pop-up blocked: allow pop-ups for this site, then press the button again.'); return; }
+    LV.pending[r.id] = Date.now();
+    toast('Sent to LevelUp. The CEFR result and feedback will come back here.');
+    if (T.view === 'marking') paintMarking();
+  }
+  function lvQueue() { try { var q = JSON.parse(localStorage.getItem(LV.key) || '[]'); return Array.isArray(q) ? q : []; } catch (e) { return []; } }
+  function lvDrop(key) { try { localStorage.setItem(LV.key, JSON.stringify(lvQueue().filter(function (x) { return x.key !== key; }))); } catch (e) {} }
+  function drainLevelUp() {
+    if (LV.busy || !T.loaded) return;
+    var q = lvQueue(), item = null, r = null;
+    for (var i = 0; i < q.length && !item; i++) {
+      var hit = T.reports.filter(function (x) { return x.id === q[i].reportId; })[0];
+      if (hit) { item = q[i]; r = hit; }
+      else if (Date.now() - Date.parse(q[i].at || 0) > 14 * 86400000) lvDrop(q[i].key); /* no such report for two weeks: give up */
+    }
+    if (!item) return;
+    var ai = { source: 'levelup', cefr: String(item.cefr || ''), comment: String(item.feedback || ''), respondentId: item.respondentId || '', levelupId: item.savedId || '', at: item.at || new Date().toISOString() };
+    LV.busy = true;
+    api.markReport(r.id, { ai: ai }).then(function (res) {
+      LV.busy = false;
+      if (!res || !res.ok) { toast('LevelUp result for ' + (r.name || r.studentId) + ' could not be saved yet: ' + ((res && res.error) || 'try again') + ' It stays queued.'); return; }
+      r.ai = ai; delete LV.pending[r.id]; lvDrop(item.key);
+      toast('LevelUp result saved for ' + (r.name || r.studentId) + ': CEFR ' + (ai.cefr || '—') + '.');
+      if (T.view === 'marking') paintMarking();
+      drainLevelUp();
+    }, function (err) { LV.busy = false; toast('LevelUp result could not be saved yet: ' + ((err && err.message) || err) + ' It stays queued.'); });
+  }
+  window.addEventListener('storage', function (e) { if (e.key === LV.key) drainLevelUp(); });
+  window.addEventListener('focus', drainLevelUp);
+  window.addEventListener('message', function (e) {
+    var d = e.data;
+    if (!d || d.type !== 'levelup-result') return;
+    var lvOrigin = ''; try { lvOrigin = new URL(LEVELUP, location.href).origin; } catch (x) {}
+    if (e.origin !== location.origin && e.origin !== lvOrigin) return;
+    /* A LevelUp on another origin cannot reach this queue, so it sends the result itself. */
+    if (d.item && d.item.key && d.item.reportId && !lvQueue().some(function (x) { return x.key === d.item.key; })) {
+      try { var q = lvQueue(); q.push(d.item); localStorage.setItem(LV.key, JSON.stringify(q)); } catch (x) {}
+    }
+    drainLevelUp();
+  });
 
   /* --------------------------------------------------------- assignments */
   function paintAssign() {
