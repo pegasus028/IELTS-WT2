@@ -247,7 +247,7 @@
           stem: 'Rewrite with every error fixed: spelling, countability and register. Keep the meaning.',
           given: 'The goverment should give more informations to kids about online fraud, it is definately necesary.',
           must: [['government'], ['information'], ['children', 'young people', 'teenagers', 'adolescents', 'students']],
-          ban: ['goverment', 'informations', 'kids', 'definately', 'necesary'],
+          ban: ['goverment', 'informations', 'kids', 'definately', 'necesary'], noSplice: true,
           minWords: 8, maxWords: 30, praise: 'Spelling, countability, register and the splice all repaired. An error-free sentence.',
           _good: 'The government should definitely give young people more information about online fraud.',
           _bad: 'The goverment should give more informations to kids about online fraud, it is definately necesary.',

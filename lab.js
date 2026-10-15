@@ -502,7 +502,7 @@
 
   /* ========================================================= quick checks */
   var EXTRA_CLICHE = [/\bnowadays\b/i, /\bin this essay,? i will\b/i, /\bi will discuss\b/i, /\bfirst and foremost\b/i, /\bboth sides of the coin\b/i, /\bpros and cons\b/i];
-  var CONTRACTION = /\b(\w+n't|it's|there's|that's|they're|we're|i'm|you're|let's)\b/i;
+  var CONTRACTION = /\b(\w+n['\u2019]t|it['\u2019]s|there['\u2019]s|that['\u2019]s|they['\u2019]re|we['\u2019]re|i['\u2019]m|you['\u2019]re|let['\u2019]s)\b/i;
   var INFORMAL = /\b(kids?|stuff|a lot of|lots of|gonna|wanna|okay|ok|super|awesome|guys)\b/i;
   function spellErrors(text) {
     var out = [];
@@ -586,11 +586,11 @@
     var model = ((pr.vars || {})[ctx.tier] || {})[key];
     if (model && similarity(value, model.ok) > 0.85) { res.copied = true; res.issues.push({ kind: 'warn', msg: 'This is the model answer from the bank. Use your own idea.' }); }
     if (key === 'core' && pr.keyNouns && pr.keyNouns.length) {
-      var low = value.toLowerCase(), hit = pr.keyNouns.some(function (n) { return low.indexOf(String(n).toLowerCase()) >= 0; });
+      var low = value.toLowerCase(), hit = W && W.mentions ? W.mentions(value, pr.keyNouns) : pr.keyNouns.some(function (n) { return low.indexOf(String(n).toLowerCase()) >= 0; });
       if (!hit) res.issues.push({ kind: 'warn', msg: 'None of the prompt\'s key words (' + pr.keyNouns.slice(0, 4).join(', ') + ') is here. Keep the Core Topic anchored to the prompt, or the essay may drift off topic.' });
     }
     slotFormHint(ctx.tpl, key).forEach(function (h) {
-      if (/-ing verb/.test(h) && !/^\S*ing\b/i.test(value)) res.issues.push({ kind: 'warn', msg: h });
+      if (/-ing verb/.test(h) && !/^((by|through)\s+)?\S*ing\b/i.test(value)) res.issues.push({ kind: 'warn', msg: h });
     });
     if (ctx.needs2) {
       value2 = String(value2 || '').trim();

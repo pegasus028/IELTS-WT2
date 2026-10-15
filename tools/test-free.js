@@ -48,6 +48,20 @@ each(function (it) {
   (ALT[it.id] || []).forEach(function (a) { n++; var r = fn(a, it); if (!r.ok) { fails++; console.log('FAIL sound answer rejected ' + it.id + ' "' + a + '" → ' + r.notes.join(' | ')); } });
   (ALT[it.id + '_no'] || []).forEach(function (a) { n++; if (fn(a, it).ok) { fails++; console.log('FAIL method breach accepted ' + it.id + ' "' + a + '"'); } });
 });
+/* 16 Oct 2026: the blind answer bank. Two independent teacher-written sets of
+   student answers (paraphrases, synonyms, typos, American spelling, curly
+   apostrophes). Every valid answer must pass and every invalid one fail;
+   "known" lists invalid answers the rules cannot catch yet (reported only). */
+var bank = JSON.parse(fs.readFileSync(path.join(__dirname, 'free-text-bank.json'), 'utf8')), byId = {}, known = 0, bv = 0, bi = 0;
+each(function (it) { byId[it.id] = it; });
+Object.keys(bank).filter(function (k) { return k.charAt(0) !== '_'; }).forEach(function (id) {
+  var it = byId[id]; if (!it) { fails++; console.log('FAIL bank item missing      ' + id); return; }
+  var fn = it.type === 'thesis' ? W.checkThesis : it.type === 'bodypara' ? W.checkBody : W.checkRewrite;
+  bank[id].valid.forEach(function (a) { n++; bv++; var r = fn(a, it); if (!r.ok) { fails++; console.log('FAIL bank answer rejected  ' + id + ' "' + a + '" → ' + r.notes.join(' | ')); } });
+  bank[id].invalid.forEach(function (a) { n++; bi++; if (fn(a, it).ok) { fails++; console.log('FAIL bank answer accepted  ' + id + ' "' + a + '"'); } });
+  known += (bank[id].known || []).length;
+});
+console.log('bank: ' + bv + ' valid answers accepted, ' + bi + ' invalid answers refused, ' + known + ' known gaps (body-paragraph side and topic, two thesis items)');
 (C.MODELS || []).forEach(function (m) {
   var text = m.paragraphs.map(function (p) { return p.text; }).join('\n\n');
   var pre = W.preflight(text, m.promptId);

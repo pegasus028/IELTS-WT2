@@ -1,0 +1,877 @@
+{
+ "_about": "Blind answer bank, 16 Oct 2026: two independent teacher-written sets of student answers per free-text item. valid = a fair teacher accepts (must pass); invalid = misses what the stem asks (must fail); known = invalid answers the rule checker cannot yet catch (reported, not failed). Run by tools/test-free.js.",
+ "m01s2q7": {
+  "valid": [
+   "On balance, the drawbacks of online learning outweigh its benefits for teenagers, because students at home are easily distracted by games and social media.",
+   "I believe the advantages of e-learning are greater than its disadvantages, since it lets students in remote provinces study with excellent teachers they could never meet in person.",
+   "Although remote lessons are convenient, their disadvantages are more serious, as many students lose motivation without a teacher watching them.",
+   "In my view, virtual classes do more harm than good for secondary students because a screen cannot replace face-to-face discussion with classmates.",
+   "Because learners can replay recorded lessons as many times as they need, the benefits of studying online clearly outweigh the drawbacks.",
+   "The disadvantages of online learning outweight the advantages, becuase young students need a teacher who can see when they are confused.",
+   "I belive the benefits of online classes outweighs the problems, because students can learn at their own speed and save time on travelling.",
+   "For most teenagers, the negative effects of learning over the internet exceed the positive ones, since long hours on a screen damage both concentration and eyesight.",
+   "In my opinion, the pros of distance learning are heavier than the cons because it gives students in rural areas the same access to good teachers as students in Bangkok.",
+   "On balance, I’d say online study brings more problems than benefits for school students, as it isolates them from the friends and teachers who keep them motivated.",
+   "Although learning through a screen offers flexibility, its drawbacks are more serious, since teenagers who study alone at home lose the discipline and social contact that a classroom provides.",
+   "The benefits of online study clearly outweigh the drawbacks because it gives students in remote provinces access to teachers and courses that their local schools cannot offer.",
+   "In my view, the cons of online education carry more weight than the pros, as most adolescents lack the self-control to concentrate without a teacher in the room.",
+   "Because recorded lessons can be replayed as many times as a learner needs, the advantagies of online courses outweigh their disadvantages for most students.",
+   "Online learning is, on balance, more harmful than helpful for school students, as long hours in front of a screen damage both their concentration and their friendships.",
+   "The disadvantage of studying online outweigh its convenience, because without face-to-face discussion students rarely develop the speaking and teamwork skills that employers value."
+  ],
+  "invalid": [
+   "Some people think online learning is good for students, while other people think it is bad for them.",
+   "Online learning has many advantages and disadvantages, and both of them are important for students today.",
+   "In my opinion, the advantages of online learning outweigh the disadvantages for students in many countries.",
+   "I believe private cars should be banned from city centres because they cause too much air pollution.",
+   "Online learning has both advantages and disadvantages, and this essay will discuss both of them in detail.",
+   "In my opinion, the advantages of online learning for today's students clearly outweigh the disadvantages in many different ways.",
+   "Online learning is very flexible and cheap, but students can feel lonely and distracted when they study at home."
+  ],
+  "known": []
+ },
+ "m02s3q3": {
+  "valid": [
+   "I believe private cars should be banned from city centres, because the traffic fumes are making the air dangerous to breathe.",
+   "In my view, cars should not be banned from the city centre, since many people who live far away have no other way to get to work.",
+   "I strongly agree that governments should restrict driving in city centres, as fewer cars would mean cleaner air and quieter streets.",
+   "In my opinion, banning private vehicles from downtown areas is a mistake because it would hurt shop owners whose customers arrive by car.",
+   "I would argue that cars should be kept out of city centers only after public transport improves, as a sudden ban would punish commuters.",
+   "Because the air in Bangkok is already so polluted, I belive the goverment should stop private cars entering the city centre.",
+   "I think cars should be ban from city centres becuase they cause traffic jams and pollution every day.",
+   "To my mind, keeping automobiles out of the heart of the city is the best way to cut pollution and make streets safer for pedestrians.",
+   "I am convinced that a ban on private cars in city centres would do more good than harm, since it would push people onto cleaner buses and trains.",
+   "In my view, drivers should pay a charge to enter the city centre rather than face a full ban, because this reduces traffic without taking away people’s choice.",
+   "I strongly agree that private cars should be banned from city centres, because the exhaust they produce is the main cause of the dirty air that residents breathe every day.",
+   "Given that traffic jams waste hours of every commuter’s day, I believe that city-centre driving should be restricted to buses, taxis and delivery vehicles.",
+   "This essay argues that a ban on private vehicles in downtown areas is justified, since cleaner air would protect the health of millions of city dwellers.",
+   "I disagree that cars should be banned from the centre of cities, because many elderly and disabled people depend on private transport to reach hospitals and shops.",
+   "In my view, governments should not prohibit private cars in city centers becouse public transport in many cities is still too slow and unreliable to replace them.",
+   "I am convinced that private cars ought to be kept out of the city centre; the space they occupy would serve people far better as walkways, cycle lanes and parks."
+  ],
+  "invalid": [
+   "Some people want cars out of the city centre, but others believe drivers should be free to go wherever they like.",
+   "There are many arguments for and against banning private cars from city centres in modern cities today.",
+   "I believe that private cars should be banned from all city centres in every big city in the world.",
+   "I believe this is a very important issue, because it affects many people in our society today.",
+   "I agree with this statement because it is a very important issue for everyone in modern society today.",
+   "Private cars in city centres cause pollution and traffic, but they are also convenient for many people who live there.",
+   "I completely agree that governments should ban private cars from the centres of large cities."
+  ],
+  "known": []
+ },
+ "m02s3q4": {
+  "valid": [
+   "I agree that all students should gain work experience, because a part-time job teaches them responsibility that a classroom cannot.",
+   "I disagree that every student should have work experience, as teenagers need their free time to study and rest.",
+   "In my view, all secondary students should do some work experience, since it shows them what different careers are really like before they choose a university course.",
+   "I partly agree: students should work, but for no more than eight hours a week, because longer hours would damage their grades.",
+   "I strongly believe that work experience should be compulsory for all students because it helps them learn how to manage money and time.",
+   "I agree that all studens should get work experiance, because working with adults makes them more confident and independent.",
+   "I disagree with this idea becuase forcing every student to take a job puts too much pressure on teenagers who already have heavy homework.",
+   "In my opinion, it is not necessary for all young people to gain work experience at school, since some need to focus on exams for scholarships.",
+   "Since a summer job teaches teamwork and punctuality, I agree that every student should have some experience of the workplace before leaving school.",
+   "I agree that every student should gain some work experience before leaving school, since a real job teaches responsibility and time management in a way that no classroom can.",
+   "While school must come first, I partly agree: students should take on paid work, but for no more than eight hours a week so that their grades do not suffer.",
+   "Requiring all students to work is, in my view, a mistake, because teenagers who are already under pressure from exams need their free time for rest and revision.",
+   "I believe work experiance should be compulsory for all secondary students, as it shows them how the subjects they study are used in real careers.",
+   "I disagree that all students should be made to work, as a part-time job often takes up the hours that teenagers need for homework and sleep, which harms there studies.",
+   "Giving up some free time is a price worth paying for work experience, so I agree with the statement, because early contact with employers builds the confidence students will need later."
+  ],
+  "invalid": [
+   "I’m in favour of making work experience part of every student’s education, because it connects classroom knowledge with real life.",
+   "Some people believe students should have work experience, while others think they should focus only on their studies.",
+   "Work experience has both good and bad points for students, so it depends on the situation.",
+   "I agree that all students should gain work experience before they finish high school.",
+   "I partly agree and partly disagree with the idea that all students should gain work experience in their lives.",
+   "Some people think students should work and others think they should only study, so it depends on each student.",
+   "I agree that all students should gain work experience before they finish school.",
+   "I partly agree with this statement because there are good and bad points about students working."
+  ],
+  "known": []
+ },
+ "m02s3q6": {
+  "valid": [
+   "On balance, the drawbacks of online learning outweigh its benefits, because the motivation that a physical classroom provides cannot be reproduced through a screen.",
+   "I would argue that the advantages of remote education are more significant than its disadvantages, since it removes the barrier of distance for students in rural areas.",
+   "While virtual classrooms offer flexibility, their disadvantages are more serious, as they deprive teenagers of the social interaction they need to develop.",
+   "The benefits of e-learning clearly outweigh its limitations, given that recorded lessons allow every learner to review difficult material at their own pace.",
+   "In my view, the disadvantages of online lessons outweight the advantages, becuase many students lack a quiet place and a stable internet connection at home.",
+   "Given that weaker students quietly fall behind when no teacher can see their faces, the costs of online learning exceed its benefits.",
+   "Online education does more good than harm overall, because it gives students access to world-class teachers and courses that their local schools cannot offer.",
+   "I am convinced that the negatives of studying online are greater than the positives, as constant screen time harms both concentration and mental health.",
+   "In my opinion, the advantage of online learning outweighs its disadvantages because it is cheaper and more flexibel for both students and schools.",
+   "The drawbacks of digital learning weigh more heavily than its benefits, because self-discipline, which most teenagers are still developing, becomes the only thing keeping them on task.",
+   "The drawbacks of replacing classrooms with screens carry more weight than the convenience it offers, chiefly because adolescents learn as much from face-to-face interaction as from the syllabus itself.",
+   "On balance, the gains of online learning outweigh its costs, since it removes the barriers of distance and expense that have long kept rural students from high-quality teaching.",
+   "Since motivation tends to collapse without a teacher’s physical presence, the disadvantages of online education are, in my judgment, more serious than its benefits.",
+   "Because digital courses allow learners to study at their own pace, their advantages are decisively heavier than the occasional isolation they cause.",
+   "Online study does more harm than good for teenagers, because the constant distractions of a laptop undermine the deep concentration that serious learning requires.",
+   "Online learning’s benefits outweigh its drawbacks, as recorded lectures allow students to revise difficult material repeatedly, something a single live lesson canot provide."
+  ],
+  "invalid": [
+   "Online learning has clear advantages, such as flexibility, and clear disadvantages, such as distraction at home.",
+   "There are both benefits and drawbacks to online learning, and each student will experience it differently.",
+   "I believe that the disadvantages of online learning clearly outweigh the advantages for most students.",
+   "In my view, the advantages and disadvantages of online learning are equally balanced for most learners today.",
+   "There are significant advantages and disadvantages to online learning, both of which deserve careful consideration in this essay.",
+   "I believe that the disadvantages of online learning outweigh the advantages for a number of different reasons.",
+   "Online learning is convenient because students can study anywhere, but it can also make them feel isolated from their friends."
+  ],
+  "known": []
+ },
+ "m02ckq6": {
+  "valid": [
+   "I agree that schools should stop selling sugary snacks, because children who eat sweets every day are more likely to become overweight.",
+   "I strongly believe that school canteens should no longer sell sweets and soft drinks, as eating habits formed at school last into adulthood.",
+   "In my opinion, schools should ban sugary snacks because students cannot concentrate in class after a sugar rush followed by a crash.",
+   "I disagree that schools should stop selling sugary snacks, since students will simply buy them from the shops outside the school gate.",
+   "I agree that schools should remove sugary foods from their shops, becuase they damage students teeth and health.",
+   "In my view schools must stop selling candy and fizzy drinks, since a school that teaches healthy eating should not sell unhealthy food.",
+   "Since childhood obesity is rising fast in Thailand, I agree that schools should stop selling snacks that are high in sugar.",
+   "I belive schools should not sell sugary snack anymore because it make students addicted to sweet taste.",
+   "I do not think schools should stop selling sugary snacks completely, because teenagers need to learn to make healthy choices for themselves.",
+   "I support a ban on sugary snacks in school canteens, as it is the school’s responsibility to protect students’ health during the day.",
+   "I agree that schools should stop selling sugary snacks, since the canteen shapes the eating habbits that students carry into adult life.",
+   "In my view, schools ought to remove sweets and fizzy drinks from their canteens, because a school that teaches healthy eating in class should not profit from junk food at lunchtime.",
+   "I disagree that schools should stop selling sugary snacks, because a ban would simply send students to the shops outside the gate and teach them nothing about balance.",
+   "With childhood obesity rising across Thailand, I firmly support ending the sale of sugary snacks in schools, as it would cut the amount of sugar students eat each day.",
+   "Banning sugary treats on school grounds is, I believe, the right decision, because students who cannot buy them at break are less likely to develop a habit of eating them.",
+   "I strongly agree that schools should no longer sell sugery snacks, because they harm students’ teeth and their concentration in afternoon lessons."
+  ],
+  "invalid": [
+   "Some people say schools should stop selling sugary snacks, but others say students should be free to choose what they eat.",
+   "Sugary snacks are very popular among students in many schools in Thailand and around the world.",
+   "I agree that schools should stop selling sugary snacks and drinks to all of their students.",
+   "I agree that all students should gain work experience because it teaches them responsibility and independence.",
+   "Sugary snacks are popular with students, but they are also unhealthy, so this is a difficult question for schools.",
+   "I agree that schools should stop selling sugary snacks to their students.",
+   "I agree with this statement because health is very important for everyone in the world."
+  ],
+  "known": []
+ },
+ "m03s1q4": {
+  "valid": [
+   "The banning of private cars from city centres",
+   "A ban on private cars in the city’s centre",
+   "The restriction of private vehicles in city centres",
+   "The regulation of private car use in urban centres",
+   "The removal of private cars from the centres of cities",
+   "The prohibition of privately owned cars in central city areas",
+   "Government bans on private cars in city centres",
+   "The baning of privat cars from city centres",
+   "The ban of private car in city centre",
+   "The removal of private cars from city centres",
+   "A ban on private vehicles in downtown areas",
+   "The restriction of private car use in city centers",
+   "Government prohibition of private cars in urban centres",
+   "The exclusion of privately owned cars from the centre of cities",
+   "Bans on private cars in the centres of major citys"
+  ],
+  "invalid": [
+   "Banning private cars from city centers",
+   "Governments should ban private cars from city centres.",
+   "The banning of private cars from city centres to reduce pollution",
+   "Private cars are banned from city centres by governments.",
+   "The problem of air pollution in big cities",
+   "Governments ban private cars from city centres.",
+   "Private cars should be banned in city centres.",
+   "Banning private cars from city centres reduces pollution."
+  ],
+  "known": []
+ },
+ "m04s3q5": {
+  "valid": [
+   "The main benefit of working from home is higher productivity. When employees no longer have to commute, they save time and energy, which in turn allows them to start work fresh and focused. For example, an accountant in Bangkok who used to spend two hours a day in traffic on Sukhumvit Road can use that time to finish reports before lunch, and her company receives more work for the same salary. However, some staff find it difficult to concentrate at home with children around. Even so, for most employees the hours saved on the journey make remote work more productive overall.",
+   "Working from home can make employees more productiv because it removes the daily journey to the office. Without a long commute, staff begin the day less tired, and this energy goes directly into their tasks. In Bangkok, for instance, a marketing officer at a small company in Silom might lose ninety minutes each morning on the BTS and in traffic; at home, he can answer emails by eight o’clock. Admittedly, not every employee has a quiet room, and some are distracted by family. Neverthless, for most workers the time saved is more valuable than these problems, so companies benefit as well.",
+   "The clearest advantage of remote work for a company is that its employees become more productive. The mechanism is simple: by cutting out commuting, home working gives people back several hours a week, and rested workers make fewer mistakes and finish tasks faster. A software firm in the Bang Na district of Bangkok reported that its programmers completed more projects after it allowed them to work from home three days a week, because they no longer arrived exhausted from traffic. It is true that some managers worry they cannot supervise staff at home. In reality, however, results can be measured by output rather than by hours at a desk, so this concern does not cancel the benefit.",
+   "One benefit of working from home is that employees is less stressed and therefore more productive. Long journeys in Bangkok traffic leave workers tired before the day even begins, whereas at home they can start immediatly and organise their time better. My aunt, who works for an insurance company in Ratchada, used to leave home at six in the morning; since her company let her work from home, she finishes her reports earlier and makes fewer errors. Of course, working alone can feel lonely, and some people miss their colleagues. However, in reality this can be solved by meeting in the office once a week, so the productivity benefit remains.",
+   "Home working raises productivity because it gives employees control over their environment. Instead of losing energy in crowded trains, staff can work in a quiet space at the hours when they concentrate best, which in turn improves the quality of their work. A clear example is a Bangkok bank’s call centre team, which handled more customer cases per day after the company moved them to home-based shifts during the rainy season floods. Admittedly, younger employees may learn more slowly without senior colleagues beside them. Even so, this is a reason to train them online, not a reason to abandon a system that makes the company more productive.",
+   "The most obvious benefit of working from home is the time it gives back to employees. By removing the daily commute, remote work frees two or three hours that staff can spend on focused tasks or on rest, which in turn makes them more productive when they sit down at their desks. A marketing company in Bangkok, for instance, found that its team completed projects faster after staff stopped spending the morning stuck on Sukhumvit Road. Admittedly, some employees feel isolated at home and miss chatting with colleagues; even so, a weekly office day can solve this without losing the gains in productivity.",
+   "Home-based work is beneficial mainly because it lets employees organize their day around their own energy. When an office worker is no longer forced into a fixed schedule, deep work can be planned for the hours in which concentration is highest, so output rises. This was seen at a small Thai software firm where programmers chose to work at home in the afternoons; the company reported fewer missed deadlines within six months. That said, not every job can be done from a laptop, and a cashier or a nurse cannot stay home. For desk-based roles, however, the productivity gain remains clear.",
+   "Working remotely also saves money for both staff and the company. An employee who stays at home no longer pays for petrol, parking or a BTS ticket, while the employer can rent a smaller office, and these savings can be reinvested in training that raises productivity. My aunt, an accountant in Nonthaburi, saves around 3,000 baht a month since her firm moved to a hybrid model, and her manager says the team’s output has not fallen. On the other hand, remote staff may find it harder to separate work from family life. Nevertheless, with clear working hours, the finacial benefit clearly outweighs this risk."
+  ],
+  "invalid": [
+   "Working from home is very good for employees and companies. Many people think that working from home is the best way to work in the modern world. It is very convenient and it is very good for productivity. Everyone agrees that working from home is better than working in an office. Research shows that employees are happier at home. Therefore, working from home has many benefits for both employees and companies in Bangkok and around the world.",
+   "Working from home increases productivity because employees save the time they would spend commuting, which in turn allows them to begin work with more energy and focus for longer. As a result, the company receives more output from the same staff. However, some employees find it difficult to separate work from family life at home. In reality, though, most workers can learn to set clear boundaries, so the overall effect on productivity remains positive for both employees and companies.",
+   "Working from home makes employees more productive because they do not have to commute, which gives them more time and energy. For example, an engineer in Bangkok who used to spend two hours in traffic every day can now start work at eight and finish projects faster. Her company gets more work done and saves money on office space. This shows that working from home is clearly better for productivity, and every company should allow all of its employees to do it.",
+   "Working from home is good for employees and companies. When employees work at home, they do not have to travel, so they have more time and energy, and this makes them more productive. They can also wear comfortable clothes and eat healthy food at home. As a result, companies get better results from their staff. However, some people say that employees feel lonely at home, but I still think working from home is the best choice for productivity.",
+   "Working from home has many benefits for employees and companies. For example, at a bank in Bangkok, many employees work from home two days a week. Employees at home are more productive. Research shows that productivity is higher at home. Everyone agrees that companies should allow this. Working from home is the future of work, and every company in Thailand should follow this example because productivity is the most important thing for a company today.",
+   "Working from home is great because employees don't waste time in traffic, so they're more productive. For example, my dad's company lets staff work at home. But it's lonely sometimes."
+  ],
+  "known": [
+   "Working from home has a serious drawback: employees feel isolated. Without colleagues around them, staff lose motivation, which in turn lowers their productivity. For example, a designer at a company in Bangkok said she felt lonely after six months at home and her work became slower. However, video calls can help a little. Even so, the isolation of home working damages productivity, and companies should bring their employees back to the office as soon as possible."
+  ]
+ },
+ "m04s3q6": {
+  "valid": [
+   "The first reason to support a ban is that school is where eating habits are formed. Students buy snacks at the same time every day, so a sugary drink at break becomes a routine, and routines repeated for years turn into adult preferences. At a girls' school in Bangkok, for instance, students who bought a sweet iced tea every break often admitted that they still crave one every afternoon. It is true that students can still buy snacks from shops outside the school gate. However, the school controls the six hours a day when students eat most regularly, so removing sugary snacks there still breaks the routine where it starts.",
+   "Schools should stop selling sugary snacks becuase daily routines at school shape students' eating habits for life. When a teenager buys a chocolate bar from the canteen every morning, the sweet taste becomes normal, and this habit continues into adulthood, which increases the risk of obesity and diabetes. For example, at my old school in Nonthaburi, the canteen sold soft drinks at every break, and many of my classmates still drink two or three cans a day. Admittedly, students can buy snack from the 7-Eleven next to the school. Even so, if the school itself stops selling them, sugar is no longer part of the normal school day, and healthier habbits can grow.",
+   "Eating behavior learned at school tends to last, which is the strongest argument for banning sugary snacks. The process works through repetition: a snack eaten at the same break every day becomes a ritual, the ritual becomes a craving, and the craving follows the student into adult life, damaging her health. A Bangkok school that replaced its candy counter with fruit stalls found that, within one term, students chose mango and watermelon without complaint. Of course, sweets remain available from vendors outside the gate. Yet the school day is the one place where adults can shape what teenagers eat, so it should model the habit it wants students to keep.",
+   "Selling sugary snacks at school teaches students a habit that is hard to break. Because teenagers eat at school five days a week, whatever the canteen sells becomes their normal diet; over several years, this routine sets the taste for sugar that they carry into adulthood, where it contributes to weight gain and tooth decay. Consider a secondary school in Chiang Mai where students buy sweet milk tea every lunchtime: by Mathayom 6, many cannot finish a meal without a sugary drink. Some may argue that students will just buy snacks elsewhere. While this is partly true, removing them from school still reduces how often students eat them, which weakens the habit.",
+   "The habits students form at school is the first reason to stop selling sugary snacks. Teenagers follow the school’s timetable, so a snack at every break quickly becomes part of their day; once this pattern is fixed, it shapes the food choices they make as adults and raises their risk of health problems. At one school in Bangkok, the student council removed fizzy drinks from the canteen and, after a year, the school nurse reported fewer students complaining of headaches and tiredness. Admittedly, shops outside the gate still sell sweets. Nevertheless, a school that refuses to sell them sends a clear message about what a healthy daily routine looks like.",
+   "The strongest reason to support the ban is that school is where eating habits are formed. A student who buys a sweet snack at every break turns it into a routine, and a routine repeated for twelve years becomes a habit that is carried into adult life, with lasting effects on health. At many Bangkok schools, for example, the canteen sells iced pink milk and chocolate wafers from a cooler next to the stairs, and students queue for them twice a day. Admittedly, shops outside the gate will still sell sugar, but the school should not be the place that teaches students to depend on it.",
+   "Schools shape what young people consider a normal diet. Because pupils spend most of their waking hours on campus, whatever is sold there quietly sets the standard for what a snack looks like; if soda and candy are always available, sugar becomes part of the daily rhythm and is hard to give up later, harming long-term health. When one secondary school in Chiang Mai replaced its candy stall with fruit, teachers noticed that students began bringing fruit from home as well. It is true that teenagers can still buy sugary snacks after school, yet removing them from the school day weakens the habit at its source.",
+   "Selling sugary snacks at school teaches students that sugar is an everyday food. Each time a twelve-year-old buys a soft drink with her lunch, the choice becomes more automatic, which in turn makes it the default she reaches for as an adult, with serious costs to her health. At my own school, the vending machin by the gym is empty every afternoon, and the same girls buy the same drinks each day. Of course, a ban cannot control what families buy at weekends; even so, the school is responsible for the hours it controls, and it should use them to build better habits."
+  ],
+  "invalid": [
+   "Schools should stop selling sugary snacks because sugary snacks are unhealthy. Sugary snacks are bad for students' health. If schools sell sugary snacks, students will eat sugary snacks and become unhealthy. That is why schools must not sell sugary snacks. Sugary snacks are not good for students, and schools should care about students' health. Therefore, schools should stop selling sugary snacks to all students.",
+   "Schools should stop selling sugary snacks because sugar is bad for health. Sugary snacks are very unhealthy for students, and students who eat too much sugar will have health problems. Many students eat snacks at school every day, which is not good for their health. Sugar causes many diseases. Therefore, schools must stop selling sugary snacks to protect students' health, and this is the most important reason to agree with the statement."
+  ],
+  "known": [
+   "Schools should stop selling sugary snacks because school is where eating habits begin. A snack bought every break becomes a routine, and that routine turns into a preference that lasts into adulthood, raising the risk of obesity. It is true that students can still buy sweets from shops outside the gate. However, the school controls the hours when students eat most regularly, so stopping the sale of sugary snacks there is still the most effective way to change their habits.",
+   "School is where students form their eating habits. A snack eaten every break becomes a routine, and this routine becomes an adult preference that harms health. For example, at a school in Bangkok, students who drank sweet iced tea every day said they still wanted it every afternoon years later. This proves that sugary snacks at school create lifelong habits. Therefore, schools must stop selling them immediately to protect the health of their students in the future.",
+   "Selling snacks at school is useful because students need quick energy between lessons. When students are hungry, they cannot concentrate, so a snack helps them focus in class. For example, at a school in Bangkok, students who bought snacks at break did better in afternoon tests. However, some snacks contain too much sugar. Even so, schools should continue to sell snacks, because banning them would only send students to the shops outside the gate.",
+   "School is where many eating habits begin. A student who buys a sweet snack every break makes it a routine, and this routine becomes a habit that continues into adult life and damages her health. At my school, for example, the canteen sells chocolate and soft drinks, and many students buy them every day. Admittedly, shops outside the gate sell exactly the same snacks, so a school ban would make no real difference, and perhaps schools should simply keep selling them.",
+   "Schools should stop selling sugary snacks because of the habits students form there. When students buy sugar at school every day, the routine slowly becomes a habit, and this habit stays with them when they become adults, which harms their health for many years. This is why sugar at school is so dangerous. However, it is true that students can buy snacks outside school, but the school still has a responsibility to protect their health."
+  ]
+ },
+ "m04ckq7": {
+  "valid": [
+   "Paid work builds skills that the classroom rarely teaches. A job puts a teenager in front of real customers and real deadlines, which in turn teaches responsibility, communication and how to manage money. For example, a sixteen-year-old who works weekends at a café in Siam must greet customers politely, handle cash accurately and arrive on time, and she quickly becomes more confident and independent. Admittedly, too many hours can damage a student's schoolwork. Even so, a job of eight to ten hours a week gives students these benefits without harming their studies, so work experience remains valuable.",
+   "The most important benefit of a part-time job is that it makes students more independant. When teenagers earn their own money, they have to decide how to spend and save it, and this teach them to plan ahead instead of asking their parents. A good example is a Grade 11 student in Khon Kaen who works at a noodle shop on Saturdays; she now pays her own phone bill and keeps a simple budget. Of course, if she worked every evening, her grades at school would suffer. However, with a limit on hours, the job builds responsability without taking away study time.",
+   "Work experience develops independence by giving students responsibilities that nobody else can complete for them. At school a teacher reminds them of every deadline, but at work a manager expects them to solve problems alone, and this pressure gradually builds self-reliance and practical skills such as teamwork. Consider a Thai student who spends her summer holiday working at a Central department store: she learns to deal with complaints, cooperate with older colleagues and manage her time between shifts. It is true that jobs can tire students during exam periods. Nevertheless, if work is limited to holidays or weekends, the independence it builds is worth more than the time it costs.",
+   "Part-time work teach students skills they will need in their future careers. Serving customers forces a teenager to speak clearly, stay calm under pressure and follow instructions, and these habits carry over into university and later jobs. For instance, a student in Bangkok who tutors younger children on weekends must prepare lessons, organize her schedule and communicate with parents, which makes her more mature than many of her classmates. Admittedly, a job can take time away from homework and school. However, as long as students work no more than a few hours a week, the skills they gain outweigh the small loss of study time.",
+   "A part-time job builds independence because it moves a teenager from being looked after to being relied upon. Once a manager depends on her to open the shop or count the cash, she learns punctuality and accountability, and these qualities spill over into her studies at school. A Mathayom 5 student who works Sunday shifts at a bakery in Chiang Mai, for example, now plans her week around both her shifts and her exams, something she never had to do before. Admittedly, students who work long hours often fall behind. Even so, a limit of around eight hours a week lets them gain this maturity without risking their grades; the job’s value lies in responsibility, not in long hours.",
+   "Paid work gives teenagers skills that school rarely teaches. A part-time job puts a student in front of real customers and real deadlines, which in turn teaches her to communicate politely, manage her time and solve problems without a teacher to ask. A sixteen-year-old who serves at a café in Siam Square on Saturdays, for instance, quickly learns to handle complaints and to count change accurately under pressure. Admittedly, too many hours can damage school results; however, a limit of one day a week keeps the benefits while protecting study time.",
+   "Once students earn their own money, they begin to make their own decisions, and this is where independence grows. A wage forces a young worker to budget, to save for something she wants and to accept that being late has consequences, lessons that are hard to learn from a textbook. My cousin, who has worked at a bookstore in Chiang Mai during every school vacation since she was fifteen, now pays her own phone bill and plans her expenses each month. It must be acknowledged that a job can leave less time for homework. Even so, a few hours of work each week is a price worth paying for this kind of maturity.",
+   "Working while still at school builds responsability in a way that lessons cannot. When an employer depends on a teenager to open the shop at eight, she has to organise her own transport and sleep, so self-discipline becomes a daily practice rather than an idea. A Grade 11 student who tutors two younger neighbours in maths every Sunday afternoon in Bang Kapi, for example, has to plan each lesson and explain ideas clearly, and she becomes a more confident speaker as a result of the job. Of course, work should never replace study. Within a limit of a few hours a week, however, a job is one of the best teachers a student can have."
+  ],
+  "invalid": [
+   "Part-time jobs are very good for students. Research shows that students who work are more independent. Everyone agrees that jobs teach students many useful skills for the future. Students can learn a lot of things from working. It is also good for their independence. Therefore, all students should have a part-time job because work experience is very important for their skills and independence in the future.",
+   "Paid work builds skills and independence that students cannot get at school. When a student has a job, she learns how to talk to customers and manage her time, which in turn makes her more independent. Research shows that students who work are more successful in the future, and everyone agrees that work is good for young people. However, students should not work too many hours, because school is still important, but a small job is a good idea for all students.",
+   "A part-time job puts a student in front of real customers, which in turn teaches her to communicate clearly and to manage her money and her time. For example, a fifteen-year-old who works at a 7-Eleven in Lat Phrao every Sunday learns to stay calm when the queue is long and to count change quickly. This experience makes students more independent and more mature than students who only study, so every student should get a job as soon as possible and work as much as she can.",
+   "Work is very good for students. Students who work learn many skills. They become more independent. Work also helps students to understand money. For example, my friend works at a coffee shop on Saturdays, and she likes her job very much. A job is also fun because students can meet new friends. Therefore, students should get a job because there are many benefits of work for students at school."
+  ],
+  "known": [
+   "Paid work builds independence because it puts a teenager in a situation where she must take responsibility for her own decisions, which in turn teaches her to manage time and money. When students earn their own income from a job, they also learn how difficult it is to save. Admittedly, working too many hours can harm schoolwork. Even so, with a sensible limit on hours, a job gives students skills and independence that the classroom cannot provide.",
+   "A part-time job teaches teenagers responsibility, because they must arrive on time and serve customers. For example, a student who works at a café in Bangkok learns to handle money and talk to strangers. However, jobs take too much time away from studying and make students tired at school. In reality, school is more important than work, so students should not have part-time jobs at all.",
+   "Tutoring centres help students improve their grades because they let students repeat lessons they did not understand at school. For example, many students in Bangkok go to tutoring centres in Siam Square every weekend before their exams. Admittedly, tutoring is expensive for some families. Even so, tutoring centres are an important part of the education system in Thailand and help many students pass university entrance exams."
+  ]
+ },
+ "m05s3q3": {
+  "valid": [
+   "The first concern is the pollution that heavy city traffic produces, which must be reduced quickly.",
+   "City traffic produces a great deal of pollution, and cutting it is an urgent priority.",
+   "Supporters of a ban point first to the polluted air that traffic jams create in city centres.",
+   "Reducing the pollution caused by traffic in our cities is an urgent need.",
+   "The strongest argument for a ban is the dirty air that city traffic creates every day.",
+   "Traffic in city centres pumps out fumes, and this pollution needs to be cut as soon as possible.",
+   "Above all, the polution from city trafic has to be reduced without delay.",
+   "Cities urgently need to cut the pollution which comes from traffic.",
+   "The most pressing reason to act is the pollution that comes from cars stuck in city traffic.",
+   "The pollution created by city traffic need to be reduce urgently, becuase it harms people’s health.",
+   "The first concern is the dirty air given off by the cars and buses that crawl through city streets every day.",
+   "Cutting the pollution caused by city traffic must come first, as residents can no longer wait for cleaner air.",
+   "Traffic in large cities pumps out pollution that residents are forced to breathe, and reducing it cannot wait.",
+   "City-centre traffic is the main source of the smog that hangs over Bangkok, so reducing these emissions is an urgent priority.",
+   "At the heart of the argument for a ban is the pollution that heavy trafic releases into the city air.",
+   "Above all, a ban would tackle the toxic fumes and pollution that urban traffic generates, which harm the health of everyone living downtown."
+  ],
+  "invalid": [
+   "One important part of this issue is reducing the pollution that comes from city traffic.",
+   "An important aspect of the issue is that traffic creates pollution in the city.",
+   "Cars should be banned from city centres because many people think it is a good idea.",
+   "Another part of this issue is the urgent need to reduce pollution from city traffic.",
+   "One important part of this issue is the urgent need to cut the pollution created by city traffic.",
+   "The first reason is that private cars are very convenient for people who live far from the city.",
+   "A key part of the issue is reducing pollution."
+  ],
+  "known": []
+ },
+ "m05s3q6": {
+  "valid": [
+   "Above all, the eating habits that teenagers form at school tend to stay with them for life.",
+   "The food choices adolescents make every day at school shape the habits they keep as adults.",
+   "What teenagers eat at school matters because adolescence is when lifelong dietary habits are formed.",
+   "Adolescence is the period in which young people develop the eating habits they will carry into adulthood.",
+   "The snacks teenagers buy at school influence the eating habits they will follow for the rest of their lives.",
+   "Teenage years are when eating habits are set, and many of these habits begin in the school canteen.",
+   "The habbits teenagers form in adolesence often last for the rest of their lives.",
+   "The strongest reason is that what teenager eat at school become their habits for life.",
+   "Most lifelong habits around food take shape during the teenage years, often in front of a school vending machine.",
+   "Eating habits learned in adolescence are rarely unlearned, so school food plays a large role in teenagers’ long-term health.",
+   "Above all, the teenage years are when lifelong eating habits take shape, and the school canteen plays a central role in that process.",
+   "What adolescents eat at school tends to become what they eat for the rest of their lives.",
+   "The diet habits that teenagers form at school often stay with them long into adulthood, which makes the school menu far from trivial.",
+   "Eating patterns established during adolescence are notoriously hard to break, so the snacks schools sell matter more than they first appear.",
+   "Schools influence the food habbits that teenagers will keep for life, so the first argument concerns what is sold at break time.",
+   "It is during the teenage years — largely spent on school grounds — that a person’s attitude to sugar and their everyday food habits are set."
+  ],
+  "invalid": [
+   "A fundamental dimension of this issue is how teenagers form eating habits at school.",
+   "One key aspect of the issue is its relationship to the formation of lifelong habits in adolescence.",
+   "Schools should stop selling sugary snacks because they are unhealthy for everyone.",
+   "A fundamental dimension of this issue is the relationship between school food and teenage habits.",
+   "A fundamental dimension of this issue is its link to the dietary habits formed by teenagers.",
+   "Sugary snacks are cheap and popular, so many schools earn a lot of money by selling them.",
+   "The key relationship here is to the formation of lifelong dietary habits during adolescence."
+  ],
+  "known": []
+ },
+ "m05ckq8": {
+  "valid": [
+   "On the other hand, people value the freedom to travel wherever and whenever they choose.",
+   "Opponents of a ban stress that each person should be free to move around the city as they wish.",
+   "However, banning cars would limit people’s freedom to travel when and where they want.",
+   "Personal freedom of movement is the strongest argument against keeping cars out of the city.",
+   "Many citizens believe that the right to travel freely by car should not be taken away.",
+   "Equally, every individual has the right to choose how and where they travel.",
+   "On the other hand, people should have the freedom to travel anywhere they want by thier own car.",
+   "Against this, a ban would take away people’s freedom to go where they like, when they like.",
+   "The other side stresses the freedom of citizens to get around and travel however they choose.",
+   "The second argument is about the freedom of every person to travelling where they want.",
+   "On the other side, every citizen has the right to move around their city in whatever way suits them best.",
+   "Opponents of a ban stress personal liberty: people should be free to choose how and when they travel.",
+   "Restricting private cars would limit the freedom of individuals to go where they want, when they want.",
+   "Equally weighty is each person’s freedom to decide how to get from one place to another.",
+   "Against this stands the freedom of movement, which many drivers see as a basic right rather than a privilege.",
+   "The opposing view rests on individual freedom, since residents expect to travel by car without the govenment telling them where they may drive."
+  ],
+  "invalid": [
+   "Another very important part of the debate is people's freedom to travel as they choose.",
+   "Another important part of this debate is that people want to drive their cars freely.",
+   "Public transport in many cities is cheap, fast and comfortable for most passengers.",
+   "Another part of the debate is the freedom to move around and travel as each person chooses.",
+   "Another very important part of the debate is each person's freedom to travel as they wish.",
+   "Another key point is that cars are expensive to buy and maintain in big cities.",
+   "Another important part of this debate is freedom."
+  ],
+  "known": []
+ },
+ "m06s1q7": {
+  "valid": [
+   "Governments should limit visitor numbers at fragile sites but keep tourism, using the income to protect local culture and nature.",
+   "Tourism should continue, but only if daily visitor caps are introduced and part of the money is spent on repairing the damage it causes.",
+   "Since both the income and the damage are real, the best solution is to control tourist numbers and invest tourism revenue in conservation.",
+   "I believe countries should welcome tourists while charging an entry fee at popular sites, so that the money pays for protecting the environment.",
+   "Tourism should not be stopped; instead, the number of visitors to places like Maya Bay should be capped and the profits used to preserve them.",
+   "Local authorities should keep the tourism income but set strict limits on how many people can visit each beach or temple per day.",
+   "The goverment should keep tourism becuase it brings money, but it must limit the number of tourist and use the income to protect nature.",
+   "In my view, tourism is worth keeping only if visitor numbers are controlled and a “tourist tax” is used to protect heritage sites and wildlife.",
+   "Rather than banning tourists, governments should manage them by limiting numbers in sensitive areas and spending the revenue on the communities that host them.",
+   "We should keep the money that tourism brings, but protect the environment by limit visitors at the most popular places and investing in conservation.",
+   "Tourism should continue, but only if visitor numbers are capped and a share of the income is spent on protecting the temples, beaches and communities that attract tourists in the first place.",
+   "Governments ought to welcome tourists while charging an entry fee at fragile sites, so that the money visitors bring pays to repair the damage they cause.",
+   "Rather than being banned or left unregulated, mass tourism should be managed through daily visitor limits, with the revenue reinvested in local culture and nature.",
+   "Since the economic benefits and the environmental harm are both undeniable, the sensible response is to limit tourist numbers at vulnerable sites and use tourism taxes to restore them.",
+   "Tourist income is worth keeping on condition that it funds the conservation of the places it damages, so that beaches and reefs have time to recover between busy seasons.",
+   "Local authorities should protect the enviroment by limiting the number of visitors to sensitive areas, while keeping tourism as a source of jobs and income for residents."
+  ],
+  "invalid": [
+   "Tourism brings both good and bad effects, so it depends on each country and each place.",
+   "Tourism creates a lot of income for local people, but it also damages the environment and the culture.",
+   "Tourism should be banned completely because it destroys beaches, forests and traditional culture.",
+   "There are many advantages and disadvantages of tourism for developing countries around the world.",
+   "Tourism has both good and bad sides, as it brings money to the country but also damages the environment.",
+   "It depends on the country, because some places need tourist money more than others do."
+  ],
+  "known": [
+   "Tourism should be stopped in all sensitive places because the damage to nature is more serious than the income."
+  ]
+ },
+ "m06ckq7": {
+  "valid": [
+   "The benefits of CCTV in public places outweigh the loss of privacy, provided that recordings are deleted after a short time and only police can access them.",
+   "On balance, security cameras do more good than harm, as long as the footage is kept for a limited period and access is strictly controlled.",
+   "As long as strict laws control who can watch the recordings, the advantages of surveillance cameras are greater than the threat to privacy.",
+   "I believe the disadvantages of cameras everywhere outweigh the benefits unless the footage is deleted within days and protected from misuse.",
+   "The advantages of CCTV outweight the privacy concerns, but only if the goverment keeps the recordings for a short time and protects them from hackers.",
+   "Public cameras bring more benefits than risks, on condition that the footage is stored for no more than a month and viewed only by authorised officers.",
+   "In my opinion, the advantege of CCTV outweighs the disadvantages if the videos are only kept briefly and only the police can see them.",
+   "The threat to privacy is more serious than the safety benefit of cameras everywhere, unless independent bodies control how long footage is kept and who sees it.",
+   "Provided that access to recordings is limited and they are erased after thirty days, the safety benefits of CCTV clearly exceed its costs to privacy.",
+   "CCTV’s advantages outweigh its drawbacks, so long as recordings are kept only briefly and access to them is controlled by law.",
+   "The benefits of CCTV in public places outweigh the loss of privacy, provided that recordings are deleted after a short period and only the police can access them.",
+   "As long as footage is stored for no more than a month and viewed only with a warrant, the security that cameras bring carries more weight than the threat to privacy.",
+   "Widespread surveillance cameras do more good than harm, but only when strict laws control who may watch the recordings and how long they are kept.",
+   "The privacy concerns raised by cameras on every street are more serious than the safety gains unless independent bodies limit how the footage is stored and shared.",
+   "Public cameras’ advantages outweigh their drawbacks on the condition that video is erased quickly and access is restricted to trained officers.",
+   "Provided that the data is protected by law, the advantagies of CCTV outweigh the disadvantages because cameras both deter crime and help police to solve it."
+  ],
+  "invalid": [
+   "CCTV cameras have good points, such as reducing crime, and bad points, such as invading people's privacy.",
+   "The advantages of CCTV in public places outweigh the disadvantages because cameras help the police to catch criminals.",
+   "Some people think cameras make us safer, while others worry that they take away our privacy.",
+   "Cameras are everywhere in modern cities, and this is a very big change for our society.",
+   "The advantages of CCTV outweigh the disadvantages because cameras help the police to catch criminals.",
+   "CCTV cameras have good points, such as reducing crime, and bad points, such as reducing privacy.",
+   "CCTV should only be used if the footage is kept for a short time and access is controlled by the police."
+  ],
+  "known": []
+ },
+ "m07s2q4": {
+  "valid": [
+   "A tax on fast food raises its price, so people buy less of it and their diet improves.",
+   "A fast-food tax makes burgers and fries more expensive; this higher price reduces how much people buy, so their diet gets healthier.",
+   "Taxing fast food pushes up its price. This higher cost means people buy less of it, so their diets improve.",
+   "When fast food is taxed, it becomes more expensive, so people purchase less of it, and this change improves their diet.",
+   "A tax on fast food increases its price, and this increase discourages people from buying it, so their eating habits improve.",
+   "Fast food becomes more expensive under a tax, so consumers buy less of it, and this reduction leads to a healthier diet.",
+   "A tax on fast food rises its price, so people buy less of it and their diet become better.",
+   "Taxing junk food raises its price, so people buy less, and this lower consumption makes there diet healthier.",
+   "Higher taxes on fast food raise the price; such a price rise means customers buy less of it, so their diet improves.",
+   "A tax on fast food makes it cost more, so people buy less of it; this drop in consumption improves people’s diet.",
+   "A tax on fast food raises its price, so people buy less of it and eat a healthier diet.",
+   "Taxing fast food makes it more expensive, and this higher price discourages people from buying it, which leaves room for healthier meals in their diet.",
+   "A fast-food tax pushes prices up; this cost discourages frequent purchases, so the average diet gradually becomes healthier.",
+   "When fast food is taxed, its price climbs, so customers buy it less often; such a change is soon reflected in a better diet.",
+   "Higher prices caused by a fast food tax lead people to buy fewer of these meals, so their diets improve.",
+   "A tax on fast food increases what it costs, so people purchase less, and this reduction makes there diet healthier."
+  ],
+  "invalid": [
+   "Firstly, a tax on fast food increases its price. Moreover, people buy less of it. In addition, their diet improves.",
+   "A tax on fast food raises its price. In addition, people buy less of it, and their diet improves.",
+   "A tax on fast food raises its price. People buy less of it. Their diet improves.",
+   "Moreover, a tax on fast food raises its price, so people buy less and their diet improves.",
+   "Firstly, a tax on fast food raises its price, so people buy less of it and their diet improves.",
+   "A tax on fast food raises its price. Moreover, people buy less of it. Their diet also improves.",
+   "A tax on fast food raises its price, and people are unhappy about paying more for their meals."
+  ],
+  "known": []
+ },
+ "m07s2q5": {
+  "valid": [
+   "Cameras make people feel safer in stations, and the footage they record provides evidence after a crime; such footage can then be used in court.",
+   "Cameras help passengers feel safe in stations, and their recordings give police evidence after a crime, evidence that can later be presented in court.",
+   "Cameras do more than make stations feel safer: they record what happens during a crime, and this footage can later be shown in court.",
+   "People feel safer in stations with cameras, which also record evidence after a crime; this evidence can then be used in court.",
+   "A station’s cameras reassure passengers and capture crimes on video. Such recordings can later serve as evidence in court.",
+   "Cameras make stations feel safer and provide evidence once a crime has happened, and these recordings can be presented in court.",
+   "Cameras make people feel more safe in stations and give evidence after a crime, and this evidense can be use in court.",
+   "CCTV in stations reassures travellers, and the same recordings that deter criminals can later become evidence; this footage often decides cases in court.",
+   "Cameras make passengers feel safer in stations, and they also record crimes, so this video can be used as evidense in court.",
+   "Passengers feel safer under cameras in stations; that same footage provides evidence after a crime and can be used in court.",
+   "Cameras make passengers feel safer in stations and record evidence after a crime, and such footage can later be presented in court.",
+   "Station cameras reassure travellers while also capturing what happens during an offence; these recordings can then be used to convict the offender in court.",
+   "Beyond making stations feel safer, cameras provide evidence once a crime has occurred, and this material is admissible in court.",
+   "The sense of security that cameras give commuters in stations is matched by their value after a crime, when the images they capture can be put before a judge.",
+   "People feel safer in stations watched by cameras, which also supply evidence after a crime — evidence that courts can rely on.",
+   "Cameras make people feel more secure in stations, and when a crime happens, the videos they record become evidance that can be used in court."
+  ],
+  "invalid": [
+   "Firstly, cameras make people feel safe in stations. Secondly, they provide evidence after crimes, and it can be used in court.",
+   "Cameras make people feel safer in stations. Furthermore, they provide evidence that can be used in court.",
+   "Cameras make people feel safer in stations and provide evidence after a crime for use in court.",
+   "Cameras are expensive to install and maintain, and many stations cannot afford them.",
+   "Firstly, cameras make people feel safer in stations, and they also provide evidence that can be used in court.",
+   "Cameras make people feel safer in stations. Furthermore, they provide evidence after a crime, which can be used in court.",
+   "Cameras make people feel safer in stations, and cameras provide evidence after a crime, and evidence can be used in court."
+  ],
+  "known": []
+ },
+ "m07ckq3": {
+  "valid": [
+   "Tutoring centres let students repeat lessons they did not understand at school, and this extra practice raises their exam results, which in turn reassures parents.",
+   "At tutoring centres students can go over lessons they missed at school; such practice improves their exam scores, so parents feel reassured.",
+   "Tutoring centres give students a second chance at lessons they did not follow in class, and this repetition lifts their grades, leaving parents reassured.",
+   "Students who did not understand a lesson at school can repeat it at a tutoring centre. This extra practice raises their results and reassures their parents.",
+   "By letting students revisit difficult lessons, tutoring centres raise exam results, and these better results reassure parents.",
+   "Tutoring centre let students repeat the lesson they did not understand, and this extra practise improve their exam results, so parents feel reassured.",
+   "Tutoring centres allow studens to review lessons from school again; this practice raises there scores, which makes parents feel calm.",
+   "Students use tutoring centres to repeat the lessons they found difficult at school, and this practice improves their exam results, something that reassures parents.",
+   "Repeating lessons at a tutoring center gives students the practice they missed at school; that practice raises exam results and puts parents’ minds at rest.",
+   "Tutoring centres let pupils go back over what they did not understand in class, and this additional practice boosts their test results, so their parents worry less.",
+   "Tutoring centres let students repeat lessons they did not understand at school, and this extra practice raises their exam results, which in turn reassures their parents.",
+   "By going over school lessons a second time, tutoring centers give students extra practice; this boosts their grades and puts parents’ minds at ease.",
+   "Students who missed something in class can relearn it at a tutoring centre, and such repetition lifts their exam scores, so parents feel reassured.",
+   "The chance to repeat difficult lessons at a tutoring centre gives students more practice, which improves their results and leaves their parents feeling more confident.",
+   "Tutoring centres allow students to revisit lessons that confused them at school; the resulting practice raises their marks, and parents are reassured by this improvement.",
+   "Tutoring centres give students a second chance at lessons they did not understand, so this practice improves their exam results and reasures their parents."
+  ],
+  "invalid": [
+   "Firstly, tutoring centres let students repeat lessons. Secondly, their results go up. Moreover, parents are happy.",
+   "Tutoring centres let students repeat lessons they did not understand. Moreover, this extra practice raises their exam results.",
+   "Tutoring centres let students repeat difficult school lessons, raising exam results and reassuring parents.",
+   "In addition, tutoring centres are expensive, and many families cannot afford them.",
+   "Firstly, tutoring centres let students repeat lessons, and secondly this practice raises results, so parents feel reassured.",
+   "Tutoring centres let students repeat lessons. Moreover, their results improve. In addition, parents feel reassured.",
+   "Tutoring centres let students repeat lessons they did not understand at school, students get higher exam results and parents feel reassured."
+  ],
+  "known": []
+ },
+ "m08s2q2": {
+  "valid": [
+   "Rising prices reduced consumption.",
+   "Higher prices cut people’s spending.",
+   "The rise in prices lowered consumer demand.",
+   "Price increases reduced the amount people bought.",
+   "Rising costs decreased household purchases.",
+   "Higher prices brought down consumption.",
+   "Rising prices shrank consumer spending.",
+   "Rising prises reduced consumption.",
+   "The rise of prices reduce people's buying.",
+   "Steep price rises curbed consumer spending.",
+   "Rising prices reduced consumtion.",
+   "The price increase cut consumer demand.",
+   "An increase in prices lowered sales.",
+   "Price rises shrank household purchases.",
+   "The rise in prices decreased consumer spending.",
+   "Higher prices dampened people’s purchasing."
+  ],
+  "invalid": [
+   "Because prices rose, people bought less.",
+   "Prices rose, so people bought less.",
+   "When prices rose, people bought less food.",
+   "People bought less because the prices were higher.",
+   "Prices rose, so people bought less.",
+   "People bought less because prices rose.",
+   "Rising prices were a problem for people."
+  ],
+  "known": []
+ },
+ "m08s2q3": {
+  "valid": [
+   "The removal of vending machines reduced students' consumption of sugary drinks.",
+   "The removal of vending machines cut students’ intake of sugary drinks.",
+   "The removal of vending machines lowered the consumption of sugary drinks among students.",
+   "The removal of school vending machines decreased sugary drink consumption.",
+   "The removal of vending machines from schools decreased students’ intake of sugary drinks.",
+   "The removal of vending machines sharply reduced sugary drink consumption among pupils.",
+   "The removal of vending machines reduce students consumption of sugary drinks.",
+   "The removal of vending machines cut the consumtion of suggary drinks by students.",
+   "The removal of vending machines from campus brought down students' sugary drink intake.",
+   "The removal of vending machines in schools lowered students' consumption of soda and other sugary drinks.",
+   "The removal of vending machines reduced students’ consumption of sugary drinks.",
+   "The removal of vending machines from schools cut student intake of sugary drinks.",
+   "The removal of vending machines lowered the amount of soda consumed by students.",
+   "The removal of school vending machines sharply decreased sugary-drink consumption among students.",
+   "The removal of vending machines from campuses has lessened pupils' intake of sweetened beverages.",
+   "The removal of vending machines by schools reduced the consuption of sugary drinks among students."
+  ],
+  "invalid": [
+   "When schools removed vending machines, students drank fewer sugary drinks.",
+   "The removal of vending machines meant that students drank fewer sugary drinks.",
+   "Schools removed vending machines, so students drank fewer sugary drinks.",
+   "The removal of vending machines was a good idea for schools.",
+   "The removal of vending machines meant that students drank fewer sugary drinks.",
+   "When schools removed vending machines, the consumption of sugary drinks fell.",
+   "The removal of vending machines in schools was a good idea for students' health."
+  ],
+  "known": []
+ },
+ "m08ckq3": {
+  "valid": [
+   "Early start times cut students' sleep and weaken their concentration.",
+   "Early school start times reduce students’ sleep and impair their concentration.",
+   "Pre-eight o'clock lessons shorten teenagers' sleep and lower their ability to concentrate.",
+   "An early start to the school day reduces students' sleep and damages their concentration.",
+   "Early lesson times cut sleep and weaken students' concentration in class.",
+   "Early starts reduce student sleeping time and decrease there concentration.",
+   "Early start time cut students sleep and weaken they concentration.",
+   "The early start of lessons shortens students' rest, reducing their concentration.",
+   "Starting lessons before eight reduces sleep and weakens students' focus.",
+   "Early morning classes deprive students of sleep and undermine their concentration.",
+   "Early start times cut students’ sleep and weaken their concentration.",
+   "Pre-eight o’clock lessons reduce adolescents’ sleep and impair their ability to concentrate.",
+   "An early school start shortens students' sleep, lowering their concentration in class.",
+   "Lessons beginning before eight reduce students' sleep and diminish their concentration.",
+   "The early start of the school day decreases sleeping hours and damages students’ focus.",
+   "Early starting times reduce students’ sleep and weeken their concentration."
+  ],
+  "invalid": [
+   "Because lessons start early, students sleep less and cannot concentrate.",
+   "Lessons start before eight, so students sleep less and cannot concentrate.",
+   "Students sleep less when lessons start before eight o'clock.",
+   "Students cannot concentrate because early start times reduce their sleep.",
+   "Because lessons start early, students’ sleep is reduced and their concentration falls.",
+   "Students sleep less and cannot concentrate, so schools should start later.",
+   "Early start times are a big problem for students."
+  ],
+  "known": []
+ },
+ "m09s1q5": {
+  "valid": [
+   "Seldom does this approach account for the cost.",
+   "Rarely does this approach take the cost into account.",
+   "Never does this approach consider the cost.",
+   "Nowhere does this approach account for the cost.",
+   "Little does this approach consider the cost involved.",
+   "At no point does this approach account for the cost.",
+   "In no way does this approach account for the cost.",
+   "Seldom does this aproach account for the cost.",
+   "Rarely does this approach take into acount the cost.",
+   "Hardly ever does this approach consider what it will cost.",
+   "Seldom does this approach account for the cost.",
+   "Rarely does this approach take the cost into account.",
+   "Little does this approach consider the financial cost.",
+   "Nowhere does this approach account for the cost involved.",
+   "In no way does this approach account for the costs.",
+   "Hardly does this aproach account for the cost."
+  ],
+  "invalid": [
+   "This approach seldom accounts for the cost.",
+   "However, rarely does this approach account for the cost.",
+   "Seldom this approach accounts for the cost.",
+   "This approach does not account for the cost.",
+   "However, rarely does this approach account for the cost.",
+   "This approach seldom accounts for the cost.",
+   "Rarely this approach accounts for the cost."
+  ],
+  "known": []
+ },
+ "m09ckq7": {
+  "valid": [
+   "A camera raises the chance that a thief is caught, making theft less worth trying.",
+   "A camera raises the chance that a thief is caught, making theft far less attractive.",
+   "A camera increases the chance that a thief will be caught, making stealing less worth the risk.",
+   "A camera raises the chance that a thief is caught, making theft a much riskier choice.",
+   "A camera raises the likelihood that a thief is caught, making a thief’s attempt less worthwhile.",
+   "A camera raises the chance that a thief is caught, making theft less worth trying for most criminals.",
+   "A camera rises the chance that a thief is caught, making theft less worth to try.",
+   "A camera raises the chance that a theif is caught, making stealing not worth the risk anymore.",
+   "A camera raises the chance that a thief is caught, thereby making theft less worth trying.",
+   "A camera raises the chance that a thief gets caught, making theft hardly worth trying.",
+   "A camera raises the chance that a thief is caught, making theft less worth trying.",
+   "A camera raises the chance that a thief is caught, making theft a far less attractive gamble.",
+   "A camera raises the chance that a thief is caught, making the attempt hardly worth the risk.",
+   "A camera raises the chance that a thief is caught, making stealing less worthwhile.",
+   "A camera increases the likelihood that a thief will be caught, making theft much less tempting.",
+   "A camera raises the chance that a theif is caught, making theft less worth trying."
+  ],
+  "invalid": [
+   "A camera raises the chance that a thief is caught, which makes theft less worth trying.",
+   "A camera raises the chance that a thief is caught, so theft becomes less worth trying.",
+   "A camera raises the chance that a thief is caught. This makes theft less worth trying.",
+   "A camera raises the chance that a thief is caught by the police.",
+   "A camera raises the chance that a thief is caught, which makes theft less worth trying.",
+   "A camera raises the chance that a thief is caught, so theft becomes less worth trying.",
+   "Making theft less worth trying, a thief is caught more often by a camera."
+  ],
+  "known": []
+ },
+ "m10s3q7": {
+  "valid": [
+   "Young people spend a great deal of time on their phones, which is harmful to their sleep.",
+   "Adolescents spend considerable time on their mobile phones, and this damages the quality of their sleep.",
+   "Teenagers devote a significant amount of time to their smartphones, which has a negative effect on their sleep.",
+   "Many young people use their phones for long periods, and this habit is detrimental to their sleep.",
+   "The large amount of time that adolescents spend on their phones is harmful to their sleep.",
+   "Young people spend a considerable amount of time on their phones, which is harmfull for their sleep.",
+   "Teenagers spend much time on there phones and it is damaging for their sleeping.",
+   "Excessive phone use among young people reduces both the length and the quality of their sleep.",
+   "Adolescents’ heavy use of mobile phones has a damaging effect on their sleep.",
+   "Children and teenagers spend a large proportion of their time on phones, and it is harmful to their sleep.",
+   "Young people today spend a great deal of time on their phones, which harms their sleep.",
+   "Adolescents now devote considerable time to their mobile phones, and this habit damages the quality of their sleep.",
+   "The many hours that teenagers spend on smartphones have a negative effect on their sleep.",
+   "Contemporary teenagers’ heavy smartphone use is detrimental to their sleep.",
+   "Many young people spend long periods using their phones, and it is harmful to there sleep.",
+   "Screen time on mobile phones, which occupies much of the day for modern youth, undermines their sleep."
+  ],
+  "invalid": [
+   "Kids spend a great deal of time on their phones, which is harmful to their sleep.",
+   "Young people spend a lot of time on their phones, and it is bad for their sleep.",
+   "Teenagers spend considerable time on their phones, and honestly it's harmful to their sleep.",
+   "Young people today spend a great deal of time on their mobile phones.",
+   "Kids today spend a great deal of time on their phones, which is bad for their sleep.",
+   "Young people spend a lot of time on their phones, and it is harmful to their sleep.",
+   "Honestly, teenagers’ phone use isn’t good for their sleep."
+  ],
+  "known": []
+ },
+ "m10ckq8": {
+  "valid": [
+   "Many teenagers do not get enough sleep because they use their phones late at night, which harms their concentration at school.",
+   "A large number of adolescents are sleep-deprived because they stay on their phones throughout the night, and this damages their health.",
+   "Numerous young people fail to get sufficient sleep as a result of using their phones all night, which seriously affects their performance at school.",
+   "Late-night phone use cuts many teenagers’ sleep, which harms both their health and their academic results.",
+   "Many young people do not sleep sufficiently because they use mobile devices late into the night, and this weakens their concentration.",
+   "Many teenagers do not get enough sleep becuase they use their phones all night, which is harmful for their health.",
+   "A significant proportion of adolescents does not sleep enough as they are on there phones at night, which reduces their concentration.",
+   "Because they spend the night on their phones, many teenagers suffer from a lack of sleep, which is extremely damaging to their wellbeing.",
+   "Many adolescents are deprived of sleep due to using their phones throughout the night, which lowers their energy the following day.",
+   "Many students today lack sleep because of their phone use at night, a habit that seriously damages their mental health.",
+   "Many teenagers do not get enough sleep because they use their phones throughout the night, which harms their health and concentration.",
+   "A large number of adolescents are sleep-deprived as a result of using smartphones late into the night, and this damages their performance at school.",
+   "Since they stay on their phones all night, many young people do not sleep sufficiently, which seriously affects their well-being.",
+   "Late-night phone use leaves numerous teenagers without adequate sleep, a problem with serious consequences for their health.",
+   "Many young people today suffer from a lack of sleep becuase they spend the night on their phones, which is harmful to their studies.",
+   "Owing to hours of smartphone use at night, a significant proportion of teenagers fail to obtain the sleep they need – a serious threat to their health."
+  ],
+  "invalid": [
+   "Nowadays many teenagers do not get enough sleep because they use their phones all night, which is harmful.",
+   "A lot of teenagers don't get enough sleep because they're on their phones all night, which is very bad.",
+   "Many kids do not get enough sleep because they use their phones at night, which is really harmful.",
+   "Many teenagers do not get enough sleep, which is very harmful to their health and their studies.",
+   "Nowadays many teenagers do not get enough sleep because they use their phones all night, which is very bad.",
+   "Many teenagers don’t get enough sleep, which is a serious problem for their health.",
+   "Many teenagers do not get enough sleep, and this is extremely harmful to their health and studies."
+  ],
+  "known": []
+ },
+ "m11ckq8": {
+  "valid": [
+   "The government should give young people more information about online fraud, as it is definitely necessary.",
+   "The government should provide young people with more information about online fraud. This is definitely necessary.",
+   "It is definitely necessary for the government to give young people more information about online fraud.",
+   "The government should give children more information about online fraud; this is definitely necessary.",
+   "The government should offer more information on online fraud to young people, which is clearly necessary.",
+   "Giving teenagers more information about online fraud is something the government should definitely do.",
+   "The government must give adolescents more information about online fraud, because this is absolutely necessary.",
+   "It is essential that the government provides young people with more information about internet fraud.",
+   "The government should give minors more information about online scams, since this is definitely necessary.",
+   "It is definitely necessary for the government to provide more information about online fraud to the country’s young people.",
+   "The government should give young people more information about online fraud, as this is definitely necessary.",
+   "The government should provide more information to young people about online fraud; this is definitely necessary.",
+   "Governments should give children more information about online fraud. It is definitely necessary.",
+   "It is definitely necessary for the government to give teenagers more information about online fraud.",
+   "The government should offer young people more pieces of information about online fraud, a step that is definitely necessary.",
+   "Providing adolescents with more information about online scams is something the government definitely needs to do."
+  ],
+  "invalid": [
+   "The goverment should give more information to young people about online fraud; it is definitely necessary.",
+   "The government should give more informations to young people about online fraud, which is definitely necessary.",
+   "The government should give more information to kids about online fraud because it is definitely necessary.",
+   "The government should give more information to young people about online fraud, it is definitely necessary.",
+   "The government should give more information to young people about online fraud, it is definitely necessary.",
+   "The government should give more informations to young people about online fraud because it is definitely necessary.",
+   "The goverment should give kids more information about online fraud, as it is definitely necessary."
+  ],
+  "known": []
+ },
+ "m12s1q7": {
+  "valid": [
+   "I agree that teenagers should take part-time jobs, provided that they work no more than ten hours a week during the school term.",
+   "Students should gain work experience, but only during the school holidays, so that their studies are not affected.",
+   "I agree that all students should work part-time as long as the job does not stop them from doing their homework and sleeping properly.",
+   "I disagree that every student should have a job, unless the work is linked to their future career and limited to weekends.",
+   "I agree that studens should have part-time jobs, but they should not work more than eight hours a week becuase school must come first.",
+   "In my view, teenagers benefit from paid work only if their parents and school agree on a limit to their weekly hours.",
+   "Part-time work is good for students as long as it is limited to weekends, so I agree with this idea on that condition.",
+   "I agree with student working part-time on condition that the hours are short and the job is safe for teenagers.",
+   "Provided that their working hours are capped, I am in favour of secondary students gaining experience in a real job.",
+   "I agree that students should gain work experience, provided that their jobs take up no more than ten hours a week during the school term.",
+   "Part-time work benefits teenagers only if it is limited to weekends, so I agree with the statement on that condition.",
+   "While I support the idea that all students should work, this should apply only to holiday jobs, so that schoolwork is never put at risk.",
+   "I disagree that every student must take a job unless the school itself organizes the placement and checks that working hours are safe.",
+   "As long as their grades do not drop, students should be encouraged to take part-time jobs, and I therefore agree with this view.",
+   "I agree that all students should have work experiance, on condition that parents and teachers make sure the job does not interfere with their studies."
+  ],
+  "invalid": [
+   "I support teenagers having part-time jobs, but only if the work stays under 10 hours a week and doesn’t affect their grades.",
+   "Some people think students should work and others think they should study, so it depends on the student.",
+   "I agree that all students should have part-time jobs because it teaches them to be responsible.",
+   "Part-time jobs have advantages and disadvantages for teenagers in Thailand and in other countries.",
+   "I believe schools should stop selling sugary snacks if they want their students to stay healthy.",
+   "Some people think students should work, while others believe they should focus on their studies, so it depends on the student.",
+   "I agree that all students should gain work experience because it teaches them responsibility.",
+   "Students can work if they want, but they also need enough time to study and rest."
+  ],
+  "known": []
+ },
+ "m12s2q7": {
+  "valid": [
+   "The advantages of online learning outweigh the disadvantages, provided that online lessons are used alongside classroom teaching rather than replacing it.",
+   "On balance, e-learning does more good than harm as long as it supports face-to-face lessons instead of replacing them.",
+   "The benefits of remote classes are greater than the drawbacks, but only if teachers still meet students in person every week.",
+   "As long as students have a quiet place to study and a reliable internet connection, the advantages of online education clearly exceed its disadvantages.",
+   "The disadvantages of online learning outweigh the advantages unless it is limited to revision and homework, with new topics taught in the classroom.",
+   "I belive the advantages of online lessons outweight the disadvantages, if they add to normal school lessons and do not replace them.",
+   "Virtual classes bring more benefits than problems, on condition that schools provide devices for students who cannot afford them.",
+   "The advantage of online learning outweighs the disadvantages, as long as teachers check studens regularly by video so nobody falls behind.",
+   "Provided that it complements rather than replaces the classroom, studying online offers greater advantages than disadvantages for teenagers.",
+   "Online learning’s strengths are heavier than its weaknesses only when it is combined with regular face-to-face contact with teachers and classmates.",
+   "The advantages of online learning outweigh its disadvantages as long as it supplements classroom teaching rather than replacing it.",
+   "Provided that students still meet their teachers in person each week, the benefits of studying online carry more weight than its drawbacks.",
+   "Online courses do more good than harm on one condition: they must add to, not take the place of, face-to-face lessons.",
+   "Learning through a screen is a net gain for students, but only if schools limit it to revision and extra subjects instead of core lessons.",
+   "The disadvantages of online learning outweigh the advantages unless younger students are closely supervized by an adult at home.",
+   "If it is used alongside traditional teaching, online education offers more advantagies than disadvantages, especially for students in rural areas."
+  ],
+  "invalid": [
+   "Online learning has some advantages and some disadvantages for both students and teachers.",
+   "The advantages of online learning outweigh the disadvantages because students can study anywhere and at any time.",
+   "It depends on the student, because some people learn well online and others do not.",
+   "Some people prefer online lessons, while other people prefer to study in a classroom with a teacher.",
+   "Online learning has some advantages and some disadvantages for students in the modern world.",
+   "The advantages of online learning outweigh the disadvantages because students can study at any time.",
+   "Online learning should only be used together with classroom lessons so that students do not lose contact with their teachers."
+  ],
+  "known": []
+ },
+ "m12ckq7": {
+  "valid": [
+   "Schools must start lessons later, because early start times are the main reason teenagers do not get enough sleep.",
+   "Parents should take phones out of teenagers’ bedrooms at night, since late-night screen use is the biggest cause of their lack of sleep.",
+   "Because the blue light from phones delays sleep, families need to set a rule that all screens are switched off an hour before bed.",
+   "To solve teenage sleep loss, schools must reduce homework, as hours of late-night study are what keep students awake.",
+   "The government should require secondary schools to begin after 8:30, because teenagers’ body clocks make it hard for them to fall asleep early.",
+   "Teenagers must limit their screen time at night becuase using phones in bed is the main cause of they sleep problems.",
+   "In my view, schools should set less homework, since too much homework is why many teens go to bed after midnight.",
+   "The main cause is social media at night, so parents must set clear limits on phone use after ten o'clock.",
+   "Since evening tutoring classes leave students too little time to rest, parents need to reduce their children's after-school timetable.",
+   "Schools should start later in the morning becuase students' biological clock make them sleepy late at night and wake late.",
+   "Schools must start lessons later than eight o’clock, because the early start is the main reason why teenagers arrive in class without enough sleep.",
+   "Since late-night phone use is the chief cause of teenage sleep loss, parents need to set a rule that devices leave the bedroom at bedtime.",
+   "To tackle the screen use that keeps adolescents awake, families and schools should work together to make phones off-limits after ten at night.",
+   "The most effective solution is a later school start, as it directly addresses the clash between teenagers’ natural body clocks and early lessons.",
+   "Governments should require secondary schools to delay the start of the day, because adolescents’ biological sleep cycle makes early nights almost impossible.",
+   "Heavy homework loads keep many students up past midnight, so schools must limit homework to protect there sleep."
+  ],
+  "invalid": [
+   "Some people think teenagers do not sleep enough because of phones, while others blame homework, so it depends.",
+   "Many teenagers do not get enough sleep because they use their phones late at night.",
+   "Teenagers must go to bed earlier and get at least eight hours of sleep every night.",
+   "Sleep is very important for everyone, and this problem is becoming more serious in our society.",
+   "Some people think teenagers should sleep more and others think it is their own choice, so it depends.",
+   "Many teenagers do not get enough sleep because they use their phones late at night."
+  ],
+  "known": [
+   "Teenagers should sleep more because sleep is very important for their health."
+  ]
+ },
+ "m13s3q7": {
+  "valid": [
+   "Making public transport free would cut congestion in the city. The policy works by removing the fare, which is the main reason many drivers still choose their cars; once a bus ride costs nothing, the cheapest option is also the cleaner one. We can see this in Tallinn, Estonia, where free transport for residents led more people to leave their cars at home. Admittedly, taxpayers who never use buses would help pay for the system. Even so, they also gain from clearer roads and cleaner air, so funding free transport through tax is fair.",
+   "The strongest reason to make public transport free is that it would reduce traffic in the city. This works by changing what is cheapest: when a train ride is free and parking is expensive, many commuters will stop driving becuase the train saves them money. We can see this in Luxembourg, which made all buses and trains free in 2020. Admittedly, the goverment must raise taxes to pay for the system, and some citizens will complain. Even so, the money saved on road repairs and health care from cleaner air would cover much of this cost.",
+   "Free public transportation, funded by tax, would make the city fairer for low-income workers. The mechanism is straightforward: fares take a much larger share of a cleaner's daily wage than of a manager's, so removing them works like a pay rise for the people who need it most. We can see this in Bangkok, where a worker traveling from Bang Bua Thong to Silom can spend over a hundred baht a day on transport. Admittedly, higher taxes affect everyone, including the poor. Even so, a progressive tax places most of the cost on wealthier residents.",
+   "Free public transport would reduce air pollution in the city. It works by making buses and trains more attractive than private cars, so fewer vehicles is on the road and fewer fumes are released. We can see this in Dunkirk, France, where the number of bus passengers rose sharply after fares were abolished and many drivers said they used their cars less. Admittedly, the city must use tax money to replace ticket income. Even so, cleaner air saves the public health system money, so the tax spent on free transport is partly paid back.",
+   "Abolishing fares would get more residents onto public transport, easing the city’s traffic. The mechanism is behavioural: a ticket price, however small, is a daily reminder of cost, and removing it makes the bus the default choice rather than the car. We can see this in Tallinn, where free travel for registered residents increased public transport use within its first year. Admittedly, someone must pay, and the money will come from local taxes. Even so, a city that spends tax on free transport rather than on wider roads gets more movement for every baht.",
+   "Making public transport free would draw drivers out of their cars. The scheme works by removing the cost barrier: once a bus ride costs nothing, it becomes cheaper than petrol and parking, so commuters switch, and congestion and emissions fall across the city. We can see this in Tallinn, where fares were abolished for residents in 2013 and passenger numbers rose noticeably. Admittedly, the service must be paid for through taxes, which some citizens resent. Even so, a small tax increase is a price worth paying for cleaner air and faster journeys.",
+   "Free public transportation is, above all, a matter of fairness. Low-income workers spend a large share of their wages on fares, so when the fare disappears, that money stays in their pockets and the poorest residents gain access to jobs across the city. Luxembourg, which made its buses and trains free in 2020, is a clear illustration, as commuters from modest neighborhoods no longer have to choose between travel and food. It is true that the goverment must fund the system through taxes, even from people who never ride a bus. Nevertheless, a city where everyone can move freely benefits all its residents.",
+   "Abolishing fares would also cut traffic in the city centre. With no ticket to buy, a bus becomes the obvious choice for short trips, which in turn takes thousands of cars off the road at rush hour. In Bangkok, for instance, a free shuttle between BTS stations and the offices on Sathorn Road would let workers leave their cars at home, and the city's worst jams would ease. Admittedly, funding such a service would mean higher city taxes; even so, the hours saved in traffic are worth far more than the extra cost of free transport."
+  ],
+  "invalid": [
+   "Free public transport is a very good idea for every city. It is good for people and good for the environment. Everyone likes free things, and free transport would make people happy. Many experts agree that free transport is the future. Therefore, governments should use tax money to make transport free in all cities.",
+   "Free public transport would reduce traffic in the city. This works by removing the fare, which is the main reason many drivers choose their cars, so once the bus is free, more people will use it. As a result, roads become less crowded and the air becomes cleaner. Admittedly, taxpayers who do not use buses would also have to pay. Even so, everyone benefits from cleaner air and quieter streets, so funding free transport through tax is reasonable.",
+   "Online learning is very useful for students because they can study at home. It works by letting students watch recorded lessons again and again, so they can understand difficult topics. We can see this in Bangkok, where many students used online lessons during the pandemic. Admittedly, some students feel lonely at home. Even so, online learning is a good way to study, and schools should use it more often in the future.",
+   "Free public transport is a good idea for the city. If transport is free, more people will use it, so there will be less traffic. However, the city needs tax money to pay for it. Even so, I think free transport is better.",
+   "Free public transport is very important for every city. It is good for people and good for the environment. Many people agree that transport should be free. Free transport makes the city better and makes people happier. It also helps the economy of the city. Although some people say it is expensive and taxes will go up, I believe that free transport is the best choice for a modern city, and every government should make transport free as soon as possible for all citizens.",
+   "Making public transport free would take cars off the road. Once a bus ride costs nothing, it becomes cheaper than driving, so commuters switch to buses and trains, and traffic and pollution fall across the city. Tallinn in Estonia is a good example: it abolished fares for residents in 2013, and many more people started using public transport. For this reason, free transport paid for by tax is clearly the best way to solve the traffic problems of a modern city, and every city should copy this policy."
+  ],
+  "known": [
+   "Free public transport would help the city a lot. We can see this in Tallinn, Estonia, where buses and trams have been free for residents since 2013. Many people there use public transport every day. Admittedly, the city has to use tax money to pay for it. Even so, Tallinn is a good example of a free transport system, and other cities should copy it because free transport is a good idea for everyone."
+  ]
+ },
+ "m13ckq8": {
+  "valid": [
+   "I agree that children should start learning a foreign language at primary school, provided that lessons in their mother tongue are not reduced.",
+   "Young children should begin learning a second language early, as long as they first have a strong foundation in their own language.",
+   "I agree with teaching foreign languages from primary school, but only if it does not take time away from reading and writing in Thai.",
+   "In my view, starting English at the age of six is beneficial because young brains pick up pronunciation easily, as long as Thai remains the main language at school.",
+   "I disagree that children should learn a foreign language so early, because they need to master their first language before adding a second one.",
+   "Children should start foreign languages early, on condition that their native language is protected and taught every day.",
+   "I strongly support early language learning at primary school, provided that it adds to the first language rather than replacing it.",
+   "I belive primary students should learn a second language becuase children learn languages faster than adults, but their mother language must still come first.",
+   "Introducing a foreign language in primary school is a good idea as long as children’s first language keeps its place in the timetable.",
+   "I agree that children should begin a foreign language at primary school, provided that lessons do not reduce the time given to their mother tongue.",
+   "Starting a second language in the early grades is, in my view, highly beneficial, because young children pick up pronunciation far more easily than adults do.",
+   "I disagree with introducing foreign languages to young learners until they can read and write confidently in their first language.",
+   "Primary schools should teach a foreign language from the first year, as long as Thai literacy remains the priority in the timetable.",
+   "Early foreign language learning is worth supporting, but only when it is taught by trained teachers through songs and games rather than grammar drills.",
+   "I strongly believe that primary pupils should learn a foriegn language, because early exposure builds confidence and an open attitude to other cultures."
+  ],
+  "invalid": [
+   "I agree that kids should learn foreign langauge in primary school, if the school still teach their first language well.",
+   "Some people think children should learn languages early, while others think it is better to wait, so it depends.",
+   "Learning a foreign language has many advantages and disadvantages for young children at primary school.",
+   "Foreign languages are becoming more and more important in today's globalised world.",
+   "I agree that teenagers should have part-time jobs if they work only at weekends.",
+   "Some people think children should learn languages early, but others disagree, so it depends on the child.",
+   "Learning a foreign language at primary school has advantages and disadvantages for children and their families.",
+   "I'm sure kids should learn English early because it's useful."
+  ],
+  "known": []
+ }
+}

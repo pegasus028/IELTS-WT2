@@ -1,5 +1,26 @@
 # Position Control / Quillmoor Academy — QA report
 
+## Free-text checker: every fair answer passes — 16 October 2026 (Claude Opus 5.5)
+
+Trigger: a student's thesis for m01s2q7, "The advantages of online lessons outweighs the disadvantages becuase it saves travel time.", was refused with "Add the reason" because of the typo.
+
+**Measured before the fix.** Two independent teacher-written answer sets for the 30 typed items (11 theses, 15 rewrites, 4 body paragraphs), written without seeing the checker: the old rules refused 83 of 280 valid answers in the first set and 64 of 168 in the second (about one in three).
+
+**What changed** (`writer.js`, item lists in `topic-03/06/07/08/09/10/11.js`):
+- Tolerant reading: curly apostrophes and quotes from iPad keyboards straightened; American spelling matched as British; one-letter typos repaired for ~95 key words (because, outweigh, believe, government, pollution …) unless the typo is itself a real word (list built from an English frequency list); chat forms (coz, bcoz) and "out weigh" / "overweigh(t) the" read as their word. A repaired typo still passes but adds a note ("Read as: becuase → because. Check the spelling."). The spelling item m11ckq8 is never repaired, and register bans (contractions, kids, a lot of) still look at what she typed, now including curly apostrophes, which used to slip through.
+- Synonyms: item keyword lists widen to words that mean the same (online → e-learning, remote, virtual, distance learning; student → pupil, teenager, young people, adolescent; car → vehicle, traffic, driving; outweigh → more serious than, exceed, do more harm than good, greater advantages than, net gain …). Plurals and hyphen/space variants match.
+- Reasons and conditions are now two lists: a stem that asks for a condition ("under what condition", "with the condition") needs a condition (provided that, as long as, only if, rather than, with strict limits, no more than …); "why / a reason / the cause" accepts either. Reasons now include since, as, given that, due to, so, a semicolon or dash explanation, a purpose ("to protect …"), "by + -ing" and ", saving …".
+- Position words: more stance phrasings (is a mistake, is worth keeping, the best way, in favour of, net gain …). "Some people think … others think …" and "it depends" still fail unless she then says what she thinks; "partly agree" must name both parts.
+- Rewrites: m08s2q2 / m08ckq3 accept any nominalised cause (price increases, inflation, lessons beginning before eight); m09s1q5 accepts every negative-adverb inversion (At no point does, Little does, Nowhere does …) at the start of the sentence only; m09ckq7 accepts any ", -ing" participle after the comma (and no longer accepts a dangling one at the front); m10 items accept every formal quantifier and now also require the sleep (s3q7) and the phones (ckq8) to stay; m07 detox items accept "so" (s2q4, as the stem says) and pronoun reference, require the chain's content, and m07s2q4 must join the sentences; m03s1q4 refuses a purpose clause ("to reduce pollution") and a subject + verb clause; m11ckq8 refuses the comma splice; m06s1q7 must respect both the income and the damage.
+- Body paragraphs: wider mechanism / example / nuance wording, a capitalised place name counts as an example, "research shows" is refused.
+- The Ten Wards, the Plan Wards and the Spellbook Workshop's keyword check read the repaired text too; the Workshop's contraction check catches curly apostrophes.
+
+**After the fix.** First set: 276 of 280 valid answers pass (the 4 still refused break a house rule: a contraction, "kids", a gerund Core Topic); second set: 168 of 168. Invalid answers refused: 202. Known gaps (12, recorded in the bank): the body-paragraph checker cannot tell which side a paragraph argues or whether a Bangkok example is on the prompt's topic, and two theses whose reason is weak but present.
+
+**Tests.** `tools/free-text-bank.json` holds both sets; `tools/test-free.js` now runs them (764 checks). All suites pass: validate, test-free, audit, lab-validate, template-test, story-validate and smoke.py (0 console errors).
+
+---
+
 ## Word cards, Chapter 1 text and lesson audio — 11 October 2026 (Claude Opus 5.5)
 
 Requested by T.Chris (11 Oct 2026, evening):
