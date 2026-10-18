@@ -272,7 +272,7 @@
           { kind: 'sub', id: 'm06s1' }, { kind: 'sub', id: 'm06s2' }, { kind: 'sub', id: 'm06s3' },
           { kind: 'check', id: 'm06l1' },
           { kind: 'view', view: 'lab', label: 'Spellbook Workshop: design and save a spellbook', note: 'In Design, choose a share and a target, write your fourteen lines in your own words, and save the spellbook.' },
-          { kind: 'view', view: 'bootcamp', label: 'Duelling Hall: all eight steps', note: 'Take one prompt through every step, from time to the Ten Wards.' },
+          { kind: 'view', view: 'bootcamp', label: 'Duelling Hall: all eight steps', note: 'Take one prompt through every step, from time to the Ten Wards (press Full duel if the Hall offers short duels).' },
           { kind: 'writing', label: 'Your first full essay', note: 'In the Scriptorium, write a full essay with your spellbook, run the Ten Wards, and send it to the examiners.' }
         ],
         gate: {
@@ -522,7 +522,7 @@
           }
         ],
         tasks: [
-          { id: 'tour-duel', label: 'One full duel in the Duelling Hall', view: 'bootcamp', note: 'Take one prompt through all eight steps, from time to the Ten Wards. The Hall has no clock, so time yourself if you like.' },
+          { id: 'tour-duel', label: 'One full duel in the Duelling Hall', view: 'bootcamp', note: 'Take one prompt through all eight steps, from time to the Ten Wards: press Full duel in the Hall if your duels have become short ones. The Hall has no clock, so time yourself if you like.' },
           { id: 'tour-cast', label: 'Cast one prompt at two minutes per key', view: 'lab', note: 'In the Spellbook Workshop, cast your spellbook on one prompt and fill every variable in two minutes each.' },
           { id: 'tour-essay', label: 'A forty-minute essay', view: 'writer', note: 'A full essay in the Scriptorium at forty minutes, then send it to the examiners.' }
         ]
