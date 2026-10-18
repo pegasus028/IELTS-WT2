@@ -185,6 +185,48 @@ C.MODELS.forEach(function (m) {
   if (m.contrast) (m.contrast.faults || []).forEach(function (f) { if (!C.REMEDIATION[f.tag]) err(m.id + ': contrast fault tag ' + f.tag); });
 });
 
+/* Old-iPad safety (B2, 18 Oct 2026). Safari before 16.4 cannot parse a regex lookbehind, and one such
+   literal anywhere stops the whole app at start-up; older Safari also fails on newer syntax. Every .js
+   file in the repo root must be free of regex lookbehind ((?<= / (?<!, also inside RegExp strings),
+   arrow functions and optional chaining. Comments, strings and regex literals are blanked before the
+   syntax checks, so "=>" in a comment or a string is not an error; the lookbehind check reads the raw
+   text, because new RegExp('(?<!…)') hides the lookbehind inside a string. */
+function blankJs(src) {
+  var out = '', i = 0, n = src.length, last = '';
+  function keep(seg) { return seg.replace(/[^\n]/g, ''); }
+  function regexOk() {
+    if (!last) return true;
+    if (/[(,=:[!&|?{};+\-*%<>~^]/.test(last)) return true;
+    return /\b(return|typeof|case|do|else|in|of|new|delete|void|throw|instanceof)\s*$/.test(out);
+  }
+  while (i < n) {
+    var c = src.charAt(i), d = src.charAt(i + 1), j;
+    if (c === '/' && d === '/') { j = src.indexOf('\n', i); if (j < 0) j = n; i = j; continue; }
+    if (c === '/' && d === '*') { j = src.indexOf('*/', i + 2); j = j < 0 ? n : j + 2; out += ' ' + keep(src.slice(i, j)); i = j; continue; }
+    if (c === '"' || c === "'" || c === '`') {
+      j = i + 1; while (j < n && src.charAt(j) !== c) { if (src.charAt(j) === '\\') j++; j++; }
+      out += c + keep(src.slice(i, j)) + c; last = c; i = j + 1; continue;
+    }
+    if (c === '/' && regexOk()) {
+      j = i + 1; var cls = false;
+      while (j < n) { var ch = src.charAt(j); if (ch === '\\') { j += 2; continue; } if (ch === '\n') break; if (ch === '[') cls = true; else if (ch === ']') cls = false; else if (ch === '/' && !cls) break; j++; }
+      j++; while (j < n && /[a-z]/i.test(src.charAt(j))) j++;
+      out += '/r/'; last = '/'; i = j; continue;
+    }
+    out += c; if (!/\s/.test(c)) last = c; i++;
+  }
+  return out;
+}
+function lineOf(text, idx) { return text.slice(0, idx).split('\n').length; }
+var es5 = 0;
+fs.readdirSync(root).filter(function (f) { return /\.js$/.test(f); }).sort().forEach(function (f) {
+  var src = fs.readFileSync(path.join(root, f), 'utf8'), m, re = /\(\?<[=!]/g;
+  while ((m = re.exec(src))) { es5++; err(f + ':' + lineOf(src, m.index) + ': regex lookbehind "' + m[0] + '" (fails to parse on Safari before 16.4)'); }
+  var code = blankJs(src), r2 = /=>|\?\.(?=[A-Za-z_$[(])/g;
+  while ((m = r2.exec(code))) { es5++; err(f + ':' + lineOf(code, m.index) + ': ' + (m[0] === '=>' ? 'arrow function' : 'optional chaining') + ' (keep the code ES5 for old iPads)'); }
+});
+console.log('ES5 check: ' + fs.readdirSync(root).filter(function (f) { return /\.js$/.test(f); }).length + ' root .js files, ' + es5 + ' problem(s)');
+
 report.forEach(function (r) { console.log(r); });
 console.log(C.PROMPTS.length + ' prompts, ' + C.MODELS.length + ' models, ' + C.TOPICS.length + ' modules');
 warnings.forEach(function (w) { console.log('WARN ' + w); });

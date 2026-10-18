@@ -108,6 +108,12 @@ with sync_playwright() as p:
     assert page.is_disabled('#wr-submit'), 'submit should wait for the Landing Check'
     page.evaluate("document.querySelectorAll('#wr-landlist input[data-ward]:not([disabled])').forEach(cb=>{cb.checked=true;cb.dispatchEvent(new Event('change',{bubbles:true}))})")
     page.wait_for_timeout(200); print('  landing check:', page.inner_text('#wr-landscore'))
+    # WP7 (18 Oct 2026): an essay that is only filled frames stays locked until each paragraph has a changed sentence
+    assert page.is_disabled('#wr-submit'), 'a frame-only essay must not be submittable'
+    assert 'locked' in page.inner_text('#wr-lockmsg').lower()
+    assert page.evaluate("document.querySelectorAll('.pf-row.bad .pf-next, .pf-row.warn .pf-next').length") >= page.evaluate("document.querySelectorAll('.pf-row.bad').length")
+    page.evaluate("document.querySelectorAll('textarea[id^=wr-t]').forEach(function(a){a.value += ' In my own school in Bangkok, the girls in my class saw this happen last year.'; a.dispatchEvent(new Event('input',{bubbles:true}))})")
+    page.wait_for_timeout(200); assert page.is_enabled('#wr-submit'), 'submit should open after the rewrite'
     page.click('#wr-submit'); page.wait_for_selector('#w-levelup', timeout=4000); shot(page, '11-submitted')
     reps = page.evaluate("JSON.parse(localStorage.getItem('pc.local.v1')).reports.length"); assert reps == 1, reps
 
