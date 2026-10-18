@@ -66,22 +66,44 @@
     return !!(r && r.best >= E().PASS_CHECK);
   }
   /* A saved Spellbook Workshop design. lab.js keeps a summary on p.lab (synced)
-     and the full store under pc.lab.v1.<id>; the share dial under pc.share.<id>. */
+     and the full store under pc.lab.v1.<id>. Only a FINISHED design counts (status
+     'complete'): the share dial (pc.share.<id>) is written by the first draft save,
+     so it no longer ticks the chapter 4 gate (B4). */
   function labDesigned(pr) {
     if (pr.lab && pr.lab.templatesComplete > 0) return true;
     try {
       var sid = String(pr.studentId || '').toLowerCase();
       var d = JSON.parse(localStorage.getItem('pc.lab.v1.' + sid) || 'null');
       if (d && d.templates && d.templates.some(function (t) { return t.status === 'complete'; })) return true;
-      if (Number(localStorage.getItem('pc.share.' + pr.studentId))) return true;
     } catch (e) {}
     return false;
   }
-  /* An essay handed to the examiners: a submitted report, or a LevelUp hand-off. */
-  function essaysSent(pr) {
+  /* An essay handed to the examiners: a submitted report, or a LevelUp hand-off.
+     With kind 'mock', only the mock examinations count (B6). */
+  function essaysSent(pr, kind) {
+    if (kind) return (pr.reports || []).filter(function (r) { return r.kind === kind; }).length;
     var n = (pr.reports || []).length;
     var s = ensure(pr);
     return Math.max(n, (s && s.handoffs) || 0);
+  }
+  /* The student's level for targets: the level she chose for lesson explanations
+     (A1–C1), else the target of her finished Workshop design, else none (''). */
+  var LV = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
+  function studentLevel(pr) {
+    var v = pr && pr.explainLevel;
+    if (!v) { try { v = localStorage.getItem('qm.explain.lvl'); } catch (e) {} }
+    if (LV.indexOf(v) >= 0) return v;
+    try {
+      var d = JSON.parse(localStorage.getItem('pc.lab.v1.' + String(pr.studentId || '').toLowerCase()) || 'null');
+      var done = d && d.templates ? d.templates.filter(function (t) { return t.status === 'complete' && LV.indexOf(t.level) >= 0; }) : [];
+      if (done.length) return done[done.length - 1].level;
+    } catch (e) {}
+    return '';
+  }
+  /* The Midwinter Tournament essay: a length target at her level (B7). The exam itself still needs 250. */
+  function tourWords(pr) {
+    var lv = studentLevel(pr);
+    return lv === 'A1' || lv === 'A2' ? 150 : lv === 'B1' ? 220 : 250;
   }
   function essaysMarked(pr, min) {
     return (pr.reports || []).filter(function (r) { return r.bands && r.bands.overall >= min; }).length;
@@ -90,7 +112,7 @@
     if (!x) return true;
     switch (x.id) {
       case 'lab-design': return labDesigned(pr);
-      case 'essay-sent': return essaysSent(pr) >= (x.min || 1);
+      case 'essay-sent': return essaysSent(pr, x.kind) >= (x.min || 1);
       case 'faults-under-5': return P().dueReview(pr).length < 5;
       case 'best-band': return (Number(pr[x.field || 'bestBand']) || 0) >= (x.min || TARGET_BAND);
       default: return !!(ensure(pr).flags[x.id]);
@@ -100,7 +122,7 @@
     switch (x.id) {
       case 'faults-under-5': return P().dueReview(pr).length + ' due now';
       case 'best-band': return pr.bestBand ? 'best so far: Band ' + pr.bestBand : 'no marked essay yet';
-      case 'essay-sent': return essaysSent(pr) + ' of ' + (x.min || 1) + ' sent';
+      case 'essay-sent': return essaysSent(pr, x.kind) + ' of ' + (x.min || 1) + ' sent';
       default: return '';
     }
   }
@@ -181,7 +203,8 @@
   function writingMissionDone(pr, m) {
     var s = ensure(pr);
     var need = /three/i.test(m.label || '') ? 3 : 1;
-    return s.visited[m._key] === 'done' || (pr.reports || []).length >= need;
+    var sent = /mock/i.test(m.label || '') ? essaysSent(pr, 'mock') : (pr.reports || []).length;
+    return s.visited[m._key] === 'done' || sent >= need;
   }
   function eventDone(pr, ev) {
     var s = ensure(pr);
@@ -217,7 +240,8 @@
         if (d && d.attempts && d.attempts.some(function (a) { return a.status === 'complete' && a.completedAt > started; })) done['tour-cast'] = nowIso();
       } catch (e) {}
     }
-    if (!done['tour-essay'] && (pr.reports || []).some(function (r) { return r.ts > started && (r.words || 0) >= 250; })) done['tour-essay'] = nowIso();
+    var need = tourWords(pr);
+    if (!done['tour-essay'] && (pr.reports || []).some(function (r) { return r.ts > started && (r.words || 0) >= need; })) done['tour-essay'] = nowIso();
     return Object.keys(done).length;
   }
 
@@ -438,7 +462,8 @@
     var gr = P().gateReadiness(pr);
     var HEADS = { TR: 'North', CC: 'Brigg', LR: 'Liang', GRA: 'Weaver' };
     var NOTE = { TR: 'position, parts, mechanism, example, nuance', CC: 'one idea per paragraph, reference before linkers', LR: 'precise collocation, no clichés, formal', GRA: 'noun phrases, controlled swaps, error-free' };
-    html += '<div class="examiners"><h3>The four examiners</h3><div class="gates">' + CRITS.map(function (k) {
+    var banded = (Number(pr.bestBand) || 0) > 0 || (pr.reports || []).some(function (r) { return r.bands && Number(r.bands.overall) > 0; });
+    html += '<div class="examiners"><h3>The four examiners</h3>' + (banded ? '' : '<p class="tiny">No essay of yours is marked yet, so these bars show the classes you have done for each examiner. Their verdict on your writing comes with your first band.</p>') + '<div class="gates">' + CRITS.map(function (k) {
       var hh = STORY().houses.filter(function (x) { return x.crit === k; })[0];
       return '<div class="gate exam"><span>' + (hh ? crestSvg(hh.id, 18) : '') + 'Professor ' + HEADS[k] + '</span><b>' + gr[k] + '%</b><div class="bar-line' + (k === 'TR' ? ' gold' : '') + '"><span style="width:' + gr[k] + '%"></span></div><small>' + esc((hh ? hh.critName : k) + ': ' + NOTE[k]) + '</small></div>';
     }).join('') + '</div></div>';
@@ -446,7 +471,7 @@
     /* the tournament, once the cellars are cleared */
     if (cleared(pr, 5) && STORY().events && STORY().events.tournament) {
       var td = tournamentDone(pr);
-      html += '<div class="card evcard"><div><p class="kicker">Optional event · Examination Hall</p><h3>' + esc(STORY().events.tournament.title) + '</h3><p class="tiny">' + (td === 3 ? 'All three tasks done. The token is in your trunk.' : td + ' of 3 tasks done. A timed run, one prompt cast against the clock, one forty-minute essay.') + '</p></div><button class="btn sm" data-open-ev="tournament">' + (s.tournament.started ? 'Open' : 'Enter') + ' →</button></div>';
+      html += '<div class="card evcard"><div><p class="kicker">Optional event · Examination Hall</p><h3>' + esc(STORY().events.tournament.title) + '</h3><p class="tiny">' + (td === 3 ? 'All three tasks done. The token is in your trunk.' : td + ' of 3 tasks done. One full duel, one prompt cast at two minutes per key, one forty-minute essay.') + '</p></div><button class="btn sm" data-open-ev="tournament">' + (s.tournament.started ? 'Open' : 'Enter') + ' →</button></div>';
     }
 
     /* keepsakes */
@@ -719,6 +744,8 @@
       var i = m._info, dis = !i.ok || i.locked;
       return missionPodRow(m) + '<button class="ckrow' + (i.done ? ' done' : '') + '" data-mi="' + m._i + '"' + (dis ? ' disabled' : '') + '><span class="ck-box">' + (i.done ? '✓' : '') + '</span><span class="ck-txt"><span class="ck-name">' + esc(i.label) + '</span><span class="ck-sub">' + esc(i.sub) + '</span></span><span class="ck-go">' + (dis ? 'locked' : (i.done ? 'again' : 'open') + ' →') + '</span></button>';
     }).join('') + '</div></div>';
+    var tm = list.filter(function (m) { return m.kind === 'writing' && m.thesis; })[0];
+    if (tm) html += thesisBoxHtml(pr, tm);
     html += '<div class="card gatebox big"><p class="kicker">The gate</p>' + sayBtn(ch.gate.intro) + '<p class="gate-intro">' + esc(ch.gate.intro || '') + '</p><ul class="gate-list">' + g.items.map(function (it) {
       return '<li class="' + (it.ok ? 'ok' : '') + '"><span class="gate-pip">' + (it.ok ? '✓' : '') + '</span><span>' + esc(it.label) + (it.note ? '<span class="tiny"> — ' + esc(it.note) + '</span>' : '') + (it.detail && !it.ok ? ' <span class="tiny">· ' + esc(it.detail) + '</span>' : '') + '</span></li>';
     }).join('') + '</ul>' + (g.ok ? '<button class="btn primary" id="ch-gate">' + (got ? 'Read the ending again' : 'Pass the gate →') + '</button>' : '<p class="tiny">The gate opens when every line above is ticked.</p>') + '</div>';
@@ -730,6 +757,44 @@
     $$('[data-mi]', el).forEach(function (b) { b.addEventListener('click', function () { launch(ch, list[Number(b.dataset.mi)]); }); });
     $$('[data-mvid]', el).forEach(function (b) { b.addEventListener('click', function () { if (host.playVid) host.playVid(b.dataset.mvid); }); });
     $$('[data-mpod]', el).forEach(function (b) { b.addEventListener('click', function () { host.togglePod(document.getElementById('drop-mpod-' + b.dataset.mpod), b.dataset.mpod); }); });
+    if (tm) wireThesisBox(el, pr, tm);
+    if (st.focusThesis && tm) { st.focusThesis = false; var bx = $('#camp-box', el); if (bx) { bx.scrollIntoView({ block: 'start' }); var ta = $('#camp-text', el); if (ta && !ta.disabled) try { ta.focus({ preventScroll: true }); } catch (e) {} } }
+  }
+  /* --------------------------------------------- a one-sentence mission (B5)
+     The chapter 2 campaign position is one sentence, so it gets its own box on
+     the chapter page, checked by the same thesis checker the lessons use
+     (Writer.checkThesis). A pass completes the mission; a report from the
+     Scriptorium still completes it too. The sentence is kept on p.story.campaign. */
+  function thesisBoxHtml(pr, m) {
+    var s = ensure(pr), t = m.thesis, saved = s.campaign || null, done = m._info.done;
+    var chosen = (s.flags['camp-ban'] ? 'Ban The Whisper.' : s.flags['camp-fade'] ? 'Do not ban it.' : '');
+    var html = '<div class="card camp-box" id="camp-box"><p class="kicker">Mission · ' + esc(m.label) + '</p><h3 style="margin:2px 0 6px">' + esc(t.stem) + '</h3>' +
+      '<p class="tiny">One sentence: a marker ("I believe …"), a claim, and a reason ("because …"). A limit ("although …") is a bonus. ' + t.minWords + ' to ' + t.maxWords + ' words.' + (chosen ? ' On the notice board you chose: <b>' + esc(chosen) + '</b>' : '') + '</p>';
+    if (t.model) html += '<p class="tiny camp-model"><b>Penhallow\'s model (a different question):</b> ' + esc(t.model) + '</p>';
+    html += '<textarea id="camp-text" class="ftext" rows="3" spellcheck="true" placeholder="I believe Quillmoor should … because …" aria-label="Your campaign position in one sentence">' + esc(saved ? saved.text : '') + '</textarea>' +
+      '<div class="camp-row"><span class="tiny" id="camp-wc">' + (saved ? wordCount(saved.text) : 0) + ' words</span><button class="btn primary" id="camp-check" type="button">' + (done && saved && saved.ok ? 'Check it again' : 'Check my sentence') + '</button></div>' +
+      '<div id="camp-notes" role="status" aria-live="polite">' + (saved && saved.ok ? '<ul class="ftnotes ok"><li>Penhallow pins it to the board. Mission done.</li></ul>' : '') + '</div></div>';
+    return html;
+  }
+  function wordCount(t) { var W = global.Writer; return W && W.words ? W.words(t || '') : String(t || '').split(/\s+/).filter(Boolean).length; }
+  function wireThesisBox(el, pr, m) {
+    var ta = $('#camp-text', el), btn = $('#camp-check', el), wc = $('#camp-wc', el), out = $('#camp-notes', el);
+    if (!ta || !btn) return;
+    ta.addEventListener('input', function () { wc.textContent = wordCount(ta.value) + ' words'; });
+    btn.addEventListener('click', function () {
+      var W = global.Writer, text = String(ta.value || '').trim();
+      if (!text) { out.innerHTML = '<ul class="ftnotes no"><li>Write your sentence first.</li></ul>'; return; }
+      if (!W || !W.checkThesis) { out.innerHTML = '<ul class="ftnotes no"><li>The checker is not ready. Reload the page and try again.</li></ul>'; return; }
+      var res = W.checkThesis(text, m.thesis), s = ensure(pr), first = !(s.campaign && s.campaign.ok);
+      s.campaign = { text: text.slice(0, 400), ok: !!res.ok, at: nowIso() };
+      if (res.ok) s.visited[m._key] = 'done';
+      out.innerHTML = '<ul class="ftnotes ' + (res.ok ? 'ok' : 'no') + '">' + res.notes.map(function (n) { return '<li>' + esc(n) + '</li>'; }).join('') + (res.ok ? '<li>Penhallow pins it to the board. Mission done.</li>' : '') + '</ul>';
+      try { if (global.API && global.API.enqueue) global.API.enqueue([{ ts: nowIso(), studentId: pr.studentId, itemId: 'story-campaign', topic: 'story', level: '', type: 'thesis', tag: 'tr-no-position', cefr: '', correct: res.ok ? 1 : 0, ms: 0, hinted: 0, fast: 0, mode: 'story', given: text.slice(0, 400), expected: res.notes.join(' ').slice(0, 300) }]); } catch (e) {}
+      if (res.ok && first) { pr.xp = (pr.xp || 0) + 10; if (host.toast) host.toast('Your position is on the board. +10 merits'); }
+      if (host.paintHeader) host.paintHeader();
+      if (host.sync) host.sync();
+      if (res.ok) setTimeout(function () { if ($('#camp-box') && st.screen === 'chapter') { var y = window.scrollY; paintChapter($('#view-story')); window.scrollTo(0, y); } }, 900);
+    });
   }
   /* A podcast row before the first lesson of each class in the missions list.
      Rendered only (not a mission), so mission keys, gates and estimates are unchanged. */
@@ -753,6 +818,12 @@
       return openEvent(m.event, ch.n, null);
     }
     if (m.kind === 'view') { s.visited[m._key] = nowIso(); if (m.view === 'models') s.visited.models = nowIso(); if (host.syncSoon) host.syncSoon(); if (host.toast) host.toast('Back to the Map Room when you are done.'); return host.show(m.view); }
+    if (m.kind === 'writing' && m.thesis) {
+      /* the one-sentence box lives on the chapter page */
+      st.focusThesis = true;
+      if (host.show) host.show('story');
+      return;
+    }
     if (m.kind === 'writing') { s.visited[m._key] = s.visited[m._key] || nowIso(); if (host.syncSoon) host.syncSoon(); if (host.toast) host.toast(m.note || 'Write it in the Scriptorium.', 3600); return host.show('writer'); }
   }
   function paintEnding(el) {
@@ -797,8 +868,11 @@
     } else if (st.ev === 'tournament') {
       tournamentDone(pr);
       var done = s.tournament.done || {};
+      var tw = tourWords(pr), tlv = studentLevel(pr);
       html += '<div class="card missions"><h3>The three tasks</h3><p class="tiny">Each task counts when it is finished after you entered the Hall. Ten house points each.</p><div class="ckstack">' + (ev.tasks || []).map(function (t) {
-        return '<button class="ckrow' + (done[t.id] ? ' done' : '') + '" data-task="' + esc(t.view) + '"><span class="ck-box">' + (done[t.id] ? '✓' : '') + '</span><span class="ck-txt"><span class="ck-name">' + esc(t.label) + '</span><span class="ck-sub">' + esc(t.note || '') + '</span></span><span class="ck-go">open →</span></button>';
+        var note = t.note || '';
+        if (t.id === 'tour-essay') note += ' Your target: at least ' + tw + ' words' + (tlv && tw < 250 ? ' (your level, ' + tlv + ')' : '') + '.' + (tw < 250 ? ' The real exam still needs 250.' : '');
+        return '<button class="ckrow' + (done[t.id] ? ' done' : '') + '" data-task="' + esc(t.view) + '"><span class="ck-box">' + (done[t.id] ? '✓' : '') + '</span><span class="ck-txt"><span class="ck-name">' + esc(t.label) + '</span><span class="ck-sub">' + esc(note) + '</span></span><span class="ck-go">open →</span></button>';
       }).join('') + '</div>' + (Object.keys(done).length === 3 ? '<button class="btn primary" id="tour-claim">' + (hasKeepsake(pr, 'token') ? 'Token kept' : 'Take the token →') + '</button>' : '') + '</div>';
     } else {
       s.flags.campaignDone = s.flags.campaignDone || nowIso(); if (host.syncSoon) host.syncSoon();

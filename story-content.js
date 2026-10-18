@@ -152,7 +152,9 @@
         ],
         missions: [
           { kind: 'sub', id: 'm02s1' }, { kind: 'sub', id: 'm02s2' }, { kind: 'sub', id: 'm02s3' },
-          { kind: 'writing', label: 'Your campaign position', note: 'In the Scriptorium, write your position on the campaign question in one sentence: a marker, a claim, then a reason or a limit. Fifteen to thirty words.' },
+          { kind: 'writing', label: 'Your campaign position', note: 'Write your position on the campaign question in the box on this page: one sentence with a marker, a claim and a reason. Fifteen to thirty words.',
+            thesis: { stem: 'The Chamber Campaign: should Quillmoor ban The Whisper?', must: [['whisper', 'gossip', 'newspaper', 'paper']], mustNotes: ['Name the question: The Whisper (or its gossip).'], minWords: 15, maxWords: 30, need: 'reason',
+              model: 'Schools should keep uniforms, mainly because they remove daily pressure about clothes, although they limit personal expression.' } },
           { kind: 'check', id: 'm02l1' }
         ],
         gate: {
@@ -453,12 +455,12 @@
           { kind: 'sub', id: 'm13s1' }, { kind: 'sub', id: 'm13s2' }, { kind: 'sub', id: 'm13s3' },
           { kind: 'check', id: 'm13l1' },
           { kind: 'view', view: 'models', label: 'Exemplar Archive: read the nine model essays', note: 'Read them for the shape of a Band 8 paragraph, not to copy.' },
-          { kind: 'writing', label: 'Three mock examinations', note: 'Three full essays in the Scriptorium at forty minutes each, then send each one to the examiners.' }
+          { kind: 'writing', label: 'Three mock examinations', note: 'Sit the three mock examinations at the foot of the Scriptorium, forty minutes each, and send each one to the examiners. Practice essays do not count here.' }
         ],
         gate: {
           checks: ['m12l1', 'm13l1'], checkIds: ['m12ck', 'm13ck'],
           extra: [
-            { id: 'essay-sent', label: 'Three mock examinations sent to the examiners', note: 'Three forty-minute essays, each sent to the examiners.', min: 3 },
+            { id: 'essay-sent', label: 'Three mock examinations sent to the examiners', note: 'Three mock examinations from the Scriptorium, each sent to the examiners. Practice essays do not count.', min: 3, kind: 'mock' },
             { id: 'best-band', label: 'An essay marked at 7.5 or above', note: 'This is the standard of the real test, and it can take months of mock examinations after the classes end. Keep sending essays: your best band is kept, and the seal arrives by owl the day the examiners agree.', min: 7.5, field: 'bestBand' }
           ],
           intro: "Penhallow stands alone before the table. 'Two gates, and then the only thing that matters: one essay, marked by the four examiners at the 7.5 standard. Everything else was practice for this.'",
@@ -520,7 +522,7 @@
           }
         ],
         tasks: [
-          { id: 'tour-duel', label: 'A timed Duelling Hall run', view: 'bootcamp', note: 'Take one prompt through all eight steps against the clock.' },
+          { id: 'tour-duel', label: 'One full duel in the Duelling Hall', view: 'bootcamp', note: 'Take one prompt through all eight steps, from time to the Ten Wards. The Hall has no clock, so time yourself if you like.' },
           { id: 'tour-cast', label: 'Cast one prompt at two minutes per key', view: 'lab', note: 'In the Spellbook Workshop, cast your spellbook on one prompt and fill every variable in two minutes each.' },
           { id: 'tour-essay', label: 'A forty-minute essay', view: 'writer', note: 'A full essay in the Scriptorium at forty minutes, then send it to the examiners.' }
         ]
