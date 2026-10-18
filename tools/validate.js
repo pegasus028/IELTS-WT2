@@ -185,6 +185,92 @@ C.MODELS.forEach(function (m) {
   if (m.contrast) (m.contrast.faults || []).forEach(function (f) { if (!C.REMEDIATION[f.tag]) err(m.id + ': contrast fault tag ' + f.tag); });
 });
 
+/* Mock isolation (WP12, 19 Oct 2026). A mock must be UNSEEN: its prompt lives in prompts-mock.js
+   (CONTENT.MOCK_PROMPTS), never in the practice bank, a model, a lesson item, the A2/B1 duel sets or the
+   Duelling Hall / Spellbook Workshop sources, so a mock band measures readiness, not familiarity.
+   Checks: every mock's promptId resolves to a mock-only prompt of the right shape; no mock prompt id is a
+   practice prompt, an item's prompt: field, a model's promptId, or appears anywhere in any other root .js
+   file (topics, models, prompts-levels, bootcamp, lab*, student, teacher …); and the mock prompt's own
+   wording (the background sentences, not the fixed instruction sentence of its type) shares no 4-word
+   sequence with any practice prompt, model answer or Workshop test-drive prompt. */
+var MOCKP = {}, mockIds = [];
+(C.MOCK_PROMPTS || []).forEach(function (p) { MOCKP[p.id] = p; mockIds.push(p.id); });
+var mockErr0 = errors.length;
+if (!C.MOCK_PROMPTS) err('mocks: CONTENT.MOCK_PROMPTS missing (prompts-mock.js not loaded?)');
+if (!fs.existsSync(path.join(root, 'mocks.js'))) err('mocks: mocks.js missing');
+else load('mocks.js');
+(C.MOCKS || []).forEach(function (m) {
+  var pr = MOCKP[m.promptId];
+  if (PROMPT[m.promptId]) err(m.id + ': promptId ' + m.promptId + ' is a PRACTICE prompt (students have duelled, written and read a model of it); use a mock-only prompt from prompts-mock.js');
+  if (!pr) return err(m.id + ': promptId ' + m.promptId + ' does not resolve to a mock prompt');
+  var tn = (C.TYPES[pr.type] || {}).name || '';
+  var want = /discuss/i.test(m.name) ? 'DISCUSS' : /agree/i.test(m.name) ? 'OPINION' : /advantage/i.test(m.name) ? 'ADVANTAGE' : /problem/i.test(m.name) ? 'PROBLEM' : /two-part|two part/i.test(m.name) ? 'TWOPART' : '';
+  if (want && pr.type !== want) err(m.id + ': "' + m.name + '" points at a ' + pr.type + ' prompt (' + tn + ')');
+});
+(C.MOCK_PROMPTS || []).forEach(function (p) {
+  uid(p.id, 'mock prompt');
+  if (!/^p-mock-/.test(p.id)) err(p.id + ': mock prompt ids start with p-mock-');
+  if (!p.mock) err(p.id + ': mock prompt needs mock: true');
+  if (PROMPT[p.id]) err(p.id + ': mock prompt is also in CONTENT.PROMPTS');
+  if (!p.type || !C.TYPES[p.type]) err(p.id + ': bad type ' + p.type);
+  if (!p.domain || !C.DOMAINS[p.domain]) err(p.id + ': bad domain ' + p.domain);
+  if (!p.text || !p.title) err(p.id + ': prompt needs title and text');
+  if (!Array.isArray(p.keyNouns) || p.keyNouns.length < 2) err(p.id + ': prompt needs keyNouns[]');
+  if (p.modelId) err(p.id + ': a mock prompt must not have a model (modelId ' + p.modelId + ')');
+  ['C1', 'B2'].forEach(function (t) {
+    if (!p.vars || !p.vars[t]) return err(p.id + ': missing vars.' + t);
+    KEYS.forEach(function (k) { var v = p.vars[t][k]; if (!v || !v.ok || !Array.isArray(v.d) || v.d.length !== 3) err(p.id + ' ' + t + '.' + k + ': needs ok and 3 distractors'); });
+  });
+});
+/* practice lists and content fields */
+function walkPrompts(o, where) {
+  if (!o || typeof o !== 'object') return;
+  if (Array.isArray(o)) return o.forEach(function (x, i) { walkPrompts(x, where); });
+  Object.keys(o).forEach(function (k) {
+    var v = o[k];
+    if ((k === 'prompt' || k === 'promptId') && typeof v === 'string' && MOCKP[v]) err(where + (o.id ? ' ' + o.id : '') + ': ' + k + ' is the mock-only prompt ' + v);
+    else if (v && typeof v === 'object') walkPrompts(v, where);
+  });
+}
+C.PROMPTS.forEach(function (p) { if (MOCKP[p.id]) err('practice bank: contains the mock-only prompt ' + p.id); });
+walkPrompts(C.TOPICS, 'lesson items');
+C.MODELS.forEach(function (m) { if (MOCKP[m.promptId]) err(m.id + ': model written for the mock-only prompt ' + m.promptId); });
+/* raw text: no other root .js file may name a mock prompt id (topic files, models.js, prompts-levels.js,
+   bootcamp.js, lab.js, lab-content.js, lab-examples.js, lab-scenario.js, student.js, teacher.js …) */
+var MOCK_HOME = { 'prompts-mock.js': 1, 'mocks.js': 1 };
+fs.readdirSync(root).filter(function (f) { return /\.js$/.test(f) && !MOCK_HOME[f]; }).sort().forEach(function (f) {
+  var src = fs.readFileSync(path.join(root, f), 'utf8');
+  mockIds.forEach(function (id) { var i = src.indexOf(id); if (i >= 0) err(f + ':' + src.slice(0, i).split('\n').length + ': names the mock-only prompt ' + id); });
+  if (/\bp-mock-[a-z]/.test(src)) err(f + ': names a p-mock-… prompt id (mock prompts belong in prompts-mock.js only)');
+});
+/* the mock wording itself: no 4-word sequence shared with a practice prompt, a model or a Workshop prompt */
+function toks(s) { return String(s || '').replace(/<[^>]+>/g, ' ').toLowerCase().replace(/[’‘]/g, "'").match(/[a-z0-9']+/g) || []; }
+function grams(s, n) { var t = toks(s), out = {}; for (var i = 0; i + n <= t.length; i++) out[t.slice(i, i + n).join(' ')] = 1; return out; }
+function background(p) {
+  var sig = toks((C.TYPES[p.type] || {}).signal).join(' ');
+  return String(p.text).replace(/([.!?])\s+/g, '$1\u0001').split('\u0001').filter(function (s) {
+    s = s.trim(); return s && !/\?$/.test(s) && toks(s).join(' ') !== sig && !/^discuss both views/i.test(s);
+  }).join(' ');
+}
+var pool = [];
+C.PROMPTS.forEach(function (p) { pool.push({ where: p.id, text: p.text }); });
+C.MODELS.forEach(function (m) {
+  (m.paragraphs || []).forEach(function (pg, i) { pool.push({ where: m.id + ' para ' + (i + 1), text: pg.text }); });
+  ((m.contrast || {}).paragraphs || []).forEach(function (pg, i) { pool.push({ where: m.id + ' contrast para ' + (i + 1), text: pg.text }); });
+});
+if (fs.existsSync(path.join(root, 'lab-scenario.js'))) {
+  try { load('lab-content.js'); load('lab-scenario.js'); } catch (e) { warn('mock 4-gram check: lab-scenario.js not loaded (' + e.message + ')'); }
+  var LS = window.LabScenario || {}; Object.keys(LS.prompts || {}).forEach(function (t) { pool.push({ where: 'lab-scenario ' + t, text: LS.prompts[t].text }); });
+}
+pool.forEach(function (x) { x.g = grams(x.text, 4); });
+var gramChecks = 0;
+(C.MOCK_PROMPTS || []).forEach(function (p) {
+  var mine = grams(background(p), 4);
+  if (!Object.keys(mine).length) err(p.id + ': no background sentence found before the instruction');
+  Object.keys(mine).forEach(function (g) { gramChecks++; pool.forEach(function (x) { if (x.g[g]) err(p.id + ': shares the 4-word sequence "' + g + '" with ' + x.where); }); });
+});
+console.log('Mock isolation: ' + (C.MOCKS || []).length + ' mocks, ' + mockIds.length + ' mock-only prompts, ' + gramChecks + ' four-word sequences against ' + pool.length + ' texts, ' + (errors.length - mockErr0) + ' problem(s)');
+
 /* Old-iPad safety (B2, 18 Oct 2026). Safari before 16.4 cannot parse a regex lookbehind, and one such
    literal anywhere stops the whole app at start-up; older Safari also fails on newer syntax. Every .js
    file in the repo root must be free of regex lookbehind ((?<= / (?<!, also inside RegExp strings),
