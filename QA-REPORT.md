@@ -135,7 +135,7 @@ All suites pass: validate, test-free, audit, lab-validate, lab-examples-check, g
 
 1. Paste the new `Code.gs` and `Lab.gs` into the Apps Script project, then Deploy → Manage deployments → pencil → New version → Deploy. Do this after the GitHub Pages update is live (the new pages work with the old back end; the old pages would not send the teacher token).
 2. Keep `TEACHER_PIN` set in Script properties (the console no longer falls back to 1234).
-3. Optional: set `JOIN_CODE` to require a class code when students create accounts.
+3. (Oct 2026) The class code was removed: account creation never asks for one, and a leftover `JOIN_CODE` property is ignored.
 4. Students stay signed in: their existing tokens still work, and old passwords upgrade at their next login.
 
 ---

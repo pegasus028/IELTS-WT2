@@ -178,7 +178,7 @@ check('student posts are trimmed and whitelisted', pr2.ok && pr2.posts.slice(-1)
 const lo = post('logout', { token: tok });
 check('logout retires the token', lo.ok && post('reports', { studentId: 'ploy', token: tok }).ok === false);
 props.JOIN_CODE = 'swep41';
-check('join code required when set', post('register', { id: 'nok', pw: 'pw12' }).ok === false && post('register', { id: 'yes1', pw: 'pw12', code: 'SWEP41' }).ok === true);
+check('no class code is ever asked for, even if JOIN_CODE is still set', post('register', { id: 'yes1', pw: 'pw12' }).ok === true);
 delete props.JOIN_CODE;
 
 /* ------------------------------------------- House Cup (Quillmoor, Oct 2026) */

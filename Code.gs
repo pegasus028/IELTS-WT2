@@ -180,7 +180,6 @@ function register(p) {
   if (findStudent(id)) return { ok: false, error: 'That student ID is already taken. Try logging in instead.' };
   var t = token();
   var progress = { studentId: id, displayName: p.name || id, cohort: p.cohort || '', xp: 0, streak: 0, longestStreak: 0, lastActiveDate: null, sessions: 0, runBest: 0, run: 0, reclaimed: 0, speedBonuses: 0, subs: {}, checks: {}, mocks: {}, plans: {}, badges: [], review: {}, stats: { seen: 0, correct: 0, byTag: {} }, reports: [], types: {}, tier: 'B2', assignment: null, created: new Date().toISOString() };
-  if (prop('JOIN_CODE') && String(p.code || '').trim().toLowerCase() !== prop('JOIN_CODE').trim().toLowerCase()) return { ok: false, error: 'Ask T.Chris for the class code.' };
   if (String(p.pw || '').length < 4) return { ok: false, error: 'Choose a password of at least 4 characters.' };
   append('Students', { id: id, name: p.name || id, pw: hashPw(p.pw), created: new Date().toISOString(), cohort: p.cohort || '', token: t, progress: JSON.stringify(progress) });
   return { ok: true, token: t, progress: progress };

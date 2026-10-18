@@ -110,7 +110,6 @@
     $('#wrap-pick').classList.toggle('hidden', m !== 'fast');
     $('#wrap-id').classList.toggle('hidden', m === 'fast');
     $('#wrap-name').classList.toggle('hidden', m !== 'new');
-    $('#wrap-code').classList.toggle('hidden', m === 'in');
     $('#btn-go').textContent = m === 'in' ? 'Log in' : m === 'new' ? 'Create my account' : 'Go';
     $('#f-pw').setAttribute('autocomplete', m === 'in' ? 'current-password' : 'new-password');
     $('#login-tip').textContent = m === 'fast'
@@ -131,7 +130,6 @@
     var pick = $('#f-pick'), fast = mode === 'fast';
     var id = fast ? pick.value : $('#f-id').value.trim().toLowerCase();
     var pw = $('#f-pw').value;
-    var code = ($('#f-code') && $('#f-code').value.trim()) || '';
     var name = fast ? (pick.selectedIndex > 0 ? pick.options[pick.selectedIndex].dataset.name : '') : $('#f-name').value.trim();
     if (fast && !id) return say('Find your name in the list first.', true);
     if (!id) return say('Enter a student ID.', true);
@@ -147,11 +145,11 @@
     if (fast) {
       api.login(id, pw).then(function (r) {
         if (r && r.ok) return done(r);
-        api.register(id, pw, name, code).then(function (r2) { if (r2 && r2.ok) return done(r2); failed(r && r.error && !/No account/.test(r.error) ? r.error : (r2 && r2.error) || (r && r.error)); }).catch(crashed);
+        api.register(id, pw, name).then(function (r2) { if (r2 && r2.ok) return done(r2); failed(r && r.error && !/No account/.test(r.error) ? r.error : (r2 && r2.error) || (r && r.error)); }).catch(crashed);
       }).catch(crashed);
       return;
     }
-    var req = mode === 'new' ? api.register(id, pw, name, code) : api.login(id, pw);
+    var req = mode === 'new' ? api.register(id, pw, name) : api.login(id, pw);
     req.then(function (r) { if (!r || !r.ok) return failed(r && r.error); done(r); }).catch(crashed);
   }
   $('#btn-go').addEventListener('click', go);

@@ -291,8 +291,8 @@
         .catch(function (e) { return { ok: false, mode: 'cloud', error: String(e.message || e) }; });
     },
 
-    register: function (id, pw, name, code) {
-      return call('register', { id: id, pw: pw, name: name, code: code || '' }, function () { return localRegister(id, pw, name); })
+    register: function (id, pw, name) {
+      return call('register', { id: id, pw: pw, name: name }, function () { return localRegister(id, pw, name); })
         .then(keepToken);
     },
     login: function (id, pw) {
