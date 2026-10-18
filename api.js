@@ -287,7 +287,8 @@
     },
     ping: function () {
       if (state.mode !== 'cloud') return Promise.resolve({ ok: false, mode: 'demo' });
-      return post('ping', {}).then(function (r) { return { ok: !!r.ok, mode: 'cloud', sheet: r.sheet, students: r.students }; })
+      /* version: the backend build (Code.gs APP_VERSION, 19 Oct 2026); '' from an older deployment */
+      return post('ping', {}).then(function (r) { return { ok: !!r.ok, mode: 'cloud', sheet: r.sheet, students: r.students, version: r.version ? String(r.version) : '' }; })
         .catch(function (e) { return { ok: false, mode: 'cloud', error: String(e.message || e) }; });
     },
 

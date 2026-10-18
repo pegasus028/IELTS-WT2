@@ -12,6 +12,16 @@
      { id, ts, kind:'resort', studentId }
    The student console applies them and never lists them as owl post; this
    console keeps them in their own list, apart from the essays it sets.
+
+   Your five (19 Oct 2026). The five prompts a student works (one per question
+   type) ride the same path: { id, ts, kind:'coreset', studentId | cohort,
+   prompts:[5 ids] }. Her own latest row wins over her cohort's; with no row
+   the app's default five apply (student.js CORE_DEFAULT, mirrored below).
+   The class table and her panel flag essays that are mostly frame (own words
+   under 30%), the Landing Check agreement and revisions.
+
+   Version check (19 Oct 2026). ping returns the backend's APP_VERSION; when it
+   is missing or older than EXPECTED_BACKEND a banner asks for a redeploy.
    =========================================================================== */
 (function () {
   'use strict';
@@ -19,6 +29,14 @@
   var LEVELUP = window.PC_LEVELUP_URL || 'https://pegasus028.github.io/LevelUp/';
   var $ = function (s) { return document.querySelector(s); };
   var esc = E.esc;
+  /* WP1: the Code.gs build this front end needs (Code.gs APP_VERSION). One constant: change both together. */
+  var EXPECTED_BACKEND = '20261019';
+  /* Your five: the same default and teaching order as student.js (Discuss → Advantages → Opinion → Problem → Two-part). */
+  var CORE_TYPES = ['DISCUSS', 'ADVANTAGE', 'OPINION', 'PROBLEM', 'TWOPART'];
+  var CORE_DEFAULT = { DISCUSS: 'p-fast-food-tax', ADVANTAGE: 'p-cctv-everywhere', OPINION: 'p-free-transport', PROBLEM: 'p-youth-unemployment', TWOPART: 'p-rural-youth' };
+  var CORE_AVOID = { 'p-tourism': 1, 'p-teen-jobs': 1, 'p-teen-sleep': 1 };
+  var OWN_MIN = 0.3;
+  var BOX = { intro: 'Introduction', bodyA: 'Body A', bodyB: 'Body B', conclusion: 'Conclusion' };
   var T = { roster: [], reports: [], assignments: [], sel: null, detail: null, q: '', sort: 'ready', dir: -1, cohort: 'all', view: 'class', markSel: null, markFilter: 'queue', proj: null };
 
   function toast(m) {
@@ -56,9 +74,10 @@
     if (!h) return '<span class="hchip none">unsorted</span>';
     return '<span class="hchip" style="background:' + esc(h.main) + ';border-color:' + esc(h.accent) + '">' + esc(h.name) + '</span>';
   }
-  function isOrder(a) { return !!a && (a.kind === 'unlock' || a.kind === 'resort'); }
+  function isOrder(a) { return !!a && (a.kind === 'unlock' || a.kind === 'resort' || a.kind === 'coreset'); }
   function orderLabel(a) {
-    var who = a.studentId ? 'for ' + a.studentId : a.cohort ? 'for the whole ' + a.cohort + ' cohort' : 'for everyone';
+    var who = a.studentId ? 'for ' + a.studentId : a.cohort && a.cohort !== 'all' ? 'for the whole ' + a.cohort + ' cohort' : 'for everyone';
+    if (a.kind === 'coreset') return 'Five prompts · ' + who + ' · ' + (a.prompts || []).map(function (id) { return (PR.get(id) || {}).title || id; }).join(', ');
     if (a.kind === 'resort') return 'Re-sort · ' + who + ' · she meets the Sorting Lantern again on her next visit';
     var n = Number(a.chapter) || 0;
     return 'Chapter unlock · up to chapter ' + n + (chapterTitle(n) ? ' (' + chapterTitle(n) + ')' : '') + ' · ' + who;
@@ -70,7 +89,7 @@
       if (!r || !r.ok) { toast('Could not save: ' + ((r && r.error) || 'try again')); return; }
       T.assignments = (r && r.assignments) || T.assignments.concat([row]);
       toast(msg);
-      paintHouseCup();
+      paintHouseCup(); paintRoster();
       if (T.view === 'assign') paintAssign();
       if (T.sel && row.studentId && row.studentId === T.sel) openStudent(T.sel);
     });
@@ -86,6 +105,81 @@
       out.totals[h] += Math.round(hp); out.members[h] += 1;
     });
     return out;
+  }
+
+  /* ------------------------------------------------------------ your five */
+  function lc(x) { return String(x == null ? '' : x).toLowerCase().trim(); }
+  function practicePrompts() { return C.PROMPTS.filter(function (pr) { return !pr.mockOnly; }); }
+  function defaultCore() {
+    return CORE_TYPES.map(function (t) {
+      var want = PR.get(CORE_DEFAULT[t]);
+      if (want && want.type === t) return want.id;
+      var alt = practicePrompts().filter(function (pr) { return pr.type === t && !CORE_AVOID[pr.id] && pr.vars && pr.vars.A2 && pr.vars.B1; })[0];
+      return alt ? alt.id : null;
+    }).filter(Boolean);
+  }
+  /* The row that decides her five: her own latest, else her cohort's (or everyone's) latest. */
+  function coreRowFor(id, cohort) {
+    var mine = null, cls = null, sid = lc(id), coh = lc(cohort);
+    T.assignments.forEach(function (a) {
+      if (!a || a.kind !== 'coreset' || !a.prompts || !a.prompts.length) return;
+      if (a.studentId) { if (lc(a.studentId) === sid && (!mine || String(a.ts || '') >= String(mine.ts || ''))) mine = a; return; }
+      if (!a.cohort || a.cohort === 'all' || lc(a.cohort) === coh) { if (!cls || String(a.ts || '') >= String(cls.ts || '')) cls = a; }
+    });
+    return mine || cls;
+  }
+  /* What she works on: the teacher's row (pending until her next visit if her progress has not picked it up),
+     else the five her progress carries, else the default. */
+  function coreOf(s) {
+    var p = s.progress || {}, row = coreRowFor(s.id, cohortOf(s)), cs = p.coreSet;
+    if (row) return { prompts: row.prompts.slice(0, 5), by: 'teacher', row: row, pending: !(cs && cs.by === 'teacher' && cs.row === row.id), own: !!row.studentId };
+    if (cs && cs.prompts && cs.prompts.length) return { prompts: cs.prompts.slice(), by: cs.by || 'app', pending: cs.by === 'teacher' };
+    return { prompts: defaultCore(), by: 'app', pending: false };
+  }
+  function frameOnly(r) { return r.meritWhy === 'frame' || (typeof r.ownShare === 'number' && r.ownShare < OWN_MIN); }
+  /* duel (won) · essay (not mostly frame) · revised · cast (Workshop; from p.lab.castPrompts when lab.js keeps it) */
+  function coreSteps(s, id) {
+    var p = s.progress || {}, bm = ((p.bootcamp || {}).missions || {})[id], reps = reportsOf(s.id).concat(p.reports || []);
+    var seen = {}; reps = reps.filter(function (r) { if (seen[r.id]) return false; seen[r.id] = 1; return true; });
+    var lab = p.lab || {};
+    return { duel: !!(bm && bm.passed), essay: reps.some(function (r) { return r.promptId === id && r.kind !== 'mock' && !frameOnly(r); }),
+      revised: reps.some(function (r) { return r.promptId === id && !!r.revisionOf; }), cast: lab.castPrompts ? !!lab.castPrompts[id] : null };
+  }
+  function coreProg(s) {
+    var c = coreOf(s), steps = c.prompts.map(function (id) { return coreSteps(s, id); });
+    return { core: c, steps: steps, done: steps.filter(function (x) { return x.essay && x.revised; }).length, essays: steps.filter(function (x) { return x.essay; }).length };
+  }
+  function stepsHtml(st) {
+    return [['duel', 'duel'], ['essay', 'essay'], ['revised', 'revised'], ['cast', 'cast']].map(function (k) {
+      var v = st[k[0]]; return '<span class="c5-step' + (v ? ' on' : '') + '"' + (v == null ? ' title="Not reported yet by the Workshop"' : '') + '>' + k[1] + (v ? ' ✓' : v == null ? ' ?' : '') + '</span>';
+    }).join(' · ');
+  }
+  function promptOptions(type, sel) {
+    return practicePrompts().filter(function (pr) { return pr.type === type; }).map(function (pr) {
+      return '<option value="' + esc(pr.id) + '"' + (pr.id === sel ? ' selected' : '') + '>' + esc(pr.title) + (CORE_DEFAULT[type] === pr.id ? ' (default)' : '') + (CORE_AVOID[pr.id] ? ' · mock prompt' : '') + '</option>';
+    }).join('');
+  }
+  /* One select per question type, in teaching order; ids from the five go to the slot of their type. */
+  function fiveSelects(attr, prompts) {
+    var byType = {}; (prompts || []).forEach(function (id) { var pr = PR.get(id); if (pr && !byType[pr.type]) byType[pr.type] = id; });
+    return CORE_TYPES.map(function (t, i) { return '<div class="c5-row"><label>' + (i + 1) + ' · ' + esc(typeName(t)) + '</label><select ' + attr + '="' + t + '">' + promptOptions(t, byType[t] || CORE_DEFAULT[t]) + '</select></div>'; }).join('');
+  }
+  function readFive(root, attr) { return CORE_TYPES.map(function (t) { var el = root.querySelector('[' + attr + '="' + t + '"]'); return el ? el.value : ''; }).filter(Boolean); }
+  /* Landing Check agreement: the share of the lines the app can judge where her tick matched the Wards */
+  function agreeOf(r) {
+    if (typeof r.landAgree === 'number') return r.landAgree;
+    var c = r.plan && r.plan.calibration; return c && c.of ? c.agree / c.of : null;
+  }
+  function pctOrDash(x) { return x == null ? '—' : Math.round(x * 100) + '%'; }
+  function essayFlags(r, all) {
+    var out = [];
+    if (frameOnly(r)) out.push('<span class="flag frame" title="Under 30% of the essay is her own words: no merits">mostly frame' + (typeof r.ownShare === 'number' ? ' · ' + Math.round(r.ownShare * 100) + '% own' : '') + '</span>');
+    else if (typeof r.ownShare === 'number') out.push('<span class="tiny">' + Math.round(r.ownShare * 100) + '% own</span>');
+    var ag = agreeOf(r); if (ag != null) out.push('<span class="tiny" title="Landing Check: her ticks agreed with the Wards">landing ' + Math.round(ag * 100) + '%</span>');
+    if (r.fillUsed) out.push('<span class="tiny">Fill used</span>');
+    if (r.revisionOf) { var o = (all || T.reports).filter(function (x) { return x.id === r.revisionOf; })[0]; out.push('<span class="flag rev">revision of ' + (o ? esc(String(o.ts).slice(0, 10)) : 'an earlier essay') + (r.reviseBox || r.reviseRow ? ' · ' + esc(BOX[r.reviseBox] || r.reviseRow) : '') + '</span>'); }
+    var n = (all || T.reports).filter(function (x) { return x.revisionOf === r.id; }).length; if (n) out.push('<span class="flag rev">revised ' + n + '×</span>');
+    return out.join(' ');
   }
 
   /* ------------------------------------------------------------- sign in */
@@ -121,12 +215,18 @@
   function checkLink() {
     if (!api.url) return;
     api.ping().then(function (r) {
-      if (r.ok) { $('#top-sub').textContent = 'Connected · ' + (r.sheet || 'class sheet'); toast('Connected to ' + (r.sheet || 'the class sheet') + '.'); }
+      if (r.ok) { $('#top-sub').textContent = 'Connected · ' + (r.sheet || 'class sheet'); toast('Connected to ' + (r.sheet || 'the class sheet') + '.'); versionBanner(r.version); }
       else {
         $('#top-sub').textContent = 'Server not answering — showing local data';
         $('#modebar-slot').innerHTML = '<div class="wrap"><div class="modebar"><span><b>Not connected</b> &nbsp;The class server did not answer, so this is local data only. Check the Apps Script deployment is <em>Execute as: Me</em> and <em>Access: Anyone</em>, and that you deployed a <em>new version</em> after your last edit.' + (r.error ? ' &nbsp;(' + esc(r.error) + ')' : '') + '</span></div></div>';
       }
     });
+  }
+  /* WP1: a quiet banner when the live Apps Script is older than this front end (or reports no version). */
+  function versionBanner(v) {
+    var have = String(v || '');
+    if (have && have >= EXPECTED_BACKEND) return;
+    $('#modebar-slot').innerHTML = '<div class="wrap"><div class="modebar" id="ver-banner"><span><b>Redeploy the class server</b> &nbsp;The Apps Script is ' + (have ? 'version ' + esc(have) : 'an older version (it reports no version number)') + '; this Staff Room expects ' + esc(EXPECTED_BACKEND) + ' or later. In Apps Script, paste the current Code.gs and Lab.gs, then Deploy → Manage deployments → pencil → New version → Deploy. Until then, new report columns and the House Cup may be missing.</span></div></div>';
   }
   function paintMode() {
     $('#top-sub').textContent = api.mode === 'cloud' ? 'Connected to the class sheet' : 'Local data, this browser only';
@@ -197,7 +297,7 @@
       sendOrder({ id: uidO(), ts: new Date().toISOString(), kind: 'unlock', cohort: c, chapter: NCH }, 'All chapters unlocked for ' + c + '.');
     }); });
   }
-  var COLS = [{ k: 'name', t: 'Student' }, { k: 'rank', t: 'Classes' }, { k: 'ready', t: 'TR · CC · LR · GRA' }, { k: 'chapter', t: 'Chapter' }, { k: 'house', t: 'House' }, { k: 'band', t: 'Last band' }, { k: 'reps', t: 'Reports' }, { k: 'faults', t: 'Faults' }, { k: 'streak', t: 'Candles' }, { k: 'seen2', t: 'Last seen' }, { k: null, t: '' }];
+  var COLS = [{ k: 'name', t: 'Student' }, { k: 'rank', t: 'Classes' }, { k: 'ready', t: 'TR · CC · LR · GRA' }, { k: 'chapter', t: 'Chapter' }, { k: 'house', t: 'House' }, { k: 'band', t: 'Last band' }, { k: 'reps', t: 'Reports' }, { k: 'five', t: 'Her five' }, { k: 'frame', t: 'Mostly frame' }, { k: 'land', t: 'Landing agree' }, { k: 'revs', t: 'Revisions' }, { k: 'faults', t: 'Faults' }, { k: 'streak', t: 'Candles' }, { k: 'seen2', t: 'Last seen' }, { k: null, t: '' }];
   function paintRoster() {
     var list = visible();
     $('#roster-n').textContent = list.length + ' enrolled';
@@ -206,8 +306,10 @@
       var p = s.progress || P.blank(s.id, s.name), g = P.gateReadiness(p);
       var stale = p.lastActiveDate ? E.daysBetween(p.lastActiveDate, E.today()) : 999, cleared = P.checksCleared(p);
       var flag = (!p.stats || p.stats.seen < 5) ? '<span class="flag new">new</span>' : stale > 7 ? '<span class="flag stall">stalled</span>' : cleared >= 11 ? '<span class="flag fly">soaring</span>' : '';
-      var st = storyOf(p);
-      return { s: s, p: p, g: g, ready: Math.round((g.TR + g.CC + g.LR + g.GRA) / 4), rank: cleared, chapter: Number(st.chapter) || 0, unlockedTo: Number(st.unlockedTo) || 0, house: st.house || '', hp: Number(st.hp) || 0, band: lastBand(s.id) || 0, reps: reportsOf(s.id).length, faults: P.dueReview(p).length, flag: flag, stale: stale };
+      var st = storyOf(p), mine = reportsOf(s.id), cp = coreProg(s);
+      var ags = mine.map(agreeOf).filter(function (x) { return x != null; });
+      var land = ags.length ? ags.reduce(function (a, b) { return a + b; }, 0) / ags.length : null;
+      return { s: s, p: p, g: g, five: cp.done * 10 + cp.essays, cp: cp, frame: mine.filter(frameOnly).length, land: land == null ? -1 : land, revs: mine.filter(function (r) { return r.revisionOf; }).length, ready: Math.round((g.TR + g.CC + g.LR + g.GRA) / 4), rank: cleared, chapter: Number(st.chapter) || 0, unlockedTo: Number(st.unlockedTo) || 0, house: st.house || '', hp: Number(st.hp) || 0, band: lastBand(s.id) || 0, reps: reportsOf(s.id).length, faults: P.dueReview(p).length, flag: flag, stale: stale };
     });
     if (T.q) { var q = T.q.toLowerCase(); rows = rows.filter(function (r) { return (r.p.displayName || '').toLowerCase().indexOf(q) >= 0 || r.s.id.toLowerCase().indexOf(q) >= 0; }); }
     var key = T.sort, dir = T.dir;
@@ -224,7 +326,10 @@
         '<td>' + ['TR', 'CC', 'LR', 'GRA'].map(function (k) { return '<span class="mini' + (k === 'TR' ? ' gold' : '') + '" title="' + k + ' ' + r.g[k] + '%"><i style="width:' + r.g[k] + '%"></i></span>'; }).join('') + ' <span style="font-family:var(--f-mono);font-size:.78rem">' + r.ready + '%</span></td>' +
         '<td>' + (r.chapter ? '<span title="' + esc(chapterTitle(r.chapter)) + '">Ch ' + r.chapter + '</span>' + (r.unlockedTo > r.chapter ? ' <span class="tiny">· open to ' + r.unlockedTo + '</span>' : '') : '<span class="tiny">not started</span>') + '</td>' +
         '<td>' + houseChip(r.house) + (r.house ? ' <span class="tiny">' + r.hp + ' pts</span>' : '') + '</td>' +
-        '<td class="num">' + (r.band ? fmtBand(r.band) : '—') + '</td><td class="num">' + r.reps + '</td><td class="num">' + r.faults + '</td><td class="num">' + (r.p.streak || 0) + '</td><td>' + esc(ago(r.p.lastActiveDate ? r.p.lastActiveDate + 'T12:00:00' : null)) + '</td><td>' + r.flag + '</td></tr>';
+        '<td class="num">' + (r.band ? fmtBand(r.band) : '—') + '</td><td class="num">' + r.reps + '</td>' +
+        '<td class="c5-cell" title="Essays written of her five · written and revised' + (r.cp.core.by === 'teacher' ? ' · set by you' : ' · the default five') + '">' + r.cp.essays + '/' + r.cp.core.prompts.length + ' <span class="tiny">· ' + r.cp.done + ' revised' + (r.cp.core.by === 'teacher' ? ' · yours' : '') + (r.cp.core.pending ? ' · pending' : '') + '</span></td>' +
+        '<td class="num">' + (r.frame ? '<span class="flag frame" title="Essays under 30% her own words">' + r.frame + '</span>' : '0') + '</td>' +
+        '<td class="num">' + (r.land >= 0 ? Math.round(r.land * 100) + '%' : '—') + '</td><td class="num">' + r.revs + '</td><td class="num">' + r.faults + '</td><td class="num">' + (r.p.streak || 0) + '</td><td>' + esc(ago(r.p.lastActiveDate ? r.p.lastActiveDate + 'T12:00:00' : null)) + '</td><td>' + r.flag + '</td></tr>';
     });
     $('#roster').innerHTML = html + '</tbody>';
     $('#roster').querySelectorAll('tr.r').forEach(function (tr) { tr.addEventListener('click', function () { T.sel = tr.dataset.id; paintRoster(); openStudent(tr.dataset.id); }); });
@@ -338,9 +443,20 @@
         '<button class="btn sm" id="d-unl">Unlock up to chapter ' + defN + '</button><button class="btn sm ghost" id="d-resort" title="She meets the Sorting Lantern again on her next visit">Re-sort</button></div>' +
         (myOrders.length ? '<div style="margin-top:8px">' + myOrders.map(function (a) { return '<div class="assignrow order"><div class="grow tiny">' + esc(orderLabel(a)) + ' · set ' + esc(String(a.ts || '').slice(0, 10)) + '</div><button class="btn sm ghost" data-orm="' + esc(a.id) + '">Remove</button></div>'; }).join('') + '</div>' : '') +
         '<p class="tiny" style="margin-top:8px">Unlocks open chapters early; they never lock one. Her progress still decides which gates she has passed.</p></div></details>';
+      /* Your five (E4): her five prompts, her steps on each, and the selects to change them */
+      var sRec = { id: id, progress: p, cohort: (T.roster.filter(function (x) { return x.id === id; })[0] || {}).cohort };
+      var cpg = coreProg(sRec), c5 = cpg.core;
+      h += '<details class="disc" open id="d-five"><summary>Her five<span class="count">' + cpg.essays + ' of ' + c5.prompts.length + ' written · ' + cpg.done + ' revised · ' + (c5.by === 'teacher' ? (c5.own ? 'set by you for her' : 'set by you for the class') : 'the default five') + (c5.pending ? ' · she sees it on her next visit' : '') + '</span></summary><div class="disc-body" style="padding-top:10px">' +
+        '<div style="overflow-x:auto"><table class="roster c5-tab" style="min-width:0"><thead><tr><th>#</th><th>Prompt</th><th>Steps</th></tr></thead><tbody>' + c5.prompts.map(function (pid, i) {
+          var pr = PR.get(pid) || {};
+          return '<tr><td class="num">' + (i + 1) + '</td><td>' + esc(pr.title || pid) + ' <span class="tiny">' + esc(typeName(pr.type)) + '</span></td><td class="tiny">' + stepsHtml(cpg.steps[i]) + '</td></tr>';
+        }).join('') + '</tbody></table></div>' +
+        '<p class="tiny" style="margin:10px 0 6px">Change her five: one prompt per type, worked in this order. She sees the change the next time she opens the app. The other prompts stay open to her as extra practice.</p>' +
+        '<div class="c5-form">' + fiveSelects('data-d5', c5.prompts) + '</div>' +
+        '<div class="story-acts" style="margin-top:8px"><button class="btn sm primary" id="d-five-save">Save her five</button>' + (c5.by === 'teacher' && c5.own ? '<button class="btn sm ghost" id="d-five-reset" title="Removes the five you set for her; the class five or the default applies">Back to the ' + (coreRowFor('', cohortOf(sRec)) ? 'class' : 'default') + ' five</button>' : '') + '</div></div></details>';
       /* reports */
       h += '<details class="disc" open><summary>Reports<span class="count">' + reps.length + ' written · ' + reps.filter(function (r) { return !r.released; }).length + ' unreleased</span></summary><div class="disc-body" style="padding-top:10px">';
-      h += reps.length ? '<div class="replist">' + reps.map(function (r) { var pr = PR.get(r.promptId) || {}, b = bandsOf(r); return '<button class="rep" data-open="' + esc(r.id) + '"><span class="rep-t"><span class="rep-n">' + esc(pr.title || r.promptId) + '</span><span class="rep-s">' + esc(String(r.ts).slice(0, 10) + ' · ' + typeName(r.type) + ' · ' + r.words + ' w · ' + mmss(r.seconds || 0) + ' · ' + (r.uiMode || '') + ' · ' + (r.kind || 'practice') + ' · ' + ((r.preflight || {}).bad || 0) + ' red · ' + (r.released ? 'released' : r.teacher ? 'marked, not released' : r.ai ? 'AI estimate' : 'unmarked')) + '</span></span><span class="rep-b">' + (b ? fmtBand(b.overall) : '—') + '</span></button>'; }).join('') + '</div>' : '<p class="tiny">No reports yet.</p>';
+      h += reps.length ? '<div class="replist">' + reps.map(function (r) { var pr = PR.get(r.promptId) || {}, b = bandsOf(r); return '<button class="rep' + (frameOnly(r) ? ' frame' : '') + '" data-open="' + esc(r.id) + '"' + (r.revisionOf ? ' style="margin-left:18px"' : '') + '><span class="rep-t"><span class="rep-n">' + (r.revisionOf ? '↳ ' : '') + esc(pr.title || r.promptId) + '</span><span class="rep-s">' + esc(String(r.ts).slice(0, 10) + ' · ' + typeName(r.type) + ' · ' + r.words + ' w · ' + mmss(r.seconds || 0) + ' · ' + (r.uiMode || '') + ' · ' + (r.kind || 'practice') + ' · ' + ((r.preflight || {}).bad || 0) + ' red · ' + (r.released ? 'released' : r.teacher ? 'marked, not released' : r.ai ? 'AI estimate' : 'unmarked')) + '</span><span class="rep-f">' + essayFlags(r, reps) + '</span></span><span class="rep-b">' + (b ? fmtBand(b.overall) : '—') + '</span></button>'; }).join('') + '</div>' : '<p class="tiny">No reports yet.</p>';
       h += '<div style="margin-top:10px"><button class="btn sm" id="d-assign">Set an essay for ' + esc(p.displayName || id) + '</button> <button class="btn sm" id="d-print">Print report card</button></div></div></details>';
       /* Template Lab: lab.js keeps a summary on the progress object; the full
          blueprints, essays and coaching are in the LabTemplates / LabAttempts tabs. */
@@ -386,6 +502,17 @@
       $('#detail').querySelectorAll('[data-open]').forEach(function (b) { b.addEventListener('click', function () { T.markSel = b.dataset.open; showView('marking'); }); });
       $('#d-assign').addEventListener('click', function () { showView('assign'); $('#a-student').value = id; });
       $('#d-print').addEventListener('click', function () { printCard(id); });
+      $('#d-five-save').addEventListener('click', function () {
+        var five = readFive($('#detail'), 'data-d5');
+        if (five.length !== CORE_TYPES.length) { toast('Choose one prompt for each type.'); return; }
+        sendOrder({ id: uidO(), ts: new Date().toISOString(), kind: 'coreset', studentId: id, prompts: five }, 'Her five saved. ' + (p.displayName || id) + ' sees them on her next visit.');
+      });
+      var r5 = $('#d-five-reset'); if (r5) r5.addEventListener('click', function () {
+        var mineRows = T.assignments.filter(function (a) { return a.kind === 'coreset' && a.studentId && lc(a.studentId) === lc(id); });
+        if (!mineRows.length) return;
+        var n = mineRows.length;
+        mineRows.forEach(function (a) { api.assignments('remove', { id: a.id }).then(function (r) { T.assignments = (r && r.assignments) || T.assignments.filter(function (x) { return x.id !== a.id; }); if (--n === 0) { toast('Her own five removed.'); paintRoster(); openStudent(id); } }); });
+      });
       var nameOf = p.displayName || id;
       $('#d-unl-n').addEventListener('change', function () { $('#d-unl').textContent = 'Unlock up to chapter ' + $('#d-unl-n').value; });
       $('#d-unl').addEventListener('click', function () {
@@ -405,7 +532,7 @@
     var list = T.reports.filter(function (r) { return T.markFilter === 'all' || (T.markFilter === 'queue' ? !r.released : r.released); });
     if (T.cohort !== 'all') { var ids = {}; visible().forEach(function (s) { ids[s.id] = 1; }); list = list.filter(function (r) { return ids[r.studentId]; }); }
     var html = '<div class="panel-h"><h2>Marking</h2><div class="filters" style="margin:0">' + ['queue', 'released', 'all'].map(function (k) { return '<button data-mf="' + k + '"' + (T.markFilter === k ? ' class="on"' : '') + '>' + k + '</button>'; }).join('') + '</div></div>';
-    html += '<div class="mark"><div class="card panel"><div class="replist">' + (list.length ? list.map(function (r) { var pr = PR.get(r.promptId) || {}, b = bandsOf(r); return '<button class="rep' + (T.markSel === r.id ? ' sel' : '') + '" data-mk="' + esc(r.id) + '"><span class="rep-t"><span class="rep-n">' + esc(r.name || r.studentId) + ' — ' + esc(pr.title || r.promptId) + '</span><span class="rep-s">' + esc(String(r.ts).slice(0, 10) + ' · ' + typeName(r.type) + ' · ' + r.words + ' w · ' + ((r.preflight || {}).bad || 0) + ' red · ' + (r.kind || 'practice') + ' · ' + (r.released ? 'released' : r.teacher ? 'marked' : r.ai ? 'AI estimate' : 'unmarked')) + '</span></span><span class="rep-b">' + (b ? fmtBand(b.overall) : (r.ai && r.ai.cefr ? esc(r.ai.cefr) : (LV.pending[r.id] ? '⏳' : '—'))) + '</span></button>'; }).join('') : '<div class="empty">Nothing here.</div>') + '</div></div><div class="card panel" id="mk-detail"><div class="empty">Pick a report.</div></div></div>';
+    html += '<div class="mark"><div class="card panel"><div class="replist">' + (list.length ? list.map(function (r) { var pr = PR.get(r.promptId) || {}, b = bandsOf(r); return '<button class="rep' + (T.markSel === r.id ? ' sel' : '') + '" data-mk="' + esc(r.id) + '"><span class="rep-t"><span class="rep-n">' + esc(r.name || r.studentId) + ' — ' + esc(pr.title || r.promptId) + '</span><span class="rep-s">' + esc(String(r.ts).slice(0, 10) + ' · ' + typeName(r.type) + ' · ' + r.words + ' w · ' + ((r.preflight || {}).bad || 0) + ' red · ' + (r.kind || 'practice') + ' · ' + (r.released ? 'released' : r.teacher ? 'marked' : r.ai ? 'AI estimate' : 'unmarked')) + '</span><span class="rep-f">' + essayFlags(r) + '</span></span><span class="rep-b">' + (b ? fmtBand(b.overall) : (r.ai && r.ai.cefr ? esc(r.ai.cefr) : (LV.pending[r.id] ? '⏳' : '—'))) + '</span></button>'; }).join('') : '<div class="empty">Nothing here.</div>') + '</div></div><div class="card panel" id="mk-detail"><div class="empty">Pick a report.</div></div></div>';
     $('#view-marking').innerHTML = html;
     $('#view-marking').querySelectorAll('[data-mf]').forEach(function (b) { b.addEventListener('click', function () { T.markFilter = b.dataset.mf; paintMarking(); }); });
     $('#view-marking').querySelectorAll('[data-mk]').forEach(function (b) { b.addEventListener('click', function () { T.markSel = b.dataset.mk; paintMarking(); }); });
@@ -419,6 +546,13 @@
     var tb = (r.teacher && r.teacher.bands) || (r.ai && r.ai.bands) || {};
     var opts = function (v) { var o = ''; for (var b = 4; b <= 9; b += 0.5) o += '<option value="' + b + '"' + (Math.abs((v || 0) - b) < 0.01 ? ' selected' : '') + '>' + b.toFixed(1) + '</option>'; return '<option value="">—</option>' + o; };
     var h = '<div class="panel-h"><div><h2>' + esc(r.name || r.studentId) + '</h2><span class="kicker">' + esc(pr.title || r.promptId) + ' · ' + esc(String(r.ts).slice(0, 16).replace('T', ' ')) + ' · ' + r.words + ' words in ' + mmss(r.seconds || 0) + (r.timedOut ? ' (time out)' : '') + ' · ' + (r.uiMode || '') + (r.revision ? ' · revised once' : '') + '</span></div><span class="pill ' + (pre.bad ? 'bad' : 'good') + '">' + (pre.bad || 0) + ' red · ' + (pre.warn || 0) + ' amber</span></div>';
+    /* 19 Oct 2026: how much is hers, the Landing Check agreement, and the revision links */
+    var orig = r.revisionOf ? T.reports.filter(function (x) { return x.id === r.revisionOf; })[0] : null, later = T.reports.filter(function (x) { return x.revisionOf === r.id; });
+    h += '<div class="mk-meta" id="mk-meta"><span>Own words: <b>' + (typeof r.ownShare === 'number' ? Math.round(r.ownShare * 100) + '%' : '—') + '</b>' + (frameOnly(r) ? ' <span class="flag frame">mostly frame · no merits</span>' : '') + '</span>' +
+      '<span>Own sentences: <b>' + (r.ownSentences == null ? '—' : r.ownSentences) + '</b></span><span>Fill used: <b>' + (r.fillUsed == null ? '—' : r.fillUsed ? 'yes' : 'no') + '</b></span>' +
+      '<span>Landing Check agreement: <b>' + pctOrDash(agreeOf(r)) + '</b></span>' + (r.merits != null ? '<span>Merits: <b>' + r.merits + '</b></span>' : '') + '</div>';
+    if (orig || r.revisionOf) h += '<p class="tiny" id="mk-revof">A revision' + (r.reviseBox ? ' of the ' + esc(BOX[r.reviseBox] || r.reviseBox) + ' paragraph' : '') + (r.reviseRow ? ' (weak row: ' + esc(r.reviseRow) + ')' : '') + ' of ' + (orig ? '<button class="linky" data-mk-go="' + esc(orig.id) + '">the essay of ' + esc(String(orig.ts).slice(0, 16).replace('T', ' ')) + ' →</button>' : 'an essay not in this list') + '</p>';
+    if (later.length) h += '<p class="tiny" id="mk-revised">Revised later: ' + later.map(function (x) { return '<button class="linky" data-mk-go="' + esc(x.id) + '">' + esc(String(x.ts).slice(0, 16).replace('T', ' ')) + (x.reviseBox ? ' (' + esc(BOX[x.reviseBox] || x.reviseBox) + ')' : '') + ' →</button>'; }).join(' ') + '</p>';
     h += PR.card(pr, { compact: true });
     h += W.paragraphs(r.text).map(function (t) { return '<div class="mpara">' + esc(t).replace(new RegExp(W.LEX.NUANCE.source, 'gi'), '<span class="cmp">$&</span>') + '</div>'; }).join('');
     if (r.firstText) h += '<details class="disc"><summary>First draft (before revision)</summary><div class="disc-body" style="padding-top:10px">' + W.paragraphs(r.firstText).map(function (t) { return '<div class="mpara">' + esc(t) + '</div>'; }).join('') + '</div></details>';
@@ -430,6 +564,7 @@
     h += '<textarea class="comment" id="mk-comment" placeholder="Nickname, then one specific praise! Quote their words in single quotes. State the level plainly. Name the error types. However, … Just ensure … Finally, … Warm close.">' + esc((r.teacher && r.teacher.comment) || (r.ai && r.ai.comment) || '') + '</textarea>';
     h += '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn" id="mk-save">Save mark</button><button class="btn primary" id="mk-release">Save and release to student</button>' + (r.released ? '<button class="btn ghost" id="mk-unrelease">Withdraw</button>' : '') + '<button class="btn" id="mk-levelup" title="Open LevelUp with this essay and prompt filled in">Send to the examiners →</button><button class="btn ghost" id="mk-copyprompt" title="Copy the marking prompt to paste into Claude">Copy AI prompt</button></div>';
     host.innerHTML = h;
+    host.querySelectorAll('[data-mk-go]').forEach(function (b) { b.addEventListener('click', function () { T.markSel = b.dataset.mkGo; if (T.markFilter !== 'all') T.markFilter = 'all'; paintMarking(); }); });
     function bands() {
       var out = {}, sum = 0, n = 0;
       ['tr', 'cc', 'lr', 'gra'].forEach(function (k) { var v = parseFloat($('#mk-' + k).value); if (!isNaN(v)) { out[k] = v; sum += v; n++; } });
@@ -536,9 +671,19 @@
         return '<div class="assignrow"><div class="grow"><b>' + esc(a.title || pr.title || a.id) + '</b><div class="tiny">' + esc((a.studentId ? 'for ' + a.studentId : a.cohort === 'all' ? 'everyone' : a.cohort) + ' · ' + (pr.title || '') + ' · ' + (a.uiMode || 'guided') + ' · ' + (a.timed === false ? 'untimed' : (a.minutes || 40) + ' min') + (a.due ? ' · due ' + a.due : '') + ' · ' + done + ' submitted') + '</div></div><button class="btn sm" data-rm="' + esc(a.id) + '">Remove</button></div>';
       }).join('') : '<p class="tiny">None yet.</p>') + '</div>' +
       '<div class="panel-h" style="margin-top:16px"><h2>Story orders</h2><span class="tiny">chapter unlocks and re-sorts · applied quietly, never shown as owl post</span></div><div id="o-list">' + (orders.length ? orders.slice().reverse().map(function (a) {
-        return '<div class="assignrow order"><div class="grow"><b>' + (a.kind === 'resort' ? 'Re-sort' : 'Chapter unlock') + '</b><div class="tiny">' + esc(orderLabel(a)) + ' · set ' + esc(String(a.ts || '').slice(0, 10)) + '</div></div><button class="btn sm" data-orm="' + esc(a.id) + '">Remove</button></div>';
+        return '<div class="assignrow order"><div class="grow"><b>' + (a.kind === 'resort' ? 'Re-sort' : a.kind === 'coreset' ? 'Five prompts' : 'Chapter unlock') + '</b><div class="tiny">' + esc(orderLabel(a)) + ' · set ' + esc(String(a.ts || '').slice(0, 10)) + '</div></div><button class="btn sm" data-orm="' + esc(a.id) + '">Remove</button></div>';
       }).join('') : '<p class="tiny">None. Use the Quillmoor story panel of a student, or "Unlock all chapters" in the House Cup.</p>') + '</div></div></div>';
+    /* Your five for a whole class (E4). A student's own five (her panel) wins over the class five. */
+    h += '<div class="card panel form" id="c5-card" style="margin-top:16px"><div class="panel-h"><h2>Five prompts for a class</h2><span class="tiny">one per question type, worked in this order · the other prompts stay open as extra practice</span></div>' +
+      '<div class="row"><div><label>Class</label><select id="c5-cohort"><option value="all">Everyone</option>' + Object.keys(cohorts).sort().map(function (c) { return '<option value="' + esc(c) + '">' + esc(c) + '</option>'; }).join('') + '</select></div></div>' +
+      '<div class="c5-form">' + fiveSelects('data-c5', defaultCore()) + '</div>' +
+      '<div><button class="btn primary" id="c5-save">Set these five</button> <span class="tiny">Students see them on their next visit. A five you set in a student\'s own panel stays hers.</span></div></div>';
     $('#view-assign').innerHTML = h;
+    $('#c5-save').addEventListener('click', function () {
+      var five = readFive($('#c5-card'), 'data-c5'), coh = $('#c5-cohort').value;
+      if (five.length !== CORE_TYPES.length) { toast('Choose one prompt for each type.'); return; }
+      sendOrder({ id: uidO(), ts: new Date().toISOString(), kind: 'coreset', cohort: coh, prompts: five }, 'Five prompts set for ' + (coh === 'all' ? 'everyone' : coh) + '.');
+    });
     $('#a-set').addEventListener('click', function () {
       var pid = $('#a-prompt').value;
       if (pid === 'random') {
@@ -630,10 +775,12 @@
   function csv(rows) { return rows.map(function (r) { return r.map(function (c) { var s = String(c == null ? '' : c); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }).join(','); }).join('\n'); }
   function download(name, text) { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: 'text/csv' })); a.download = name; a.click(); }
   $('#t-csv').addEventListener('click', function () {
-    var rows = [['Student ID', 'Name', 'Cohort', 'Classes passed', 'TA', 'CC', 'LR', 'GRA', 'Accuracy %', 'Reports', 'Last band', 'Best band', 'Candles (streak)', 'Last active', 'House', 'Chapter', 'House points', 'Lessons read at', 'Duel level']];
-    T.roster.forEach(function (s) { var p = s.progress || P.blank(s.id), g = P.gateReadiness(p), st = storyOf(p); rows.push([s.id, p.displayName || s.name, cohortOf(s), P.checksCleared(p), g.TR, g.CC, g.LR, g.GRA, P.accuracy(p), reportsOf(s.id).length, lastBand(s.id) || '', p.bestBand || '', p.streak || 0, p.lastActiveDate || '', st.house || '', st.chapter || '', st.hp || 0, p.explainLevel || 'C1', p.duelTier || p.tier || 'B2']); });
-    rows.push([]); rows.push(['Essay ID', 'Student', 'Date', 'Prompt', 'Type', 'Mode', 'Kind', 'Words', 'Seconds', 'Red', 'Amber', 'Template %', 'TR', 'CC', 'LR', 'GRA', 'Overall', 'CEFR', 'Released', 'Comment']);
-    T.reports.forEach(function (r) { var b = bandsOf(r) || {}, m = markOf(r) || {}; rows.push([r.id, r.studentId, String(r.ts).slice(0, 10), r.promptId, r.type, r.uiMode || '', r.kind, r.words, r.seconds, (r.preflight || {}).bad, (r.preflight || {}).warn, Math.round(((r.preflight || {}).ratio || 0) * 100), bandKey(b, 'tr'), b.cc, b.lr, b.gra, b.overall, m.cefr, r.released ? 'yes' : 'no', m.comment || '']); });
+    var rows = [['Student ID', 'Name', 'Cohort', 'Classes passed', 'TA', 'CC', 'LR', 'GRA', 'Accuracy %', 'Reports', 'Last band', 'Best band', 'Candles (streak)', 'Last active', 'House', 'Chapter', 'House points', 'Lessons read at', 'Duel level', 'Her five', 'Five set by', 'Five written', 'Five revised', 'Mostly-frame essays', 'Revisions']];
+    T.roster.forEach(function (s) { var p = s.progress || P.blank(s.id), g = P.gateReadiness(p), st = storyOf(p), cp = coreProg(s), mine = reportsOf(s.id); rows.push([s.id, p.displayName || s.name, cohortOf(s), P.checksCleared(p), g.TR, g.CC, g.LR, g.GRA, P.accuracy(p), mine.length, lastBand(s.id) || '', p.bestBand || '', p.streak || 0, p.lastActiveDate || '', st.house || '', st.chapter || '', st.hp || 0, p.explainLevel || 'C1', p.duelTier || p.tier || 'B2',
+      cp.core.prompts.join(' '), cp.core.by + (cp.core.pending ? ' (pending)' : ''), cp.essays, cp.done, mine.filter(frameOnly).length, mine.filter(function (r) { return r.revisionOf; }).length]); });
+    rows.push([]); rows.push(['Essay ID', 'Student', 'Date', 'Prompt', 'Type', 'Mode', 'Kind', 'Words', 'Seconds', 'Red', 'Amber', 'Template %', 'TR', 'CC', 'LR', 'GRA', 'Overall', 'CEFR', 'Released', 'Comment', 'Own words %', 'Own sentences', 'Fill used', 'Landing agree %', 'Revision of', 'Revised row', 'Mostly frame', 'Merits', 'Revised paragraph']);
+    T.reports.forEach(function (r) { var b = bandsOf(r) || {}, m = markOf(r) || {}, ag = agreeOf(r); rows.push([r.id, r.studentId, String(r.ts).slice(0, 10), r.promptId, r.type, r.uiMode || '', r.kind, r.words, r.seconds, (r.preflight || {}).bad, (r.preflight || {}).warn, Math.round(((r.preflight || {}).ratio || 0) * 100), bandKey(b, 'tr'), b.cc, b.lr, b.gra, b.overall, m.cefr, r.released ? 'yes' : 'no', m.comment || '',
+      typeof r.ownShare === 'number' ? Math.round(r.ownShare * 100) : '', r.ownSentences == null ? '' : r.ownSentences, r.fillUsed == null ? '' : (r.fillUsed ? 'yes' : 'no'), ag == null ? '' : Math.round(ag * 100), r.revisionOf || '', r.reviseRow || '', frameOnly(r) ? 'yes' : 'no', r.merits == null ? '' : r.merits, r.reviseBox || '']); });
     download('quillmoor-' + E.today() + '.csv', csv(rows));
   });
   /* Blooket import: Question, Answer 1-4, Time, Correct answers */

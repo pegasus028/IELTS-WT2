@@ -69,6 +69,20 @@ table.roster tr.sel td{background:var(--accent-soft)}
 .flag.stall{background:var(--no-soft);color:var(--no)}
 .flag.new{background:var(--accent-soft);color:var(--accent)}
 .flag.fly{background:var(--ok-soft);color:var(--ok)}
+/* 19 Oct 2026: mostly-frame essays, revisions, her five, the version banner */
+.flag.frame{background:var(--no-soft);color:var(--no)}
+.flag.rev{background:var(--accent-soft);color:var(--accent)}
+.rep-f{display:flex;flex-wrap:wrap;gap:4px 8px;margin-top:3px}
+.rep.frame{border-left:3px solid var(--no)}
+.c5-cell{white-space:nowrap}
+table.roster.c5-tab{width:100%}
+table.roster.c5-tab td,table.roster.c5-tab th{white-space:normal}
+.c5-step{color:var(--ink-3)}.c5-step.on{color:var(--ok);font-weight:600}
+.c5-form{display:grid;gap:6px}
+.c5-row{display:grid;grid-template-columns:minmax(110px,150px) 1fr;gap:8px;align-items:center}
+.c5-row select{width:100%;min-height:40px}
+@media (max-width:520px){.c5-row{grid-template-columns:1fr}}
+.mk-meta{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.85rem;margin:6px 0 10px}
 details.disc{border:1px solid var(--rule);border-radius:var(--r-m);margin-bottom:10px;background:var(--surface)}
 details.disc>summary{cursor:pointer;list-style:none;padding:11px 14px;display:flex;align-items:center;gap:10px;font-weight:600;font-size:.92rem}
 details.disc>summary::-webkit-details-marker{display:none}
@@ -260,9 +274,9 @@ details.disc>summary .count{margin-left:auto;font-family:var(--f-mono);font-size
 <script src="writer.js?v=20261019s"></script>
 <script src="prompts-mock.js?v=20261019m"></script>
 <script src="bootcamp.js?v=20261018q"></script>
-<script src="engine.js?v=20261018q"></script>
+<script src="engine.js?v=20261019f"></script>
 <script src="story-content.js?v=20261018q"></script>
-<script src="api.js?v=20261012"></script>
-<script src="teacher.js?v=20261018q"></script>
+<script src="api.js?v=20261019f"></script>
+<script src="teacher.js?v=20261019f"></script>
 </body>
 </html>
