@@ -642,7 +642,7 @@
      lessonSpeech() must stay identical to the copy in that tool. */
   var LSAY = { audio: null, h: null };
   function lfnv(s) { var h = 0x811c9dc5; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
-  function plainSpeech(h) { return String(h || '').replace(/<s>[\s\S]*?<\/s>/g, '').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/→/g, ' to ').replace(/\s+/g, ' ').trim(); }
+  function plainSpeech(h) { return String(h || '').replace(/<s>[\s\S]*?<\/s>/g, '').replace(/<br\s*\/?>/g, ' ').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/→/g, ' to ').replace(/\s+/g, ' ').trim(); }
   /* Levelled explanations (lesson-levels.js): A1 · A2 · B1 · B2 versions of every lesson's key,
      explanation and example notes. C1 is the original full text in the topic files. The choice is
      kept on the profile (so it follows the student to another device) and on this device. */
