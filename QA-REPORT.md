@@ -1,5 +1,33 @@
 # Position Control / Quillmoor Academy — QA report
 
+## Hints: one rule-only hint for every question — 18 October 2026 (Claude Opus 5.5)
+
+Requested by T.Chris: check the hint on every question; it must be the right hint for that question, must not give the answer away, and should only outline the rule or principle.
+
+**What was wrong.** The Hint button shows `item.hint`, or, when an item has none, the tag's general `principle`. 228 of the 406 lesson and check questions had no hint of their own, so they showed a principle written for the whole tag: often off-target for the question, and on fact or grammar questions it stated the answer (m00s1q3 showed "At least 250 words…" on a question about under-length deductions; agreement items showed "The number of cars HAS risen"; spelling items listed the correct spellings). Of the 178 existing hints, 24 failed the standard.
+
+| Kind of fault in an existing hint | Examples |
+| --- | --- |
+| Defines or names the key | m10s1q4 ("a verb meaning 'help something grow'" → fosters), m10s2q7 ("make less severe" → mitigate), m11s2q4 (defined "economical"), m10ckq3 ("one noun for young people" → kids) |
+| Rules out each distractor so only the key is left | m02s1q4, m04s1q5, m04s1q7, m04ckq1 |
+| Names the chunk or the error family on "one error, one family" items | m11ckq4 ("the first word is a linker"), m11s3q1/q3/q4/q6 (each hint named its family) |
+| Points the wrong way or is false | m05s1q2 (cue fitted a distractor), m11ckq2 ("one noun cannot be counted": *training* cannot either), m11s1q7 ("such nouns always carry an article"), m11ckq6 ("say the verb the noun comes from": *argue* + *ment* makes the misspelling look right), m02ckq4 (sent students to put the opinion last in an order item whose key ends with a plan sentence) |
+
+**What changed.**
+- Every one of the 406 questions now has its own one-sentence hint (≤ 30 words, no contractions, British spelling) that names the rule or the question to ask, phrased for that question. 154 existing hints kept, 24 rewritten, 228 written.
+- Duelling Hall (`bootcamp.js`): 11 generated hints stated the answer or listed the key (20 / 40 split, five-minute plan, 250 words, the conclusion checklist, "where is the mechanism?", the 238-word fix) and now give the rule only. The Core Topic hint there no longer quotes "the regulation of private cars in city centres", which was almost the C1 key on the cars prompt (the Template tab's variable note is unchanged).
+- Module 05 still taught the retired one-third / one-half frame-text lines. m05s3q2, m05s3q7 (options rewritten, key position kept), m05ckq5, the m05s3 theory (key, body, simple) and the `struct-template` reteach now use the spellbook share (60/50/40/30: green at or under, amber up to five points over, red beyond or above 60%), as `writer.js` does. The two m05s3 lesson clips were re-recorded (Sonia, `tools/build-lesson-audio.py --prune`).
+
+**How it was checked.** Five reviewers drafted and judged hints module by module against the standard; every proposed hint was then read against its item, the key and the `why` (14 tightened); two fresh reviewers who had not seen the drafts read all 406 adversarially (6 more fixed). The Duelling Hall hints were read against all 37 prompts at both tiers.
+
+**New check.** `tools/validate.js` now fails an item with no hint, a contraction in its hint, an option named by position, or the key's text inside the hint (planted-leak test: caught). `tools/audit.js` word-overlap flag: 0.
+
+**Tests.** validate, test-free (764), audit (0 flags), lab-validate, template-test (134), story-validate, gs-test, date-test, lab-examples-check; smoke.py on a copy with the server address blanked: 0 console errors.
+
+**For T.Chris.** No Apps Script change; ids, storage keys and the API are unchanged, so progress is safe. Judgement call: two order items (m02s2q6, m02ckq4) end the introduction with a plan sentence after the opinion, while the course elsewhere teaches the position as the last sentence of the introduction.
+
+---
+
 ## Free-text checker: every fair answer passes — 16 October 2026 (Claude Opus 5.5)
 
 Trigger: a student's thesis for m01s2q7, "The advantages of online lessons outweighs the disadvantages becuase it saves travel time.", was refused with "Add the reason" because of the typo.

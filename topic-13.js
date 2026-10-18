@@ -141,7 +141,7 @@
             { id: 'm13s2q7', type: 'choose', tag: 'cc-paragraphing', level: 'B2',
               stem: 'Five minutes left. The essay has no conclusion and a contraction in Body A. Which fault matters more?',
               options: ['The contraction, since register errors are counted against every sentence they appear in.', 'Both equally, since each is one red row on the panel.', 'The missing conclusion, since the position must be restated at the end.', 'Neither: with five minutes left, the time belongs to the ten-point check instead.'], answer: 2,
-              hint: 'Compare what each fault does to Task Response and how long each takes to repair before you decide which comes first.',
+              hint: 'Compare how much each fault costs the essay and how long each takes to repair before you decide which to fix first.',
               why: 'A contraction is one word and one register fault. A missing conclusion fails check 2 and leaves the position stated once, which the descriptor reads as a position not held throughout. Fix the expensive fault first, then the two-second one; the check comes after both, because a missing conclusion is the one thing worth breaking the protocol for.' }
           ] },
 
@@ -176,7 +176,7 @@
             { id: 'm13s3q2', type: 'judge', tag: 'kn-test-facts', level: 'B1',
               given: 'On the computer-delivered test, the screen underlines spelling mistakes as a word processor does.',
               stem: 'Is this claim about the test correct?', answer: 1,
-              hint: 'Think about which tools the test gives you on screen and which it deliberately leaves out.',
+              hint: 'Recall exactly what the computer-delivered test shows on screen while you write, and compare it with what a word processor shows.',
               why: 'False. Neither format checks spelling or grammar; the screen shows a word counter and nothing else. Spelling is part of Lexical Resource, so the kit words are learned before the exam: government, environment, benefit, argument, necessary, which, their.' },
             { id: 'm13s3q3', type: 'choose', tag: 'cc-paragraphing', level: 'B2',
               stem: 'Two minutes left, Body B unfinished, no conclusion. What goes on the page?',

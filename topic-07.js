@@ -215,7 +215,7 @@
         { id: 'm07ckq1', type: 'choose', tag: 'cc-reference', level: 'B1', prompt: 'p-school-snacks',
           stem: '"Our school stopped selling sugary drinks last term. ___ has changed what students reach for at break." Which fits?',
           options: ['This trend', 'Such a ban', 'The former', 'These students'], answer: 1,
-          hint: 'What kind of thing did the first sentence describe: a decision, a trend, or a group of people?',
+          hint: 'Ask what kind of thing the first sentence describes, then choose the summarising noun that names exactly that kind of thing.',
           why: 'The first sentence is about one school\'s decision to stop selling, so the summarising noun must name a decision: "such a ban". One school\'s policy is not a trend, "the former" needs two things named, and the students are the people affected, not the thing that changed their choices.' },
         { id: 'm07ckq2', type: 'spot', tag: 'cc-linker-overuse', level: 'B2', prompt: 'p-tourism',
           stem: 'Tap the linker that adds nothing, because the join is already made.',

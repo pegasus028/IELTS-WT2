@@ -236,7 +236,7 @@
         { id: 'm02ckq4', type: 'order', tag: 'tr-position-late', level: 'B2', prompt: 'p-science-funding',
           stem: 'Put the sentences of this introduction in order.',
           items: ['Universities teach both science and the arts, and public money pays for much of both.', 'Some argue that only science degrees deserve funding, while others want the arts supported too.', 'In my view, science should receive the larger share, but the arts must keep targeted support.', 'This essay explains why a country needs both the ability to invent and the judgement to use inventions well.'],
-          hint: 'Ask what each sentence needs the reader to know already, and remember where a discuss-both-views introduction places the writer\'s opinion.',
+          hint: 'Ask what each sentence needs the reader to know already, and notice which sentence describes what the rest of the essay will do.',
               why: 'Background, the two views, the position, then the plan. The verdict sits in paragraph one, so the body paragraphs on science and on the arts are read as evidence for it, not as a neutral survey.' },
         { id: 'm02ckq5', type: 'choose', tag: 'tr-off-topic', level: 'B2', prompt: 'p-libraries',
           stem: 'Which thesis answers this prompt rather than a neighbouring one?',

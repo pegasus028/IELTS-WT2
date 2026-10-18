@@ -109,7 +109,7 @@
             { id: 'm01s2q1', type: 'choose', tag: 'tr-listing', level: 'B2', prompt: 'p-online-learning',
               stem: 'Which sentence answers what this prompt actually asks?',
               options: ['Online lessons offer flexibility and lower costs, but they remove the teacher and classmates who keep students motivated.', 'Online lessons have several advantages and several disadvantages for secondary students.', 'The advantages are flexibility and lower cost; the disadvantages are isolation and distraction.', 'The drawbacks outweigh the benefits for most students, so online lessons should support the classroom.'], answer: 3,
-              hint: 'Read the instruction sentence again and ask what kind of sentence a question with "outweigh" needs.',
+              hint: 'Ask what the instruction sentence wants you to do with the two sides: describe them both, or reach a decision about them.',
               why: '"Outweigh" asks which side is heavier. Only the last sentence weighs; the other three describe both sides without deciding, which is the list that keeps TR at Band 6.' },
             { id: 'm01s2q2', type: 'choose', tag: 'tr-position-late', level: 'B2', prompt: 'p-remote-work',
               stem: 'In a discuss-both-views essay, where must your own opinion appear?',

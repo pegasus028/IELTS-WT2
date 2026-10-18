@@ -236,7 +236,7 @@
           options: ['success', 'succeed', 'successful', 'successfully'], answer: 0,
           why: '"The ___ of" is a noun slot: success. "Succeed" is the verb, "successful" the adjective, "successfully" the adverb. The examiner reads "the successful of" as a grammar error, not a slip, so learn the four forms as a column.' },
         { id: 'm11ckq6', type: 'spot', tag: 'lr-spelling', level: 'B2', prompt: 'p-private-tutoring',
-  hint: 'Say the verb each noun comes from and check the spelling of the noun against it.',
+  hint: 'Check each kit word letter by letter; a noun built from a verb does not always keep every letter of that verb.',
           stem: 'Tap the misspelt chunk.',
           words: ['The strongest arguement', 'against private tutoring', 'is', 'that it widens', 'the gap', 'between rich and poor students.'], answer: 0,
           fix: 'The strongest argument',
