@@ -234,7 +234,7 @@
     ]
    },
    "facetB": {
-    "ok": "Government money for history, art and other creative subjects.",
+    "ok": "Government money for university history, art and other creative subjects.",
     "d": [
      "Government money for orchestras, galleries and theatres.",
      "Making science students study poems before they finish.",
@@ -253,7 +253,7 @@
     "ok": "Public money for university courses in history, literature and languages.",
     "d": [
      "Government money for any art project that anyone in the country suggests.",
-     "Free concert tickets for every university student.",
+     "Free concert tickets for university students.",
      "Big statues paid for in the centre of every city."
     ]
    },
@@ -343,7 +343,7 @@
     "ok": "Public grants for university courses in history, literature and modern languages.",
     "d": [
      "State support for every single art project that any citizen in the country suggests.",
-     "Free concert and theatre tickets for every university student.",
+     "Free concert and theatre tickets for students at university.",
      "Large public statues ordered for the centre of every major city."
     ]
    },
@@ -768,7 +768,7 @@
     "d": [
      "Country rules limiting screen time for people of every age.",
      "Removing every fun app from a child's phone.",
-     "Schools banning computers from all lessons for ever."
+     "Schools that keep computers out of their lessons."
     ]
    },
    "nuanceA": {
@@ -1451,7 +1451,7 @@
     "ok": "governments should tax clearly harmful ingredients and make healthy food cheaper",
     "d": [
      "governments should tax all processed food and leave everything else to the market",
-     "the state should teach people about nutrition and leave every purchase to the shopper",
+     "the state should teach people about nutrition and let shoppers decide what to buy",
      "heavy taxes should replace every other public health measure now in use"
     ]
    },
@@ -1519,7 +1519,7 @@
     "ok": "giving a finished paper that shows readers the most important news",
     "d": [
      "giving every reader in the country the same view of every story",
-     "keeping older readers who have never learned to use a computer",
+     "keeping older readers who find computers hard to use",
      "printing longer stories than any news website would ever want to publish"
     ]
    },
@@ -1594,7 +1594,7 @@
     "d": [
      "no news company anywhere in the world has ever made a lasting profit from its website",
      "far more people read a news story online each morning than ever read a printed paper",
-     "online news can be read on a phone, a tablet or a computer at any time"
+     "online news can be read on a phone, a tablet or a computer during the day"
     ]
    },
    "facetB": {
@@ -1609,7 +1609,7 @@
     "ok": "offering a finished, carefully chosen edition that shows readers what matters most that day",
     "d": [
      "giving every reader in the country exactly the same view of every single news story",
-     "keeping the loyalty of older readers who have never learned to use a computer",
+     "keeping the loyalty of older readers who find computers difficult to use",
      "printing longer articles than any news website would be willing to publish"
     ]
    },
@@ -1633,7 +1633,7 @@
     "ok": "print will survive as a local, high-quality product while online news reports the day's events",
     "d": [
      "printed newspapers will vanish completely once the last generation of older readers has finally gone",
-     "governments should pay to keep the national newspapers printing every single day",
+     "governments should pay to keep the national newspapers in print each day",
      "readers should give up their screens and return to the printed page entirely"
     ]
    },
@@ -1714,7 +1714,7 @@
     ]
    },
    "nuanceB": {
-    "ok": "they cannot copy a whole body yet, so some animal tests remain",
+    "ok": "new methods cannot copy a whole body yet, so animal tests remain",
     "d": [
      "computer models will never tell scientists anything useful about a drug",
      "human cell tests avoid the pain that laboratory animals still feel",
@@ -1722,7 +1722,7 @@
     ]
    },
    "position": {
-    "ok": "the law should put proven new methods first and animals last",
+    "ok": "laws should allow animal tests only when no proven new method works",
     "d": [
      "all animal tests should stop now because new methods can do everything",
      "scientists should decide for themselves when they need to test on animals",
@@ -2612,7 +2612,7 @@
     "d": [
      "saving the government the whole cost of caring for old people",
      "keeping a grandparent at home so no official ever checks their care",
-     "paying family members a wage for every hour of care"
+     "paying family members a wage for the care they give"
     ]
    },
    "exB": {
@@ -2702,7 +2702,7 @@
     "d": [
      "saving the government the whole cost of looking after its older citizens",
      "keeping an older relative at home so that no official ever checks their care",
-     "paying family members a wage for every hour of care they give"
+     "paying family members a regular wage for the care they give"
     ]
    },
    "exB": {
@@ -3312,7 +3312,7 @@
     ]
    },
    "exA": {
-    "ok": "City rules that control the height, front and outside materials.",
+    "ok": "City rules on the height, front walls and outside materials of buildings.",
     "d": [
      "Rules that set the smallest size of rooms in new flats.",
      "Money that helps owners of old houses repair their windows.",
@@ -3363,7 +3363,7 @@
     "ok": "planners should control size and materials but let architects pick the style",
     "d": [
      "planners should control every part so new buildings match old ones exactly",
-     "architects should be free to design anything anywhere in the city",
+     "architects should be free to build tall glass towers in old centres",
      "old centres should stay unchanged, with all new building outside town"
     ]
    },
@@ -3372,7 +3372,7 @@
     "d": [
      "tourists only really want to see a city's old buildings",
      "modern design will always be cheaper and quicker to build",
-     "local people should decide how every new building looks"
+     "local people should decide how new buildings look"
     ]
    }
   },
@@ -3453,7 +3453,7 @@
     "ok": "planners should control size and materials but leave the style to the architect",
     "d": [
      "planners should control every part of a design so new work matches the old exactly",
-     "architects should be free to design as they wish in any part of the city",
+     "architects should be free to put tall glass towers in the historic centre",
      "historic centres should stay unchanged, with all new building moved to the edge of town"
     ]
    },
@@ -3462,7 +3462,7 @@
     "d": [
      "old buildings are the only part of a city that tourists really want to see",
      "modern design will always be cheaper and faster to build than traditional building work",
-     "local people should decide what every new building in their area looks like"
+     "local people should decide what new buildings in their area look like"
     ]
    }
   }
@@ -4100,7 +4100,7 @@
     "d": [
      "more people going to university always matters more than high standards",
      "young people should be free to choose any course they like",
-     "a country needs skilled workers and world-class universities"
+     "a country needs more skilled workers than university graduates"
     ]
    }
   },
@@ -4190,7 +4190,7 @@
     "d": [
      "wider access to education always matters more than protecting academic standards",
      "young people should be free to choose whichever course interests them",
-     "a country needs both a well educated workforce and universities as good as the best abroad"
+     "a country needs far more skilled workers than it needs university graduates"
     ]
    }
   }
@@ -4225,7 +4225,7 @@
     "ok": "Schools that went back to printed books for literature after tablets.",
     "d": [
      "Schools that swapped all their books for tablets and never went back.",
-     "Publishers that now sell a digital copy with every printed book.",
+     "Publishers that now sell a digital copy with their printed books.",
      "The heavy bags of pupils who carry five books to school daily."
     ]
    },
@@ -4278,7 +4278,7 @@
     ]
    },
    "rationale": {
-    "ok": "careful reading and fair access matter more than one easy screen",
+    "ok": "careful reading and fair access are more important than easy screens",
     "d": [
      "young people already spend far too much of the day on screens",
      "digital books can change quickly whenever the school course changes",
@@ -4315,7 +4315,7 @@
     "ok": "Schools that went back to printed books for literature after trying tablet lessons.",
     "d": [
      "Schools that replaced every printed book with a tablet in one year and never went back.",
-     "Publishers that now sell a digital copy together with every printed textbook.",
+     "Publishers that now sell a digital copy together with their printed textbooks.",
      "The heavy bags carried by pupils who bring five textbooks to school every day."
     ]
    },
@@ -4460,7 +4460,7 @@
     ]
    },
    "rationale": {
-    "ok": "habits from school last for decades, and school changes everyone at once",
+    "ok": "school habits last for decades, and school can change everyone's habits together",
     "d": [
      "teenagers cannot choose their own food without an adult watching every time",
      "treating diabetes costs hospitals a huge and growing amount of money",
@@ -5008,7 +5008,7 @@
    "rationale": {
     "ok": "teenagers need rules and people to learn well, which freedom cannot replace",
     "d": [
-     "teenagers are too easily distracted to study alone at a screen",
+     "no teenager can ever study alone at a screen without playing games",
      "video lessons can be made once and used for many years cheaply",
      "the internet is now fast enough for good video in most homes"
     ]
@@ -5167,7 +5167,7 @@
     "ok": "Traditional music and dance groups that cannot find young members.",
     "d": [
      "Traditional festivals that now bring in more foreign tourists than ever.",
-     "Young fans who spend all their savings on goods from foreign groups.",
+     "Young fans who spend their savings on goods from foreign groups.",
      "Local pop groups that sing only in English to reach fans abroad."
     ]
    },
@@ -5366,7 +5366,7 @@
     "d": [
      "cameras bring equal good and bad, so each town must decide",
      "the disadvantages are bigger, because lost privacy can never come back",
-     "cameras should be used only inside banks and shops, not on streets"
+     "cameras should be used inside banks and shops, not on streets"
     ]
    },
    "rationale": {
@@ -6053,14 +6053,14 @@
     "ok": "criminals work from abroad, where local police cannot reach them",
     "d": [
      "no online criminal anywhere has ever been caught or sent to prison",
-     "most victims lose only small amounts each time",
+     "most victims lose small amounts each time",
      "young people spend more hours online than any other age group"
     ]
    },
    "facetB": {
     "ok": "Lessons on spotting scams as a required part of secondary school.",
     "d": [
-     "Sending far more online criminals to prison every year.",
+     "Sending far more online criminals to prison each year.",
      "A rule that banks must pay back every victim in full.",
      "A ban on chat apps for all users under sixteen."
     ]
@@ -6143,7 +6143,7 @@
     "ok": "the fraudsters work across borders, where the police of one country cannot reach them",
     "d": [
      "no fraudster has ever been arrested, let alone sent to prison, for a crime committed online",
-     "most victims lose only small amounts of money each time",
+     "most victims lose fairly small amounts of money each time",
      "young people spend more hours online than any other age group"
     ]
    },
@@ -6275,7 +6275,7 @@
     "ok": "tutoring is negative, and better schools and fairer exams should limit it",
     "d": [
      "tutoring has good and bad sides, so it depends on each family",
-     "tutoring is positive because it helps every hard-working student do better",
+     "tutoring is positive because it helps hard-working students do better",
      "private tutoring should be banned so all students compete equally"
     ]
    },
@@ -6365,7 +6365,7 @@
     "ok": "tutoring is negative, and governments should limit it by improving schools and reforming exams",
     "d": [
      "tutoring has both benefits and drawbacks, and whether it is positive depends entirely on the family",
-     "tutoring is a positive development because it helps every hard-working student do better",
+     "tutoring is a positive development because it helps hard-working students do better",
      "private tutoring should be banned completely so that all students compete on equal terms"
     ]
    },
@@ -6434,7 +6434,7 @@
     "d": [
      "making people spend too much because they never hold the money",
      "leaving old people unable to buy bus tickets from card-only machines",
-     "recording every purchase so banks can sell the data to advertisers"
+     "recording purchases so banks can sell the data to advertisers"
     ]
    },
    "exB": {
