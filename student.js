@@ -196,12 +196,19 @@
   document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'hidden' && S.p && api.pendingCount()) api.flushBeacon(S.p); });
 
   /* ----------------------------------------------------------- header UI */
+  function hasBand(p) { return (Number(p.bestBand) || 0) > 0 || (p.reports || []).some(function (r) { return r.bands && Number(r.bands.overall) > 0; }); }
   function paintHeader() {
     var p = S.p, r = P.rank(p), g = P.gateReadiness(p);
     var ready = Math.round((g.TR + g.CC + g.LR + g.GRA) / 4);
     var h = ST ? ST.house(p) : null;
     $('#hdr-name').textContent = p.displayName;
     $('#hdr-rank').textContent = r.name + (h ? ' of ' + h.name : '') + ' · ' + P.checksCleared(p) + '/' + E.Bank.allLevels().length + ' classes · ' + (tier() === 'C1' ? 'Band 8 track' : 'Band 7 track');
+    /* B12: until an essay has a band (teacher-released or an AI estimate) the gauge only measures
+       the classes she has done, so it says so; the examiners' verdict appears with the first band. */
+    var banded = hasBand(p), lbl = $('#hdr-gauge-lbl');
+    if (lbl) lbl.textContent = banded ? 'The examiners\' verdict' : 'Course progress';
+    var gauge = lbl && lbl.closest ? lbl.closest('.gauge') : null;
+    if (gauge) gauge.title = banded ? 'Your classes and the bands on your marked essays.' : 'Classes completed. The examiners\' verdict appears when an essay is marked.';
     $('#hdr-ready').textContent = ready + '%';
     $('#hdr-bar').style.width = ready + '%';
     $('#hdr-streak').textContent = p.streak || 0;
@@ -321,7 +328,7 @@
     var nm = ST ? ST.nextMission(p) : null;
     if (nm && nm.mission) {
       var m = nm.mission, i = m._info;
-      var kick = { sub: 'Next lesson', check: 'Next gate', view: 'Next room', writing: 'In the Scriptorium', event: 'Chapter ' + nm.chapter.n }[m.kind] || 'Next';
+      var kick = { sub: 'Next lesson', check: 'Next gate', view: 'Next room', writing: m.thesis ? 'Chapter ' + nm.chapter.n : 'In the Scriptorium', event: 'Chapter ' + nm.chapter.n }[m.kind] || 'Next';
       return { kind: 'mission', chapter: nm.chapter, mission: m, kicker: kick, label: i.label, sub: i.sub, go: m.kind === 'sub' ? 'Start →' : 'Open →' };
     }
     if (nm && nm.gate) return { kind: 'gate', chapter: nm.chapter, kicker: 'Chapter ' + nm.chapter.n, label: 'Pass the gate', sub: nm.chapter.gate.intro || '', go: 'Go →' };
@@ -733,9 +740,24 @@
      PRACTICE RUNNER (inherited)
      ===================================================================== */
   function startRun(kind, items, meta) {
-    S.run = { kind: kind, items: items.slice(), i: 0, results: [], subId: meta.subId, checkId: meta.checkId, title: meta.title, hintedAny: false, t0: 0 };
+    S.run = { kind: kind, items: items.slice(), i: 0, results: [], subId: meta.subId, checkId: meta.checkId, title: meta.title, hintedAny: false, t0: 0, fxTopic: meta.fxTopic || '' };
     if (kind === 'check') S.run.items = E.shuffle(S.run.items);
+    /* B11: an examiner's gate keeps its key until the gate is passed. */
+    if (kind === 'check') S.run.keyHidden = !gatePassed(meta.checkId);
     show('play'); renderQ();
+  }
+  function gatePassed(checkId) { var c = checkId && S.p.checks && S.p.checks[checkId]; return !!(c && c.best >= E.PASS_CHECK); }
+  /* Is the key hidden for this item? Gate items stay keyless until their gate is passed,
+     in the gate itself and when they come back in the Mending Room. Lessons always show the key. */
+  function keyHiddenFor(r, item) {
+    if (r.kind === 'check') return !!r.keyHidden;
+    if (r.kind === 'faults') { var ck = E.Bank.checkOf ? E.Bank.checkOf(item.id) : ''; return !!ck && !gatePassed(ck); }
+    return false;
+  }
+  function ruleOnlyHtml(item) {
+    var rem = C.REMEDIATION[item.tag] || {};
+    return '<div class="verdict-exp">The examiner keeps the answer until you pass the gate. Check this rule and try again.</div>' +
+      '<div class="verdict-w"><b>' + esc(rem.name || 'The rule') + '</b>' + (item.hint || rem.principle ? ': ' + esc(item.hint || rem.principle) : '') + '</div>';
   }
   function startCheck(levelId) { var lv = E.Bank.level(levelId); startRun('check', lv.check.items, { checkId: lv.check.id, title: lv.check.name }); }
   var TIMED_TYPES = { choose: 1, judge: 1, spot: 1 };
@@ -781,7 +803,8 @@
       if (answered) return next();
       answered = true;
       var ms = Date.now() - r.t0; stopTimer();
-      var out = view.check(); view.lock();
+      var hideKey = keyHiddenFor(r, item);
+      var out = view.check(); view.lock({ hideKey: hideKey });
       var hinted = !!r.thisHinted; r.thisHinted = false;
       var fast = timed && !hinted && out.correct && ms <= E.SPEED_MS;
       var row = P.recordAttempt(S.p, item, out.correct, ms, hinted, fast);
@@ -789,10 +812,11 @@
       api.enqueue([row]);
       S.sessItems++;
       if (out.correct) { S.sessCorrect++; r.combo = (r.combo || 0) + 1; } else r.combo = 0;
-      r.results.push({ item: item, correct: out.correct, given: out.givenText, expected: out.expectedText });
       var free = !!FREE_TYPES[item.type];
+      var keyless = hideKey && !out.correct && !free;
+      r.results.push({ item: item, correct: out.correct, given: out.givenText, expected: out.expectedText, hidden: keyless });
       $('#feedback').innerHTML = '<div class="verdict ' + (out.correct ? 'ok' : 'no') + '"><div class="verdict-h">' + (out.correct ? '✓ ' + (free ? 'Passes every rule' : 'Correct') : '✕ ' + (free ? 'Not yet' : 'Not quite')) + (fast ? '<span class="bonus-note">time bonus +' + E.XP_SPEED + '</span>' : '') + '</div>' +
-        (out.correct || free ? '' : '<div class="verdict-exp">You chose: ' + esc(out.givenText) + '<br>Answer: ' + esc(out.expectedText) + '</div>') + '<div class="verdict-w">' + item.why + '</div></div>';
+        (keyless ? ruleOnlyHtml(item) : (out.correct || free ? '' : '<div class="verdict-exp">You chose: ' + esc(out.givenText) + '<br>Answer: ' + esc(out.expectedText) + '</div>') + '<div class="verdict-w">' + item.why + '</div>') + '</div>';
       if (out.correct && S.p.lastGain) { var f = E.el('span', 'xpfloat' + (fast ? '' : ' plain'), '+' + S.p.lastGain); $('.qfoot').appendChild(f); setTimeout(function () { if (f.parentNode) f.parentNode.removeChild(f); }, 1200); }
       var btn = $('#p-check'); btn.textContent = r.i + 1 >= r.items.length ? 'See your result' : 'Next →'; btn.disabled = false;
       paintHeader(); syncSoon();
@@ -818,13 +842,25 @@
       note = passed ? 'That class is passed. Your year has been recalculated.' : 'You need 75% to pass an examiner\'s gate. The principles you lost marks on are listed below.';
     } else { passed = true; head = 'Mending done'; note = 'A question you get right twice in a row leaves the Mending Room for good.'; }
     var misses = r.results.filter(function (x) { return !x.correct; });
+    /* B11: the review shows the answers only once the gate is passed (this try or an earlier one). */
+    var reviewOpen = function (m) { return r.kind === 'check' ? passed || !r.keyHidden : !m.hidden || gatePassed(E.Bank.checkOf ? E.Bank.checkOf(m.item.id) : ''); };
+    var anyKeyless = misses.some(function (m) { return !reviewOpen(m); });
+    var moreDue = r.kind === 'faults' ? fxDue(r.fxTopic).length : 0;
     var html = '<div class="play"><div class="card result"><div class="score-ring" style="--p:' + pct(score) + '"><i>' + pct(score) + '%</i></div><h3>' + esc(head) + '</h3><p>' + esc(note) + '</p>';
-    if (misses.length) html += '<div class="misslist">' + misses.map(function (m) { var rem = C.REMEDIATION[m.item.tag]; return '<div class="miss"><b>' + esc(rem ? rem.name : m.item.tag) + '</b>' + m.item.why + '</div>'; }).join('') + '</div>';
-    html += '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn primary" id="r-map">' + (S.returnTo === 'story' ? 'Back to the chapter' : S.returnTo === 'faults' ? 'Back to the Mending Room' : 'Back to the map') + '</button>' + (r.kind === 'module' || r.kind === 'check' ? '<button class="btn" id="r-again">Try again</button>' : '') + '</div></div></div>';
+    if (anyKeyless) html += '<p class="tiny">The examiner keeps the answers until you pass the gate. Here are the rules to check before you try again.</p>';
+    if (misses.length) html += '<div class="misslist">' + misses.map(function (m) {
+      var rem = C.REMEDIATION[m.item.tag] || {};
+      if (!reviewOpen(m)) return '<div class="miss"><b>' + esc(rem.name || m.item.tag) + '</b>' + esc(m.item.hint || rem.principle || '') + '</div>';
+      return '<div class="miss"><b>' + esc(rem.name || m.item.tag) + '</b>' + m.item.why + (r.kind === 'check' && !FREE_TYPES[m.item.type] ? '<br><span class="tiny">Answer: ' + esc(m.expected) + '</span>' : '') + '</div>';
+    }).join('') + '</div>';
+    if (r.kind === 'faults') html += '<p class="tiny">' + (moreDue ? moreDue + ' more due' + (r.fxTopic && E.Bank.topic(r.fxTopic) ? ' in ' + esc(E.Bank.topic(r.fxTopic).name) : '') + ' · ' + fxMinutes(Math.min(moreDue, FX_SITTING)) + '.' : 'Nothing more is due' + (r.fxTopic ? ' in this class' : '') + '. Well mended.') + '</p>';
+    html += '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn primary" id="r-map">' + (S.returnTo === 'story' ? 'Back to the chapter' : S.returnTo === 'faults' ? 'Back to the Mending Room' : 'Back to the map') + '</button>' + (r.kind === 'module' || r.kind === 'check' ? '<button class="btn" id="r-again">Try again</button>' : '') + (moreDue ? '<button class="btn" id="r-more">Mend ' + Math.min(moreDue, FX_SITTING) + ' more</button>' : '') + '</div></div></div>';
     $('#view-play').innerHTML = html;
     var earned = P.checkBadges(S.p);
     paintHeader(); sync();
     $('#r-map').addEventListener('click', function () { S.run = null; show(homeView()); });
+    var more = $('#r-more');
+    if (more) more.addEventListener('click', function () { startMending(r.fxTopic); });
     var again = $('#r-again');
     if (again) again.addEventListener('click', function () {
       if (r.kind === 'module') startRun('module', E.Bank.sub(r.subId).items, { subId: r.subId, title: r.title });
@@ -1068,10 +1104,18 @@
     var html = '<div class="sect-h"><div><h2>Mending Room</h2><p>Every question you get wrong is brought here and comes back a day or two later. Get one right twice in a row and it is mended for good. The gap is the point.</p></div></div>';
     if (!all.length) html += '<div class="card empty">The workbench is empty. Every question you have answered wrong has been mended.</div>';
     else {
-      html += '<div class="card" style="padding:var(--pad);display:flex;flex-direction:column;gap:12px"><div style="display:flex;gap:14px;flex-wrap:wrap"><span class="pill' + (due.length ? ' bad' : ' good') + '">' + due.length + ' due now</span><span class="pill">' + all.length + ' on the bench</span><span class="pill gold">' + (S.p.reclaimed || 0) + ' mended</span></div>';
+      html += '<div class="card" style="padding:var(--pad);display:flex;flex-direction:column;gap:12px"><div style="display:flex;gap:14px;flex-wrap:wrap"><span class="pill' + (due.length ? ' bad' : ' good') + '" id="fx-due">' + due.length + ' due now' + (due.length ? ' · ' + fxMinutes(due.length) : '') + '</span><span class="pill">' + all.length + ' on the bench</span><span class="pill gold">' + (S.p.reclaimed || 0) + ' mended</span></div>';
       var tagCount = {}; all.forEach(function (id) { var t = E.Bank.item(id).tag; tagCount[t] = (tagCount[t] || 0) + 1; });
       html += '<div style="display:flex;flex-direction:column;gap:7px">' + Object.keys(tagCount).sort(function (a, b) { return tagCount[b] - tagCount[a]; }).map(function (t) { return '<div style="display:flex;justify-content:space-between;gap:12px;font-size:.9rem"><span>' + esc((C.REMEDIATION[t] || {}).name || t) + partnerLink(t) + '</span><span style="color:var(--ink-3);font-family:var(--f-mono);font-size:.82rem">' + tagCount[t] + '</span></div>'; }).join('') + '</div>';
-      html += due.length ? '<button class="btn primary wide" id="fx-go">Mend ' + Math.min(due.length, 12) + ' now</button>' : '<p class="tiny">Nothing is due yet. Questions come back after a day or two.</p>';
+      if (due.length) {
+        if (due.length > FX_SITTING) html += '<p class="tiny fx-est">That is a lot at once. Mend ' + FX_SITTING + ' at a time: one sitting now, another when you are ready.</p>';
+        html += '<button class="btn primary wide" id="fx-go">Mend ' + Math.min(due.length, FX_SITTING) + ' now · ' + fxMinutes(Math.min(due.length, FX_SITTING)) + '</button>';
+        /* mend by class: the due questions of one class only */
+        var dueBy = {}, dueOrder = [];
+        due.forEach(function (id) { var tid = E.Bank.topicOf(id); if (!tid) return; if (!dueBy[tid]) { dueBy[tid] = 0; dueOrder.push(tid); } dueBy[tid]++; });
+        dueOrder.sort(function (a, b) { var ta = E.Bank.topic(a), tb = E.Bank.topic(b); return ((ta && ta.n) || 0) - ((tb && tb.n) || 0); });
+        if (dueOrder.length > 1) html += '<div class="fx-bycls"><p class="kicker" style="margin:4px 0 0">Or mend one class</p><div class="filters fx-mods">' + dueOrder.map(function (tid) { var t = E.Bank.topic(tid); return '<button type="button" data-fx-mod="' + esc(tid) + '">' + esc(t ? t.code + ' · ' + t.name : tid) + ' · ' + dueBy[tid] + '</button>'; }).join('') + '</div></div>';
+      } else html += '<p class="tiny">Nothing is due yet. Questions come back after a day or two.</p>';
       html += '</div>';
       html += faultChecklist(all, due);
     }
@@ -1079,7 +1123,19 @@
     wireMedia($('#view-faults'));
     $('#view-faults').querySelectorAll('[data-fx-sub]').forEach(function (b) { b.addEventListener('click', function () { S.returnTo = 'faults'; openSub(b.dataset.fxSub); }); });
     var g = $('#fx-go');
-    if (g) g.addEventListener('click', function () { S.returnTo = 'faults'; startRun('faults', E.shuffle(due).slice(0, 12).map(E.Bank.item), { title: 'Mending Room' }); });
+    if (g) g.addEventListener('click', function () { startMending(''); });
+    $('#view-faults').querySelectorAll('[data-fx-mod]').forEach(function (b) { b.addEventListener('click', function () { startMending(b.dataset.fxMod); }); });
+  }
+  /* One sitting in the Mending Room is at most FX_SITTING questions (about 25 seconds each),
+     from every class or from one, so fifty due never feels endless. */
+  var FX_SITTING = 15, FX_SECONDS = 25;
+  function fxDue(topicId) { return P.dueReview(S.p).filter(function (id) { return !topicId || E.Bank.topicOf(id) === topicId; }); }
+  function fxMinutes(n) { var m = Math.max(1, Math.round(n * FX_SECONDS / 60)); return 'about ' + m + (m === 1 ? ' minute' : ' minutes'); }
+  function startMending(topicId) {
+    var list = fxDue(topicId);
+    if (!list.length) { show('faults'); return; }
+    S.returnTo = 'faults';
+    startRun('faults', E.shuffle(list).slice(0, FX_SITTING).map(E.Bank.item), { title: 'Mending Room', fxTopic: topicId || '' });
   }
 
   /* =====================================================================
