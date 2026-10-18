@@ -60,7 +60,7 @@
           {
             img: 'story/ch1-02.webp',
             alt: 'An open letter on a desk, written in dark ink, with the seal broken beside it.',
-            text: "The letter says:\n\n'Dear Student,\n\nQuillmoor Academy teaches argument-craft: the art of holding a [[position|what you think, said clearly|จุดยืน]] and defending it with reasons. You have been chosen for one year of study. Term begins on 29 October.\n\nThe year ends with the Grand Examination: one essay, forty minutes, four [[examiners|the people who mark an exam|ผู้ตรวจข้อสอบ]]. A pass at the Band 7.5 standard earns the Quillmoor seal.\n\nWe look forward to meeting you.\n\nProfessor Marisol Penhallow, Head of Examinations\n\nP.S. The owl is called Nutmeg. Please dry her.'"
+            text: "The letter says:\n\n'Dear Student,\n\nQuillmoor Academy teaches argument-craft: the art of holding a [[position|what you think, said clearly|จุดยืน]] and defending it with reasons. You have been chosen for one year of study. Term begins on 29 October.\n\nThe year ends with the Grand Examination: one essay, forty minutes, four [[examiners|the people who mark an exam|ผู้ตรวจข้อสอบ]]. Every student who finishes earns the Quillmoor seal. The Band 7.5 standard is the goal.\n\nWe look forward to meeting you.\n\nProfessor Marisol Penhallow, Head of Examinations\n\nP.S. The owl is called Nutmeg. Please dry her.'"
           },
           {
             img: 'story/ch1-03.webp',
@@ -415,7 +415,7 @@
       {
         id: 'ch7', n: 7, title: 'The Grand Examination', place: 'Examination Hall',
         blurb: 'Four examiners, four gates, one essay in forty minutes. In plain words.',
-        keepsake: { id: 'seal7', name: 'The Quillmoor seal', desc: 'The seal of the Academy, for an essay at the Band 7.5 standard.' },
+        keepsake: { id: 'seal7', name: 'The Quillmoor seal', desc: 'The seal of the Academy, for finishing the Grand Examination. The 7.5 standard is the next step.' },
         opens: ['models'],
         pages: [
           {
@@ -426,7 +426,7 @@
           {
             img: 'story/ch7-02.webp',
             alt: 'Professor Liang holds up a pair of chained words; Professor Weaver holds up a row of flawless sentences.',
-            text: "'Lexical Resource,' says Penhallow, pointing at Liang. 'Precise words with their partners, some less common ones used well, and the right register. Precision, not rarity.' Then Weaver. 'Grammatical [[Range|the variety of things you can do|ความหลากหลาย]] and Accuracy. A variety of complex structures with frequent error-free sentences is seven. Most sentences error-free is eight.' She looks at the room. 'Four whole bands. The seal needs their average at 7.5: two eights and two sevens, for example. The real test marks Task 2 on the same four things, at the same [[standard|the level you must reach|มาตรฐาน]]. Then it adds your Task 1 report, which counts half as much, and reports one Writing band.'"
+            text: "'Lexical Resource,' says Penhallow, pointing at Liang. 'Precise words with their partners, some less common ones used well, and the right register. Precision, not rarity.' Then Weaver. 'Grammatical [[Range|the variety of things you can do|ความหลากหลาย]] and Accuracy. A variety of complex structures with frequent error-free sentences is seven. Most sentences error-free is eight.' She looks at the room. 'Four whole bands. The 7.5 standard needs their average at 7.5: two eights and two sevens, for example. The real test marks Task 2 on the same four things, at the same [[standard|the level you must reach|มาตรฐาน]]. Then it adds your Task 1 report, which counts half as much, and reports one Writing band.'"
           },
           {
             img: 'story/ch7-03.webp',
@@ -461,10 +461,10 @@
           checks: ['m12l1', 'm13l1'], checkIds: ['m12ck', 'm13ck'],
           extra: [
             { id: 'essay-sent', label: 'Three mock examinations sent to the examiners', note: 'Three mock examinations from the Scriptorium, each sent to the examiners. Practice essays do not count.', min: 3, kind: 'mock' },
-            { id: 'best-band', label: 'An essay marked at 7.5 or above', note: 'This is the standard of the real test, and it can take months of mock examinations after the classes end. Keep sending essays: your best band is kept, and the seal arrives by owl the day the examiners agree.', min: 7.5, field: 'bestBand' }
+            { id: 'best-band', optional: true, label: 'An essay marked at 7.5 or above', note: 'This is the standard of the real test, and it can take months of mock examinations after the classes end. You can finish the course without it. Keep sending essays: your best band is kept.', min: 7.5, field: 'bestBand' }
           ],
-          intro: "Penhallow stands alone before the table. 'Two gates, and then the only thing that matters: one essay, marked by the four examiners at the 7.5 standard. Everything else was practice for this.'",
-          pass: "Four verdicts come back by owl. The average is 7.5 or above. Penhallow presses the Quillmoor seal into warm wax. 'Clear, flexible, precise, controlled. Your own words. Verba vincunt.'"
+          intro: "Penhallow stands alone before the table. 'Two gates and three mock examinations, and then you have walked every corridor of this Academy. The 7.5 standard is the goal of the real test. Keep writing towards it, however long it takes.'",
+          pass: "Three mock papers come back by owl. Penhallow reads each one and presses the Quillmoor seal into warm wax. 'You have finished the course. Clear, flexible, precise, controlled: that is the 7.5 standard, and now you know the way there. Your own words. Verba vincunt.'"
         },
         ending: {
           img: 'story/ch7-end.webp',

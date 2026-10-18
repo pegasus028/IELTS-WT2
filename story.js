@@ -133,8 +133,10 @@
       var name = lv ? (lv.name || id) : id;
       items.push({ kind: 'check', id: id, label: name + ': the examiner\'s gate', ok: checkPassed(pr, id), note: lv ? (t ? t.code : '') : 'unknown gate' });
     });
-    (ch.gate.extra || []).forEach(function (x) { items.push({ kind: 'extra', id: x.id, label: x.label, ok: extraOk(pr, x), note: x.note || '', detail: extraNote(pr, x) }); });
-    return { ok: items.every(function (i) { return i.ok; }), items: items };
+    /* An extra marked optional (the Band 7.5 essay) is shown as a goal but never blocks the chapter:
+       every student can walk every mission to the end (T.Chris, Oct 2026). */
+    (ch.gate.extra || []).forEach(function (x) { items.push({ kind: 'extra', id: x.id, label: x.label + (x.optional ? ' (a goal, not required)' : ''), ok: extraOk(pr, x), optional: !!x.optional, note: x.note || '', detail: extraNote(pr, x) }); });
+    return { ok: items.every(function (i) { return i.optional || i.ok; }), items: items };
   }
   function cleared(pr, n) { var ch = chapterN(n); return !!(ch && gateStatus(pr, ch).ok); }
   function firstUnmet(pr) {
