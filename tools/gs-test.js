@@ -205,5 +205,22 @@ const hcTok = post('login', { id: 'hc1', pw: 'pw12' }).token;
 check('a student sees unlock rows in the assignments list', post('assignments', { kind: 'list', token: hcTok }).assignments.some((a) => a.id === 'U1'));
 check('a student cannot set an unlock row', post('assignments', { kind: 'set', token: hcTok, row: { id: 'U3', kind: 'unlock', studentId: 'hc1', chapter: 7 } }).ok === false);
 
+/* ------------------------------------- 19 Oct 2026: version, five, new columns */
+check('ping reports APP_VERSION', post('ping', {}).version === ctx.APP_VERSION && /^\d{8}$/.test(String(ctx.APP_VERSION)));
+check('doGet reports the version', JSON.parse(ctx.doGet().t).version === ctx.APP_VERSION);
+const c5 = post('assignments', { kind: 'set', tt: tl.tt, row: { id: 'K1', ts: '2026-10-19T00:00:00Z', kind: 'coreset', studentId: 'hc1', prompts: ['p-a', 'p-b', 'p-c', 'p-d', 'p-e'] } });
+check('teacher stores a "your five" row through assignments', c5.ok && c5.assignments.some((a) => a.kind === 'coreset' && a.prompts.length === 5));
+check('a student sees her five row', post('assignments', { kind: 'list', token: hcTok }).assignments.some((a) => a.id === 'K1'));
+const RH = ctx.SHEETS.Reports, oldLen = RH.indexOf('json') + 1;
+check('new Reports columns are appended at the end', RH.slice(oldLen).join() === 'ownShare,ownSentences,fillUsed,landAgree,revisionOf' && RH.slice(0, oldLen).join() === 'id,ts,studentId,name,cohort,promptId,type,tier,kind,uiMode,words,seconds,bad,warn,status,released,aiVisible,overall,json');
+post('submitReport', { token: hcTok, report: { id: 'RV1', studentId: 'hc1', text: 'x', words: 260, preflight: {}, ownShare: 0.4567, ownSentences: 6, fillUsed: true, landAgree: 0.75, revisionOf: 'R0' } });
+const rvRow = book.sheets.Reports.rows.filter((r) => r[0] === 'RV1')[0] || [];
+check('report row carries ownShare … revisionOf in the new columns', rvRow[RH.indexOf('ownShare')] === 0.46 && rvRow[RH.indexOf('ownSentences')] === 6 && rvRow[RH.indexOf('fillUsed')] === 1 && rvRow[RH.indexOf('landAgree')] === 0.75 && rvRow[RH.indexOf('revisionOf')] === 'R0', rvRow.slice(oldLen));
+/* an existing sheet with the old header gets the new header cells, nothing else changes */
+book.sheets.Reports.rows[0] = RH.slice(0, oldLen);
+vm.runInContext('HEAD_DONE = {};', ctx);
+post('reports', { tt: tl.tt, studentId: '' });
+check('old Reports header gains the five new header cells at the end', book.sheets.Reports.rows[0].join() === RH.join(), book.sheets.Reports.rows[0]);
+
 console.log(fails ? fails + ' failure(s)' : 'all Code.gs + Lab.gs checks passed');
 process.exit(fails ? 1 : 0);

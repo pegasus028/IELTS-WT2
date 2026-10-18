@@ -73,7 +73,13 @@
     startAssignment: function (id) { startAssignment(id); },
     podInfo: function (topicId) { var t = E.Bank.topic(topicId), md = mdOf(topicId); return t ? { has: !!t.podcast, done: !!md.done, seconds: md.seconds || 0, code: t.code, name: t.name, video: !!t.video, watched: !!md.videoOpens } : null; },
     playVid: function (topicId) { playVideo(E.Bank.topic(topicId)); },
-    togglePod: function (drop, topicId) { togglePodcast(drop, E.Bank.topic(topicId)); }
+    togglePod: function (drop, topicId) { togglePodcast(drop, E.Bank.topic(topicId)); },
+    /* Your five (19 Oct 2026), read-only for lab.js and story.js: the ids in teaching order, her steps on
+       one prompt { duel, essay, revised, cast }, a list split into { core:[…], extra:[…] }, and the steps line. */
+    coreSet: function () { return S.p ? coreIds() : []; },
+    coreSteps: function (id) { return S.p ? coreSteps(S.p, id) : null; },
+    coreSplit: function (list) { var ids = S.p ? coreIds() : [], core = []; ids.forEach(function (id) { (list || []).forEach(function (pr) { if (pr.id === id) core.push(pr); }); }); return { core: core, extra: (list || []).filter(function (pr) { return ids.indexOf(pr.id) < 0 && !pr.mockOnly; }) }; },
+    coreStepsHtml: function (id) { return S.p ? coreStepsHtml(coreSteps(S.p, id)) : ''; }
   };
   setInterval(function () {
     if (!S.p) return;
@@ -171,6 +177,7 @@
     if (!S.p.tier) S.p.tier = 'B2';
     if (!S.p.media) S.p.media = {};
     if (ST) { ST.ensure(S.p); ST.init(window.PCHost); }
+    takeCoreSet(false);
     var newDay = P.touchDay(S.p);
     $('#screen-login').classList.add('hidden');
     $('#screen-app').classList.remove('hidden');
@@ -178,7 +185,7 @@
     var want = String(location.hash || '').replace('#', '');
     show(VIEWS.indexOf(want) >= 0 && want !== 'play' && want !== 'write' && want !== 'bootrun' && want !== 'story' && visibleViews().indexOf(want) >= 0 ? want : 'plan');
     api.startSession(S.p.studentId);
-    api.assignments('list').then(function (r) { S.assignments = (r && r.assignments) || []; takeUnlocks(); if ($('#view-plan') && !$('#view-plan').classList.contains('hidden')) paintPlan(); paintHeader(); });
+    api.assignments('list').then(function (r) { S.assignments = (r && r.assignments) || []; takeOrders(r); if ($('#view-plan') && !$('#view-plan').classList.contains('hidden')) paintPlan(); paintHeader(); });
     var earned = P.checkBadges(S.p);
     sync();
     if (newDay && S.p.streak > 1) toast('Day ' + S.p.streak + ' in a row. Your candles are still lit.');
@@ -267,7 +274,7 @@
     applyTabs();
     if (v === 'map') paintMap();
     if (v === 'story' && ST) ST.resume();
-    if (v === 'plan') { paintPlan(); api.assignments('list').then(function (r) { var list = (r && r.assignments) || []; if (JSON.stringify(list) !== JSON.stringify(S.assignments)) { S.assignments = list; takeUnlocks(); if (!$('#view-plan').classList.contains('hidden')) { paintPlan(); paintHeader(); } } }); }
+    if (v === 'plan') { paintPlan(); api.assignments('list').then(function (r) { var list = (r && r.assignments) || []; if (JSON.stringify(list) !== JSON.stringify(S.assignments)) { S.assignments = list; takeOrders(r); if (!$('#view-plan').classList.contains('hidden')) { paintPlan(); paintHeader(); } } }); }
     if (v === 'writer') paintWriter();
     if (v === 'template') paintTemplate();
     if (v === 'lab' && window.Lab) window.Lab.mount($('#view-lab'), window.PCHost);
@@ -300,6 +307,7 @@
     var done = {}; (S.p.reports || []).forEach(function (r) { if (r.assignmentId) done[r.assignmentId] = 1; });
     return (S.assignments || []).filter(function (a) {
       if (ST && ST.isUnlockRow(a)) return false;
+      if (a.kind === 'coreset') return false;
       if (a.studentId && a.studentId !== S.p.studentId) return false;
       if (a.cohort && a.cohort !== 'all' && !a.studentId && a.cohort !== mine) return false;
       return !done[a.id];
@@ -329,6 +337,11 @@
     var nm = ST ? ST.nextMission(p) : null;
     if (nm && nm.mission) {
       var m = nm.mission, i = m._info;
+      /* E4: a chapter's essay mission (not the one-sentence campaign, not the mocks) is written on her five */
+      if (m.kind === 'writing' && !m.thesis && !/mock/i.test(m.label || '')) {
+        var cn = coreNext(p, true);
+        if (cn) { cn.kicker = 'Chapter ' + nm.chapter.n + ' · Your five'; cn.label = i.label + ': ' + (PR.get(cn.promptId) || {}).title; return cn; }
+      }
       var kick = { sub: 'Next lesson', check: 'Next gate', view: 'Next room', writing: m.thesis ? 'Chapter ' + nm.chapter.n : 'In the Scriptorium', event: 'Chapter ' + nm.chapter.n }[m.kind] || 'Next';
       return { kind: 'mission', chapter: nm.chapter, mission: m, kicker: kick, label: i.label, sub: i.sub, go: m.kind === 'sub' ? 'Start →' : 'Open →' };
     }
@@ -336,6 +349,9 @@
     /* Oct 2026: when only the 7.5 mark is missing, or every chapter is done, the path continues as
        one timed examination a week (Bangkok week, Monday to Sunday) on a prompt she has not written. */
     if (!nm || (nm.gateItem && nm.gateItem.id === 'best-band')) {
+      /* E4: her five come before the weekly examination */
+      var c5 = coreNext(p);
+      if (c5) return c5;
       var wk = weeklyExam(p);
       if (wk) return wk;
     }
@@ -346,8 +362,8 @@
   function weeklyExam(p) {
     var thisWeek = weekKey(E.today()), sent = (p.reports || []).filter(function (r) { return r.ts && weekKey(String(r.ts).slice(0, 10)) === thisWeek; }).length;
     var written = {}; (p.reports || []).forEach(function (r) { written[r.promptId] = 1; });
-    var pool = C.PROMPTS.filter(function (pr) { return !written[pr.id]; });
-    if (!pool.length) pool = C.PROMPTS.slice();
+    var pool = practicePrompts().filter(function (pr) { return !written[pr.id]; });
+    if (!pool.length) pool = practicePrompts();
     var pick = pool[Math.floor(((p.studentId || '').length + Number(thisWeek.replace(/-/g, ''))) % pool.length)];
     if (sent >= 1) return { kind: 'weekdone', kicker: 'The Examination Hall', label: 'This week\'s examination is sent', sub: 'One timed essay a week keeps the spellbook sharp. The next one opens on Monday; the Mending Room and the elective classes are open meanwhile.', go: 'Mending Room →' };
     return { kind: 'weekexam', promptId: pick.id, kicker: 'The Examination Hall', label: 'This week\'s examination: ' + (pick.title || typeName(pick.type)), sub: 'Forty minutes, a blank page and the clock, on a prompt you have not written. Then send it to the examiners.', go: 'Sit it →' };
@@ -356,6 +372,9 @@
     if (!next) return;
     if (next.kind === 'weekexam') { startWrite({ promptId: next.promptId, uiMode: 'exam', minutes: 40, kind: 'weekly' }); return; }
     if (next.kind === 'weekdone') { show('faults'); return; }
+    if (next.kind === 'core') { startWrite({ promptId: next.promptId, uiMode: S.uiMode, minutes: 40, kind: 'practice' }); return; }
+    if (next.kind === 'coreduel') { startBootcamp(next.promptId); return; }
+    if (next.kind === 'corerevise') { openReportById(next.reportId); return; }
     if (next.kind === 'sub') { S.returnTo = 'plan'; openSub(next.id); }
     else if (next.kind === 'check') { S.returnTo = 'plan'; startCheck(next.id); }
     else if (next.kind === 'faults') show('faults');
@@ -370,6 +389,217 @@
       else ST.open(next.chapter.n, 'chapter');
     }
   }
+  /* =====================================================================
+     YOUR FIVE (E4, 19 Oct 2026). T.Chris's decision: the chapter path plus ONE prompt of each
+     question type in the writing rooms, not all 37. S.p.coreSet = { prompts:[5 ids], by:'app'|'teacher', at }.
+     Teaching order (ielts-writing-task-2 skill, Type Switch Card and LAB.TYPE_FIT): Discuss first (the
+     Universal Spine fits it best, and it is the type of the cars lesson every tutee has met), then
+     Advantages (also a good fit, one new demand: a verdict), Opinion (acceptable fit, adds "how far"),
+     then the two hard fits: Problem (two causes and two measures) and Two-part (each question in its
+     own paragraph). The default prompts have A2 and B1 duel answers, and none has an Exemplar Archive
+     model or a Workshop worked example, so the five are her own work: Taxing fast food (the same
+     "ban for the public good or free choice" shape as the cars prompt), Cameras in public places,
+     Free public transport, Graduates without jobs and Young people leaving villages. The mock prompts
+     (p-tourism, p-teen-jobs, p-teen-sleep) are never in the five. T.Chris may set other five in the
+     Staff Room ({kind:'coreset'} assignment rows); every other prompt stays open as extra practice.
+     ===================================================================== */
+  var CORE_TYPES = ['DISCUSS', 'ADVANTAGE', 'OPINION', 'PROBLEM', 'TWOPART'];
+  var CORE_DEFAULT = { DISCUSS: 'p-fast-food-tax', ADVANTAGE: 'p-cctv-everywhere', OPINION: 'p-free-transport', PROBLEM: 'p-youth-unemployment', TWOPART: 'p-rural-youth' };
+  var CORE_AVOID = { 'p-tourism': 1, 'p-teen-jobs': 1, 'p-teen-sleep': 1 };
+  var OWN_MIN = (P.MERITS && P.MERITS.ownMin) || 0.3;
+  function lc(s) { return String(s == null ? '' : s).toLowerCase().trim(); }
+  /* The prompts a student practises from (mock-only prompts never appear in these lists). */
+  function practicePrompts() { return C.PROMPTS.filter(function (pr) { return !pr.mockOnly; }); }
+  function coreOk(pr) { return !!(pr && !CORE_AVOID[pr.id] && !pr.mockOnly && pr.vars && pr.vars.A2 && pr.vars.B1); }
+  function defaultCore() {
+    var all = practicePrompts();
+    return CORE_TYPES.map(function (t) {
+      var want = PR.get(CORE_DEFAULT[t]);
+      if (coreOk(want) && want.type === t) return want.id;
+      var alt = all.filter(function (pr) { return pr.type === t && coreOk(pr); })[0];
+      return alt ? alt.id : null;
+    }).filter(Boolean);
+  }
+  /* The teacher's row for her: her own latest row first, else the latest one for her cohort or everyone. */
+  function coreRow(p, rows) {
+    var sid = lc(p.studentId), coh = lc(p.cohort), mine = null, cls = null;
+    (rows || []).forEach(function (a) {
+      if (!a || a.kind !== 'coreset' || !a.prompts || !a.prompts.length) return;
+      if (a.studentId) { if (lc(a.studentId) === sid && (!mine || String(a.ts || '') >= String(mine.ts || ''))) mine = a; return; }
+      if (!a.cohort || a.cohort === 'all' || lc(a.cohort) === coh) { if (!cls || String(a.ts || '') >= String(cls.ts || '')) cls = a; }
+    });
+    return mine || cls;
+  }
+  /* listOk: the assignments list has just loaded, so a missing teacher row really is missing. */
+  function takeCoreSet(listOk) {
+    var p = S.p; if (!p) return false;
+    var cur = p.coreSet, row = listOk ? coreRow(p, S.assignments) : null, next = null;
+    if (row) {
+      var ids = row.prompts.filter(function (id, i, a) { return !!PR.get(id) && a.indexOf(id) === i; }).slice(0, 5);
+      if (ids.length) next = { prompts: ids, by: 'teacher', at: row.ts || new Date().toISOString(), row: row.id || '' };
+    }
+    if (!next) {
+      var curOk = cur && cur.prompts && cur.prompts.length && cur.prompts.every(function (id) { return !!PR.get(id); });
+      if (curOk && (cur.by === 'app' || !listOk)) return false;
+      next = { prompts: defaultCore(), by: 'app', at: new Date().toISOString() };
+    }
+    if (cur && JSON.stringify(cur.prompts) === JSON.stringify(next.prompts) && cur.by === next.by && (cur.row || '') === (next.row || '')) return false;
+    p.coreSet = next;
+    return true;
+  }
+  function takeOrders(r) { takeUnlocks(); if (takeCoreSet(!!(r && r.ok !== false && r.assignments))) syncSoon(); }
+  function coreIds() { var cs = S.p && S.p.coreSet; return cs && cs.prompts && cs.prompts.length ? cs.prompts.slice() : defaultCore(); }
+  /* Prompts she has cast in the Spellbook Workshop: lab.js's summary (p.lab.castPrompts) when it has one,
+     else the Workshop's copy in this browser (the same place story.js reads for the tournament). */
+  var CAST = { at: 0, sid: '', map: {} };
+  function castMap(p) {
+    var lab = (p && p.lab) || {};
+    if (lab.castPrompts) return lab.castPrompts;
+    if (CAST.sid === p.studentId && Date.now() - CAST.at < 3000) return CAST.map;
+    var map = {};
+    try {
+      var d = JSON.parse(localStorage.getItem('pc.lab.v1.' + lc(p.studentId)) || 'null');
+      ((d && d.attempts) || []).forEach(function (a) { if (a && a.status === 'complete' && a.promptId) map[a.promptId] = (map[a.promptId] || 0) + 1; });
+    } catch (e) {}
+    CAST.at = Date.now(); CAST.sid = p.studentId; CAST.map = map;
+    return map;
+  }
+  function frameOnly(r) { return r.meritWhy === 'frame' || (typeof r.ownShare === 'number' && r.ownShare < OWN_MIN); }
+  /* duel ✓ (won) · essay ✓ (sent, not mostly frame) · revised ✓ (a revision sent) · cast ✓ (Workshop cast) */
+  function coreSteps(p, id) {
+    var reps = p.reports || [], bm = ((p.bootcamp || {}).missions || {})[id];
+    /* an essay counts once one on this prompt is not mostly frame (a good revision of a frame-only essay counts too) */
+    var good = reps.filter(function (r) { return r.promptId === id && r.kind !== 'mock' && !frameOnly(r); });
+    return { duel: !!(bm && bm.passed), essay: good.length > 0, revised: reps.some(function (r) { return r.promptId === id && !!r.revisionOf; }),
+      cast: !!castMap(p)[id], last: good.length ? good[good.length - 1].id : '' };
+  }
+  function coreProgress(p) {
+    var ids = coreIds(), steps = ids.map(function (id) { return coreSteps(p, id); }), cur = -1, done = 0;
+    steps.forEach(function (s, i) { if (s.essay && s.revised) done++; else if (cur < 0) cur = i; });
+    return { ids: ids, steps: steps, done: done, current: cur, by: (p.coreSet && p.coreSet.by) || 'app' };
+  }
+  function coreStepsHtml(st) {
+    return '<span class="core-steps">' + [['duel', 'duel'], ['essay', 'essay'], ['revised', 'revised'], ['cast', 'cast']].map(function (k) {
+      return '<span class="core-step' + (st[k[0]] ? ' on' : '') + '">' + k[1] + (st[k[0]] ? ' ✓' : '') + '</span>';
+    }).join('<span class="core-dot" aria-hidden="true">·</span>') + '</span>';
+  }
+  /* A prompt card for the five: number, steps, and "Next" on the one to work on now (soft: all stay open). */
+  function coreCard(pr, i, cp, attr, extraPill) {
+    var st = cp.steps[i], now = cp.current === i, full = st.essay && st.revised;
+    return '<button class="pcard core-card' + (full ? ' done' : '') + (now ? ' core-now' : '') + '" ' + attr + '><span class="pcard-t"><span class="core-n">' + (i + 1) + '</span>' + esc(pr.title) + '</span>' +
+      '<span class="pcard-m"><span class="pill gold">' + esc(typeName(pr.type)) + '</span><span class="pill">' + esc(PR.domainName(pr.domain)) + '</span>' + (now ? '<span class="pill on">next</span>' : '') + (extraPill || '') + '</span>' +
+      coreStepsHtml(st) + '<span class="pcard-r">' + esc(pr.text) + '</span></button>';
+  }
+  function coreHead(cp, room) {
+    var who = cp.by === 'teacher' ? 'T.Chris chose these five for you.' : 'One prompt of each question type, simplest first.';
+    var nxt = cp.current >= 0 ? ' Next: number ' + (cp.current + 1) + '.' : ' All five are written and revised.';
+    return '<div class="sect-h core-h" id="' + room + '-core"><div><h2>Your five</h2><p>' + who + ' For each one: duel it, write it, then revise your weakest row.' + nxt + '</p></div><span class="pill on">' + cp.done + ' of ' + cp.ids.length + ' done</span></div>';
+  }
+  function extraHead(room, n) {
+    return '<div class="sect-h core-h" id="' + room + '-extra" style="margin-top:22px"><div><h2>Extra practice</h2><p>' + n + ' more prompts, all open. Write any of them whenever you like; your five come first.</p></div></div>';
+  }
+  /* The next of her five for the Map Room pointer: duel (when the Hall is open), write, then revise. */
+  function coreNext(p, writeOnly) {
+    var cp = coreProgress(p); if (cp.current < 0) return null;
+    var i = cp.current, id = cp.ids[i], pr = PR.get(id) || {}, st = cp.steps[i];
+    var lbl = 'Your five · ' + (i + 1) + ' of ' + cp.ids.length + ': ' + (pr.title || typeName(pr.type));
+    if (!st.essay && !st.duel && !writeOnly && visibleViews().indexOf('bootcamp') >= 0) return { kind: 'coreduel', promptId: id, kicker: 'Your five', label: lbl, sub: typeName(pr.type) + '. Duel it in the Duelling Hall first: the duel plans the essay with you.', go: 'Duel →' };
+    if (!st.essay) return { kind: 'core', promptId: id, kicker: 'Your five', label: lbl, sub: typeName(pr.type) + '. Write it in the Scriptorium with your spellbook, then revise your weakest row.', go: 'Write →' };
+    return { kind: 'corerevise', promptId: id, reportId: st.last, kicker: 'Your five', label: lbl, sub: 'Revise your weakest row: rewrite one paragraph of this essay so it is stronger. Then number ' + (i + 2 <= cp.ids.length ? i + 2 : i + 1) + ' opens as your next step.', go: 'Revise →' };
+  }
+  /* Small styles for the five (index.html is shared; these live with the code that uses them). */
+  (function coreStyle() {
+    if (document.getElementById('core-style')) return;
+    var st = document.createElement('style'); st.id = 'core-style';
+    st.textContent = '.core-steps{display:flex;flex-wrap:wrap;gap:2px 6px;font-size:.8rem;color:var(--ink-3)}.core-step.on{color:var(--ok);font-weight:700}.core-dot{color:var(--ink-3)}' +
+      '.core-n{display:inline-flex;align-items:center;justify-content:center;width:1.5em;height:1.5em;border-radius:50%;background:var(--accent-soft,rgba(200,160,60,.18));font-size:.85rem;margin-right:8px}' +
+      '.pcard.core-now{border-color:var(--gold,#c8a03c);box-shadow:0 0 0 2px rgba(200,160,60,.25)}' +
+      '.merit-note{margin:8px auto 12px;max-width:34rem;font-size:.93rem}.merit-note.none{color:var(--no,#ae3a22)}' +
+      '.rev-link{display:inline-block;margin:4px 6px 0 0}';
+    document.head.appendChild(st);
+  })();
+
+  /* =====================================================================
+     REVISION (19 Oct 2026): "Revise your weakest row". The row is a paragraph of her essay
+     (intro · bodyA · bodyB · conclusion, the Scriptorium's box keys), chosen from the Ten Wards rows
+     that point at one paragraph and from how much of each paragraph is still frame.
+     ===================================================================== */
+  var PARA_KEYS = ['intro', 'bodyA', 'bodyB', 'conclusion'];
+  var PARA_NAME = { intro: 'Introduction', bodyA: 'Body A', bodyB: 'Body B', conclusion: 'Conclusion' };
+  function splitParas(text) {
+    var ps = W.paragraphs(text || ''), out = { intro: '', bodyA: '', bodyB: '', conclusion: '' };
+    if (!ps.length) return out;
+    out.intro = ps[0];
+    if (ps.length === 2) { out.bodyA = ps[1]; return out; }
+    if (ps.length > 2) { out.conclusion = ps[ps.length - 1]; var mid = ps.slice(1, ps.length - 1); out.bodyA = mid[0] || ''; out.bodyB = mid.slice(1).join('\n\n'); }
+    return out;
+  }
+  function wardPara(row, pre) {
+    var id = row.id || '', lbl = row.label || '', m = /^b(\d+)/.exec(id);
+    if (m) return Number(m[1]) === 0 ? 'bodyA' : 'bodyB';
+    if (id === 'position') return /restated/i.test(lbl) ? 'conclusion' : 'intro';
+    if (id === 'verdict' || id === 'extent') return 'intro';
+    if (id === 'newidea') return 'conclusion';
+    if (id === 'twopart' || id === 'plural-s') return 'bodyB';
+    if (id === 'plural-c') return 'bodyA';
+    if (id === 'parts') return /no causes/i.test(lbl) ? 'bodyA' : 'bodyB';
+    if (id === 'length') { var bw = (pre && pre.bodyWords) || []; return bw.length > 1 && bw[1] < bw[0] ? 'bodyB' : 'bodyA'; }
+    return '';
+  }
+  /* res: the Writer's result (or a saved report): preflight.rows and, in guided mode, plan.ownWords per box. */
+  function paraScores(res) {
+    var pre = res.preflight || {}, out = {}, ow = (res.plan && res.plan.ownWords) || [];
+    PARA_KEYS.forEach(function (k) { out[k] = { score: 0, why: null, whyW: 0, frame: null, own: null }; });
+    (pre.rows || []).forEach(function (r) {
+      if (r.status === 'ok') return;
+      var k = wardPara(r, pre); if (!k) return;
+      var w = r.status === 'bad' ? 2 : 1;
+      out[k].score += w; if (w > out[k].whyW) { out[k].why = r; out[k].whyW = w; }
+    });
+    PARA_KEYS.forEach(function (k, i) {
+      var o = ow[i]; if (!o || !o.words) return;
+      out[k].frame = o.frame / o.words; out[k].own = o.own;
+      if (o.own === 0) out[k].score += 2; else if (out[k].frame > 0.6) out[k].score += 1;
+    });
+    return out;
+  }
+  function weakestRow(res) {
+    var sc = paraScores(res), best = null;
+    ['bodyA', 'bodyB', 'intro', 'conclusion'].forEach(function (k) {
+      if (!best || sc[k].score > sc[best].score || (sc[k].score === sc[best].score && (sc[k].frame || 0) > (sc[best].frame || 0) + 0.001)) best = k;
+    });
+    var s = sc[best], why = s.why ? s.why.label : s.own === 0 ? 'every sentence is still the frame' : s.frame != null && s.frame > 0.05 ? Math.round(s.frame * 100) + '% of it is still frame words' : 'add one more developed sentence with your own reason or example';
+    return { key: best, why: why, ward: s.why ? s.why.id : '', base: { key: best, score: s.score, frame: s.frame, own: s.own } };
+  }
+  function reviseCfg(rep, res, kind) {
+    var wk = weakestRow(res), paras = splitParas(rep.text || res.text);
+    return { promptId: rep.promptId, uiMode: rep.uiMode || S.uiMode, minutes: 40, kind: 'practice', revisionOf: rep.id, reviseRow: wk.key,
+      reviseText: paras, reviseParas: PARA_KEYS.map(function (k) { return paras[k]; }), reviseWard: wk.ward, reviseWhy: wk.why, reviseBase: wk.base, reviseFrom: kind || 'result' };
+  }
+  /* The weak row improved: fewer Ward points against that paragraph, or its frame share fell by 10 points. */
+  function reviseImproved(cfg, res) {
+    var b = cfg.reviseBase; if (!b || !b.key) return false;
+    var now = paraScores(res)[b.key]; if (!now) return false;
+    if (now.score < b.score) return true;
+    return b.frame != null && now.frame != null && b.frame - now.frame >= 0.1 - 1e-9;
+  }
+  function meritNote(sum, rep) {
+    var M = P.MERITS || { essay: 150, short: 60, improve: 50, revise: 80 }, why = sum && sum.meritWhy, xp = (sum && sum.merits) || 0;
+    var row = PARA_NAME[rep.reviseRow] || 'paragraph', own = typeof rep.ownShare === 'number' ? Math.round(rep.ownShare * 100) : null;
+    if (why === 'mock') return '+' + xp + ' merits for a mock examination.';
+    if (why === 'frame') return 'No merits for this essay. Write more in your own words to earn merits: ' + (own != null ? own + '% of it is yours, and merits start at ' + Math.round(OWN_MIN * 100) + '%.' : 'most of it is still the frame.');
+    if (why === 'revise-up') return '+' + xp + ' merits: your ' + row + ' is stronger than before. A better band from the examiners adds ' + M.improve + ' more.';
+    if (why === 'revise-same') return 'No merits yet for this revision: by the Wards, your ' + row + ' is not stronger yet. A revision earns merits when its weak row gets stronger, or when the examiners give it a better band.';
+    if (why === 'revise-again') return 'No merits: this essay has already earned its revision merits. Revise a new essay to earn more.';
+    if (why === 'own-up') return '+' + xp + ' merits: ' + (rep.words >= 250 ? M.essay : M.short) + ' for the essay and ' + M.improve + ' because more of it is in your own words than last time.';
+    return '+' + xp + ' merits' + (rep.words >= 250 ? '.' : ' for a short essay (250 words earns ' + M.essay + ').') + ' A better band than your best ' + typeName(rep.type) + ' essay adds ' + M.improve + ' more.';
+  }
+  /* Open one of her saved essays on the Report Card (used by the Map Room's "Revise" pointer). */
+  function openReportById(id) {
+    S.openAfter = id || '';
+    show('record');
+  }
+
   /* Oct 2026: partner apps and the band ladder (data in partners.js). */
   /* The template share of the student's latest Spellbook Workshop design (lab.js keeps it). */
   /* The student's five most frequent fault families (names), for the Landing Check. */
@@ -888,8 +1118,14 @@
     html += '<div class="modechoice">' + T.FADE.map(function (f) { return '<label><input type="radio" name="uim" value="' + f.id + '"' + (S.uiMode === f.id ? ' checked' : '') + '> ' + esc(f.name) + ' — ' + esc(f.blurb) + '</label>'; }).join('') + '</div>';
     html += '<div class="filters" id="f-type">' + types.map(function (t) { return '<button data-t="' + t + '"' + (S.filters.type === t ? ' class="on"' : '') + '>' + (t === 'all' ? 'All types' : esc(typeName(t))) + '</button>'; }).join('') + '</div>';
     html += '<div class="filters" id="f-domain">' + domains.map(function (d) { return '<button data-d="' + d + '"' + (S.filters.domain === d ? ' class="on"' : '') + '>' + (d === 'all' ? 'All domains' : esc(C.DOMAINS[d])) + '</button>'; }).join('') + '</div>';
-    var list = C.PROMPTS.filter(function (pr) { return (S.filters.type === 'all' || pr.type === S.filters.type) && (S.filters.domain === 'all' || pr.domain === S.filters.domain); });
-    html += '<div class="promptgrid">' + list.map(function (pr) {
+    /* E4: her five first (always shown, in order), then every other prompt as extra practice (the filters apply there) */
+    var cp = coreProgress(p), coreIdx = {}; cp.ids.forEach(function (id, i) { coreIdx[id] = i; });
+    var fiveHtml = coreHead(cp, 'w') + '<div class="promptgrid" id="w-five">' + cp.ids.map(function (id, i) {
+      var pr = PR.get(id); return pr ? coreCard(pr, i, cp, 'data-p="' + pr.id + '"', done[pr.id] ? '<span class="pill good">written ' + done[pr.id] + '×</span>' : '') : '';
+    }).join('') + '</div>' + extraHead('w', practicePrompts().length - cp.ids.length);
+    html = html.replace('<div class="filters" id="f-type">', function (m) { return fiveHtml + m; });
+    var list = practicePrompts().filter(function (pr) { return coreIdx[pr.id] == null && (S.filters.type === 'all' || pr.type === S.filters.type) && (S.filters.domain === 'all' || pr.domain === S.filters.domain); });
+    html += '<div class="promptgrid" id="w-extra">' + list.map(function (pr) {
       return '<button class="pcard' + (done[pr.id] ? ' done' : '') + '" data-p="' + pr.id + '"><span class="pcard-t">' + esc(pr.title) + '</span><span class="pcard-m"><span class="pill gold">' + esc(typeName(pr.type)) + '</span><span class="pill">' + esc(PR.domainName(pr.domain)) + '</span>' + (done[pr.id] ? '<span class="pill good">written ' + done[pr.id] + '×</span>' : '') + '</span><span class="pcard-r">' + esc(pr.text) + '</span></button>';
     }).join('') + '</div>';
     html += '<p style="margin:14px 0"><button class="btn sm" id="w-live">Join the Assembly (class game) →</button></p>';
@@ -919,6 +1155,8 @@
     var host = $('#view-write');
     show('write');
     S.write = W.mount(host, { prompt: cfg.promptId, mode: cfg.uiMode, minutes: cfg.minutes, tier: tier(), level: explainLevel(), studentId: S.p.studentId, share: myShare(), faultTags: topFaultTags(),
+      /* revision (19 Oct 2026, contract with writer.js): the essay it revises, the weak row (a box key) and her text by box */
+      revisionOf: cfg.revisionOf || '', reviseRow: cfg.reviseRow || '', reviseText: cfg.reviseText || null, reviseParas: cfg.reviseParas || null, reviseWard: cfg.reviseWard || '', reviseWhy: cfg.reviseWhy || '',
       onQuit: function () { S.write = null; show('writer'); },
       onSubmit: function (res) { S.write = null; submitReport(cfg, res); } });
   }
@@ -934,6 +1172,21 @@
     var w = window.open(url, '_blank');
     if (!w) toast('Pop-up blocked. Allow pop-ups for this site, or copy the essay and paste it into LevelUp.');
   }
+  /* What the Writer measured on the essay just submitted (Writer.lastMeta, group s). Without it, the same
+     numbers are worked out from the result: frame words per box (guided) or the frame ratio of the Wards. */
+  function writerMeta(cfg, res) {
+    var m = null;
+    try { m = W && typeof W.lastMeta === 'function' ? W.lastMeta() : null; } catch (e) { m = null; }
+    m = m || {};
+    var ow = (res.plan && res.plan.ownWords) || [], words = 0, frame = 0, sents = 0, have = false;
+    ow.forEach(function (o) { if (o && o.words) { have = true; words += o.words; frame += o.frame || 0; sents += o.own || 0; } });
+    var cal = res.plan && res.plan.calibration;
+    var ownShare = typeof m.ownShare === 'number' ? m.ownShare : have && words ? 1 - frame / words : (res.preflight && typeof res.preflight.ratio === 'number' ? 1 - res.preflight.ratio : null);
+    return { ownShare: ownShare == null ? null : Math.max(0, Math.min(1, ownShare)), ownSentences: typeof m.ownSentences === 'number' ? m.ownSentences : have ? sents : null,
+      fillUsed: typeof m.fillUsed === 'boolean' ? m.fillUsed : null, landTaps: m.landTaps || null,
+      landAgree: typeof m.landAgree === 'number' ? m.landAgree : cal && cal.of ? cal.agree / cal.of : null,
+      revisionOf: cfg.revisionOf || m.revisionOf || '', reviseRow: cfg.reviseRow || m.reviseRow || '' };
+  }
   function submitReport(cfg, res) {
     var p = S.p, pr = PR.get(cfg.promptId) || {};
     var rep = { id: uid('R'), studentId: p.studentId, name: p.displayName, cohort: p.cohort || '', ts: new Date().toISOString(),
@@ -941,15 +1194,24 @@
       text: res.text, words: res.words, seconds: res.seconds, timedOut: res.timedOut, revision: res.revision, firstText: res.firstText,
       preflight: { bad: res.preflight.bad, warn: res.preflight.warn, ratio: res.preflight.ratio, rows: res.preflight.rows.map(function (r) { return { id: r.id, status: r.status, label: r.label, tag: r.tag }; }) },
       plan: res.plan, promptDesc: pr.text, status: 'submitted', released: false };
-    P.recordReport(p, rep);
+    var meta = writerMeta(cfg, res);
+    Object.keys(meta).forEach(function (k) { rep[k] = meta[k]; });
+    if (rep.revisionOf) rep.reviseImproved = reviseImproved(cfg, res);
+    var sum = P.recordReport(p, rep);
+    rep.merits = sum ? sum.merits : 0; rep.meritWhy = sum ? sum.meritWhy : '';
     api.submitReport(rep).then(function (r) { if (!r || !r.ok) toast('Saved on this device; it will reach the class sheet when the connection is back.'); });
     var earned = P.checkBadges(p);
     paintHeader(); sync();
+    /* Revision (19 Oct 2026): every essay but a mock can be revised on its weakest row. */
+    var revCfg = cfg.kind === 'mock' ? null : reviseCfg(rep, res, 'result');
     var html = '<div class="play"><div class="card result"><div class="score-ring" style="--p:' + (res.preflight.bad ? 40 : res.preflight.warn ? 75 : 100) + '"><i>' + res.words + '<small style="font-size:.9rem">w</small></i></div>' +
       '<h3>' + (res.timedOut ? 'Time. The owl has taken the essay' : 'The owl has taken the essay') + '</h3><p>' + esc(res.preflight.summary) + ' Written in ' + mmss(res.seconds) + '. ' + (cfg.kind === 'mock' ? 'T.Chris will mark this one.' : 'It has gone to T.Chris: he already has your essay, so you do not need to send it again. If you want, you can also get an AI band estimate and an upgraded version in LevelUp.') + '</p>' +
       '<div class="misslist">' + res.preflight.rows.filter(function (r) { return r.status !== 'ok'; }).map(function (r) { var ns = W.nextStep ? W.nextStep(r, res.preflight, explainLevel()) : null; return '<div class="miss"><b>' + esc(r.label) + '</b>' + esc(r.note) + (ns ? '<span class="miss-next"><span class="miss-next-h">Next time:</span> ' + esc(ns.text) + (ns.sub ? ' <button class="linky" data-miss-sub="' + esc(ns.sub) + '">' + esc(ns.link) + ' →</button>' : '') + '</span>' : '') + '</div>'; }).join('') + '</div>' +
-      '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn primary" id="w-levelup">Get an AI band estimate (LevelUp)</button><button class="btn" id="w-copy">Copy essay</button><button class="btn" id="w-record">See my report card</button><button class="btn ghost" id="w-another">Write another</button></div></div></div>';
+      '<p class="merit-note' + (rep.merits ? '' : ' none') + '" id="w-merits">' + esc(meritNote(sum, rep)) + '</p>' +
+      (revCfg ? '<div class="card" id="w-revise-card" style="padding:12px 14px;margin:0 auto 12px;max-width:34rem;text-align:left"><p class="kicker">Next: make it stronger</p><p style="margin:0 0 8px">Your weakest row is <b>' + esc(PARA_NAME[revCfg.reviseRow] || revCfg.reviseRow) + '</b>: ' + esc(revCfg.reviseWhy) + '. Rewrite that paragraph in your own words; the rest of your essay stays as it is.</p><button class="btn primary" id="w-revise">Revise your weakest row</button></div>' : '') +
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn' + (revCfg ? '' : ' primary') + '" id="w-levelup">Get an AI band estimate (LevelUp)</button><button class="btn" id="w-copy">Copy essay</button><button class="btn" id="w-record">See my report card</button><button class="btn ghost" id="w-another">Write another</button></div></div></div>';
     $('#view-write').innerHTML = html;
+    if (revCfg) $('#w-revise').addEventListener('click', function () { startWrite(revCfg); });
     $('#w-levelup').addEventListener('click', function () { handoff(pr, res.text, rep); });
     $('#view-write').querySelectorAll('[data-miss-sub]').forEach(function (b) { b.addEventListener('click', function () { S.returnTo = 'write'; openSub(b.dataset.missSub); }); });
     $('#w-copy').addEventListener('click', function () { try { navigator.clipboard.writeText(res.text); toast('Essay copied.'); } catch (e) { prompt('Copy your essay', res.text); } });
@@ -1189,14 +1451,18 @@
       var reps = ((r && r.reports) || []).slice().sort(function (a, b) { return a.ts < b.ts ? 1 : -1; });
       S.reports = reps;
       var changed = false;
-      reps.forEach(function (rp) { var bands = bandsOf(rp); if (bands) { var hit = P.applyBands(p, rp.id, bands); if (hit) changed = true; } });
+      /* oldest first, so "better than her best band for the type" compares with the earlier essays (WP11b) */
+      reps.slice().reverse().forEach(function (rp) { var bands = bandsOf(rp); if (bands) { var hit = P.applyBands(p, rp.id, bands); if (hit) changed = true; } });
       if (changed) { P.checkBadges(p); paintHeader(); syncSoon(); }
+      if (S.openAfter) { var want = S.openAfter; S.openAfter = ''; if (reps.some(function (x) { return x.id === want; })) { openReport(want); return; } }
       var host = $('#rec-list');
       if (!reps.length) { host.innerHTML = '<p class="tiny">No essays yet. Open the Scriptorium and write one.</p>'; return; }
       host.innerHTML = trajectory(reps.slice().reverse().map(function (rp) { return { type: rp.type, bands: bandsOf(rp) }; })) +
         reps.map(function (rp) {
           var bands = bandsOf(rp), pr = PR.get(rp.promptId) || {};
-          return '<button class="rep" data-r="' + esc(rp.id) + '"><span class="rep-t"><span class="rep-n">' + esc(pr.title || rp.promptId) + '</span><span class="rep-s">' + esc(String(rp.ts).slice(0, 10) + ' · ' + typeName(rp.type) + ' · ' + rp.words + ' words · ' + mmss(rp.seconds || 0) + ' · ' + (rp.uiMode || '') + ' · ' + (rp.kind || 'practice') + (rp.preflight ? ' · ' + rp.preflight.bad + ' red' : '')) + '</span></span><span class="rep-b">' + (bands ? fmtBand(bands.overall) : (rp.status === 'submitted' ? '…' : '—')) + '</span></button>';
+          var revs = reps.filter(function (x) { return x.revisionOf === rp.id; }).length, orig = rp.revisionOf ? reps.filter(function (x) { return x.id === rp.revisionOf; })[0] : null;
+          var link = rp.revisionOf ? ' · revision of the essay of ' + (orig ? String(orig.ts).slice(0, 10) : 'an earlier essay') + (rp.reviseRow ? ' (' + (PARA_NAME[rp.reviseRow] || rp.reviseRow) + ')' : '') : revs ? ' · revised ' + revs + '×' : '';
+          return '<button class="rep" data-r="' + esc(rp.id) + '"' + (rp.revisionOf ? ' data-rev-of="' + esc(rp.revisionOf) + '" style="margin-left:18px"' : '') + '><span class="rep-t"><span class="rep-n">' + (rp.revisionOf ? '↳ ' : '') + esc(pr.title || rp.promptId) + '</span><span class="rep-s">' + esc(String(rp.ts).slice(0, 10) + ' · ' + typeName(rp.type) + ' · ' + rp.words + ' words · ' + mmss(rp.seconds || 0) + ' · ' + (rp.uiMode || '') + ' · ' + (rp.kind || 'practice') + (rp.preflight ? ' · ' + rp.preflight.bad + ' red' : '') + link + (frameOnly(rp) ? ' · mostly frame' : '')) + '</span></span><span class="rep-b">' + (bands ? fmtBand(bands.overall) : (rp.status === 'submitted' ? '…' : '—')) + '</span></button>';
         }).join('');
       host.querySelectorAll('[data-r]').forEach(function (b) { b.addEventListener('click', function () { openReport(b.dataset.r); }); });
     });
@@ -1206,7 +1472,11 @@
     if (!rp) return;
     var pr = PR.get(rp.promptId) || {};
     var mark = rp.released && rp.teacher && rp.teacher.bands ? rp.teacher : (rp.aiVisible && rp.ai ? rp.ai : null);
-    var html = '<div class="play"><div class="play-top"><button class="btn ghost sm" id="rp-back">← Report Card</button><span style="flex:1"></span><span class="qcount">' + esc(String(rp.ts).slice(0, 10)) + '</span></div>' + PR.card(pr, { compact: true }) +
+    var orig = rp.revisionOf ? (S.reports || []).filter(function (x) { return x.id === rp.revisionOf; })[0] : null;
+    var later = (S.reports || []).filter(function (x) { return x.revisionOf === rp.id; });
+    var links = (rp.revisionOf ? '<p class="tiny" id="rp-revof">A revision of ' + (orig ? '<button class="linky rev-link" data-rlink="' + esc(orig.id) + '">your essay of ' + esc(String(orig.ts).slice(0, 10)) + ' →</button>' : 'an earlier essay') + (rp.reviseRow ? ' · the row you revised: ' + esc(PARA_NAME[rp.reviseRow] || rp.reviseRow) : '') + '</p>' : '') +
+      (later.length ? '<p class="tiny" id="rp-revised">Revised: ' + later.map(function (x) { return '<button class="linky rev-link" data-rlink="' + esc(x.id) + '">' + esc(String(x.ts).slice(0, 10)) + (x.reviseRow ? ' (' + esc(PARA_NAME[x.reviseRow] || x.reviseRow) + ')' : '') + ' →</button>'; }).join(' ') + '</p>' : '');
+    var html = '<div class="play"><div class="play-top"><button class="btn ghost sm" id="rp-back">← Report Card</button><span style="flex:1"></span><span class="qcount">' + esc(String(rp.ts).slice(0, 10)) + '</span></div>' + links + PR.card(pr, { compact: true }) +
       '<div class="model">' + W.paragraphs(rp.text).map(function (t) { return '<div class="mpara">' + esc(t) + '</div>'; }).join('') + '</div>';
     if (mark) {
       var b = mark.bands;
@@ -1217,8 +1487,11 @@
     } else {
       html += '<div class="card preflight"><div class="pf-h"><b>The Ten Wards at submission</b><span class="pill ' + (rp.preflight && rp.preflight.bad ? 'bad' : 'good') + '">' + (rp.preflight ? rp.preflight.bad + ' red · ' + rp.preflight.warn + ' amber' : '') + '</span></div>' + ((rp.preflight && rp.preflight.rows) || []).filter(function (r) { return r.status !== 'ok'; }).map(function (r) { return '<div class="pf-row ' + r.status + '"><span class="pf-dot"></span><div><b>' + esc(r.label) + '</b></div></div>'; }).join('') + '<p class="tiny" style="margin-top:8px">T.Chris has not released a mark for this essay yet.</p></div>';
     }
-    html += '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"><button class="btn primary" id="rp-levelup">Send to the examiners →</button><button class="btn" id="rp-copy">Copy essay</button></div></div>';
+    var canRev = rp.kind !== 'mock' && rp.text;
+    html += '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">' + (canRev ? '<button class="btn primary" id="rp-revise">Revise your weakest row</button>' : '') + '<button class="btn' + (canRev ? '' : ' primary') + '" id="rp-levelup">Send to the examiners →</button><button class="btn" id="rp-copy">Copy essay</button></div></div>';
     $('#view-record').innerHTML = html;
+    $('#view-record').querySelectorAll('[data-rlink]').forEach(function (b) { b.addEventListener('click', function () { openReport(b.dataset.rlink); }); });
+    if (canRev) $('#rp-revise').addEventListener('click', function () { startWrite(reviseCfg(rp, rp, 'record')); });
     $('#rp-back').addEventListener('click', paintRecord);
     $('#rp-levelup').addEventListener('click', function () { handoff(pr, rp.text, rp); });
     $('#rp-copy').addEventListener('click', function () { try { navigator.clipboard.writeText(rp.text); toast('Essay copied.'); } catch (e) { prompt('Copy your essay', rp.text); } });
@@ -1233,6 +1506,7 @@
   function paintBootcamp() {
     var bs = bootState(), rank = BC.rankFor(bs.points), nxt = BC.nextRank(bs.points);
     var cleared = Object.keys(bs.missions).filter(function (k) { return bs.missions[k].passed; }).length;
+    var cp = coreProgress(S.p), fiveWon = cp.steps.filter(function (x) { return x.duel; }).length;
     var html = '<div class="sect-h"><div><h2>Duelling Hall</h2><p>One prompt, the whole plan, one decision at a time: time, decode, the Core Topic, side A, side B, the position, the frames and the Ten Wards. Every question is a drop-down. Hints cost ' + BC.POINTS.hint + ' points; a correct second choice earns ' + BC.POINTS.second + '. Win a duel at ' + Math.round(BC.POINTS.pass * 100) + '%. Fighting a prompt again adds points only when you beat your best on it.</p></div></div>';
     var dt = duelTier();
     html += '<div class="lvl-bar" role="group" aria-label="Choose the level of the answer options"><span class="lvl-lbl">Answer options at my level:</span>' + DUEL_LVLS.map(function (l) { return '<button type="button" class="lvl-btn' + (l === dt ? ' on' : '') + '" data-duel-lvl="' + l + '" aria-pressed="' + (l === dt) + '">' + l + '</button>'; }).join('') + '<span class="tiny" style="flex-basis:100%">The prompts stay in exam English. This changes the English of the eleven-key choices.</span></div>';
@@ -1240,10 +1514,14 @@
     var nDuelled = BC.duelled(bs);
     if (nDuelled < BC.SHORT_AFTER) html += '<p class="tiny" id="bc-mode-note" style="margin:-6px 0 14px">Your first ' + BC.SHORT_AFTER + ' duels ask every step (' + nDuelled + ' of ' + BC.SHORT_AFTER + ' fought). After that, a duel starts at the Core Topic and takes about ten minutes.</p>';
     else html += '<div class="lvl-bar" role="group" aria-label="Choose short or full duels"><span class="lvl-lbl">Duel length:</span><button type="button" class="lvl-btn' + (bs.full ? '' : ' on') + '" data-duel-mode="short" aria-pressed="' + !bs.full + '">Short duel</button><button type="button" class="lvl-btn' + (bs.full ? ' on' : '') + '" id="bc-full" data-duel-mode="full" aria-pressed="' + !!bs.full + '">Full duel</button><span class="tiny" style="flex-basis:100%">' + (bs.full ? 'Full duel: every step, from the time and the decode to the Ten Wards.' : 'Short duel: from the Core Topic to the frames. Choose Full duel for every step.') + '</span></div>';
-    html += '<div class="gates" style="grid-template-columns:repeat(2,1fr)"><div class="gate"><span>Duelling rank</span><b>' + esc(rank.name) + '</b><small>' + bs.points + ' points' + (nxt ? ' · ' + (nxt.min - bs.points) + ' to ' + esc(nxt.name) : ' · top rank') + '</small><div class="bar-line gold"><span style="width:' + (nxt ? Math.round(100 * (bs.points - rank.min) / (nxt.min - rank.min)) : 100) + '%"></span></div></div><div class="gate"><span>Duels won</span><b>' + cleared + '</b><small>of ' + C.PROMPTS.length + ' prompts · win at ' + Math.round(BC.POINTS.pass * 100) + '%</small></div></div>';
+    html += '<div class="gates" style="grid-template-columns:repeat(2,1fr)"><div class="gate"><span>Duelling rank</span><b>' + esc(rank.name) + '</b><small>' + bs.points + ' points' + (nxt ? ' · ' + (nxt.min - bs.points) + ' to ' + esc(nxt.name) : ' · top rank') + '</small><div class="bar-line gold"><span style="width:' + (nxt ? Math.round(100 * (bs.points - rank.min) / (nxt.min - rank.min)) : 100) + '%"></span></div></div><div class="gate"><span>Your five won</span><b>' + fiveWon + ' of ' + cp.ids.length + '</b><small>' + cleared + ' duel' + (cleared === 1 ? '' : 's') + ' won in all · win at ' + Math.round(BC.POINTS.pass * 100) + '%</small></div></div>';
     html += '<div class="card" style="padding:14px 16px;margin-bottom:16px"><p class="kicker">The Ten Wards</p><ol class="bc-list">' + BC.CHECKLIST.map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') + '</ol></div>';
-    var order = C.PROMPTS.slice().sort(function (a, b) { return Object.keys(C.TYPES).indexOf(a.type) - Object.keys(C.TYPES).indexOf(b.type) || a.title.localeCompare(b.title); });
-    html += '<div class="promptgrid">' + order.map(function (pr) {
+    /* E4: her five first, in order; the rest as extra practice */
+    html += coreHead(cp, 'bc') + '<div class="promptgrid" id="bc-five">' + cp.ids.map(function (id, i) {
+      var pr = PR.get(id), m = bs.missions[id]; return pr ? coreCard(pr, i, cp, 'data-bc="' + pr.id + '"', m ? '<span class="pill' + (m.passed ? ' good' : ' bad') + '">best ' + m.best + '%</span>' : '') : '';
+    }).join('') + '</div>';
+    var order = practicePrompts().filter(function (pr) { return cp.ids.indexOf(pr.id) < 0; }).sort(function (a, b) { return Object.keys(C.TYPES).indexOf(a.type) - Object.keys(C.TYPES).indexOf(b.type) || a.title.localeCompare(b.title); });
+    html += extraHead('bc', order.length) + '<div class="promptgrid" id="bc-extra">' + order.map(function (pr) {
       var m = bs.missions[pr.id];
       return '<button class="pcard' + (m && m.passed ? ' done' : '') + '" data-bc="' + pr.id + '"><span class="pcard-t">' + esc(pr.title) + '</span><span class="pcard-m"><span class="pill gold">' + esc(typeName(pr.type)) + '</span><span class="pill">' + esc(PR.domainName(pr.domain)) + '</span>' + (m ? '<span class="pill' + (m.passed ? ' good' : ' bad') + '">best ' + m.best + '%</span>' : '') + '</span><span class="pcard-r">' + esc(pr.text) + '</span></button>';
     }).join('') + '</div>';

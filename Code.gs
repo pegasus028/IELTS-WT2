@@ -21,14 +21,21 @@
    ACCESS (Oct 2026). Teacher actions (roster, detail, all reports, marking,
    setting assignments, running the projector) need the short-lived teacher
    token that teacherLogin returns. Student actions need the student's own
-   token, and touch only that student's rows. Five wrong PINs or passwords in
-   a row lock that door for 15 minutes.
+   token, and touch only that student's rows. Five wrong passwords in a row
+   lock that account for 5 minutes (LOCK_SECONDS); five wrong PINs lock the
+   Staff Room door for 1 minute (PIN_LOCK_SECONDS).
 
    HOUSE CUP (Oct 2026). `houses` needs no sign-in: it returns only the four
    house totals and member counts for one cohort, never a name or an id, so
    the student console can show the House Cup to everyone. Chapter unlocks and
    re-sorts from the Staff Room travel as ordinary Assignments rows
    ({kind:'unlock'} / {kind:'resort'}); no new sheet column is needed.
+   "Your five" (19 Oct 2026): the five prompts T.Chris sets a student or a
+   cohort travel the same way, as {kind:'coreset', studentId | cohort,
+   prompts:[5 ids]} rows.
+
+   VERSION (19 Oct 2026). ping and doGet return APP_VERSION; the Staff Room
+   asks for a redeploy when it is missing or older than the front end expects.
 
    Requests are POST with Content-Type text/plain (a "simple request", so no
    CORS preflight), body {action, payload}. Every reply is JSON {ok, …}.
@@ -38,13 +45,18 @@ var SHEETS = {
   Students: ['id', 'name', 'pw', 'created', 'cohort', 'token', 'progress'],
   Attempts: ['ts', 'studentId', 'itemId', 'topic', 'level', 'type', 'tag', 'cefr', 'correct', 'ms', 'hinted', 'fast', 'mode', 'given', 'expected'],
   Sessions: ['sessionId', 'studentId', 'loginTs', 'logoutTs', 'durationSec', 'items', 'correct'],
-  Reports: ['id', 'ts', 'studentId', 'name', 'cohort', 'promptId', 'type', 'tier', 'kind', 'uiMode', 'words', 'seconds', 'bad', 'warn', 'status', 'released', 'aiVisible', 'overall', 'json'],
+  Reports: ['id', 'ts', 'studentId', 'name', 'cohort', 'promptId', 'type', 'tier', 'kind', 'uiMode', 'words', 'seconds', 'bad', 'warn', 'status', 'released', 'aiVisible', 'overall', 'json', 'ownShare', 'ownSentences', 'fillUsed', 'landAgree', 'revisionOf'],
   Assignments: ['id', 'ts', 'json'],
   Projector: ['ts', 'round', 'kind', 'json'],
   Log: ['ts', 'what']
 };
 
-function doGet() { return out({ ok: true, app: 'Quillmoor Academy', sheet: SpreadsheetApp.getActive().getName() }); }
+/* WP1 (19 Oct 2026): the build this file belongs to. ping and doGet report it, and the Staff Room
+   shows a banner when the live deployment is older than the front end expects. Change it with every
+   release that touches this file (and the Staff Room's EXPECTED_BACKEND in teacher.js). */
+var APP_VERSION = '20261019';
+
+function doGet() { return out({ ok: true, app: 'Quillmoor Academy', sheet: SpreadsheetApp.getActive().getName(), version: APP_VERSION }); }
 
 function doPost(e) {
   var req;
@@ -66,7 +78,7 @@ function out(o) { return ContentService.createTextOutput(JSON.stringify(o)).setM
 function handle(action, p) {
   var T = isTeacher(p);
   switch (action) {
-    case 'ping': return { ok: true, sheet: SpreadsheetApp.getActive().getName(), students: sheet('Students').getLastRow() - 1 };
+    case 'ping': return { ok: true, sheet: SpreadsheetApp.getActive().getName(), students: sheet('Students').getLastRow() - 1, version: APP_VERSION };
     case 'register': return register(p);
     case 'login': return login(p);
     case 'save': return save(p);
@@ -91,7 +103,19 @@ function handle(action, p) {
 function sheet(name) {
   var ss = SpreadsheetApp.getActive(), sh = ss.getSheetByName(name);
   if (!sh) { sh = ss.insertSheet(name); sh.appendRow(SHEETS[name]); sh.setFrozenRows(1); }
+  else headTail(sh, name);
   return sh;
+}
+/* Columns added at the END of a sheet in a later release (Reports: ownShare … revisionOf, 19 Oct 2026)
+   get their header cell on an existing sheet. Only empty header cells are written: nothing is renamed
+   or moved. Checked once per request. */
+var HEAD_DONE = {};
+function headTail(sh, name) {
+  if (HEAD_DONE[name] || !SHEETS[name]) return;
+  HEAD_DONE[name] = 1;
+  var head = SHEETS[name], cur = sh.getRange(1, 1, 1, head.length).getValues()[0], from = -1;
+  for (var j = head.length - 1; j >= 0 && String(cur[j] == null ? '' : cur[j]) === ''; j--) from = j;
+  if (from > 0 && String(cur[from - 1]) === head[from - 1]) sh.getRange(1, from + 1, 1, head.length - from).setValues([head.slice(from)]);
 }
 function rows(name) {
   var sh = sheet(name), n = sh.getLastRow();
@@ -246,7 +270,10 @@ function detail(id) {
 function reportRow(rep) {
   return { id: rep.id, ts: rep.ts, studentId: rep.studentId, name: rep.name, cohort: rep.cohort || '', promptId: rep.promptId, type: rep.type, tier: rep.tier || '', kind: rep.kind, uiMode: rep.uiMode,
     words: rep.words, seconds: rep.seconds, bad: (rep.preflight || {}).bad || 0, warn: (rep.preflight || {}).warn || 0, status: rep.status || 'submitted', released: rep.released ? 1 : 0, aiVisible: rep.aiVisible ? 1 : 0,
-    overall: rep.teacher && rep.teacher.bands ? rep.teacher.bands.overall : (rep.ai && rep.ai.bands ? rep.ai.bands.overall : ''), json: JSON.stringify(rep) };
+    overall: rep.teacher && rep.teacher.bands ? rep.teacher.bands.overall : (rep.ai && rep.ai.bands ? rep.ai.bands.overall : ''), json: JSON.stringify(rep),
+    /* 19 Oct 2026, appended columns: how much of the essay is hers, Fill, Landing Check agreement, revision link */
+    ownShare: typeof rep.ownShare === 'number' ? Math.round(rep.ownShare * 100) / 100 : '', ownSentences: rep.ownSentences == null ? '' : rep.ownSentences,
+    fillUsed: rep.fillUsed == null ? '' : (rep.fillUsed ? 1 : 0), landAgree: typeof rep.landAgree === 'number' ? Math.round(rep.landAgree * 100) / 100 : '', revisionOf: rep.revisionOf || '' };
 }
 function submitReport(p) {
   var rep = p.report;

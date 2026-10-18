@@ -964,7 +964,10 @@
     var prompt = global.Prompts.get(rep.promptId) || {};
     var summary = { id: rep.id, ts: rep.ts || new Date().toISOString(), promptId: rep.promptId, mode: rep.uiMode || '', type: prompt.type || '',
       words: rep.words, seconds: rep.seconds, bad: rep.preflight ? rep.preflight.bad : 0, warn: rep.preflight ? rep.preflight.warn : 0,
-      timedOut: !!rep.timedOut, kind: rep.kind || 'practice', bands: rep.bands || null };
+      timedOut: !!rep.timedOut, kind: rep.kind || 'practice', bands: rep.bands || null,
+      ownShare: typeof rep.ownShare === 'number' ? rep.ownShare : null, landAgree: typeof rep.landAgree === 'number' ? rep.landAgree : null,
+      revisionOf: rep.revisionOf || '', reviseRow: rep.reviseRow || '' };
+    var prior = p.reports.slice();
     p.reports.push(summary);
     if (p.reports.length > 40) p.reports = p.reports.slice(-40);
     var passing = summary.bad === 0 && rep.words >= 250;
@@ -973,9 +976,32 @@
     if (summary.bad === 0 && summary.warn === 0) p.preflightPerfect = (p.preflightPerfect || 0) + 1;
     if (rep.seconds <= 2400 && rep.words >= 250) p.onTime = (p.onTime || 0) + 1;
     if (rep.kind === 'mock') { if (!p.mocks) p.mocks = {}; p.mocks[rep.mockId || rep.promptId] = { best: passing ? 1 : 0.5, at: summary.ts }; }
-    /* Oct 2026: an essay outranks taps. A full essay (250+ words) earns 150 merits, a short one 60; a mock 250. */
-    p.xp += rep.kind === 'mock' ? XP_MOCK : (rep.words >= 250 ? XP_ESSAY : XP_ESSAY_SHORT);
+    /* Oct 2026: an essay outranks taps. A full essay (250+ words) earns 150 merits, a short one 60; a mock 250.
+       WP11b (19 Oct 2026): merits for the writing, not the count — see essayMerits. */
+    var em = essayMerits(rep, prior);
+    summary.merits = em.xp; summary.meritWhy = em.why;
+    p.xp += em.xp;
     return summary;
+  }
+  /* WP11b. A practice essay that is mostly frame (under 30% her own words) earns nothing. Otherwise the base
+     (150 full, 60 short) plus 50 when her own-word share rises 10 points or more over her last essay. A revision
+     earns 80 only when its weak row improved (rep.reviseImproved, judged by the console), once per original.
+     A band that beats her best for the type (or the original's band, for a revision) adds 50 in applyBands.
+     Mocks are unchanged: 250. Returns { xp, why: 'mock'|'frame'|'base'|'own-up'|'revise-up'|'revise-same'|'revise-again' }. */
+  var XP_IMPROVE = 50, XP_REVISE = 80, OWN_MIN = 0.3;
+  function essayMerits(rep, prior) {
+    if (rep.kind === 'mock') return { xp: XP_MOCK, why: 'mock' };
+    var own = typeof rep.ownShare === 'number' ? rep.ownShare : null;
+    if (own != null && own < OWN_MIN) return { xp: 0, why: 'frame' };
+    if (rep.revisionOf) {
+      if (prior.some(function (r) { return r.revisionOf === rep.revisionOf && r.merits > 0; })) return { xp: 0, why: 'revise-again' };
+      return rep.reviseImproved ? { xp: XP_REVISE, why: 'revise-up' } : { xp: 0, why: 'revise-same' };
+    }
+    var xp = rep.words >= 250 ? XP_ESSAY : XP_ESSAY_SHORT, why = 'base';
+    var last = null;
+    for (var i = prior.length - 1; i >= 0 && last === null; i--) if (prior[i].kind !== 'mock' && typeof prior[i].ownShare === 'number') last = prior[i].ownShare;
+    if (own != null && last !== null && own - last >= 0.1 - 1e-9) { xp += XP_IMPROVE; why = 'own-up'; }
+    return { xp: xp, why: why };
   }
   /* The AI or the teacher marks later; the band arrives by id. */
   function applyBands(p, reportId, bands) {
@@ -983,9 +1009,17 @@
     (p.reports || []).forEach(function (r) { if (r.id === reportId) { r.bands = bands; hit = r; } });
     if (hit && bands && bands.overall) {
       if (bands.overall >= (p.bestBand || 0) + 0.5 && p.bestBand) p.bandUp = true;
-      /* a marked essay at or above her track's target band (7 on the B2 track, 8 on C1) earns 200 merits, once per essay */
-      var target = p.tier === 'C1' ? 8 : 7;
-      if (bands.overall >= target && !hit.targetXp) { hit.targetXp = 1; p.xp = (p.xp || 0) + XP_BAND_TARGET; }
+      /* a marked essay at or above her track's target band (7 on the B2 track, 8 on C1) earns 200 merits, once per essay
+         (not for an essay that was mostly frame, WP11b) */
+      var target = p.tier === 'C1' ? 8 : 7, frameOnly = hit.meritWhy === 'frame';
+      if (bands.overall >= target && !hit.targetXp && !frameOnly) { hit.targetXp = 1; p.xp = (p.xp || 0) + XP_BAND_TARGET; }
+      /* WP11b: +50 once when the band beats her best earlier band for this question type, or the original's band for a revision */
+      if (hit.kind !== 'mock' && !frameOnly && !hit.bandXp) {
+        var beat = 0;
+        if (hit.revisionOf) (p.reports || []).forEach(function (r) { if (r.id === hit.revisionOf && r.bands && r.bands.overall) beat = r.bands.overall; });
+        else (p.reports || []).forEach(function (r) { if (r !== hit && r.type === hit.type && r.bands && r.bands.overall && String(r.ts) < String(hit.ts)) beat = Math.max(beat, r.bands.overall); });
+        if (beat && bands.overall > beat) { hit.bandXp = 1; p.xp = (p.xp || 0) + XP_IMPROVE; }
+      }
       p.bestBand = Math.max(p.bestBand || 0, bands.overall);
     }
     return hit;
@@ -1189,7 +1223,8 @@
     scoreMock: scoreMock, finishMock: finishMock,
     touchDay: touchDay, checkBadges: checkBadges,
     dueReview: dueReview, laterReview: laterReview, tagsCovered: tagsCovered, weakTags: weakTags, strongTags: strongTags, systemScores: systemScores,
-    gateReadiness: gateReadiness, recordReport: recordReport, applyBands: applyBands
+    gateReadiness: gateReadiness, recordReport: recordReport, applyBands: applyBands, essayMerits: essayMerits,
+    MERITS: { essay: XP_ESSAY, short: XP_ESSAY_SHORT, mock: XP_MOCK, improve: XP_IMPROVE, revise: XP_REVISE, ownMin: OWN_MIN }
   };
 
   global.Engine = {
