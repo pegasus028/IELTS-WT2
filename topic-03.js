@@ -23,10 +23,10 @@
               '<p>Use the key nouns of the prompt and words you are sure of. "Control" is better than a rare word you are not sure of.</p>'
             ],
             examples: [
-              { s: 'Government control over the use of privately owned cars in city centres.', g: 'Noun phrase; both views fit (the ban and the freedom to drive); nothing else does.' },
+              { s: 'The use of taxation to influence what people choose to eat.', g: 'Noun phrase; both views fit (the tax and the freedom to choose); nothing else does.' },
               { s: '<s>Banning cars from city centres.</s>', g: 'View A only. The freedom to drive has nowhere to sit.' },
-              { s: '<s>Whether governments should ban private cars in city centres.</s>', g: 'A clause. It reads like the prompt and does not slot into the frames.' },
-              { s: 'The participation of secondary school students in part-time employment.', g: 'From "students should gain work experience": the verb has become a noun, and the setting is named.' }
+              { s: '<s>Whether fast food should be taxed to improve public health.</s>', g: 'A clause. It reads like the prompt and does not slot into the frames.' },
+              { s: 'The provision of free public transport in large cities.', g: 'From "governments should make buses and trains free": the verb has become a noun, and the setting is named.' }
             ]
           },
           items: [
@@ -97,10 +97,10 @@
               '<p>Not too big ("every source of pollution in all cities") and not too small ("wider roads"). Two different facets, one per paragraph, covering both views the prompt names.</p>'
             ],
             examples: [
-              { s: 'Facet A: the urgent need to reduce the pollution that city traffic creates.', g: 'One aspect of view A. It can be explained, shown and limited in ninety words.' },
+              { s: 'Facet A: the harm that traffic fumes do to the health of city residents.', g: 'One aspect of view A. It can be explained, shown and limited in ninety words.' },
               { s: '<s>Facet A: cutting the exhaust fumes that people breathe in crowded city districts.</s>', g: 'That is how the facet works: the mechanism, not the facet.' },
-              { s: '<s>Facet A: the removal of every single source of pollution from all cities.</s>', g: 'Too broad. An absolute claim that no nuance sentence could survive.' },
-              { s: '<s>One important part of this issue is the pollution cars cause and the freedom people lose.</s>', g: 'Two facets in one topic sentence. Two ideas, two paragraphs.' }
+              { s: '<s>Facet A: the end of all air pollution everywhere in the world.</s>', g: 'Too broad. An absolute claim that no nuance sentence could survive.' },
+              { s: '<s>One important part of this issue is the cleaner air a ban brings and the right to drive it takes away.</s>', g: 'Two facets in one topic sentence. Two ideas, two paragraphs.' }
             ]
           },
           items: [
@@ -166,10 +166,10 @@
               '<p>The lens must stay inside the prompt. One lens per paragraph. Choose the lens that makes each view strongest.</p>'
             ],
             examples: [
-              { s: 'Economic lens on part-time work: the financial independence that a wage gives a teenager.', g: 'Money, earnings, independence: the economic kit.' },
-              { s: 'Public-health lens on the same topic: the sleep lost by students who work late on school nights.', g: 'Same Core Topic, different facet, different vocabulary.' },
-              { s: '<s>Economic lens on the car ban: the profit of the national car manufacturing industry.</s>', g: 'Economic, but outside the prompt, which is about city centres and the right to drive there.' },
-              { s: '<s>Facet A: the pollution that city traffic creates and the cost to shops when customers cannot drive in.</s>', g: 'Two lenses in one topic sentence: health and economic. Two ideas.' }
+              { s: 'Economic lens on working from home: the money staff save on the daily commute.', g: 'Money, saving, costs: the economic kit.' },
+              { s: 'Public-health lens on the same topic: the back and eye strain of long days at a kitchen table.', g: 'Same Core Topic, different facet, different vocabulary.' },
+              { s: '<s>Economic lens on working from home: the falling price of laptops around the world.</s>', g: 'Economic, but outside the prompt, which is about what working from home does to staff and companies.' },
+              { s: '<s>Facet A: the money staff save on travel and the back pain of a desk at home.</s>', g: 'Two lenses in one topic sentence: health and economic. Two ideas.' }
             ]
           },
           items: [
@@ -278,7 +278,45 @@
           stem: 'Which Core Topic is a noun phrase that covers both views of this prompt?',
           options: ['The effects on the whole economy of raising the legal minimum wage.', 'The gap between the pay of company directors and that of their lowest paid staff.', 'Raising the minimum wage to cut poverty and strengthen the economy.', 'Whether businesses should be forced to pay their lowest paid staff more.'], answer: 0,
           hint: 'Rule out anything with a main verb or a "whether", then check that the second view still has a place inside the phrase.',
-          why: 'Poverty falling and prices rising both fit inside "the effects on the whole economy". The pay gap is a neighbouring debate, "raising the minimum wage to cut poverty" is view A alone, and "whether…" is the question, not its topic.' }
+          why: 'Poverty falling and prices rising both fit inside "the effects on the whole economy". The pay gap is a neighbouring debate, "raising the minimum wage to cut poverty" is view A alone, and "whether…" is the question, not its topic.' },
+        { id: 'm03ckq9', type: 'choose', tag: 'lr-nominal', level: 'B1', prompt: 'p-newspapers',
+          stem: 'Which is the Core Topic of this prompt?',
+          options: ['The decline of reading for pleasure among teenagers and young adults.', 'The cost of printing and delivering a daily newspaper.', 'The future of printed newspapers in an age of online news.', 'The influence of social media on what people believe.'],
+          answer: 2,
+          hint: 'Test the phrase twice: does each view fit inside it, and does it stay inside this debate?',
+          why: 'Both views fit inside it: print replaced, or print keeping its place. Reading habits and social media are neighbouring debates, and printing costs are one detail that a paragraph might use.' },
+        { id: 'm03ckq10', type: 'judge', tag: 'cc-one-idea', level: 'B2', prompt: 'p-gm-crops',
+          given: 'Facet A: "The need to feed a growing population and the profits that seed companies make."',
+          stem: 'Can this facet carry one body paragraph?',
+          answer: 1,
+          hint: 'Count the ideas joined by "and", and ask whether one paragraph could develop both.',
+          why: 'False. Feeding people and company profits are two ideas, and the second is not part of the first view. One facet per paragraph: keep the need to feed a growing population, and leave profits out or give them their own place.' },
+        { id: 'm03ckq11', type: 'choose', tag: 'lr-precision', level: 'B2', prompt: 'p-climate-action',
+          stem: 'Which facet comes from the economic lens?',
+          options: ['The guilt people feel about flying on holiday', 'The cost to firms of meeting new emission rules', 'The damage that dirty air does to children\'s lungs', 'The sense of shared duty that a national campaign creates'],
+          answer: 1,
+          hint: 'Ask which facet an accountant would be the first to notice.',
+          why: 'Costs to firms belong to the economic kit: money, prices, budgets. Guilt and shared duty come from the socio-cultural lens, and damaged lungs from public health.' },
+        { id: 'm03ckq12', type: 'spot', tag: 'lr-precision', level: 'C1', prompt: 'p-elderly-care',
+          stem: 'Tap the word used imprecisely in this facet.',
+          words: ['The economical pressure', 'that full-time care', 'places', 'on working families.'],
+          answer: 0,
+          fix: 'The financial pressure',
+          hint: 'Check whether each describing word means exactly what the writer intends, or only a near neighbour of it.',
+          why: '"Economical" means cheap to run or careful with money. The pressure of paying for care is "financial" (or "economic"). A word from the right family with the wrong meaning is still the wrong word.' },
+        { id: 'm03ckq13', type: 'select', tag: 'tr-partial', level: 'B2', prompt: 'p-child-advertising',
+          stem: 'Tick the two facets, one for each view.',
+          options: ['The rising price of toys in the weeks before New Year', 'The protection of children from persuasion they cannot yet judge', 'The amount of time children spend watching online videos', 'The salaries of the actors who appear in adverts', 'The skill of choosing between products, learnt through adverts', 'The use of famous footballers to sell sports shoes'],
+          answers: [1, 4],
+          k: 2,
+          hint: 'Name what each view of the prompt is worried about or hopes for, then find the facet for each.',
+          why: 'View A wants a ban to protect children who cannot yet judge persuasion; view B says adverts teach them to choose. Toy prices, viewing hours, actors\' pay and football stars are details or neighbouring debates.' },
+        { id: 'm03ckq14', type: 'sort', tag: 'tr-off-topic', level: 'C1', prompt: 'p-history-teaching',
+          stem: 'Sort these facets for the history prompt: inside the prompt, or outside it?',
+          bins: [{ key: 'in', label: 'Inside', hint: 'helps decide which history to teach' }, { key: 'out', label: 'Outside', hint: 'another school question' }],
+          items: [{ text: 'The national pride that a shared story of the past builds', bin: 'in' }, { text: 'The number of history lessons compared with science lessons', bin: 'out' }, { text: 'The understanding of global events that world history gives', bin: 'in' }, { text: 'The training of history teachers at university', bin: 'out' }, { text: 'The ability to see how events in one country shape another', bin: 'in' }, { text: 'The cost of school trips to museums abroad', bin: 'out' }],
+          hint: 'Ask whether each facet helps decide which history children should study, or answers some other question about schools.',
+          why: 'The prompt asks which history children should study: their own country\'s or the world\'s. Pride, global understanding and cross-border causes all serve that choice. Timetable hours, teacher training and trip costs are real school issues, but none decides which history is taught.' }
       ] }
     }]
   });

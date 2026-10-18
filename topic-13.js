@@ -95,7 +95,7 @@
               { s: '<s>Firstly, cameras stop crime. Secondly, they give evidence. Thirdly, they make people feel safe. Moreover, they are cheap.</s>', g: 'Fails check 6 (a linker on every sentence) and check 4 (four claims, no mechanism, no example).' },
               { s: '<s>In a nutshell, it\'s clear that you can\'t stop kids using phones.</s>', g: 'Fails check 7 (a memorised phrase) and check 8 (contractions, "you", "kids").' },
               { s: 'In conclusion, the answer is better buses first and the dirtiest cars gone after, because a city must protect its air and keep people moving.', g: 'Passes checks 1 and 2: the position restated in fresh words, the reason, nothing new.' },
-              { s: '<s>In conclusion, councils should invest in buses, and they should also build cycle lanes across the whole city.</s>', g: 'Fails check 2: cycle lanes appear nowhere in the body.' }
+              { s: '<s>In conclusion, councils should invest in buses, and they should also lower the price of petrol.</s>', g: 'Fails check 2: petrol prices appear nowhere in the body.' }
             ]
           },
           items: [
@@ -269,7 +269,44 @@
           _good: 'I believe that schools should start a foreign language in the earliest grades through play, as long as reading in the first language is protected.',
           _bad: 'Some people think languages should start early and some people think later, so it depends on the child.',
           hint: 'Your sentence must say whether you agree or disagree with early language lessons and add the condition that makes the position your own.',
-              why: 'By minute 10 the examiner can quote what you think: agree, with the condition that protects the first language. That condition is the nuance of Body A already planned. "Some people think … it depends" describes the debate and puts nothing on the page that can be marked as a position.' }
+              why: 'By minute 10 the examiner can quote what you think: agree, with the condition that protects the first language. That condition is the nuance of Body A already planned. "Some people think … it depends" describes the debate and puts nothing on the page that can be marked as a position.' },
+        { id: 'm13ckq9', type: 'choose', tag: 'struct-time', level: 'B1',
+          stem: 'By which minute should the eleven variables be on the question paper?',
+          options: ['Minute 1', 'Minute 5', 'Minute 10', 'Minute 20'],
+          answer: 1,
+          hint: 'Recall how long the protocol gives to decoding and planning.',
+          why: 'Five minutes to decode and fill the matrix, then thirty to write. With the variables on paper by minute 5, the position can be on the page by minute 10.' },
+        { id: 'm13ckq10', type: 'judge', tag: 'kn-test-facts', level: 'B2',
+          given: 'The examiner marks the planning notes you write on the question paper.',
+          stem: 'Is this claim about the test correct?',
+          answer: 1,
+          hint: 'Think about which sheet the examiner actually reads.',
+          why: 'False. Only the answer is marked; the matrix on the question paper is free. That is why the five planning minutes cost nothing in marks and save many.' },
+        { id: 'm13ckq11', type: 'spot', tag: 'tr-new-idea', level: 'B2', prompt: 'p-cashless',
+          stem: 'Tap the chunk that fails check 2 in this conclusion.',
+          words: ['In conclusion,', 'the change is positive', 'as long as cash', 'stays legal for those who need it,', 'and banks should also cut their fees for students.'],
+          answer: 4,
+          fix: '(delete) Bank fees never appeared earlier in the essay; end at "need it".',
+          hint: 'Compare each chunk with what the body of an essay on this prompt would have developed.',
+          why: 'Check 2 asks for the position restated in fresh words, with no new idea. Student bank fees appear nowhere in the body, so they arrive with no mechanism or example. The verdict and its condition were already complete.' },
+        { id: 'm13ckq12', type: 'choose', tag: 'struct-length', level: 'B2',
+          stem: 'Minute 37: 238 words, and the conclusion is written. What is the best use of the time?',
+          options: ['Add a third body paragraph of about forty words', 'Add a sentence to the thinner body paragraph, then check', 'Rewrite the introduction so that it is twice as long', 'Copy out the instruction sentence again at the end'],
+          answer: 1,
+          hint: 'Ask where extra words do real work, and how many minutes the final read needs.',
+          why: 'One more sentence of real development, an example or a nuance in the thinner body, lifts the count past 250 without a new idea, and leaves time to check. A new paragraph cannot be developed in time, a longer introduction steals the body\'s words, and copied prompt words are discounted.' },
+        { id: 'm13ckq13', type: 'sort', tag: 'lr-register', level: 'B2', prompt: 'p-private-tutoring',
+          stem: 'Sort each sentence: does it pass check 8 (formal register), or fail it?',
+          bins: [{ key: 'pass', label: 'Passes', hint: 'formal' }, { key: 'fail', label: 'Fails', hint: 'breaks check 8' }],
+          items: [{ text: 'Many parents cannot afford private tutoring.', bin: 'pass' }, { text: 'You can\'t blame parents for paying for tutoring.', bin: 'fail' }, { text: 'Is it fair that only rich families can pay?', bin: 'fail' }, { text: 'Tutoring costs families a great deal of money.', bin: 'pass' }, { text: 'Tutoring is a total waste of money!', bin: 'fail' }, { text: 'Families on low incomes are left behind.', bin: 'pass' }],
+          hint: 'Check each sentence for contractions, "you", questions to the reader and exclamation marks.',
+          why: 'Check 8 bans contractions, "you", rhetorical questions and exclamation marks. The three that pass use impersonal subjects and full forms; each of the three that fail has at least one banned feature.' },
+        { id: 'm13ckq14', type: 'choose', tag: 'kn-test-facts', level: 'C1',
+          stem: 'When does a memorised answer receive Band 0?',
+          options: ['When there is proof the whole answer was memorised', 'When the essay begins with one memorised opening line', 'When the essay is shorter than 250 words', 'When the essay contains three clichés'],
+          answer: 0,
+          hint: 'Recall how much of the answer must be memorised, and what the examiner needs, before the lowest band applies.',
+          why: 'The descriptors keep Band 0 for an answer that is "totally memorised", with proof. A memorised opener or a few clichés are judged under Lexical Resource as memorised language, and length has no fixed deduction.' }
       ] }
     }]
   });

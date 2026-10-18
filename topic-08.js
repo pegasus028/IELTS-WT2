@@ -24,7 +24,7 @@
             ],
             examples: [
               { s: 'The adoption of remote working by large firms has emptied many city-centre offices.', g: 'adopt → adoption. The noun phrase is the subject, and "by large firms" hangs from it.' },
-              { s: '<s>The economical growth of Bangkok has increased the number of cars.</s>', g: 'Wrong family member. Economical means cheap to run; the adjective for the economy is economic.' },
+              { s: '<s>The economical cost of flooding falls hardest on small shops.</s>', g: 'Wrong family member. Economical means cheap to run; the adjective for the economy is economic.' },
               { s: 'A ban on private cars in the centre would cut the fumes that people breathe.', g: 'Ban is verb and noun with no change of form; its partner preposition is "on".' },
               { s: '<s>Learning languages young</s> → early foreign-language instruction', g: 'The Core Topic moves from a verb phrase (learning) to a noun phrase (instruction).' }
             ]
@@ -92,10 +92,10 @@
               '<p>Do not overdo it. "The improvement of attendance was the result of the introduction of a later start" has no action. Keep one dense subject and one live verb: "The introduction of a later start improved attendance."</p>'
             ],
             examples: [
-              { s: 'Because prices rose, people bought less. → Rising prices reduced consumption.', g: 'Cause clause → subject noun phrase; effect clause → object noun phrase; "reduced" is the verb of change.' },
-              { s: 'When the fare was removed, more people used the buses. → The removal of the fare raised bus use.', g: '"Removed" becomes "removal"; "more people used" becomes "raised … use". No "when", no "so".' },
-              { s: '<s>The improvement of attendance was the result of the introduction of a later start.</s>', g: 'Over-nominalised: three verb-nouns and only "was". The action has been buried.' },
-              { s: 'The introduction of a later start improved attendance at several schools.', g: 'One nominalised subject, one live verb. Dense and readable.' }
+              { s: 'Because more people cycled, the air got cleaner. → The rise in cycling cleaned the air.', g: 'Cause clause → subject noun phrase; effect clause → object noun phrase; "cleaned" is the verb of change.' },
+              { s: 'When the library opened late, more students studied there. → Later opening hours drew more students to the library.', g: '"Opened late" becomes "later opening hours"; "more students studied" becomes "drew more students". No "when", no "so".' },
+              { s: '<s>The reduction of traffic was the result of the introduction of a congestion charge.</s>', g: 'Over-nominalised: three verb-nouns and only "was". The action has been buried.' },
+              { s: 'The introduction of a congestion charge reduced traffic in the centre.', g: 'One nominalised subject, one live verb. Dense and readable.' }
             ]
           },
           items: [
@@ -162,10 +162,10 @@
               '<p>If the subject is so long that you cannot find the head, split the sentence. A correct simple sentence scores higher than a complex one with an error.</p>'
             ],
             examples: [
-              { s: 'The widespread adoption of remote working by large companies <u>has</u> changed the centre of Bangkok.', g: 'Head noun: adoption. "Companies" is inside a "by" phrase and does not count.' },
-              { s: 'The number of students at tutoring centres <u>rises</u> every year.', g: '"The number of" is singular: the head is "number".' },
-              { s: 'A number of Bangkok schools <u>have</u> already replaced their vending machines.', g: '"A number of" means many; the verb agrees with "schools".' },
-              { s: '<s>Each of the measures proposed by the council require money.</s>', g: 'Head: each, always singular. The verb must be "requires".' }
+              { s: 'The rapid growth of online shopping among young people <u>has</u> emptied many small shops.', g: 'Head noun: growth. "Young people" is inside an "among" phrase and does not count.' },
+              { s: 'The number of cars in the city centre <u>falls</u> on public holidays.', g: '"The number of" is singular: the head is "number".' },
+              { s: 'A number of large firms <u>have</u> moved staff to a three-day office week.', g: '"A number of" means many; the verb agrees with "firms".' },
+              { s: '<s>Each of the students in the final-year classes need a quiet place to study.</s>', g: 'Head: each, always singular. The verb must be "needs".' }
             ]
           },
           items: [
@@ -265,7 +265,44 @@
           words: ['The economy benefits', 'of tourism', 'are clear,', 'but the environmental costs', 'are often ignored', 'by local councils.'], answer: 0,
           fix: 'The economic benefits',
           hint: 'Check each noun phrase across the sentence and ask whether every word describing a noun is in the right form for that job.',
-              why: '"Economy" is the noun; the adjective that describes benefits is "economic". Note that "environmental costs" in the same sentence is correct: environment (noun) → environmental (adjective). Learn each family as a set.' }
+              why: '"Economy" is the noun; the adjective that describes benefits is "economic". Note that "environmental costs" in the same sentence is correct: environment (noun) → environmental (adjective). Learn each family as a set.' },
+        { id: 'm08ckq9', type: 'choose', tag: 'gra-word-form', level: 'B1', prompt: 'p-climate-action',
+          stem: 'Choose the right form: "The ___ of factories by the state is needed to cut emissions."',
+          options: ['regulate', 'regulation', 'regulatory', 'regulated'],
+          answer: 1,
+          hint: 'Ask what part of speech fits between "The" and "of".',
+          why: '"The ___ of" is a noun slot: regulate → regulation. The adjective "regulatory" and the participle "regulated" can describe a noun but cannot be one, and the verb cannot follow "the".' },
+        { id: 'm08ckq10', type: 'judge', tag: 'gra-agreement', level: 'B2', prompt: 'p-libraries',
+          given: 'The opening of new libraries in poorer districts has given many children a quiet place to study.',
+          stem: 'Is the verb "has" correct here?',
+          answer: 0,
+          hint: 'Find the head noun of the whole subject before you look at the verb.',
+          why: 'True. The head of the subject is "opening", singular, so "has given" is right. "Libraries" and "districts" sit inside phrases that hang from the head and do not decide the verb.' },
+        { id: 'm08ckq11', type: 'choose', tag: 'gra-nominalisation', level: 'B2', prompt: 'p-minimum-wage',
+          stem: '"Because the minimum wage rose, poverty fell." Which version is nominalised: cause as subject, one verb of change, effect as object?',
+          options: ['The rise in the minimum wage reduced poverty.', 'The minimum wage rose, and this reduced poverty.', 'Poverty fell when the minimum wage rose.', 'Since the minimum wage rose, poverty was reduced.'],
+          answer: 0,
+          hint: 'Count the subject–verb pairs: a nominalised version needs only one.',
+          why: '"The minimum wage rose" becomes the noun phrase "the rise in the minimum wage"; "poverty fell" becomes the object; "reduced" is the verb of change. The others keep two clauses joined by "and this", "when" or "since".' },
+        { id: 'm08ckq12', type: 'sort', tag: 'gra-word-form', level: 'B1',
+          stem: 'Sort each word: the noun, or the adjective?',
+          bins: [{ key: 'n', label: 'Noun', hint: 'names a thing' }, { key: 'a', label: 'Adjective', hint: 'describes a noun' }],
+          items: [{ text: 'economy', bin: 'n' }, { text: 'economic', bin: 'a' }, { text: 'environment', bin: 'n' }, { text: 'environmental', bin: 'a' }, { text: 'reliance', bin: 'n' }, { text: 'reliant', bin: 'a' }],
+          hint: 'Ask which word could follow "the" and stand alone as the subject of a sentence.',
+          why: 'Economy, environment and reliance name things and can head a noun phrase; economic, environmental and reliant describe a noun. Mixing them up ("the economy benefits", "the environment costs") is one of the most common word-form errors in Task 2.' },
+        { id: 'm08ckq13', type: 'spot', tag: 'gra-agreement', level: 'C1', prompt: 'p-cashless',
+          stem: 'Tap the chunk that agrees with the wrong noun.',
+          words: ['The spread of', 'phone payments', 'among shops and markets', 'have made', 'cash', 'less useful.'],
+          answer: 3,
+          fix: 'has made',
+          hint: 'Set aside the phrases that follow the head noun, then read the head with the verb.',
+          why: 'The head is "spread", singular, so "has made". "Payments", "shops" and "markets" all sit inside phrases that hang from it, and the nearest plural is the one that misleads.' },
+        { id: 'm08ckq14', type: 'choose', tag: 'gra-complex', level: 'C1', prompt: 'p-space',
+          stem: 'Which sentence nominalises the subject and keeps a live verb of change?',
+          options: ['The funding of space research is the cause of the creation of new technology.', 'Public funding of space research produces new technology.', 'There is creation of new technology through the funding of space research.', 'New technology is created by the funding of research into space.'],
+          answer: 1,
+          hint: 'Check whether the main verb does the work of changing something, or only links nouns.',
+          why: '"Public funding of space research" is one dense subject, and "produces" is a live verb of change. The others bury the action in "is the cause of the creation of", "there is creation" or a passive. Nominalise the subject, not the action.' }
       ] }
     }]
   });

@@ -23,9 +23,9 @@
               '<p>Do not swap a plain word for a rare one you are not sure of. "Paramount" means most important, not everywhere. "Reduce" is safer than "curtail". A rare word used wrongly lowers the mark.</p>'
             ],
             examples: [
-              { s: 'Long sentences act as a deterrent only if offenders expect to be caught.', g: '"Act as a deterrent" is the fixed pair. "Work as" or "play as" a deterrent reads as a slip.' },
+              { s: 'Speed cameras act as a deterrent only where drivers know they are there.', g: '"Act as a deterrent" is the fixed pair. "Work as" or "play as" a deterrent reads as a slip.' },
               { s: '<s>Cheap fast food does a lot of damage to public health.</s> → Cheap fast food does considerable damage to public health.', g: '"Do damage" is right; "a lot of" is the register error. Both the partner and the register matter.' },
-              { s: '<s>Tutoring centres are paramount in Bangkok.</s> → Tutoring centres are widespread in Bangkok.', g: 'Paramount means "most important". The writer meant "everywhere"; a plain word is precise, the rare one is wrong.' },
+              { s: '<s>Mobile phones are paramount among Thai teenagers.</s> → Mobile phones are almost universal among Thai teenagers.', g: 'Paramount means "most important". The writer meant "everywhere"; a plain word is precise, the rare one is wrong.' },
               { s: 'Planting trees along canals would mitigate flooding rather than prevent it.', g: 'Mitigate = make less severe. The right verb for flooding, climate change and damage; it never means "stop".' }
             ]
           },
@@ -174,7 +174,7 @@
             examples: [
               { s: '<s>Kids these days don\'t get enough sleep.</s> → Many adolescents now sleep less than they need.', g: 'Kids → adolescents; don\'t → full form; "these days" → now. Same idea, formal register.' },
               { s: '<s>If you drive into the centre, you pay a fee.</s> → Drivers who enter the centre pay a fee.', g: '"You" becomes an impersonal subject. The sentence no longer talks to the reader.' },
-              { s: '<s>Why should taxpayers pay for other people\'s buses?</s> → Taxpayers should not fund bus travel for passengers who can afford the fare.', g: 'A rhetorical question becomes a statement, and the statement says what the question only hinted at.' },
+              { s: '<s>Why should parents pay twice for the same lessons?</s> → Parents should not have to pay for tutoring that repeats what schools already teach.', g: 'A rhetorical question becomes a statement, and the statement says what the question only hinted at.' },
               { s: '<s>In a nutshell, working from home is a blessing in disguise.</s> → Working from home saves commuting time but costs daily contact with colleagues.', g: 'Two clichés replaced by the actual trade-off. The second sentence contains an idea; the first contained none.' }
             ]
           },
@@ -283,7 +283,44 @@
           _good: 'Many teenagers get too little sleep because they use their phones late into the night, which damages their concentration.',
           _bad: 'Nowadays a lot of kids don\'t get enough sleep because they\'re on their phones all night, which is really bad.',
           hint: 'Replace each listed spoken word with a formal one, write full forms, and turn the vague ending into a specific effect while keeping the cause.',
-              why: 'Kids → teenagers; a lot of → many; don\'t and they\'re → full forms; "nowadays" and "really bad" go, and "which is bad" becomes a specific effect. The cause (phones at night) stays, because the register changed and the argument did not.' }
+              why: 'Kids → teenagers; a lot of → many; don\'t and they\'re → full forms; "nowadays" and "really bad" go, and "which is bad" becomes a specific effect. The cause (phones at night) stays, because the register changed and the argument did not.' },
+        { id: 'm10ckq9', type: 'choose', tag: 'lr-collocation', level: 'B2', prompt: 'p-climate-action',
+          stem: 'Choose the partner: "Governments can ___ strict limits on factory emissions."',
+          options: ['make', 'impose', 'do', 'put up'],
+          answer: 1,
+          hint: 'Recall the verb a government uses with taxes, bans and limits.',
+          why: '"Impose limits on" is the natural partner: a government imposes limits, taxes and bans. "Make" and "do" are the wrong partners here, and "put up" means build or tolerate.' },
+        { id: 'm10ckq10', type: 'spot', tag: 'lr-register', level: 'B1', prompt: 'p-cashless',
+          stem: 'Tap the informal chunk.',
+          words: ['Paying by phone', 'is super fast,', 'but older shoppers', 'often prefer', 'cash.'],
+          answer: 1,
+          fix: 'is very quick,',
+          hint: 'Read each chunk as if a headteacher will see it, and find the one you would only say to a friend.',
+          why: '"Super fast" is spoken English. "Very quick", "fast" or "convenient" keeps the point in formal register; the rest of the sentence is already fine.' },
+        { id: 'm10ckq11', type: 'choose', tag: 'lr-domain', level: 'B2',
+          stem: 'Complete the education-kit pair: "Smaller classes give teachers time for ___ learning, matched to each student."',
+          options: ['personalised', 'personal', 'personable', 'personality'],
+          answer: 0,
+          hint: 'Ask which word describes teaching that has been adapted, rather than describing a person.',
+          why: '"Personalised learning" means teaching shaped to each student, which is what "matched to each student" describes. "Personal learning" is learning you do for yourself, "personable" describes a friendly person, and "personality" is a noun.' },
+        { id: 'm10ckq12', type: 'judge', tag: 'lr-precision', level: 'B2',
+          given: 'A rarer word always lifts Lexical Resource, even when its meaning is slightly off.',
+          stem: 'True or false?',
+          answer: 1,
+          hint: 'Recall what the Band 8 descriptor says words must convey.',
+          why: 'False. Band 8 Lexical Resource rewards "precise meanings". A rare word used slightly wrongly is an error in word choice and can pull the mark down; the right common word in the right place is safer and scores better.' },
+        { id: 'm10ckq13', type: 'sort', tag: 'lr-memorised', level: 'C1',
+          stem: 'Sort each sentence: memorised language, or the writer\'s own?',
+          bins: [{ key: 'mem', label: 'Memorised', hint: 'fits any essay' }, { key: 'own', label: 'Her own', hint: 'only this prompt' }],
+          items: [{ text: 'In this day and age, technology plays a vital role in our lives.', bin: 'mem' }, { text: 'Free buses would bring some drivers out of their cars, but only on routes that run often.', bin: 'own' }, { text: 'It goes without saying that education is the key to success.', bin: 'mem' }, { text: 'A tax on sugary drinks makes the healthy choice the cheaper one.', bin: 'own' }, { text: 'At the end of the day, money cannot buy happiness.', bin: 'mem' }, { text: 'Cameras in stations help the police find a thief after the event more often than they stop one.', bin: 'own' }],
+          hint: 'Ask whether each sentence could open an essay on almost any subject, or only on one prompt.',
+          why: 'Stock phrases ("in this day and age", "it goes without saying", "at the end of the day") fit any essay, so they show no control of language and read as memorised. The other three say something specific that only this writer, on this prompt, would write.' },
+        { id: 'm10ckq14', type: 'choose', tag: 'lr-collocation', level: 'C1', prompt: 'p-gm-crops',
+          stem: 'Choose the verb: "Supporters argue that GM crops could ___ food shortages in dry regions."',
+          options: ['abolish', 'repeal', 'alleviate', 'demolish'],
+          answer: 2,
+          hint: 'Check the kind of noun each verb normally takes as its object.',
+          why: '"Alleviate" means make a problem less severe, and it partners naturally with shortages, poverty and congestion. "Abolish" and "repeal" belong to laws and systems, and "demolish" to buildings.' }
       ] }
     }]
   });

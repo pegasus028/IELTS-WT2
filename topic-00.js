@@ -24,7 +24,7 @@
             ],
             examples: [
               { s: 'Task 1: 20 minutes, 150+ words, one third of the score. Task 2: 40 minutes, 250+ words, two thirds of the score.', g: 'The arithmetic of the Writing test. Learn it cold.' },
-              { s: '5 minutes decode and plan · 30 minutes write · 5 minutes check. Position on the page by minute 10.', g: 'The 5 / 30 / 5 protocol every timed essay in this app follows.' },
+              { s: 'Five minutes to decode the prompt and fill the matrix · thirty to draft · five to proofread. Position on the page by minute 10.', g: 'The 5 / 30 / 5 protocol every timed essay in this app follows.' },
               { s: '<s>Advantages: · cheaper · faster · greener</s>', g: 'Bullet points are notes, not an essay. This costs marks in Coherence and Cohesion and gives the examiner nothing to assess.' },
               { s: '<s>In the modern world, technology plays an important role in our lives, and…</s> (for a prompt about school uniforms)', g: 'A memorised essay on the wrong topic: off topic and memorised at once. The examiner cannot score what does not answer the question.' }
             ]
@@ -91,10 +91,10 @@
               '<p>The criterion names the fix. "No opinion" is TR. "Too many linking words" is CC. "Wrong word partner" is LR. "Verb does not match subject" is GRA.</p>'
             ],
             examples: [
-              { s: '"The writer never says which view they hold." → Task Response, the 6→7 gate.', g: 'No clear position caps TR at 6.' },
+              { s: '"The essay never makes clear what the writer thinks." → Task Response, the 6→7 gate.', g: 'No clear position caps TR at 6.' },
               { s: '"Firstly… Secondly… Moreover… In conclusion…" → Coherence and Cohesion, Band 6: "mechanical".', g: 'Visible, mechanical cohesion. Band 7 wants reference and progression instead.' },
               { s: '"<s>Make a solution</s>" → "find a solution": Lexical Resource, the collocation gate.', g: 'Not a rare word; the usual partner word.' },
-              { s: '"<s>The number of cars have risen</s>" → "has risen": Grammatical Range and Accuracy.', g: 'One error in a complex sentence. Band 8 needs the majority error-free.' }
+              { s: '"<s>The number of students are falling</s>" → "is falling": Grammatical Range and Accuracy.', g: 'One error in a complex sentence. Band 8 needs the majority error-free.' }
             ]
           },
           items: [
@@ -256,7 +256,43 @@
           given: 'Writing 350 words is safer than writing 280, because a longer essay shows more language.',
           stem: 'True or false?', answer: 1,
           hint: 'Compare both lengths with the recommended target range, and ask what each one does to accuracy and to checking time.',
-              why: 'False. Beyond about 320 words the errors multiply, the five checking minutes disappear, and the extra sentences are usually the weakest. 260–290 is the safe band.' }
+              why: 'False. Beyond about 320 words the errors multiply, the five checking minutes disappear, and the extra sentences are usually the weakest. 260–290 is the safe band.' },
+        { id: 'm00ckq9', type: 'choose', tag: 'kn-test-facts', level: 'B2',
+          stem: 'Words copied from the prompt into your essay: how does the examiner treat them?',
+          options: ['They count towards the word total like any other words', 'They are not counted as your own words', 'They earn extra credit for staying close to the topic', 'They are marked twice, once for each criterion they touch'],
+          answer: 1,
+          hint: 'Ask whose language the examiner is trying to measure when the essay is read.',
+          why: '"Any copied rubric must be discounted": words lifted from the prompt are not treated as your language when the examiner judges it. Name the issue in your own words instead, for example with a Core Topic.' },
+        { id: 'm00ckq10', type: 'choose', tag: 'struct-time', level: 'B1',
+          stem: 'You finish the conclusion at minute 33. What is the best use of the time left?',
+          options: ['Start a second, better version of Body B', 'Check it for your own most common errors', 'Add a third body paragraph with a fresh idea', 'Count every word twice to be sure of the total'],
+          answer: 1,
+          hint: 'Think about what the extra minutes should protect: new material, or what is already written?',
+          why: 'The last minutes belong to checking, and starting early is a gift. A new paragraph or a rewrite brings fresh errors and undeveloped ideas; a hunt for your own usual errors makes more sentences error-free.' },
+        { id: 'm00ckq11', type: 'sort', tag: 'lr-register', level: 'B2',
+          stem: 'Sort each phrase: formal enough for the essay, or spoken English?',
+          bins: [{ key: 'f', label: 'Formal', hint: 'written, careful' }, { key: 's', label: 'Spoken', hint: 'said to a friend' }],
+          items: [{ text: 'considerable', bin: 'f' }, { text: 'loads of', bin: 's' }, { text: 'young people', bin: 'f' }, { text: 'stuff', bin: 's' }, { text: 'In my view,', bin: 'f' }, { text: 'Let\'s face it,', bin: 's' }],
+          hint: 'Ask whether you would say each one to a friend, or write it in a letter to a headteacher.',
+          why: 'Formal register uses full forms, precise nouns and measured quantifiers. "Loads of", "stuff" and "Let\'s face it" are conversation, and the examiner reads them as a register slip whatever the argument. "In my view" is a normal way to mark your position.' },
+        { id: 'm00ckq12', type: 'judge', tag: 'kn-criteria', level: 'B2',
+          given: 'The examiner rates each of the four criteria in whole bands, and the Task 2 estimate is their average.',
+          stem: 'True or false?',
+          answer: 0,
+          hint: 'Recall what the examiner gives a band to, and how a figure such as 6.75 can appear.',
+          why: 'True. Task Response, Coherence and Cohesion, Lexical Resource and Grammatical Range and Accuracy each get a whole band, and the estimate is their mean: 7, 7, 6 and 7 give 6.75. There is no separate mark for each paragraph.' },
+        { id: 'm00ckq13', type: 'choose', tag: 'struct-length', level: 'B2',
+          stem: 'Your essay is 240 words when the time ends. What is true?',
+          options: ['It loses a fixed number of marks for each word below 250.', 'Task Response is capped at Band 5 because it is short.', 'There is no fixed deduction, but it may show too little.', 'It cannot be marked at all, so it receives Band 0.'],
+          answer: 2,
+          hint: 'Recall what the official rules say about length below the minimum, and what they leave to the examiner.',
+          why: 'There is no fixed deduction and no published cap. A short essay may simply not show enough of the language needed for a higher band, so aim for 260 to 290 words. Band 0 is for answers that are totally memorised or not attempted.' },
+        { id: 'm00ckq14', type: 'choose', tag: 'kn-criteria', level: 'C1',
+          stem: 'Which change lifts Coherence and Cohesion from Band 6 towards Band 7?',
+          options: ['More linkers such as "Moreover" in every paragraph', 'Phrases such as "this policy" used flexibly', 'Longer paragraphs, each holding two ideas', 'A heading above each paragraph'],
+          answer: 1,
+          hint: 'Recall what Band 7 says about the ways sentences point back to each other.',
+          why: 'Band 7 Coherence and Cohesion uses "reference and substitution … flexibly", and Band 6 cohesion is often "mechanical". Extra linkers make it more mechanical, two ideas per paragraph break "a clear central topic", and headings turn the essay into notes.' }
       ] }
     }]
   });

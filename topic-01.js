@@ -99,8 +99,8 @@
               '<p>Outweigh: say which side is heavier and why. Causes and solutions: each solution must fix a cause you named. Two questions: one paragraph each.</p>'
             ],
             examples: [
-              { s: 'On balance, the disadvantages of online lessons outweigh the advantages for most secondary students, so they should support the classroom rather than replace it.', g: 'A verdict: which side is heavier, and a hint of why. This is what "outweigh" asks for.' },
-              { s: '<s>Online lessons have several advantages and several disadvantages, which this essay will discuss.</s>', g: 'A list announced, no scale. The outweigh trap.' },
+              { s: 'On balance, the disadvantages of television outweigh the advantages for young children, so their viewing should be limited.', g: 'A verdict: which side is heavier, and a hint of why. This is what "outweigh" asks for.' },
+              { s: '<s>Television has several advantages and several disadvantages for children, which this essay will discuss.</s>', g: 'A list announced, no scale. The outweigh trap.' },
               { s: 'Cause: concrete and asphalt cover the land that once soaked up rain. → Solution: require parks and absorbent surfaces in every new development.', g: 'The arrow from cause to solution. The solution answers the named cause.' },
               { s: '<s>Cause: concrete covers the land. → Solution: send flood warnings to every phone.</s>', g: 'A real measure that answers a different problem. Solution mismatch.' }
             ]
@@ -257,7 +257,44 @@
           stem: 'Which plan answers both questions in this prompt?',
           options: ['Body A: why graduates struggle; Body B: why employers struggle', 'Body A: advantages of university; Body B: disadvantages', 'Body A: the causes; Body B: measures that answer those causes', 'Body A: causes and measures; Body B: your opinion of universities'], answer: 2,
           hint: 'Check that the plan reaches both direct questions in the prompt and gives each one its own paragraph.',
-          why: 'Causes, then measures that answer them: two parts, one paragraph each. The first plan gives two paragraphs of causes and no measures; the others answer questions the prompt never asked.' }
+          why: 'Causes, then measures that answer them: two parts, one paragraph each. The first plan gives two paragraphs of causes and no measures; the others answer questions the prompt never asked.' },
+        { id: 'm01ckq9', type: 'choose', tag: 'kn-question-type', level: 'B1', prompt: 'p-online-scams',
+          stem: 'Which type is this prompt?',
+          options: ['Two-part question', 'Discuss both views', 'Problem and solution', 'Opinion (agree or disagree)'],
+          answer: 2,
+          hint: 'Read the second question: does it ask for a judgement, or for action?',
+          why: '"Why is this happening?" asks for causes and "What can be done?" asks for measures: the problem / solution pair. A two-part question would ask for a judgement, such as "positive or negative?", in its second half.' },
+        { id: 'm01ckq10', type: 'judge', tag: 'tr-position-late', level: 'B2', prompt: 'p-animal-testing',
+          given: 'For this prompt it is enough to give your opinion in the final paragraph, as long as both views are explained fairly first.',
+          stem: 'True or false?',
+          answer: 1,
+          hint: 'Ask when the examiner should first learn which view you hold.',
+          why: 'False. Discuss both views asks for your own opinion as well, and the examiner should meet it in the introduction and again in the conclusion. An opinion that first appears at the end leaves the position unclear for most of the essay, which is the Band 6 pattern.' },
+        { id: 'm01ckq11', type: 'choose', tag: 'tr-solution-mismatch', level: 'B2', prompt: 'p-online-scams',
+          stem: 'Named cause: scam messages copy the style of a friend\'s account, so young users trust them. Which measure answers that cause?',
+          options: ['Longer prison sentences for scammers who are caught', 'Teaching students to confirm a friend\'s request by phone', 'Banks that refund every victim within a week', 'Free antivirus software installed on every school laptop'],
+          answer: 1,
+          hint: 'Find what the named cause says makes the scam work, then choose the measure that acts on that exact point.',
+          why: 'The cause is trust in a message that looks like a friend\'s, so the measure must break that trust at the moment of the request: a quick call to check. Prison sentences and refunds act after the money is gone, and antivirus software does not stop a person choosing to send money.' },
+        { id: 'm01ckq12', type: 'select', tag: 'tr-partial', level: 'B2', prompt: 'p-teen-sleep',
+          stem: 'Tick the four parts this prompt requires.',
+          options: ['Whether the trend is positive or negative', 'The causes of the lack of sleep', 'A measure for schools', 'Why teachers prefer later lessons', 'A measure for parents', 'A measure for governments'],
+          answers: [1, 2, 4, 5],
+          k: 4,
+          hint: 'Underline the question words, and every group of people the prompt names.',
+          why: 'The prompt asks for causes and then names three actors: schools, parents and governments. Each named actor needs its own measure, or part of the question is unanswered. No judgement of positive or negative is asked for, and teachers\' preferences are a different question.' },
+        { id: 'm01ckq13', type: 'choose', tag: 'tr-listing', level: 'B2', prompt: 'p-cctv-everywhere',
+          stem: 'Which conclusion sentence answers the instruction of this prompt?',
+          options: ['Cameras bring both greater safety and a real loss of privacy.', 'On balance cameras do more good than harm, if footage is deleted quickly.', 'Cameras are now found in schools, stations, shopping centres and streets.', 'This essay has described the main benefits and costs of cameras.'],
+          answer: 1,
+          hint: 'Ask which sentence says which side is heavier, not just what is on each side.',
+          why: '"Do the advantages outweigh the disadvantages?" needs the scale read: which side is heavier. "More good than harm" is that verdict, with a condition. The others list both sides, repeat the background, or describe what the essay did.' },
+        { id: 'm01ckq14', type: 'choose', tag: 'kn-question-type', level: 'C1',
+          stem: 'A prompt ends: "What are the effects of this trend? What can be done to reduce them?" What must the essay contain?',
+          options: ['Effects of the trend, and measures that answer those effects', 'Causes of the trend, and measures that answer those causes', 'The advantages and disadvantages of the trend, with a verdict', 'Your opinion on whether the trend is positive or negative'],
+          answer: 0,
+          hint: 'Read the first question word by word: what does it ask you to name?',
+          why: 'This is the effects-and-solutions version of the problem / solution type. It asks for effects, not causes, so the measures must answer the effects named in Body A. An essay about causes answers a question the prompt did not ask.' }
       ] }
     }]
   });

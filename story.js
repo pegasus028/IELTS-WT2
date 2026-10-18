@@ -58,7 +58,10 @@
   function house(pr) { var s = ensure(pr); return s && s.house ? houseOf(s.house) : null; }
 
   /* ------------------------------------------------------------ gates */
-  function subPassed(pr, subId) { var r = pr.subs && pr.subs[subId]; return !!(r && r.best >= E().PASS_SUB); }
+  /* E1: a lesson she tested out of (passed its gate first) counts as passed. */
+  function subPassed(pr, subId) { if (P().subPassed) return P().subPassed(pr, subId); var r = pr.subs && pr.subs[subId]; return !!(r && r.best >= E().PASS_SUB); }
+  function testedOut(pr, subId) { var r = pr.subs && pr.subs[subId]; return !!(r && r.testedOut && !(r.best >= E().PASS_SUB)); }
+  function gateCount(lv) { return Math.min(E().GATE_DRAW || 8, lv.check.items.length); }
   function levelOf(levelId) { return E().Bank.level(levelId) || null; }
   function checkPassed(pr, levelId) {
     var lv = levelOf(levelId); if (!lv) return false;
@@ -180,11 +183,11 @@
     var B = E().Bank;
     if (m.kind === 'sub') {
       var sb = B.sub(m.id), t = sb ? B.topic(sb.topicId) : null;
-      return { label: sb ? sb.name : m.id, sub: t ? t.code + ' · ' + t.name + ' · ' + sb.items.length + ' questions' : '', done: subPassed(pr, m.id), ok: !!sb };
+      return { label: sb ? sb.name : m.id, sub: t ? t.code + ' · ' + t.name + ' · ' + sb.items.length + ' questions' + (testedOut(pr, m.id) ? ' · tested out — open any time for review' : '') : '', done: subPassed(pr, m.id), ok: !!sb };
     }
     if (m.kind === 'check') {
       var lv = levelOf(m.id);
-      return { label: lv ? lv.name + ': the examiner\'s gate' : m.id, sub: lv ? lv.check.items.length + ' questions · pass at 75%' + (P().checkUnlocked(pr, lv) ? '' : ' · finish the three lessons first') : '', done: checkPassed(pr, m.id), ok: !!lv, locked: lv ? !P().checkUnlocked(pr, lv) : true };
+      return { label: lv ? lv.name + ': the examiner\'s gate' : m.id, sub: lv ? gateCount(lv) + ' questions · pass at 75%' + (P().checkUnlocked(pr, lv) ? '' : ' · finish the three lessons first') : '', done: checkPassed(pr, m.id), ok: !!lv, locked: lv ? !P().checkUnlocked(pr, lv) : true, testOut: !!lv && !P().checkUnlocked(pr, lv) && !checkPassed(pr, m.id) };
     }
     if (m.kind === 'view') return { label: m.label, sub: m.note || '', done: viewMissionDone(pr, m), ok: true };
     if (m.kind === 'writing') return { label: m.label, sub: m.note || '', done: writingMissionDone(pr, m), ok: true };
@@ -251,7 +254,7 @@
   function housePoints(pr) {
     if (!pr) return 0;
     var B = E().Bank, subs = 0;
-    Object.keys(pr.subs || {}).forEach(function (id) { if (B.sub(id) && pr.subs[id].best >= E().PASS_SUB) subs++; });
+    Object.keys(pr.subs || {}).forEach(function (id) { if (B.sub(id) && subPassed(pr, id)) subs++; });
     var checks = P().checksCleared(pr);
     var mended = Math.min(100, 2 * (pr.reclaimed || 0));
     var sent = essaysSent(pr);
@@ -744,7 +747,9 @@
     html += '<div class="chapter-head"><p class="kicker">Chapter ' + ch.n + ' · ' + esc(ch.place) + '</p><h2>' + esc(ch.title) + '</h2><p class="chcard-blurb">' + esc(ch.blurb) + '</p><div class="chapter-acts"><button class="btn sm" id="ch-read">' + ((s.seen[ch.id] || []).length ? 'Read the pages again' : 'Read the pages') + '</button></div></div>';
     html += '<div class="card missions"><h3>Missions</h3><p class="tiny">Each one opens the class, the gate or the room it names. Come back here when you are done.</p>' + estimateHtml(ch) + '<div class="ckstack">' + list.map(function (m) {
       var i = m._info, dis = !i.ok || i.locked;
-      return missionPodRow(m) + '<button class="ckrow' + (i.done ? ' done' : '') + '" data-mi="' + m._i + '"' + (dis ? ' disabled' : '') + '><span class="ck-box">' + (i.done ? '✓' : '') + '</span><span class="ck-txt"><span class="ck-name">' + esc(i.label) + '</span><span class="ck-sub">' + esc(i.sub) + '</span></span><span class="ck-go">' + (dis ? 'locked' : (i.done ? 'again' : 'open') + ' →') + '</span></button>';
+      return missionPodRow(m) + '<button class="ckrow' + (i.done ? ' done' : '') + '" data-mi="' + m._i + '"' + (dis ? ' disabled' : '') + '><span class="ck-box">' + (i.done ? '✓' : '') + '</span><span class="ck-txt"><span class="ck-name">' + esc(i.label) + '</span><span class="ck-sub">' + esc(i.sub) + '</span></span><span class="ck-go">' + (dis ? 'locked' : (i.done ? 'again' : 'open') + ' →') + '</span></button>' +
+        /* E1: a locked gate can be tried before its lessons; pass it and the lessons count as passed */
+        (m.kind === 'check' && i.testOut ? '<button class="ckrow testout" data-testout="' + esc(m.id) + '"><span class="ck-box">?</span><span class="ck-txt"><span class="ck-name">Try the gate first</span><span class="ck-sub">Know this class already? Pass at 75% and its three lessons count as passed. No penalty if not.</span></span><span class="ck-go">try →</span></button>' : '');
     }).join('') + '</div></div>';
     var tm = list.filter(function (m) { return m.kind === 'writing' && m.thesis; })[0];
     if (tm) html += thesisBoxHtml(pr, tm);
@@ -757,6 +762,7 @@
     $('#ch-read', el).addEventListener('click', function () { st.screen = 'page'; st.page = 0; resume(); });
     var gb = $('#ch-gate', el); if (gb) gb.addEventListener('click', function () { st.screen = 'ending'; resume(); });
     $$('[data-mi]', el).forEach(function (b) { b.addEventListener('click', function () { launch(ch, list[Number(b.dataset.mi)]); }); });
+    $$('[data-testout]', el).forEach(function (b) { b.addEventListener('click', function () { if (host.setReturn) host.setReturn('story'); st.screen = 'chapter'; st.ch = ch.n; if (host.testOut) host.testOut(b.dataset.testout); else host.startCheck(b.dataset.testout); }); });
     $$('[data-mvid]', el).forEach(function (b) { b.addEventListener('click', function () { if (host.playVid) host.playVid(b.dataset.mvid); }); });
     $$('[data-mpod]', el).forEach(function (b) { b.addEventListener('click', function () { host.togglePod(document.getElementById('drop-mpod-' + b.dataset.mpod), b.dataset.mpod); }); });
     if (tm) wireThesisBox(el, pr, tm);

@@ -24,7 +24,7 @@
             ],
             examples: [
               { s: 'I agree that all students should gain work experience, provided that the hours are limited to protect their studies.', g: 'A position with a condition. The examiner can quote it; it is not a fence.' },
-              { s: 'The first reason is the practical skills and independence that paid work builds.', g: 'Facet A as a reason. "I agree because paid work builds skills" makes sense.' },
+              { s: 'The first reason is the confidence that dealing with real customers gives a teenager.', g: 'Facet A as a reason. "I agree because work builds confidence" makes sense.' },
               { s: '<s>I partly agree with this statement because both sides have their own strong points.</s>', g: 'The fence. Which part? The examiner cannot say what the writer thinks.' },
               { s: 'Admittedly, a demanding job can leave a student too tired to study; even so, a weekly limit on hours removes that risk.', g: 'A conceded counter-argument, answered. The position survives the objection.' }
             ]
@@ -168,8 +168,8 @@
             examples: [
               { s: 'Because concrete seals the soil and sends rain straight into old drains, the answer is parks and surfaces that let rain soak in.', g: 'Cause → solution. The arrow is inside the sentence.' },
               { s: '<s>The main cause is concrete covering the soil; the solution is for the world to cut carbon emissions.</s>', g: 'An orphan solution. It answers a cause the essay never named.' },
-              { s: 'In answer to the first question, the concentration of universities and skilled jobs in a few big cities pulls every ambitious school leaver away.', g: 'Body A of a two-part essay: it names the question and answers it with a facet.' },
-              { s: '<s>As for the second question, it is a positive development. In conclusion, …</s>', g: 'Question two answered in one sentence. Half the prompt is missing.' }
+              { s: 'In answer to the first question, cheap smartphones and free banking apps have made paying by phone easier than finding cash.', g: 'Body A of a two-part essay: it names the question and answers it with a facet.' },
+              { s: '<s>Turning to the second question, the change is mostly good. To conclude, …</s>', g: 'Question two answered in one sentence. Half the prompt is missing.' }
             ]
           },
           items: [
@@ -277,7 +277,45 @@
           given: 'Plan: Body A explains the competition for university places; Body B argues that the gap between families who can pay and those who cannot makes tutoring a negative development.',
           stem: 'Does this plan answer both questions in the prompt?', answer: 0,
           hint: 'Match each body paragraph to one of the two questions and see whether either question is left over.',
-          why: 'True. Body A answers "why has this become so common" with a cause, and Body B answers "positive or negative" with the adjective and a reason for it. One body per question is the two-part shape. Had Body B given a second reason for the growth of tutoring, the second question would have no paragraph at all.' }
+          why: 'True. Body A answers "why has this become so common" with a cause, and Body B answers "positive or negative" with the adjective and a reason for it. One body per question is the two-part shape. Had Body B given a second reason for the growth of tutoring, the second question would have no paragraph at all.' },
+        { id: 'm12ckq9', type: 'choose', tag: 'kn-question-type', level: 'B1', prompt: 'p-cctv-everywhere',
+          stem: 'What does Task Response demand for this prompt?',
+          options: ['Both views treated fairly, then your opinion in the introduction and the conclusion.', 'A weighing: which side is heavier and why, stated from paragraph one.', 'Causes of the problem, each matched with a solution that answers it.', 'Two separate answers, one body paragraph for each direct question.'],
+          answer: 1,
+          hint: 'Name the type from the last sentence of the prompt first; the demand follows from the type.',
+          why: '"Do the advantages outweigh the disadvantages?" is a weighing. Develop the main advantage and the main disadvantage, then say which is heavier, from the introduction on. The other demands belong to discuss, problem and two-part prompts.' },
+        { id: 'm12ckq10', type: 'judge', tag: 'tr-no-position', level: 'B2', prompt: 'p-tablets-textbooks',
+          given: 'I partly agree: tablets should replace textbooks for reference work, but printed books should stay for reading long texts.',
+          stem: 'Is this an acceptable "partly agree" position?',
+          answer: 0,
+          hint: 'Check whether the writer names exactly which part is accepted and which is rejected.',
+          why: 'True. "Partly agree" is allowed when the writer names the part accepted (tablets for reference work) and the part rejected (printed books stay for long reading). The examiner can quote both halves.' },
+        { id: 'm12ckq11', type: 'sort', tag: 'kn-question-type', level: 'B2',
+          stem: 'Sort each instruction by what the position sentence must say.',
+          bins: [{ key: 'ag', label: 'Agree, and how far', hint: 'opinion' }, { key: 'hv', label: 'Which side is heavier', hint: 'advantages' }, { key: 'do', label: 'What must be done', hint: 'problem' }],
+          items: [{ text: 'To what extent do you agree or disagree?', bin: 'ag' }, { text: 'Do you agree or disagree with this view?', bin: 'ag' }, { text: 'Do the advantages of this outweigh the disadvantages?', bin: 'hv' }, { text: 'What are the benefits and drawbacks of this trend?', bin: 'hv' }, { text: 'What measures could be taken to reduce it?', bin: 'do' }, { text: 'What could schools and governments do about it?', bin: 'do' }],
+          hint: 'Ask what the examiner will look for in the position sentence for each instruction.',
+          why: 'Opinion instructions want agreement and its extent; advantage instructions want the heavier side, even when "outweigh" is missing; problem instructions want the action that must come first.' },
+        { id: 'm12ckq12', type: 'spot', tag: 'tr-solution-mismatch', level: 'B2', prompt: 'p-youth-unemployment',
+          stem: 'Body A named this cause: graduates lack the practical skills employers need. Tap the chunk that answers a different cause.',
+          words: ['To close this gap,', 'universities should', 'build work placements into degrees', 'and design courses with employers,', 'and governments should lower income tax', 'for young workers.'],
+          answer: 4,
+          fix: '(delete) A tax cut does not change the skills graduates learn.',
+          hint: 'Test each measure with "Because graduates lack practical skills, …" and see which one does not follow.',
+          why: 'Placements and courses designed with employers both change the skills graduates leave with, so they answer the named cause. A tax cut for young workers leaves the skills gap exactly as it was: it answers a cause nobody named.' },
+        { id: 'm12ckq13', type: 'select', tag: 'tr-partial', level: 'B2', prompt: 'p-rural-youth',
+          stem: 'Tick the two parts this prompt asks the essay to answer.',
+          options: ['The causes of traffic in the capital', 'The reasons young people leave villages and small towns', 'Measures to keep young people in the countryside', 'Both views on city life, then your opinion', 'Whether this is positive or negative for the country', 'The advantages of village life for children'],
+          answers: [1, 4],
+          k: 2,
+          hint: 'Count the question marks in the prompt and match each one to an option.',
+          why: 'Two direct questions: what the reasons are, and whether the movement is positive or negative for the country. Each gets its own body paragraph. Measures, both views and the advantages of village life answer prompts that were not set.' },
+        { id: 'm12ckq14', type: 'choose', tag: 'tr-solution-mismatch', level: 'C1', prompt: 'p-city-flooding',
+          stem: 'Body A named this cause: new housing has been built on wetlands that once stored floodwater. Which Body B measure answers it?',
+          options: ['Early-warning text messages before every heavy storm', 'Rules that keep the last wetlands free of building', 'Flood insurance for every family in a low-lying district', 'Bigger pumps at the mouths of the main canals'],
+          answer: 1,
+          hint: 'Test each measure with "Because housing replaced the wetlands, …" and ask which one acts on that cause.',
+          why: 'The cause is lost storage: water the wetlands once held now runs into the streets. Protecting the wetlands that remain keeps that storage, so the arrow is straight. Warnings and insurance act after the water rises, and pumps treat the overflow rather than the lost storage.' }
       ] }
     }]
   });

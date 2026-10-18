@@ -23,10 +23,10 @@
               '<p>For an "outweigh" question the verdict must say which side is heavier. For "positive or negative" it must say which. Write it in the introduction and again in the conclusion.</p>'
             ],
             examples: [
-              { s: 'Councils should invest in public transport while phasing out the dirtiest vehicles.', g: 'Takes the best of both: cleaner air (Facet A) and the ability to travel (Facet B), joined by "while".' },
-              { s: 'The disadvantages outweigh the advantages for most secondary students, so online lessons should add to the classroom rather than replace it.', g: 'Picks a side and says why. "Outweigh" answers the question that was asked.' },
+              { s: 'Parents should set limits on screen time while leaving room for devices used for schoolwork.', g: 'Takes the best of both: healthy limits (Facet A) and the devices learning needs (Facet B), joined by "while".' },
+              { s: 'For younger students the drawbacks are heavier, so online lessons should be kept for older year groups.', g: 'Picks a side and says why. "Heavier" answers the question that was asked.' },
               { s: '<s>Whether cars should be banned really depends on the city and on the people who live there.</s>', g: 'Fence-sitting. It describes the debate; the examiner still cannot say what the writer thinks.' },
-              { s: '<s>Every country must ban the private motor car outright if urban air quality is to improve.</s>', g: 'One side as an absolute. It forgets the nuance of Body A and over-generalises.' }
+              { s: '<s>Every child should be kept away from screens entirely until the age of twelve.</s>', g: 'One side as an absolute. It forgets the nuance of Body A and over-generalises.' }
             ]
           },
           items: [
@@ -95,10 +95,10 @@
               '<p>Test: put the position and the "because" sentence together. Does the second add a new level, a principle? If you could delete it and lose nothing, rewrite it.</p>'
             ],
             examples: [
-              { s: 'This view makes the most sense because good city policy has to protect the environment and keep people able to travel.', g: 'A principle: any good answer must do two things, and the verdict does both.' },
-              { s: '<s>This view makes the most sense because councils should invest in buses and trains and remove the most polluting cars.</s>', g: 'A restatement. The position in other words; the circle closes and nothing is explained.' },
-              { s: '<s>This view makes the most sense because the car industry also provides thousands of jobs.</s>', g: 'A new idea. No paragraph developed it, so it is a claim with no support, and it is not even about the verdict.' },
-              { s: 'This view makes the most sense because the cause is a clash between biology and the timetable, and only the timetable can be changed.', g: 'Points back to the cause named in Body A and forward to the solution: the reason the later start is the right answer.' }
+              { s: 'This view makes the most sense because a good rule for children must protect their health without cutting them off from learning.', g: 'A principle: any good answer must do two things, and the verdict does both.' },
+              { s: '<s>This view makes the most sense because parents should limit screens but allow devices for homework.</s>', g: 'A restatement. The position in other words; the circle closes and nothing is explained.' },
+              { s: '<s>This view makes the most sense because many tablets now come with built-in parental controls.</s>', g: 'A new idea. No paragraph developed it, so it is a claim with no support, and it is not even about the verdict.' },
+              { s: 'This view makes the most sense because rain cannot be stopped, but the ground it falls on can be changed.', g: 'Points back to the cause named in Body A and forward to the solution: the reason absorbent ground is the right answer.' }
             ]
           },
           items: [
@@ -166,9 +166,9 @@
             ],
             examples: [
               { s: 'Overall, neither side of the tourism debate can stand alone. Visitor numbers should be limited and the income aimed at culture and nature, because a place that sells its character loses the very thing visitors come for.', g: 'Issue, verdict, rationale. Every noun appeared earlier in the essay.' },
-              { s: '<s>In conclusion, this essay has discussed both the money that tourism brings and the damage it does to culture and nature.</s>', g: 'A summary. True, and the examiner already knew it. No position, no reason.' },
+              { s: '<s>In conclusion, the paragraphs above have shown the income visitors bring and the harm they cause.</s>', g: 'A summary. True, and the examiner already knew it. No position, no reason.' },
               { s: '<s>To sum up, visitor numbers should be limited, and airlines should also pay a carbon tax on every flight.</s>', g: 'A new idea. Nothing in the body explained the carbon tax; it is an undeveloped claim in the last paragraph.' },
-              { s: '<s>In conclusion, online lessons give students freedom to learn anywhere, but they also take away the discipline of a classroom.</s>', g: 'Listed, not weighed. The prompt asked "outweigh"; the conclusion never says which side is heavier.' }
+              { s: '<s>In conclusion, cameras make stations safer, but they also record the movements of innocent people.</s>', g: 'Listed, not weighed. The prompt asked "outweigh"; the conclusion never says which side is heavier.' }
             ]
           },
           items: [
@@ -273,7 +273,45 @@
           stem: 'The body discussed national pride and global understanding. Which sentence must NOT appear in the conclusion?',
           options: ['Schools should teach the national past as one case inside wider world processes.', 'Causes in history cross borders, so a course split by country misrepresents the past.', 'Neither national pride nor global understanding alone justifies a whole history course.', 'History teachers should also be given more hours of training in modern languages.'], answer: 3,
           hint: 'Compare the nouns in each sentence with the two things the stem says the body developed.',
-          why: 'Language training for teachers appears nowhere in the body, so it would be a new, undeveloped idea in the last paragraph. The other three are the verdict, the rationale and the evaluation of the two sides: exactly what a conclusion is for.' }
+          why: 'Language training for teachers appears nowhere in the body, so it would be a new, undeveloped idea in the last paragraph. The other three are the verdict, the rationale and the evaluation of the two sides: exactly what a conclusion is for.' },
+        { id: 'm06ckq9', type: 'choose', tag: 'tr-no-position', level: 'B1', prompt: 'p-animal-testing',
+          stem: 'Which sentence is a synthesized position for this prompt?',
+          options: ['Animal testing should stop at once, whatever it costs medicine.', 'Testing on animals should continue only where no proven alternative exists.', 'Both sides have strong arguments, and each case is different.', 'Testing on animals should continue freely, because human lives come first.'],
+          answer: 1,
+          hint: 'Ask which sentence gives a verdict and still keeps something that each side cares about.',
+          why: 'It keeps a side, testing continues, and builds in what the other view values: no animal is used where an alternative works. The first and last options are one side as an absolute, and the third is fence-sitting.' },
+        { id: 'm06ckq10', type: 'judge', tag: 'tr-listing', level: 'B2', prompt: 'p-foreign-pop-culture',
+          given: 'The gains for young people outweigh the losses, as long as schools keep local traditions in the timetable.',
+          stem: 'Does this verdict answer the question this prompt asks?',
+          answer: 0,
+          hint: 'Ask whether the sentence says which side is heavier.',
+          why: 'True. It reads the scale (the gains outweigh the losses) and adds a condition that respects the other side. A verdict does not need the exact words of the question, only its decision.' },
+        { id: 'm06ckq11', type: 'sort', tag: 'tr-generalised', level: 'B2', prompt: 'p-libraries',
+          stem: 'The position: libraries should be funded as public and digital services. Sort each "because" clause.',
+          bins: [{ key: 'rat', label: 'Rationale', hint: 'the principle' }, { key: 'rest', label: 'Restatement', hint: 'the position again' }, { key: 'new', label: 'New idea', hint: 'not in the body' }],
+          items: [{ text: 'because free access to knowledge only matters if everyone can actually reach it', bin: 'rat' }, { text: 'because councils should keep library buildings open and add online services', bin: 'rest' }, { text: 'because bookshops in many towns are closing down', bin: 'new' }, { text: 'because a fair society gives every citizen the same chance to learn', bin: 'rat' }, { text: 'because public money should pay for both the buildings and the websites', bin: 'rest' }, { text: 'because the price of e-books has fallen sharply', bin: 'new' }],
+          hint: 'Hold each clause against the position: does it say the same thing again, explain why it is right, or change the subject?',
+          why: 'A rationale gives the principle behind the verdict: access only matters if people can use it; a fair society offers everyone the chance to learn. A restatement says the position again, and a new idea brings in something the body never developed.' },
+        { id: 'm06ckq12', type: 'spot', tag: 'tr-new-idea', level: 'B2', prompt: 'p-competitive-sport',
+          stem: 'Tap the chunk that brings a new idea into this conclusion.',
+          words: ['In conclusion,', 'school sport should stay competitive', 'but reward effort over results,', 'and canteens should sell healthier food,', 'since resilience grows from trying again.'],
+          answer: 3,
+          fix: '(delete) Food never appeared earlier in the essay; the verdict and the reason are complete.',
+          hint: 'Compare each chunk with what the body of an essay on this prompt would have developed.',
+          why: 'Canteen food appears nowhere in the body, so it arrives in the last paragraph with no mechanism or example behind it. The verdict and the "since" clause are what a conclusion is for.' },
+        { id: 'm06ckq13', type: 'build', tag: 'tr-no-position', level: 'B2', prompt: 'p-elderly-care',
+          stem: 'Build the synthesized position: one side leads, and the other keeps a role.',
+          tiles: ['The state', 'should fund', 'the medical care', 'of older people,', 'while families', 'give the daily support', 'that only relatives can.'],
+          solution: 'The state should fund the medical care of older people, while families give the daily support that only relatives can.',
+          alt: [],
+          hint: 'Start with the side that leads, then join the role of the other side to it.',
+          why: 'One side leads (the state funds medical care) and the other keeps a real role (families give daily support), joined by "while". That is a verdict the examiner can quote: not a fence, and not one side as an absolute.' },
+        { id: 'm06ckq14', type: 'choose', tag: 'tr-generalised', level: 'C1', prompt: 'p-gm-crops',
+          stem: 'The position: GM crops should be grown after long independent testing. Which sentence is its rationale?',
+          options: ['Genetically modified crops should be tested by independent scientists for many years.', 'A technology that feeds millions is worth having only if its risks are known first.', 'Many farmers in Asia already grow genetically modified cotton.', 'Organic farming is becoming more popular in many rich countries.'],
+          answer: 1,
+          hint: 'Ask which sentence explains why the verdict is right, rather than repeating it or changing the subject.',
+          why: 'The rationale is the principle under the verdict: a benefit as large as feeding millions is worth having once its risks are known. The first option restates the position, and the cotton and organic sentences are an example and a new idea.' }
       ] }
     }]
   });

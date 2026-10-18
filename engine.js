@@ -200,8 +200,7 @@
         (p.plans[mockId].subs || []).forEach(function (subId) {
           var sb = SUBS[subId];
           if (!sb) return;
-          var rec = p.subs[subId];
-          if (rec && rec.best >= PASS_SUB) return;
+          if (subPassed(p, subId)) return;
           sb.items.forEach(function (it) { fromPlan.push(it.id); });
         });
       });
@@ -228,6 +227,75 @@
     return out;
   }
 
+  /* ------------------------------------------------- the gate pools (WP4)
+     Each examiner's gate holds a pool of fourteen questions; one attempt
+     draws eight of them, spread across the gate's tags (no tag gets a second
+     question until every tag in reach has one). A retry draws at least three
+     questions she has not met in that gate (once the pool is used up: three
+     that were not in her last attempt), and the tags she missed last time
+     are served first. The check record keeps `seen`, `lastIds` and
+     `lastMiss` for this (finishCheck writes them). */
+  var GATE_DRAW = 8, GATE_FRESH = 3;
+  function drawGate(p, lv) {
+    var pool = lv.check.items.slice(), n = Math.min(GATE_DRAW, pool.length);
+    if (pool.length <= n) return shuffle(pool);
+    var rec = (p && p.checks && p.checks[lv.check.id]) || {};
+    var seen = {}, last = {}, missed = {};
+    (rec.seen || []).forEach(function (id) { seen[id] = 1; });
+    (rec.lastIds || []).forEach(function (id) { last[id] = 1; });
+    (rec.lastMiss || []).forEach(function (tag) { missed[tag] = 1; });
+    var retry = (rec.lastIds || []).length > 0;
+    var unseen = pool.filter(function (it) { return !seen[it.id]; });
+    var freshOk = unseen.length >= GATE_FRESH ? function (it) { return !seen[it.id]; } : function (it) { return !seen[it.id] || !last[it.id]; };
+    /* tags in order of service: the ones she missed first, the rest after, each group shuffled */
+    var byTag = {}, tags = [];
+    shuffle(pool).forEach(function (it) { if (!byTag[it.tag]) { byTag[it.tag] = []; tags.push(it.tag); } byTag[it.tag].push(it); });
+    tags = tags.filter(function (t) { return missed[t]; }).concat(tags.filter(function (t) { return !missed[t]; }));
+    var picked = [], taken = {}, count = {};
+    function take(it) { picked.push(it); taken[it.id] = 1; count[it.tag] = (count[it.tag] || 0) + 1; }
+    /* the tag with the fewest questions so far that still has a candidate (ties: service order) */
+    function nextTag(ok) {
+      var best = null;
+      tags.forEach(function (t) {
+        if (!byTag[t].some(function (it) { return !taken[it.id] && ok(it); })) return;
+        if (best === null || (count[t] || 0) < (count[best] || 0)) best = t;
+      });
+      return best;
+    }
+    /* within a tag: a question never met in this gate first, then one not in the last attempt */
+    function pickFrom(t, ok) {
+      var c = byTag[t].filter(function (it) { return !taken[it.id] && ok(it); });
+      var nv = c.filter(function (it) { return !seen[it.id]; });
+      if (nv.length) return nv[0];
+      var nl = c.filter(function (it) { return !last[it.id]; });
+      return nl.length ? nl[0] : c[0];
+    }
+    function fill(ok, k) { while (k > 0 && picked.length < n) { var tg = nextTag(ok); if (!tg) break; take(pickFrom(tg, ok)); k--; } return k; }
+    if (retry) {
+      /* the fresh questions first: never met, then (pool used up) not in the last attempt */
+      var need = Math.min(GATE_FRESH, pool.filter(freshOk).length);
+      need = fill(function (it) { return !seen[it.id]; }, need);
+      fill(freshOk, need);
+    }
+    fill(function () { return true; }, n);
+    return shuffle(picked);
+  }
+  /* E1: which lessons of a level teach these tags? Each tag goes to the
+     lesson that spends the most questions on it. */
+  function lessonsForTags(lv, tags) {
+    var score = {};
+    (tags || []).forEach(function (tag) {
+      var best = null, bn = 0;
+      lv.subs.forEach(function (sb) {
+        var k = sb.items.filter(function (it) { return it.tag === tag; }).length;
+        if (k > bn) { bn = k; best = sb.id; }
+      });
+      if (best) score[best] = (score[best] || 0) + 1;
+    });
+    return lv.subs.filter(function (sb) { return score[sb.id]; })
+      .sort(function (a, b) { return score[b.id] - score[a.id]; });
+  }
+
   var Bank = {
     item: function (id) { return BANK[id]; },
     moduleForTag: function (tag) { return TAG_HOME[tag] ? SUBS[TAG_HOME[tag]] : null; },
@@ -248,6 +316,10 @@
     levelOf: function (id) { return LEVEL_OF[id]; },
     /* the examiner's gate an item belongs to ('' for lesson items) */
     checkOf: function (id) { return CHECK_OF[id] || ''; },
+    /* WP4: one attempt at a gate, drawn from its pool (see drawGate). */
+    drawGate: function (p, levelId) { var lv = LEVELS[levelId]; return lv ? drawGate(p, lv) : []; },
+    /* E1: the lessons of a level that teach the given tags, most-relevant first. */
+    lessonsForTags: function (levelId, tags) { var lv = LEVELS[levelId]; return lv ? lessonsForTags(lv, tags) : []; },
     allLevels: function () { return ALL_LEVELS; },
     all: function () { return BANK; },
 
@@ -848,6 +920,7 @@
   function mount(item, host) {
     host.innerHTML = '';
     host.dataset.type = item.type;
+    host.dataset.item = item.id || '';   /* lets a test script (and the Staff Room harness) see which question is up */
     var fn = RENDER[item.type] || RENDER.choose;
     return fn(host, item);
   }
@@ -906,10 +979,26 @@
     return idx;
   }
 
+  /* A lesson counts as passed at 60%, or when she tested out of it by passing
+     its examiner's gate first (E1: the record keeps its scores and gains a
+     `testedOut` date; it stays open for review). */
+  function subPassed(p, subId) {
+    var r = p && p.subs && p.subs[subId];
+    return !!(r && (r.best >= PASS_SUB || r.testedOut));
+  }
   function subsDone(p, lv) {
-    return lv.subs.filter(function (s) {
-      var r = p.subs[s.id]; return r && r.best >= PASS_SUB;
-    }).length;
+    return lv.subs.filter(function (s) { return subPassed(p, s.id); }).length;
+  }
+  /* E1: she passed the gate before its lessons. Every lesson of the level
+     that is not yet passed is marked tested out. Returns the ids marked. */
+  function testOut(p, lv) {
+    var marked = [], at = new Date().toISOString();
+    lv.subs.forEach(function (s) {
+      if (subPassed(p, s.id)) return;
+      var r = p.subs[s.id] || (p.subs[s.id] = { best: 0, attempts: 0 });
+      r.testedOut = at; marked.push(s.id);
+    });
+    return marked;
   }
   function checkUnlocked(p, lv) { return subsDone(p, lv) === lv.subs.length; }
 
@@ -918,9 +1007,10 @@
      on the level's material, not a lock on where a student may work. */
   function levelPct(p, lv) {
     var sm = 0;
-    lv.subs.forEach(function (s) { sm += Math.min(1, (p.subs[s.id] || {}).best || 0); });
-    sm = sm / lv.subs.length;
     var cm = Math.min(1, (p.checks[lv.check.id] || {}).best || 0);
+    /* a tested-out lesson counts at the gate score that let her through */
+    lv.subs.forEach(function (s) { var r = p.subs[s.id] || {}; sm += Math.max(Math.min(1, r.best || 0), r.testedOut ? cm : 0); });
+    sm = sm / lv.subs.length;
     return Math.round((sm * 0.6 + cm * 0.4) * 100);
   }
   function topicPct(p, t) {
@@ -1073,10 +1163,19 @@
     if (score >= PASS_SUB) p.xp += XP_SUB;
   }
 
-  function finishCheck(p, checkId, score, usedHint) {
+  /* info (optional): { ids: [the items drawn], miss: [tags missed], testOut: bool }.
+     The pool draw reads seen / lastIds / lastMiss back. A test-out that fails
+     is free: it does not count as a failed gate. */
+  function finishCheck(p, checkId, score, usedHint, info) {
     var r = p.checks[checkId] || (p.checks[checkId] = { best: 0, attempts: 0, failedOnce: false });
     r.attempts++;
-    if (score < PASS_CHECK && r.best < PASS_CHECK) r.failedOnce = true;
+    if (info && info.ids) {
+      var seen = r.seen || [];
+      info.ids.forEach(function (id) { if (seen.indexOf(id) < 0) seen.push(id); });
+      r.seen = seen; r.lastIds = info.ids.slice(); r.lastMiss = (info.miss || []).slice();
+    }
+    if (info && info.testOut) { r.testOuts = (r.testOuts || 0) + 1; if (score >= PASS_CHECK) r.testedOut = new Date().toISOString(); }
+    if (score < PASS_CHECK && r.best < PASS_CHECK && !(info && info.testOut)) r.failedOnce = true;
     if (score >= PASS_CHECK && r.failedOnce) r.comeback = true;
     if (score >= 1) r.perfect = true;
     if (!usedHint && score >= PASS_CHECK) r.noHint = true;
@@ -1183,7 +1282,7 @@
 
   var Progress = {
     blank: blank, rank: rank, rankIndex: rankIndex, checksCleared: checksCleared,
-    subsDone: subsDone, checkUnlocked: checkUnlocked,
+    subsDone: subsDone, checkUnlocked: checkUnlocked, subPassed: subPassed, testOut: testOut,
     levelPct: levelPct, topicPct: topicPct, readiness: readiness, accuracy: accuracy,
     recordAttempt: recordAttempt, finishSub: finishSub, finishCheck: finishCheck,
     scoreMock: scoreMock, finishMock: finishMock,
@@ -1196,7 +1295,7 @@
     el: el, esc: esc, shuffle: shuffle, norm: norm, today: today, daysBetween: daysBetween,
     stripTags: stripTags,
     mount: mount, TYPE_LABEL: TYPE_LABEL, Bank: Bank, art: artSvg, artBand: artBand, ART: ART,
-    PASS_SUB: PASS_SUB, PASS_CHECK: PASS_CHECK, SPEED_MS: SPEED_MS, XP_SPEED: XP_SPEED,
+    PASS_SUB: PASS_SUB, PASS_CHECK: PASS_CHECK, SPEED_MS: SPEED_MS, XP_SPEED: XP_SPEED, GATE_DRAW: GATE_DRAW,
     Progress: Progress
   };
 })(window);
