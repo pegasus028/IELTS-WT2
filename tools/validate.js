@@ -25,6 +25,29 @@ var TYPES = { choose: 1, judge: 1, spot: 1, sort: 1, build: 1, order: 1, select:
 var LEVELS = { B1: 1, B2: 1, C1: 1 };
 var CLICHE = [/double[- ]edged sword/i, /in a nutshell/i, /hot topic/i, /every coin has two sides/i, /since the dawn of/i, /nowadays,? in this modern/i, /last but not least/i];
 
+/* Hints (Oct 2026): every item carries its own one-sentence hint that outlines the rule without giving the answer.
+   The tag principle is no longer a fallback, because for fact questions it stated the answer. These checks catch
+   the mechanical leaks; a human read is still needed for paraphrased ones. */
+function plainLower(s) { return String(s == null ? '' : s).replace(/<[^>]+>/g, ' ').replace(/[‘’]/g, "'").replace(/\s+/g, ' ').trim().toLowerCase(); }
+function checkHint(it, w) {
+  if (!it.hint) return err(w + ': missing hint (every item needs its own; the tag principle can give the answer away)');
+  var h = plainLower(it.hint);
+  if (h.split(' ').length > 35) warn(w + ': hint over 35 words');
+  if (/\b(\w+n't|it's|that's|there's|what's|\w+'re|\w+'ll|\w+'ve)\b/.test(h)) err(w + ': contraction in hint');
+  if (/\b(first|second|third|fourth|last) (option|answer|choice|card)\b|\b(option|answer) [a-d]\b/.test(h)) err(w + ': hint names an option by position (options are shuffled)');
+  var keys = [];
+  if (it.type === 'choose' && it.options) keys.push(it.options[it.answer]);
+  if (it.type === 'select' && it.options) (it.answers || []).forEach(function (k) { keys.push(it.options[k]); });
+  if (it.type === 'spot') { keys.push(it.fix); if (it.words) keys.push(it.words[it.answer]); }
+  if (it.type === 'build') keys.push(it.solution);
+  if (it.type === 'judge' && /^(true|false|can't tell)\b/.test(h)) err(w + ': hint starts with the verdict');
+  var ctx = plainLower((it.stem || '') + ' ' + (it.given || ''));
+  keys.forEach(function (k) {
+    var s = plainLower(k).replace(/[.,;:!?]+$/, '');
+    if (s.length > 5 && h.indexOf(s) >= 0 && ctx.indexOf(s) < 0) err(w + ': hint contains the answer "' + s + '"');
+  });
+}
+
 function checkItem(it, where, stats) {
   if (!it.id) return err(where + ': item without id');
   uid(it.id, where);
@@ -37,6 +60,7 @@ function checkItem(it, where, stats) {
   var blob = JSON.stringify(it); CLICHE.forEach(function (re) { if (re.test(blob)) warn(w + ': contains a banned cliché (' + re.source + ')'); });
   if (it.stem && String(it.stem).replace(/<[^>]+>/g, '').split(/\s+/).length > 32) warn(w + ': stem over 30 words');
   stats.n++;
+  checkHint(it, w);
   switch (it.type) {
     case 'choose':
       if (!Array.isArray(it.options) || it.options.length < 3) err(w + ': choose needs 3+ options');

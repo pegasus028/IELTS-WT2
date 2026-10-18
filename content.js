@@ -435,7 +435,7 @@ var REMEDIATION = {
   'struct-template': {
     name: 'Template used verbatim', gate: 'LR',
     principle: 'The frames are scaffolding. Edit every opener into your own words and put the weight of the essay inside the variables. An essay that is mostly frame text reads as memorised.',
-    reteach: 'The Ten Wards (the pre-submission check) measure how much of the essay is unchanged frame text. Above a third is a warning; above half is red. Fade the scaffold: guided → skeleton → blank.',
+    reteach: 'The Ten Wards (the pre-submission check) measure how much of the essay is unchanged frame text against the spellbook share the student chose (60/50/40/30): up to five points over is a warning; beyond that, or above 60%, is red. Fade the scaffold: guided → skeleton → blank.',
     activities: ['Own the frame: rewrite each opener in three ways.', 'Skeleton mode essay: slot labels only.']
   }
 };

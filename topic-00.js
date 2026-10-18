@@ -43,6 +43,7 @@
             { id: 'm00s1q3', type: 'judge', tag: 'struct-length', level: 'B1',
               given: 'An essay of 230 words loses a fixed number of marks for being short.',
               stem: 'True or false?', answer: 1,
+              hint: 'Recall what the official rules say happens to an essay under 250 words, and whether any marks are taken away automatically.',
               why: 'False. There is no fixed deduction. The real cost is that 230 words may not give "enough evidence of the language features needed" for the higher bands, so the examiner has less to reward. Write 260–290.' },
             { id: 'm00s1q4', type: 'choose', tag: 'struct-time', level: 'B2',
               stem: 'What does the 5 / 30 / 5 protocol mean?',
@@ -60,6 +61,7 @@
                 { text: 'A heading such as "Advantages" above a paragraph', bin: 'no' },
                 { text: 'Your own opinion in the first paragraph', bin: 'ok' }
               ],
+              hint: 'Ask whether each item belongs in a continuous essay written fresh in the exam room, or in a set of notes, a report or a prepared text.',
               why: 'The answer must be a whole piece of connected text in your own words. Paragraphs, examples from your own life and a stated opinion are exactly what the examiner wants; bullets, headings and memorised text are penalised.' },
             { id: 'm00s1q6', type: 'choose', tag: 'struct-length', level: 'B2',
               stem: 'Which word count is the best target for a Task 2 essay?',
@@ -69,6 +71,7 @@
             { id: 'm00s1q7', type: 'judge', tag: 'kn-test-facts', level: 'B2',
               given: 'Copying the question sentence word for word into your introduction is a safe way to start.',
               stem: 'True or false?', answer: 1,
+              hint: 'Ask what the rules say about language copied from the question, and whether those words can earn the writer any credit.',
               why: 'False. Copied text is not credited and can be penalised as plagiarism. Restate the Core Topic in your own words: "the regulation of private cars in city centres", not the prompt\'s sentence.' }
           ] },
 
@@ -111,6 +114,7 @@
                 { text: 'Two different ideas are mixed in one paragraph', bin: 'cc' },
                 { text: '"Paramount" is used where "important" was meant', bin: 'lr' }
               ],
+              hint: 'Ask whether each comment is about what the essay says, how its sentences and paragraphs connect, or which single word the writer picked.',
               why: 'The criterion names the fix. Position and parts are TR; linking words and one idea per paragraph are CC; word partners and precision are LR. Map every comment you receive onto one of the four.' },
             { id: 'm00s2q3', type: 'choose', tag: 'kn-criteria', level: 'B2',
               stem: 'Which change most often lifts Task Response from Band 6 to Band 7?',
@@ -120,11 +124,12 @@
             { id: 'm00s2q4', type: 'judge', tag: 'kn-criteria', level: 'B2',
               given: 'The examiner marks Lexical Resource by counting how many rare words the essay contains.',
               stem: 'True or false?', answer: 1,
+              hint: 'Recall which qualities the Lexical Resource descriptors reward at Bands 7 and 8, and ask whether a simple count could measure them.',
               why: 'False. LR rewards precision and collocation: Band 8 is "precise meanings", Band 7 "awareness of style and collocation". A rare word used slightly wrongly is an "inappropriacy" and lowers the mark.' },
             { id: 'm00s2q5', type: 'choose', tag: 'kn-criteria', level: 'B2',
               stem: 'Band 7 grammar says error-free sentences are "frequent". What does Band 8 require?',
               options: ['No errors anywhere in the essay', 'A wide range of tenses in every paragraph', 'The majority of sentences error-free', 'More complex sentences than simple ones'], answer: 2,
-              hint: 'Band 8 asks for more than Band 7 but stops short of perfection; think in terms of a share of the essay.',
+              hint: 'Stay with accuracy, the area the stem is about, and ask how the Band 8 wording raises the Band 7 standard.',
               why: '"The majority of sentences are error-free." Not perfection, but more correct than faulty. This is why three or four structures you control beat a wider range you do not.' },
             { id: 'm00s2q6', type: 'choose', tag: 'kn-criteria', level: 'C1',
               stem: 'Which fault stops Coherence and Cohesion reaching Band 7?',
@@ -134,6 +139,7 @@
             { id: 'm00s2q7', type: 'judge', tag: 'kn-criteria', level: 'B2',
               given: 'At Band 8, "well extended and supported" means a paragraph states an idea, explains how it works and gives a concrete case.',
               stem: 'True or false?', answer: 0,
+              hint: 'Think about what an examiner needs to see before calling an idea extended and supported, and compare that with the three steps described.',
               why: 'True. Band 7 is capped by "a tendency to over-generalise"; Band 8 ideas are "well extended and supported". The mechanism and the concrete case are what remove the generalisation.' }
           ] },
 
@@ -164,9 +170,11 @@
               stem: 'Tap the chunk that breaks the formal register.',
               words: ['Many parents', 'in Bangkok', "don't", 'allow their children', 'to use phones', 'during dinner.'], answer: 2,
               fix: 'do not',
+              hint: 'Check each chunk for a form that belongs to spoken English rather than to formal written English.',
               why: 'A contraction is spoken English. Write the full form: do not, cannot, it is. The examiner sees a contraction in the first line and marks LR down from the start.' },
             { id: 'm00s3q2', type: 'choose', tag: 'kn-test-facts', level: 'B2',
               stem: 'A student answers a prompt about school uniforms with a prepared essay about technology in schools. What happens?',
+              hint: 'Think about which criterion compares the essay with the prompt that was set, and what follows when the two do not match.',
               options: ['It scores well because the grammar is accurate', 'The examiner marks only the grammar and vocabulary', 'It is accepted if it has more than 250 words', 'It is marked as off topic and scores very low'], answer: 3,
               why: 'Off topic. The official rules say candidates are penalised for not answering the question set, and a memorised essay is discounted as well. Good grammar cannot rescue an answer to a different prompt.' },
             { id: 'm00s3q3', type: 'select', tag: 'lr-register', level: 'B2',
@@ -188,6 +196,7 @@
               stem: 'Tap the chunk the examiner would mark as informal.',
               words: ['Governments', 'should tax', 'sugary drinks', 'because', 'kids', 'buy them', 'every day', 'after school.'], answer: 4,
               fix: 'children',
+              hint: 'Check the vocabulary in each chunk and ask whether any word belongs to casual speech rather than formal writing.',
               why: '"Kids" is conversational. The essay word is "children" or "young people". Everything else in the sentence is formal and precise.' },
             { id: 'm00s3q7', type: 'choose', tag: 'kn-test-facts', level: 'B2',
               stem: 'Which of these does the examiner punish most severely?',
@@ -212,7 +221,8 @@
         { id: 'm00ckq3', type: 'judge', tag: 'kn-criteria', level: 'B2',
           given: 'This writer states a clear position in paragraph one, so Task Response will be Band 7.',
           stem: 'True, false, or can\'t tell?', answer: 2,
-          why: 'Can\'t tell. A clear position is the 6→7 gate, but Band 7 also needs main ideas "extended and supported". One sentence cannot show whether the body paragraphs do that.' },
+          hint: 'Recall everything the Band 7 Task Response descriptor asks for, then check how much of it the given information lets you see.',
+              why: 'Can\'t tell. A clear position is the 6→7 gate, but Band 7 also needs main ideas "extended and supported". One sentence cannot show whether the body paragraphs do that.' },
         { id: 'm00ckq4', type: 'sort', tag: 'kn-criteria', level: 'B2',
           stem: 'Sort each examiner comment: is it Lexical Resource or Grammatical Range and Accuracy?',
           bins: [{ key: 'lr', label: 'Lexical Resource', hint: 'words, partners, spelling' }, { key: 'gra', label: 'Grammar', hint: 'sentences, agreement, articles' }],
@@ -224,7 +234,8 @@
             { text: 'Missing "the" before "government"', bin: 'gra' },
             { text: 'Spelling: "goverment", "enviroment"', bin: 'lr' }
           ],
-          why: 'Word choice, collocation and spelling are Lexical Resource. Agreement, punctuation and articles are Grammatical Range and Accuracy. Knowing which is which tells you which module to open.' },
+          hint: 'Ask whether fixing the fault means choosing or spelling a different word, or changing the grammar that holds the words together.',
+              why: 'Word choice, collocation and spelling are Lexical Resource. Agreement, punctuation and articles are Grammatical Range and Accuracy. Knowing which is which tells you which module to open.' },
         { id: 'm00ckq5', type: 'choose', tag: 'kn-test-facts', level: 'B2',
           stem: 'Which format costs marks because the answer is not "connected text"?',
           options: ['Notes and bullet points under each heading', 'A blank line left between each of the paragraphs','An introduction of only two sentences', 'A conclusion beginning "In conclusion"'], answer: 0,
@@ -234,7 +245,8 @@
           stem: 'Tap the informal chunk.',
           words: ['Online learning', 'gives students', 'more freedom,', 'but', 'it is', 'a lot of', 'work', 'for teachers.'], answer: 5,
           fix: 'a great deal of',
-          why: '"A lot of" is conversational. In the essay use "a great deal of", "considerable" or "much". The rest of the sentence is already formal.' },
+          hint: 'Read every chunk and ask whether a careful writer would use it in a formal essay or only when chatting with friends.',
+              why: '"A lot of" is conversational. In the essay use "a great deal of", "considerable" or "much". The rest of the sentence is already formal.' },
         { id: 'm00ckq7', type: 'choose', tag: 'kn-criteria', level: 'C1',
           stem: 'Which improvement targets the 7 to 8 gate in Lexical Resource?',
           options: ['Replacing every common word with a rarer synonym', 'Adding an idiom to every paragraph', 'Using each word in its usual partner phrase', 'Repeating the key noun for clarity'], answer: 2,
@@ -243,7 +255,8 @@
         { id: 'm00ckq8', type: 'judge', tag: 'struct-length', level: 'B2',
           given: 'Writing 350 words is safer than writing 280, because a longer essay shows more language.',
           stem: 'True or false?', answer: 1,
-          why: 'False. Beyond about 320 words the errors multiply, the five checking minutes disappear, and the extra sentences are usually the weakest. 260–290 is the safe band.' }
+          hint: 'Compare both lengths with the recommended target range, and ask what each one does to accuracy and to checking time.',
+              why: 'False. Beyond about 320 words the errors multiply, the five checking minutes disappear, and the extra sentences are usually the weakest. 260–290 is the safe band.' }
       ] }
     }]
   });
