@@ -7,7 +7,7 @@
    cleared at 70%. Bootcamp rank rises with cumulative points.
 
    The matrix steps are built from the prompt's own eleven variables (the
-   Matrix Arena bank), at the student's tier (B2 or C1).
+   Matrix Arena bank), at the level the student picks in the hall (A2, B1, B2 or C1; A2/B1 sets in prompts-levels.js).
 
    Bootcamp.build(prompt, tier)  → { steps:[{ id, title, brief, questions:[{ id, stem, options, answer, hint, why, tag }] }], total }
    Bootcamp.mount(host, { prompt, tier, onDone, onQuit, onAnswer })
@@ -78,7 +78,8 @@
   /* ------------------------------------------------------------ build */
   function build(p, tier) {
     qseq = 0;
-    tier = tier === 'C1' ? 'C1' : 'B2';
+    /* A2 and B1 answer sets come from prompts-levels.js; the frames stay at B2 below C1. */
+    tier = ['A2', 'B1', 'B2', 'C1'].indexOf(tier) >= 0 ? tier : 'B2';
     var V = (p.vars && p.vars[tier]) || (p.vars && p.vars.B2) || {};
     var ty = C.TYPES[p.type] || C.TYPES.DISCUSS, labels = T.labels(p.type);
     var steps = [];
@@ -129,7 +130,7 @@
 
     /* assemble: sentences built from the frames with the variables filled */
     var vars = {}; Object.keys(V).forEach(function (k) { vars[k] = strip(V[k].ok); });
-    var paras = T.paragraphs(tier, p.type);
+    var paras = T.paragraphs(tier === 'C1' ? 'C1' : 'B2', p.type);
     var introOK = T.tidy(T.fill(paras[0].frames[0].text, vars));
     var introD = ['Nowadays, in this modern era, ' + lc(strip(vars.core || 'this issue')) + ' is a hot topic that everybody is talking about. Some people agree with it and some people disagree with it, and both sides have strong feelings. In this essay I will discuss both sides of the topic and then give my own opinion at the end.',
       cap(p.text) + ' This essay will look at the question carefully and discuss it.',
@@ -205,7 +206,7 @@
         var el = host.querySelector('[data-q="' + id + '"]'); if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       }); });
       host.querySelector('#bc-next').addEventListener('click', function () {
-        if (st.i + 1 >= mission.steps.length) { if (cfg.onDone) cfg.onDone({ promptId: p.id, points: st.points, total: total, passed: st.points / total >= POINTS.pass, log: st.log }); return; }
+        if (st.i + 1 >= mission.steps.length) { if (cfg.onDone) cfg.onDone({ promptId: p.id, tier: (p.vars && p.vars[cfg.tier]) ? cfg.tier : 'B2', points: st.points, total: total, passed: st.points / total >= POINTS.pass, log: st.log }); return; }
         st.i++; paint(); window.scrollTo({ top: 0 });
       });
     }

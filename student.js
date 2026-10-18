@@ -44,6 +44,9 @@
   function typeName(t) { return (C.TYPES[t] || {}).name || t; }
   function fmtBand(b) { return b == null ? '—' : (Math.round(b * 2) / 2).toFixed(1); }
   function tier() { return (S.p && S.p.tier === 'C1') ? 'C1' : 'B2'; }
+  /* The Duelling Hall answer level: A2 · B1 · B2 · C1, chosen in the hall; defaults to the track. */
+  var DUEL_LVLS = ['A2', 'B1', 'B2', 'C1'];
+  function duelTier() { var v = S.p && S.p.duelTier; return DUEL_LVLS.indexOf(v) >= 0 ? v : tier(); }
 
   /* --------------------------------------------------------------- sync */
   function sync() {
@@ -640,7 +643,32 @@
   var LSAY = { audio: null, h: null };
   function lfnv(s) { var h = 0x811c9dc5; for (var i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return ('0000000' + h.toString(16)).slice(-8); }
   function plainSpeech(h) { return String(h || '').replace(/<s>[\s\S]*?<\/s>/g, '').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/→/g, ' to ').replace(/\s+/g, ' ').trim(); }
-  function lessonSpeech(s, simple) { var paras = (simple && s.theory.simple && s.theory.simple.length) ? s.theory.simple : s.theory.body; return [plainSpeech(s.name) + '.', plainSpeech(s.theory.key)].concat(paras.map(plainSpeech)).join('\n'); }
+  /* Levelled explanations (lesson-levels.js): A1 · A2 · B1 · B2 versions of every lesson's key,
+     explanation and example notes. C1 is the original full text in the topic files. The choice is
+     kept on the profile (so it follows the student to another device) and on this device. */
+  var LVLS = ['A1', 'A2', 'B1', 'B2', 'C1'];
+  function explainLevel() {
+    var v = S.p && S.p.explainLevel;
+    if (!v) { try { v = localStorage.getItem('qm.explain.lvl'); } catch (e) {} }
+    if (!v && S.simple) v = 'B1';
+    return LVLS.indexOf(v) >= 0 ? v : 'C1';
+  }
+  function setExplainLevel(v) {
+    if (LVLS.indexOf(v) < 0) return;
+    if (S.p) S.p.explainLevel = v;
+    try { localStorage.setItem('qm.explain.lvl', v); } catch (e) {}
+    syncSoon();
+  }
+  function lessonText(s, lvl) {
+    var L = (window.QM_LESSON_LEVELS || {})[s.id], x = lvl !== 'C1' && L && L[lvl];
+    if (x && x.body && x.body.length) return { key: x.key || s.theory.key, body: x.body, gloss: x.examples || [], lvl: lvl };
+    return { key: s.theory.key, body: s.theory.body, gloss: [], lvl: 'C1' };
+  }
+  function lvlBar(cur) {
+    return '<div class="lvl-bar" role="group" aria-label="Choose the level of this explanation"><span class="lvl-lbl">Read it at my level:</span>' +
+      LVLS.map(function (l) { return '<button type="button" class="lvl-btn' + (l === cur ? ' on' : '') + '" data-lvl="' + l + '" aria-pressed="' + (l === cur) + '"' + (l === 'C1' ? ' title="The full explanation"' : '') + '>' + l + '</button>'; }).join('') + '</div>';
+  }
+  function lessonSpeech(s, lvl) { var t = lessonText(s, lvl); return [plainSpeech(s.name) + '.', plainSpeech(t.key)].concat(t.body.map(plainSpeech)).join('\n'); }
   function lsaySlow() { try { return localStorage.getItem('qm.lsay.slow') === '1'; } catch (e) { return false; } }
   function lsayStop() {
     if (LSAY.audio) { try { LSAY.audio.pause(); } catch (e) {} LSAY.audio = null; }
@@ -679,19 +707,21 @@
   function openSub(subId) {
     lsayStop();
     var s = E.Bank.sub(subId), t = E.Bank.topic(s.topicId);
-    var paras = (S.simple && s.theory.simple && s.theory.simple.length) ? s.theory.simple : s.theory.body;
+    var lvl = explainLevel(), tx = lessonText(s, lvl);
     var html = '<div class="play"><div class="play-top"><button class="btn ghost sm" id="p-back">← ' + homeLabel() + '</button><span style="flex:1"></span><span class="qcount">' + esc(t.code) + '</span></div>' +
-      '<div class="card theory">' + E.artBand(t.art) + '<p class="kicker">' + esc(s.cefr) + ' · ' + esc(t.name) + '</p><h3>' + esc(s.name) + '</h3>' + lsayBar() + '<p class="key">' + s.theory.key + '</p>' +
-      '<button class="btn sm simple-btn" id="p-simple">' + (S.simple ? 'Show the full explanation' : 'Explain this more simply') + '</button>' +
-      '<div class="prose">' + paras.map(function (x) { return '<p>' + x + '</p>'; }).join('') + '</div>';
-    if (s.theory.examples && s.theory.examples.length) html += '<div class="exlist">' + s.theory.examples.map(function (x) { return '<div><div class="s">' + x.s + '</div><div class="g">' + esc(x.g) + '</div></div>'; }).join('') + '</div>';
+      '<div class="card theory">' + E.artBand(t.art) + '<p class="kicker">' + esc(s.cefr) + ' · ' + esc(t.name) + '</p><h3>' + esc(s.name) + '</h3>' + lvlBar(tx.lvl) + lsayBar() + '<p class="key">' + tx.key + '</p>' +
+      '<div class="prose" data-explain-level="' + tx.lvl + '">' + tx.body.map(function (x) { return '<p>' + x + '</p>'; }).join('') + '</div>';
+    if (s.theory.examples && s.theory.examples.length) html += '<div class="exlist">' + s.theory.examples.map(function (x, i) { return '<div><div class="s">' + x.s + '</div><div class="g">' + esc(tx.gloss[i] || x.g) + '</div></div>'; }).join('') + '</div>';
     html += '<button class="btn primary wide" id="p-start">Start the ' + s.items.length + ' questions →</button></div></div>';
     $('#view-play').innerHTML = html;
     show('play');
     $('#p-back').addEventListener('click', function () { lsayStop(); show(homeView()); });
-    $('#p-simple').addEventListener('click', function () { S.simple = !S.simple; openSub(subId); });
+    $('#view-play').querySelectorAll('[data-lvl]').forEach(function (b) { b.addEventListener('click', function () {
+      var y = window.scrollY; setExplainLevel(b.dataset.lvl); openSub(subId); try { window.scrollTo(0, y); } catch (e) {}
+      var nb = $('#view-play [data-lvl="' + b.dataset.lvl + '"]'); if (nb) nb.focus();
+    }); });
     $('#p-start').addEventListener('click', function () { lsayStop(); startRun('module', s.items, { subId: subId, title: s.name }); });
-    $('#p-say').addEventListener('click', function () { lsayPlay($('#p-say'), lessonSpeech(s, S.simple)); });
+    $('#p-say').addEventListener('click', function () { lsayPlay($('#p-say'), lessonSpeech(s, explainLevel())); });
     $('#p-say-slow').addEventListener('click', function () {
       var on = !lsaySlow(); try { localStorage.setItem('qm.lsay.slow', on ? '1' : '0'); } catch (e) {}
       this.classList.toggle('on', on); this.setAttribute('aria-pressed', on);
@@ -1124,7 +1154,9 @@
   function paintBootcamp() {
     var bs = bootState(), rank = BC.rankFor(bs.points), nxt = BC.nextRank(bs.points);
     var cleared = Object.keys(bs.missions).filter(function (k) { return bs.missions[k].passed; }).length;
-    var html = '<div class="sect-h"><div><h2>Duelling Hall</h2><p>One prompt, the whole plan, one decision at a time: time, decode, the Core Topic, side A, side B, the position, the frames and the Ten Wards. Every question is a drop-down. Hints cost ' + BC.POINTS.hint + ' points; a correct second choice earns ' + BC.POINTS.second + '. Win a duel at ' + Math.round(BC.POINTS.pass * 100) + '%.</p></div><span class="pill on">' + esc(T.TIERS[tier()].name) + '</span></div>';
+    var html = '<div class="sect-h"><div><h2>Duelling Hall</h2><p>One prompt, the whole plan, one decision at a time: time, decode, the Core Topic, side A, side B, the position, the frames and the Ten Wards. Every question is a drop-down. Hints cost ' + BC.POINTS.hint + ' points; a correct second choice earns ' + BC.POINTS.second + '. Win a duel at ' + Math.round(BC.POINTS.pass * 100) + '%.</p></div></div>';
+    var dt = duelTier();
+    html += '<div class="lvl-bar" role="group" aria-label="Choose the level of the answer options"><span class="lvl-lbl">Answer options at my level:</span>' + DUEL_LVLS.map(function (l) { return '<button type="button" class="lvl-btn' + (l === dt ? ' on' : '') + '" data-duel-lvl="' + l + '" aria-pressed="' + (l === dt) + '">' + l + '</button>'; }).join('') + '<span class="tiny" style="flex-basis:100%">The prompts stay in exam English. This changes the English of the eleven-key choices.</span></div>';
     html += '<div class="gates" style="grid-template-columns:repeat(2,1fr)"><div class="gate"><span>Duelling rank</span><b>' + esc(rank.name) + '</b><small>' + bs.points + ' points' + (nxt ? ' · ' + (nxt.min - bs.points) + ' to ' + esc(nxt.name) : ' · top rank') + '</small><div class="bar-line gold"><span style="width:' + (nxt ? Math.round(100 * (bs.points - rank.min) / (nxt.min - rank.min)) : 100) + '%"></span></div></div><div class="gate"><span>Duels won</span><b>' + cleared + '</b><small>of ' + C.PROMPTS.length + ' prompts · win at ' + Math.round(BC.POINTS.pass * 100) + '%</small></div></div>';
     html += '<div class="card" style="padding:14px 16px;margin-bottom:16px"><p class="kicker">The Ten Wards</p><ol class="bc-list">' + BC.CHECKLIST.map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') + '</ol></div>';
     var order = C.PROMPTS.slice().sort(function (a, b) { return Object.keys(C.TYPES).indexOf(a.type) - Object.keys(C.TYPES).indexOf(b.type) || a.title.localeCompare(b.title); });
@@ -1134,24 +1166,26 @@
     }).join('') + '</div>';
     $('#view-bootcamp').innerHTML = html;
     $('#view-bootcamp').querySelectorAll('[data-bc]').forEach(function (b) { b.addEventListener('click', function () { startBootcamp(b.dataset.bc); }); });
+    $('#view-bootcamp').querySelectorAll('[data-duel-lvl]').forEach(function (b) { b.addEventListener('click', function () { S.p.duelTier = b.dataset.duelLvl; syncSoon(); paintBootcamp(); toast('Duel answers at ' + b.dataset.duelLvl + '.'); }); });
   }
   function startBootcamp(promptId) {
     show('bootrun');
-    S.boot = BC.mount($('#view-bootrun'), { prompt: promptId, tier: tier(),
+    var dlv = duelTier();
+    S.boot = BC.mount($('#view-bootrun'), { prompt: promptId, tier: dlv,
       onQuit: function () { S.boot = null; show('bootcamp'); },
       onAnswer: function (a) {
         var t = S.p.stats.byTag[a.tag] || (S.p.stats.byTag[a.tag] = { a: 0, c: 0 });
         t.a++; if (a.correct) t.c++;
         S.p.stats.seen++; if (a.correct) S.p.stats.correct++;
         S.p.xp += a.gain; S.sessItems++; if (a.correct) S.sessCorrect++;
-        api.enqueue([{ ts: new Date().toISOString(), studentId: S.p.studentId, itemId: 'bc-' + a.promptId + '-' + a.id, topic: 'bootcamp', level: '', type: 'choose', tag: a.tag, cefr: '', correct: a.correct ? 1 : 0, ms: 0, hinted: a.hinted ? 1 : 0, fast: 0, mode: 'bootcamp', given: a.second ? 'second choice' : 'first choice', expected: '' }]);
+        api.enqueue([{ ts: new Date().toISOString(), studentId: S.p.studentId, itemId: 'bc-' + a.promptId + '-' + a.id, topic: 'bootcamp', level: dlv, type: 'choose', tag: a.tag, cefr: dlv, correct: a.correct ? 1 : 0, ms: 0, hinted: a.hinted ? 1 : 0, fast: 0, mode: 'bootcamp', given: a.second ? 'second choice' : 'first choice', expected: '' }]);
         paintHeader(); syncSoon();
       },
       onDone: function (res) {
         S.boot = null;
         var bs = bootState(), pctScore = Math.round(100 * res.points / res.total);
         var m = bs.missions[res.promptId] || (bs.missions[res.promptId] = { best: 0, attempts: 0 });
-        m.attempts++; if (pctScore > m.best) m.best = pctScore; m.passed = m.passed || res.passed; m.at = new Date().toISOString();
+        m.attempts++; if (pctScore > m.best) m.best = pctScore; m.passed = m.passed || res.passed; m.at = new Date().toISOString(); m.level = res.tier || dlv; if (res.passed) { m.won = m.won || {}; m.won[m.level] = 1; }
         var before = BC.rankFor(bs.points).name;
         bs.points += res.points;
         var after = BC.rankFor(bs.points);
@@ -1209,9 +1243,9 @@
     var unlocked = ss && ss.unlockedTo >= (ST.chapters().length || 7);
     $('#view-settings').innerHTML = '<div class="sect-h"><div><h2>Your Trunk</h2><p>Your track, the look of the castle, and the things T.Chris set for you.</p></div></div><div class="card settings">' +
       (h ? '<div class="field"><label>Your house</label><p style="display:flex;align-items:center;gap:10px">' + ST.crestSvg(h.id, 32) + '<span><b>' + esc(h.name) + '</b> · ' + esc(h.values) + '<br><span class="tiny">Sorted ' + esc(String((ss.sort || {}).at || '').slice(0, 10)) + ' · ' + esc(h.head) + '</span></span></p></div>' : '') +
-      '<div class="field"><label>Track</label><div style="display:flex;gap:8px;flex-wrap:wrap">' + ['B2', 'C1'].map(function (t) { return '<button class="btn sm' + (tier() === t ? ' primary' : '') + '" data-tier-set="' + t + '">' + esc(T.TIERS[t].name) + ' (' + t + ')</button>'; }).join('') + '</div><p class="tiny">The track sets which tier of the eleven keys, the frames and the Duelling Hall options you see. T.Chris may ask you to change it.</p></div>' +
+      '<div class="field"><label>Track</label><div style="display:flex;gap:8px;flex-wrap:wrap">' + ['B2', 'C1'].map(function (t) { return '<button class="btn sm' + (tier() === t ? ' primary' : '') + '" data-tier-set="' + t + '">' + esc(T.TIERS[t].name) + ' (' + t + ')</button>'; }).join('') + '</div><p class="tiny">The track sets which tier of the eleven keys and the frames you see. The Duelling Hall has its own A2–C1 buttons for its answer options. T.Chris may ask you to change it.</p></div>' +
       '<div class="field"><label>Look</label><div style="display:flex;gap:8px;flex-wrap:wrap">' + ['auto', 'light', 'dark'].map(function (t) { return '<button class="btn sm' + (theme === t ? ' primary' : '') + '" data-theme-set="' + t + '">' + THEME_NAME[t] + '</button>'; }).join('') + '</div></div>' +
-      '<div class="field"><label>Explanations</label><button class="btn sm" id="s-simple">' + (S.simple ? 'Show full explanations' : 'Show simpler explanations') + '</button></div>' +
+      '<div class="field"><label>Lesson explanations</label><div style="display:flex;gap:8px;flex-wrap:wrap">' + LVLS.map(function (l) { return '<button class="btn sm' + (explainLevel() === l ? ' primary' : '') + '" data-lvl-set="' + l + '">' + l + '</button>'; }).join('') + '</div><p class="tiny">The level of English used to explain each lesson. C1 is the full explanation. You can also change it on any lesson page.</p></div>' +
       '<div class="field"><label for="s-url">Class server address</label><input id="s-url" type="text" placeholder="https://script.google.com/macros/s/…/exec" value="' + esc(api.url || '') + '" spellcheck="false"><p class="tiny">Set by T.Chris. ' + (api.pendingCount() ? api.pendingCount() + ' answers are waiting to be sent.' : 'Everything is up to date.') + '</p><button class="btn sm" id="s-save">Save address</button></div>' +
       '<div class="field"><label>The examiners</label><p class="tiny">Essays are marked by the examiners in LevelUp English: <a href="' + esc(LEVELUP) + '" target="_blank" rel="noopener">' + esc(LEVELUP) + '</a></p></div>' +
       (ST ? '<div class="field"><label for="s-pin">Teacher key</label>' + (unlocked ? '<p class="tiny">Every chapter on this account is unlocked. The map still glows where your progress is.</p>' : '<div style="display:flex;gap:8px;flex-wrap:wrap"><input id="s-pin" type="password" placeholder="T.Chris\'s PIN" autocomplete="off" style="flex:1 1 160px"><button class="btn sm" id="s-unlock">Unlock every chapter</button></div><p class="tiny" id="s-pin-msg">For T.Chris only: opens every room on this account\'s map.</p>') + '</div>' : '') +
@@ -1235,7 +1269,7 @@
       try { localStorage.setItem('pc.theme', t); } catch (e) {}
       paintSettings();
     }); });
-    $('#s-simple').addEventListener('click', function () { S.simple = !S.simple; paintSettings(); });
+    $('#view-settings').querySelectorAll('[data-lvl-set]').forEach(function (b) { b.addEventListener('click', function () { setExplainLevel(b.dataset.lvlSet); paintSettings(); toast('Lessons will be explained at ' + b.dataset.lvlSet + '.'); }); });
     $('#s-save').addEventListener('click', function () { api.setUrl($('#s-url').value.trim()); toast('Saved. ' + (api.mode === 'cloud' ? 'Connected to the class server.' : 'Working on this device only.')); });
   }
   try { var th = localStorage.getItem('pc.theme'); if (th && th !== 'auto') document.documentElement.setAttribute('data-theme', th); } catch (e) {}

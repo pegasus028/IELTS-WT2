@@ -8,12 +8,15 @@ function load(f) { vm.runInThisContext(fs.readFileSync(path.join(root, f), 'utf8
 load('content.js');
 var C = window.CONTENT;
 var files = process.argv.slice(2);
-var all = fs.readdirSync(root).filter(function (f) { return /^prompts.*\.js$/.test(f); });
+var all = fs.readdirSync(root).filter(function (f) { return /^prompts.*\.js$/.test(f) && f !== 'prompts-levels.js'; }).sort(function (a, b) { return a === 'prompts.js' ? -1 : b === 'prompts.js' ? 1 : a < b ? -1 : 1; });
 all.forEach(load);
+if (fs.existsSync(path.join(root, 'prompts-levels.js'))) load('prompts-levels.js');
 if (!files.length) files = fs.readdirSync(root).filter(function (f) { return /^topic-\d\d\.js$/.test(f); }).sort();
 files.forEach(load);
 load('template.js');
 if (fs.existsSync(path.join(root, 'models.js'))) load('models.js');
+/* Levelled lesson explanations (lesson-levels.js): every lesson needs A1, A2, B1 and B2. */
+if (fs.existsSync(path.join(root, 'lesson-levels.js'))) load('lesson-levels.js');
 
 var errors = [], warnings = [], ids = {};
 var PROMPT = {}; C.PROMPTS.forEach(function (p) { PROMPT[p.id] = p; });
@@ -143,6 +146,13 @@ C.TOPICS.forEach(function (t) {
       uid(s.id, t.id);
       if (!s.theory || !s.theory.key || !Array.isArray(s.theory.body) || !s.theory.body.length) err(s.id + ': theory needs key and body[]');
       if (!s.theory || !Array.isArray(s.theory.simple)) warn(s.id + ': no simple[] version');
+      var LL = (window.QM_LESSON_LEVELS || {})[s.id];
+      if (window.QM_LESSON_LEVELS) ['A1', 'A2', 'B1', 'B2'].forEach(function (lv) {
+        var x = LL && LL[lv];
+        if (!x || !x.key || !Array.isArray(x.body) || !x.body.length) return err(s.id + ': lesson-levels needs ' + lv + ' key and body[]');
+        if (!Array.isArray(x.examples) || x.examples.length !== ((s.theory && s.theory.examples) || []).length) err(s.id + ' ' + lv + ': examples[] must have one gloss per theory example');
+        if (/<(?!\/?(strong|em|br|s)\b)/.test(x.key + x.body.join(''))) err(s.id + ' ' + lv + ': only <strong>, <em>, <br> allowed');
+      });
       if (!s.items || s.items.length < 5) err(s.id + ': needs 5+ items (7 recommended), got ' + (s.items || []).length);
       (s.items || []).forEach(function (it) { checkItem(it, s.id, stats); });
     });
@@ -161,7 +171,7 @@ C.PROMPTS.forEach(function (p) {
   if (!p.domain || !C.DOMAINS[p.domain]) err(p.id + ': bad domain ' + p.domain);
   if (!p.text || !p.title) err(p.id + ': prompt needs title and text');
   if (!Array.isArray(p.keyNouns) || p.keyNouns.length < 2) err(p.id + ': prompt needs keyNouns[]');
-  ['C1', 'B2'].forEach(function (t) {
+  ['C1', 'B2', 'B1', 'A2'].forEach(function (t) {
     if (!p.vars || !p.vars[t]) return err(p.id + ': missing vars.' + t);
     KEYS.forEach(function (k) { var v = p.vars[t][k]; if (!v || !v.ok || !Array.isArray(v.d) || v.d.length !== 3) err(p.id + ' ' + t + '.' + k + ': needs ok and 3 distractors'); });
   });

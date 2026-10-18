@@ -277,7 +277,7 @@
       T.detail = d;
       var p = d.progress || P.blank(id), g = P.gateReadiness(p), weak = P.weakTags(p, 4), strong = P.strongTags(p, 4);
       var reps = reportsOf(id);
-      var h = '<div class="panel-h"><div><h2>' + esc(p.displayName || id) + '</h2><span class="kicker">' + esc(id) + ' · ' + esc(P.rank(p).name) + ' · ' + P.checksCleared(p) + '/' + C.TOPICS.length + ' classes · ' + esc(p.cohort || cohortOf({ id: id })) + '</span></div><span class="pill' + (P.accuracy(p) >= 80 ? ' good' : P.accuracy(p) >= 60 ? '' : ' bad') + '">' + P.accuracy(p) + '% accurate</span></div>';
+      var h = '<div class="panel-h"><div><h2>' + esc(p.displayName || id) + '</h2><span class="kicker">' + esc(id) + ' · ' + esc(P.rank(p).name) + ' · ' + P.checksCleared(p) + '/' + C.TOPICS.length + ' classes · ' + esc(p.cohort || cohortOf({ id: id })) + ' · lessons read at ' + esc(p.explainLevel || 'C1') + ' · duels at ' + esc(p.duelTier || p.tier || 'B2') + '</span></div><span class="pill' + (P.accuracy(p) >= 80 ? ' good' : P.accuracy(p) >= 60 ? '' : ' bad') + '">' + P.accuracy(p) + '% accurate</span></div>';
       h += '<div class="gates">' + ['TR', 'CC', 'LR', 'GRA'].map(function (k) { return '<div class="gate"><span>' + k + '</span><b>' + g[k] + '%</b></div>'; }).join('') + '</div>';
       /* Quillmoor story: house, chapter, keepsakes, and the teacher's story orders */
       var sto = storyOf(p), chN = Number(sto.chapter) || 0, unl = Number(sto.unlockedTo) || 0, srt = sto.sort || {};
@@ -582,8 +582,8 @@
   function csv(rows) { return rows.map(function (r) { return r.map(function (c) { var s = String(c == null ? '' : c); return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s; }).join(','); }).join('\n'); }
   function download(name, text) { var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], { type: 'text/csv' })); a.download = name; a.click(); }
   $('#t-csv').addEventListener('click', function () {
-    var rows = [['Student ID', 'Name', 'Cohort', 'Classes passed', 'TA', 'CC', 'LR', 'GRA', 'Accuracy %', 'Reports', 'Last band', 'Best band', 'Candles (streak)', 'Last active', 'House', 'Chapter', 'House points']];
-    T.roster.forEach(function (s) { var p = s.progress || P.blank(s.id), g = P.gateReadiness(p), st = storyOf(p); rows.push([s.id, p.displayName || s.name, cohortOf(s), P.checksCleared(p), g.TR, g.CC, g.LR, g.GRA, P.accuracy(p), reportsOf(s.id).length, lastBand(s.id) || '', p.bestBand || '', p.streak || 0, p.lastActiveDate || '', st.house || '', st.chapter || '', st.hp || 0]); });
+    var rows = [['Student ID', 'Name', 'Cohort', 'Classes passed', 'TA', 'CC', 'LR', 'GRA', 'Accuracy %', 'Reports', 'Last band', 'Best band', 'Candles (streak)', 'Last active', 'House', 'Chapter', 'House points', 'Lessons read at', 'Duel level']];
+    T.roster.forEach(function (s) { var p = s.progress || P.blank(s.id), g = P.gateReadiness(p), st = storyOf(p); rows.push([s.id, p.displayName || s.name, cohortOf(s), P.checksCleared(p), g.TR, g.CC, g.LR, g.GRA, P.accuracy(p), reportsOf(s.id).length, lastBand(s.id) || '', p.bestBand || '', p.streak || 0, p.lastActiveDate || '', st.house || '', st.chapter || '', st.hp || 0, p.explainLevel || 'C1', p.duelTier || p.tier || 'B2']); });
     rows.push([]); rows.push(['Essay ID', 'Student', 'Date', 'Prompt', 'Type', 'Mode', 'Kind', 'Words', 'Seconds', 'Red', 'Amber', 'Template %', 'TR', 'CC', 'LR', 'GRA', 'Overall', 'CEFR', 'Released', 'Comment']);
     T.reports.forEach(function (r) { var b = bandsOf(r) || {}, m = markOf(r) || {}; rows.push([r.id, r.studentId, String(r.ts).slice(0, 10), r.promptId, r.type, r.uiMode || '', r.kind, r.words, r.seconds, (r.preflight || {}).bad, (r.preflight || {}).warn, Math.round(((r.preflight || {}).ratio || 0) * 100), bandKey(b, 'tr'), b.cc, b.lr, b.gra, b.overall, m.cefr, r.released ? 'yes' : 'no', m.comment || '']); });
     download('quillmoor-' + E.today() + '.csv', csv(rows));

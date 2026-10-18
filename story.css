@@ -240,4 +240,12 @@ button.wchip:hover{background:var(--gold-soft)}
 .lsay-opt.on{border-color:var(--brass);background:var(--gold-soft);font-weight:700;opacity:1}
 .lsay-opt.on::before{content:'\2713  '}
 .lsay:focus-visible,.lsay-opt:focus-visible{outline:3px solid var(--accent-line);outline-offset:2px}
+/* explanation / answer level buttons (student.js) */
+.lvl-bar{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem;margin:.3rem 0 .5rem}
+.lvl-lbl{flex-basis:100%;font-family:var(--f-ui);font-size:.85rem;font-weight:700}
+.lvl-btn{min-width:44px;min-height:40px;padding:.3rem .6rem;border-radius:999px;border:1px solid var(--rule);background:var(--surface);color:var(--ink);font-family:var(--f-ui);font-weight:700;font-size:.9rem;cursor:pointer}
+.lvl-btn:hover{border-color:var(--brass);background:var(--gold-soft)}
+.lvl-btn.on{border:2px solid var(--brass);background:var(--gold-soft)}
+.lvl-btn:focus-visible{outline:3px solid var(--accent-line);outline-offset:2px}
+#view-bootcamp .lvl-bar{margin:0 0 14px}
 .map-head .say-bar,.gatebox .say-bar,.chcard .say-bar{margin:.4rem 0 .5rem}
