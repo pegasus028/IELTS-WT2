@@ -10,6 +10,9 @@
    Writer.checkRewrite(text, item)              → { ok, notes[] }
    Writer.mount(host, { prompt, mode:'guided'|'skeleton'|'exam', tier, minutes, studentId, onSubmit, onQuit })
    Writer.markingPrompt(prompt, text, pre)      → the text a teacher can paste into an AI marker
+   Writer.shapeCheck(key, value, promptText, type) → { ok, soft, tip, fix }   (matrix box shapes)
+   Writer.shapeExamples(key, level, prompt)     → examples in the right shape from OTHER prompts
+   Writer.nextStep(row, pre, level)             → { text, sub, link } for a red / amber Ward row
 
    These are checks, not marks: every rule is a tolerant heuristic and is
    labelled as such on screen.
@@ -20,7 +23,9 @@
   var C = global.CONTENT, T = global.Template;
   function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   function words(t) { var m = String(t || '').trim().match(/[A-Za-z0-9][A-Za-z0-9'’.,%$-]*/g); return m ? m.length : 0; }
-  function sentences(t) { return String(t || '').replace(/\n+/g, ' ').split(/(?<=[.!?])\s+/).map(function (s) { return s.trim(); }).filter(Boolean); }
+  /* No regex lookbehind anywhere (B2, 18 Oct 2026): Safari before 16.4 cannot parse it, and one
+     lookbehind stops the whole app. Split after . ! ? followed by white space, as before. */
+  function sentences(t) { return String(t || '').replace(/\n+/g, ' ').replace(/([.!?])\s+/g, '$1\u0001').split('\u0001').map(function (s) { return s.trim(); }).filter(Boolean); }
   function paragraphs(t) {
     var ps = String(t || '').replace(/\r/g, '').split(/\n\s*\n/).map(function (s) { return s.trim(); }).filter(Boolean);
     if (ps.length === 1) ps = String(t || '').split(/\n/).map(function (s) { return s.trim(); }).filter(Boolean);
@@ -105,12 +110,16 @@
       var f = fixWord(w.toLowerCase()); if (!f) return w;
       note(w, f); return /^[A-Z]/.test(w) ? f.charAt(0).toUpperCase() + f.slice(1) : f;
     });
+    s = s.replace(MORE_AND_MORE, function (m) { return /^M/.test(m) ? 'Increasingly' : 'increasingly'; });
     return { text: s, fixes: fixes };
   }
   function fixNote(fixes) {
     if (!fixes.length) return '';
     return 'Read as: ' + fixes.slice(0, 3).map(function (f) { return '"' + f[0] + '" → "' + f[1] + '"'; }).join(', ') + '. Check the spelling before you copy this into an essay.';
   }
+  /* "more and more serious" describes a trend; it is not a verdict (see VERDICT_WIDE). */
+  var VERDICT_ADJ = 'serious|important|significant|substantial|beneficial|harmful|damaging|valuable|weighty|compelling|powerful|convincing|considerable|numerous|positive|negative|useful|dangerous|costly|worrying|pressing|helpful|real|lasting|severe';
+  var MORE_AND_MORE = new RegExp('\\bmore and more(?= (far |much |considerably |clearly |slightly |a lot |significantly )?(' + VERDICT_ADJ + ')\\b)', 'gi');
   /* Keyword lists. An entry is a phrase ("young people"), a stem ending in *
      ("pollut*"), or a regular expression written "/…/". Phrases match whole
      words with any plural ("car" finds cars, car's), hyphen or space
@@ -187,9 +196,10 @@
     var list = syn === false ? group : expand(group);
     return list.some(function (k) { return termRe(k, whole).test(t); });
   }
-  /* Comparative verdict wording for "outweigh" prompts. */
+  /* Comparative verdict wording for "outweigh" prompts. "more and more serious" is not a verdict:
+     read() turns it into "increasingly serious" before the detectors run (this replaced a lookbehind). */
   var VERDICT_WIDE = new RegExp('\\b(outweigh\\w*|on balance|on the whole|tip(s|ped)? the (balance|scales)|(the )?(balance|scales) (tips|tilts)' +
-    '|(?<!more and )(far |much |considerably |clearly |slightly |a lot |significantly )?(more|less) (serious|important|significant|substantial|beneficial|harmful|damaging|valuable|weighty|compelling|powerful|convincing|considerable|numerous|positive|negative|useful|dangerous|costly|worrying|pressing|helpful|real|lasting|severe)\\b(?! and more)' +
+    '|(far |much |considerably |clearly |slightly |a lot |significantly )?(more|less) (' + VERDICT_ADJ + ')\\b(?! and more)' +
     '|(greater|bigger|larger|heavier|stronger|weightier|weaker|smaller|lighter|fewer|lesser|better|worse) (than|in (number|weight|importance|value|scale))' +
     '|(more|greater|bigger|larger|fewer|stronger|heavier) (\\w+ ){1,3}than' +
     '|exceed\\w*|surpass\\w*|overshadow\\w*|outnumber\\w*|outstrip\\w*|override\\w*|overrid\\w*|eclipse\\w*|dwarf\\w*|weigh\\w* (more|less|heavier|far more|much more)|weighs? heavier' +
@@ -332,7 +342,13 @@
        (B2 track) or 30% (C1 track) under exam conditions. */
     var tr = T ? T.ratio(all) : 0, share = SHARES.indexOf(Number(opts.share)) >= 0 ? Number(opts.share) : 0.4, sh = Math.round(share * 100);
     var trS = tr <= share + 0.005 ? 'ok' : tr <= share + 0.05 && tr <= 0.6 ? 'warn' : 'bad';
-    add('template', 'struct-template', trS, 'Unchanged frame text: ' + Math.round(tr * 100) + '% (your spellbook share: ' + sh + '%)', trS === 'ok' ? 'Within your spellbook (template) share. The marks are inside the variables.' : 'Above your ' + sh + '% spellbook (template) share. Edit the openers into your own words and put the weight inside the variables.');
+    /* WP6 (18 Oct 2026): the share she got sits next to the share she chose. Over it, longer
+       variables in her own words come first; lowering the spellbook share comes after. */
+    var got = Math.round(tr * 100), chosen = SHARES.indexOf(Number(opts.chosen)) >= 0 ? Math.round(Number(opts.chosen) * 100) : 0;
+    var shLbl = opts.practice ? 'practice limit ' + sh + '%' + (chosen && chosen !== sh ? ' (your spellbook: ' + chosen + '%)' : '') : 'you chose ' + sh + '%';
+    add('template', 'struct-template', trS, 'Frame share: you got ' + got + '% · ' + shLbl,
+      trS === 'ok' ? 'Unchanged frame text is within your spellbook (template) share. The marks are inside the variables.'
+        : 'Unchanged frame text is ' + got + '%, above the ' + sh + '% share. Longer variables in your own words lower it: write who, where and how much inside each key, and edit the openers. Lower your spellbook share only after that.');
 
     /* new idea in conclusion: a noun in the conclusion that appears nowhere else */
     if (concl && ps.length >= 4) {
@@ -343,7 +359,7 @@
 
     var bad = rows.filter(function (r) { return r.status === 'bad'; }).length;
     var warn = rows.filter(function (r) { return r.status === 'warn'; }).length;
-    return { rows: rows, words: n, paras: ps.length, bad: bad, warn: warn, ratio: tr,
+    return { rows: rows, words: n, paras: ps.length, bad: bad, warn: warn, ratio: tr, share: share, bodyWords: body.map(words),
       summary: bad === 0 && warn === 0 ? 'Every ward holds. Nothing red (structure only: the Wards do not mark grammar).' : bad === 0 ? 'No red rows — ' + warn + ' to look at.' : bad + ' red row' + (bad > 1 ? 's' : '') + ' to fix before you submit.' };
   }
 
@@ -355,7 +371,7 @@
   var PLAN_WARDS = [
     { id: 'type', text: 'I named the question type from the instruction sentence and read its row on the Type Switch Card.', manual: true },
     { id: 'parts', text: 'I counted the parts and circled every plural (causes, measures, reasons, both views).', manual: true },
-    { id: 'core', text: 'My Core Topic is one noun phrase that covers every part: no clause, no "should", not a copy of the prompt.' },
+    { id: 'core', text: 'My Core Topic is one noun phrase that covers every part: it names the issue (no "cars should …"), and it is not a copy of the prompt.' },
     { id: 'facets', text: 'Facet A and Facet B are two obvious ideas I can develop.' },
     { id: 'mech', text: 'Each facet has a mechanism (an -ing phrase) and an example I can picture or check.' },
     { id: 'nuance', text: 'Each facet has a nuance that limits it without changing my position.' },
@@ -365,13 +381,11 @@
   function planWards(vars, promptText) {
     var v = vars || {}, out = {};
     var has = function (k, min) { return String(v[k] || '').trim().split(/\s+/).filter(Boolean).length >= (min || 2); };
-    var core = String(v.core || '').trim();
-    out.core = has('core', 3) && !/^\s*\w+ing\b/i.test(core) && !/\b(should|must|because|which|that|when)\b/i.test(core) && !(promptText && lower(promptText).indexOf(lower(core).replace(/[.]$/, '')) >= 0 && core.split(/\s+/).length > 5);
+    out.core = coreOk(v.core, promptText);
     out.facets = has('facetA') && has('facetB');
     out.mech = /^\s*(by |through )?\w+ing\b/i.test(v.mechA || '') && /^\s*(by |through )?\w+ing\b/i.test(v.mechB || '') && has('exA') && has('exB');
     out.nuance = has('nuanceA', 5) && has('nuanceB', 5);
-    var pos = read(v.position || '').text;
-    out.position = has('position', 5) && (POSITION.test(pos) || STANCE.test(pos));
+    out.position = positionOk(v.position);
     return out;
   }
   /* The Landing Check: ten lines before submitting, ordered by marks per minute.
@@ -417,7 +431,17 @@
     '|so (they|it|we|students|schools|governments|cities|that|people|children|teenagers|families|parents|the|this|these|online|cars|tourism|young|lessons|classes|habits|councils|employers|workers))\\b' +
     '|;\\s*[a-z]|[,;:\\u2014]\\s*(so|which|since|thus|therefore|hence|as(?! well\\b| much\\b| many\\b| far\\b| soon\\b| such\\b| for\\b| part\\b))\\b|\\band so\\b|[:\\u2014]\\s*[a-z]|\\s[-\\u2013]\\s+[a-z]' +
     '|,\\s*(?!including|during|nothing|something|anything|everything|according|regarding|concerning|being|morning|evening)(thereby |thus )?[a-z]{3,}ing\\b|\\b(by|through) [a-z]+ing\\b' +
-    '|(?<!\\b(need|needs|have|has|had|ought|going|want|wants|try|tries|able|used|likely|decide|decided|plan|plans|seem|seems|tend|fail|fails|refuse|is|are|be|was|were|begin|start|continue|choose|learn) )\\bto (protect|keep|ensure|reduce|avoid|prevent|help|improve|save|allow|give|stop|cut|limit|raise|support|encourage|lower|fight|tackle|ease|free|create|boost|promote|preserve|guard|shield|balance|meet|serve|respect|gain|attract|clean|calm|make sure|safeguard|benefit)\\b', 'i');
+    '', 'i');
+  /* A purpose "to protect …" counts as a reason, unless "to" follows need / have / want … (then it
+     is part of the verb: "people need to protect"). Checked in code, not with a lookbehind (B2). */
+  var PURPOSE_TO = /\bto (protect|keep|ensure|reduce|avoid|prevent|help|improve|save|allow|give|stop|cut|limit|raise|support|encourage|lower|fight|tackle|ease|free|create|boost|promote|preserve|guard|shield|balance|meet|serve|respect|gain|attract|clean|calm|make sure|safeguard|benefit)\b/gi;
+  var TO_VERB_BEFORE = /\b(need|needs|have|has|had|ought|going|want|wants|try|tries|able|used|likely|decide|decided|plan|plans|seem|seems|tend|fail|fails|refuse|is|are|be|was|were|begin|start|continue|choose|learn) $/i;
+  function hasCause(t) {
+    if (CAUSE.test(t)) return true;
+    var m; PURPOSE_TO.lastIndex = 0;
+    while ((m = PURPOSE_TO.exec(t))) { if (!TO_VERB_BEFORE.test(t.slice(Math.max(0, m.index - 40), m.index))) { PURPOSE_TO.lastIndex = 0; return true; } }
+    return false;
+  }
   /* A condition: when, how far or on what terms the position holds. */
   var CONDITION = /\b(if|unless|provided|providing|as long as|so long as|only (if|when|where|as|for|to|in|with|after|once|until|during|on)|on (the |one |a |this |that )?condition|one condition|on the understanding|assuming|subject to|in (cases|situations|places|schools|areas|countries|districts) where|where (the|there|it|they|access|schools|recordings|footage|data|rules|hours|students|families)|when (the|it|they|there|access|schools|recordings|footage|data|rules|hours|used|combined|kept|limited|properly|strict|students|families|good)|once|until|except (when|where|if|for)|with (strict|clear|careful|proper|tight|limited|fair|strong|firm|good|sensible|reasonable|enough|adequate|independent|legal|safe|some|a few|certain|appropriate|controlled|short|reliable)\b|under (strict|clear|careful|proper|tight|firm|independent|controlled)\b|within (strict|clear|reasonable|safe|legal|certain|limited)\b|rather than|instead of|but (only|not|should|must|with|within|limited|never)|as (a|an) (supplement|addition|complement|extra|support|add-on)|alongside|complement\w*|in addition to|together with|limit\w* (to|on|the)|capped|no more than|at most|up to|for (a )?(limited|short)|kept (briefly|short|for)|restricted to|(not|never) \w+( \w+)? (more|longer) than|(fewer|less) than|a (maximum|limit|cap) of|limited|restricted|but (they|it|this|students|schools|the|teenagers|cameras|footage) (should|must|need|only|may))\b/i;
   var EXPLICIT = /\b((i|we) (strongly |firmly |personally |would |still |therefore |do |also |partly |largely |fully |completely )?(believe|think|agree|disagree|argue|feel|maintain|contend|support|oppose|prefer|conclude|am convinced|am in favou?r|am against|am sure|would say)|in my (view|opinion|judgement|judgment)|to my mind|from my (point of view|perspective)|my (own |overall |final )?(view|position|opinion|verdict|answer)|this essay (argues|will argue|contends|maintains)|personally)\b/i;
@@ -448,7 +472,7 @@
     var needCond = item.need ? item.need === 'condition' : /\bcondition\b/i.test(stem);
     var needWhy = item.need ? item.need === 'reason' : /\b(why|reason|because|cause)\b/i.test(stem);
     if (needCond && !CONDITION.test(t)) { ok = false; notes.push('Add the condition: "… provided that …", "… as long as …", "… only if …", "… with strict limits on …".'); }
-    else if (!needCond && needWhy && !CAUSE.test(t) && !CONDITION.test(t)) { ok = false; notes.push('Add the reason or the condition: "… because …", "… since …", "… provided that …", "… as long as …".'); }
+    else if (!needCond && needWhy && !hasCause(t) && !CONDITION.test(t)) { ok = false; notes.push('Add the reason or the condition: "… because …", "… since …", "… provided that …", "… as long as …".'); }
     /* Reporting the debate is not a position, unless the writer then says where she stands. */
     if (HEDGE.test(t) && !EXPLICIT.test(t)) { ok = false; notes.push('"It depends" is not a position. Say what YOU think, and put the "depends" into a condition: "… only if …".'); }
     else if (DEBATE.test(t) && !EXPLICIT.test(t)) {
@@ -529,8 +553,260 @@
       '"comment": 100–150 words in T.Chris\'s voice: open with the student\'s nickname, a comma, then one specific praise ending with an exclamation mark; quote the student\'s own words in single quotes; state the level plainly ("Your writing is around B2 level"); name error types by grammatical label; give replacement words; pivot with "However," / "Just ensure" / "Also look at" / "Finally,"; frame improvement as the next gate; close warmly. No markdown.';
   }
 
+  /* ---------------------------------------------- slot shapes (18 Oct 2026, WP6)
+     Help under each of the eleven matrix boxes, so that a student whose first
+     try is "car smoke" learns the shape instead of waiting out the ten minutes.
+       shapeCheck(key, value, promptText, type) → { ok, soft, tip, fix }
+         ok    the Plan Wards' own rule for that box (core, mechanism, nuance …)
+         soft  true when the box passes but a softer rule is not met (tip only)
+         fix   a rule-based rewrite of HER words into the shape, or '' (no AI)
+       shapeExamples(key, level, prompt) → [{ text, from, level }] taken from
+         OTHER prompts' Duelling Hall answer sets (p.vars[A2|B1|B2|C1]), never
+         this prompt's, so the example shows the shape without the answer. */
+  var SHAPE_SAY = {
+    core: ['a noun phrase', 'Three or more words that name the issue, like a title. No "should", no "because", and do not start with an -ing verb.'],
+    facet: ['a noun phrase', 'Two or more words: one idea you can explain in a paragraph.'],
+    mech: ['an -ing phrase', 'Start with an -ing verb ("cutting …", "giving …") or with by + -ing ("by giving …"). It says HOW the idea works.'],
+    ex: ['a concrete example', 'Two or more words about something real you can picture: a place, a rule, a school, a practice.'],
+    nuance: ['a limiting idea', 'Five or more words that limit the idea: who it does not help, when it does not work, or what it costs.'],
+    position: ['a full clause', 'A full sentence of five or more words with a stance word: "should", "outweigh", "I believe that …", "I agree …".'],
+    rationale: ['one reason', 'One reason why your position is right. It often starts with "because".']
+  };
+  function shapeKind(key) { return /^facet/.test(key) ? 'facet' : /^mech/.test(key) ? 'mech' : /^ex/.test(key) ? 'ex' : /^nuance/.test(key) ? 'nuance' : key; }
+  function nWords(s) { return String(s || '').trim().split(/\s+/).filter(Boolean).length; }
+  function clip(s) { return String(s || '').trim().replace(/\s+/g, ' ').replace(/[.;:,!?]+$/, ''); }
+  function lowFirst(s) { return /^(The|A|An|This|That|These|Those|It|They|We|Some|Many|Most|No|Less|More|Our|Their|Its|Every|Each|All|Too|Fewer|Cars|Students|Schools|People|Children|Teenagers|Parents|Families|Governments|Cities|Lessons|Online|Free|Better|Cheaper|Cleaner|Using|Making|Giving|Cutting|Keeping|Letting|Helping|Stopping|Banning)\b/.test(s) ? s.charAt(0).toLowerCase() + s.slice(1) : s; }
+  var MECH_OK = /^\s*(by |through )?\w+ing\b/i;
+  /* The Core Topic rule. "Cars should be banned" is a clause (an answer), so it fails. A noun phrase
+     that carries a relative clause after its head ("The role that competition should play in sport",
+     the Duelling Hall's own A2–C1 answers) is still a noun phrase, so it passes (18 Oct 2026). */
+  function coreClauseOk(core) {
+    var m = /\b(should|must|which|that|when)\b/i.exec(core);
+    if (!m) return true;
+    if (/^(how|which|what|whether|why|who)\b/i.test(core)) return true;           /* "How much competition there should be …": a noun clause */
+    var before = core.slice(0, m.index);
+    if (nWords(before) < 2 || /^(i|we|they|it|he|she|you|there)\b/i.test(core) || /\b(is|are|was|were|will|can|should|must|do|does)\b/i.test(before)) return false;
+    var md = /\b(should|must)\b/i.exec(core);
+    return !md || /\b(that|which|who|where|when)\b/i.test(core.slice(0, md.index)); /* "should" only inside the relative clause */
+  }
+  function coreOk(core, promptText) {
+    core = String(core || '').trim();
+    return nWords(core) >= 3 && !/^\s*\w+ing\b/i.test(core) && !/\bbecause\b(?! of)/i.test(core) && coreClauseOk(core) && !(promptText && lower(promptText).indexOf(lower(core).replace(/[.]$/, '')) >= 0 && core.split(/\s+/).length > 5);
+  }
+  function positionOk(v) { var pos = read(v || '').text; return nWords(v) >= 5 && (POSITION.test(pos) || STANCE.test(pos)); }
+  var SH_VERBS = {};
+  ('add allow ban block boost bring build buy calm carry cause change charge check choose clean close connect control cool cost create cut damage decide drive earn ease eat encourage end fill find fix force free fund get give go come see feel grow harm heat help hold hurt improve increase invest join keep kill learn leave let limit live lose lower make meet move offer open pay plan prevent protect provide pull push put raise read reduce remove repair rest ride run save sell send share show sleep spend start stay stop study support take tax teach tell think train travel use visit walk waste watch work write').split(' ').forEach(function (w) { SH_VERBS[w] = 1; });
+  var ING_SPECIAL = { travel: 'travelling', control: 'controlling', patrol: 'patrolling', cancel: 'cancelling', label: 'labelling', fuel: 'fuelling', model: 'modelling', level: 'levelling', admit: 'admitting', commit: 'committing', permit: 'permitting', forget: 'forgetting', begin: 'beginning', refer: 'referring', prefer: 'preferring', occur: 'occurring' };
+  function ingOf(v) {
+    v = v.toLowerCase();
+    if (ING_SPECIAL[v]) return ING_SPECIAL[v];
+    if (/ie$/.test(v)) return v.slice(0, -2) + 'ying';
+    if (/(ee|ye|oe)$/.test(v)) return v + 'ing';
+    if (/[^aeiou]e$/.test(v)) return v.slice(0, -1) + 'ing';
+    if (/^[^aeiou]*[aeiou][^aeiouwxy]$/.test(v)) return v + v.slice(-1) + 'ing';
+    return v + 'ing';
+  }
+  function verbBase(w) {
+    w = String(w || '').toLowerCase();
+    if (SH_VERBS[w]) return w;
+    var c = [/ies$/.test(w) ? w.slice(0, -3) + 'y' : '', /(ches|shes|sses|xes|zes|oes)$/.test(w) ? w.slice(0, -2) : '', /s$/.test(w) ? w.slice(0, -1) : ''];
+    for (var i = 0; i < c.length; i++) if (c[i] && SH_VERBS[c[i]]) return c[i];
+    return '';
+  }
+  var SH_SUBJ = /^(it|this|that|they|these|those|which|we|people|he|she|(the|this) (rule|ban|law|policy|plan|idea|change|tax|scheme))\s+/i;
+  var SH_AUX = /^(can|will|would|could|may|might|should|must|does|do|did)\s+/i;
+  /* her mechanism → an -ing phrase: "it cuts smoke" → "cutting smoke"; "less car smoke" → "leading to less car smoke" */
+  function mechFix(v) {
+    var s0 = clip(v).replace(/^(by|through)\s+/i, '').replace(/^to\s+/i, ''), s = s0.replace(SH_SUBJ, '').replace(SH_AUX, ''), hadSubj = s !== s0;
+    if (/^(not|never|no longer)\b/i.test(s) || /^(is|are|was|were|has|have|had|be|been)\b/i.test(s)) return '';
+    var m = /^([A-Za-z]+)\b(.*)$/.exec(s); if (!m) return '';
+    var b = verbBase(m[1]);
+    if (b) return ingOf(b) + m[2];
+    /* after a subject ("people go …") the next word is a verb, even one not on the list */
+    if (hadSubj && m[1].length > 1) { var w = m[1].toLowerCase(); return ingOf(/[^s]s$/.test(w) && w.length > 3 ? w.slice(0, -1) : w) + m[2]; }
+    return 'leading to ' + lowFirst(clip(v));
+  }
+  var SH_NOM = { ban: 'a ban on', restrict: 'limits on', limit: 'limits on', reduce: 'the reduction of', use: 'the use of', allow: 'permission for', tax: 'a tax on', charge: 'charges for', remove: 'the removal of', close: 'the closure of', protect: 'the protection of', control: 'control of', teach: 'the teaching of', build: 'the building of', fund: 'funding for', support: 'support for', invest: 'investment in', introduce: 'the introduction of', provide: 'the provision of' };
+  var SH_PP = { banned: 'ban', restricted: 'restrict', limited: 'limit', reduced: 'reduce', used: 'use', allowed: 'allow', taxed: 'tax', charged: 'charge', removed: 'remove', closed: 'close', protected: 'protect', controlled: 'control', taught: 'teach', built: 'build', funded: 'fund', supported: 'support', introduced: 'introduce', provided: 'provide' };
+  /* one repair at a time, until the Core Topic passes (or no rule applies) */
+  function coreStep(v) {
+    var m, s = clip(v);
+    if (!coreClauseOk(s) && (m = /^(.*?)\s*\b(should|must)\s+(not\s+)?(be\s+)?([A-Za-z]+)\b\s*(.*)$/i.exec(s))) {
+      var subj = clip(m[1]), verb = m[5].toLowerCase(), rest = clip(m[6]);
+      if (m[3]) return '';
+      if (m[4] && SH_PP[verb] && SH_NOM[SH_PP[verb]] && subj) return SH_NOM[SH_PP[verb]] + ' ' + lowFirst(subj) + (rest ? ' ' + rest : '');
+      if (!m[4] && SH_NOM[verb] && rest) return SH_NOM[verb] + ' ' + rest;
+      if (!m[4] && SH_VERBS[verb] && subj) return lowFirst(subj) + ' ' + ingOf(verb) + (rest ? ' ' + rest : '');
+      return '';
+    }
+    if ((m = /^(\w+)ing\b\s*(.*)$/i.exec(s)) && m[1].length > 1) {
+      var nb = verbBase(m[1]) || verbBase(m[1] + 'e') || verbBase(m[1].replace(/(.)\1$/, '$1'));
+      if (nb && SH_NOM[nb] && m[2]) return SH_NOM[nb] + ' ' + m[2];
+      return 'the practice of ' + lowFirst(s);
+    }
+    if ((m = /\b(because|which|that|when)\b/i.exec(s)) && m.index > 0 && !coreClauseOk(s)) return clip(s.slice(0, m.index));
+    if (nWords(s) < 3) return 'the issue of ' + lowFirst(s);
+    return '';
+  }
+  function coreFix(v, promptText) {
+    var s = clip(v);
+    for (var i = 0; i < 4; i++) { if (coreOk(s, promptText)) return s; s = coreStep(s); if (!s) return ''; }
+    return coreOk(s, promptText) ? s : '';
+  }
+  var LIMIT = /\b(leaves? out|neglect\w*|den(y|ies|ied)|erod\w*|puts? (most|all|the)|goes back|took away|takes? away|fake|most|often|unlimited|constant\w*|purely|strictly|exclusive\w*|narrow|leads? to|produces?|builds? up|no|not|only|some|few|fewer|less|least|hurts?|harms?|costs?|costly|expensive|cheap\w*|problems?|difficult|hard|risks?|may|might|can|could|lose|loses|losing|without|too|never|cannot|unless|if|when|still|but|lacks?|fails?|miss\w*|unfair|weak\w*|limit\w*|small|little|poor\w*|slow\w*|danger\w*|depends?|except|while|although|though|however|rather|instead|second|another|also|other)\b|n't\b/i;
+  function shapeCheck(key, value, promptText, type) {
+    var v = String(value || '').trim(), k = shapeKind(key), n = nWords(v), out = { ok: true, soft: false, tip: '', fix: '' };
+    if (!v) return out;
+    function fail(tip, fix) { out.ok = false; out.tip = tip; out.fix = fix && clip(fix) !== clip(v) ? fix : ''; return out; }
+    function soft(tip, fix) { out.soft = true; out.tip = tip; out.fix = fix || ''; return out; }
+    if (k === 'core') {
+      if (coreOk(v, promptText)) return out;
+      var cw = v.match(/\b(because|which|that|when)\b/i);
+      return fail(/^\s*\w+ing\b/i.test(v) ? 'Start with a noun, not an -ing verb: "the ban on …", "the use of …".'
+        : /\b(should|must)\b/i.test(v) && !coreClauseOk(v) ? 'Take out "should" / "must": the Core Topic names the issue. Your answer goes in the Position box.'
+        : cw ? 'Cut the "' + cw[0].toLowerCase() + ' …" part: a Core Topic is one noun phrase, with no clause.'
+        : n < 3 ? 'Too short: a Core Topic needs three or more words.' : 'Do not copy the prompt: name the issue in your own short noun phrase.', coreFix(v, promptText));
+    }
+    if (k === 'facet') return n >= 2 ? out : fail('Too short: use two or more words, like "the cost of …" or "the health of …".', 'the issue of ' + lowFirst(clip(v)));
+    if (k === 'mech') {
+      if (MECH_OK.test(v)) return out;
+      var mf = mechFix(v);
+      return fail('Start with an -ing verb ("cutting …", "making …") or with by + -ing ("by giving …"). Say HOW it works.', mf && MECH_OK.test(mf) ? mf : '');
+    }
+    if (k === 'ex') return n >= 2 ? out : fail('Too short: name something real in two or more words, like "bus lanes in Seoul" or "a school canteen in Bangkok".', /^[A-Z]/.test(v) ? '' : clip(v) + ' in Bangkok');
+    if (k === 'nuance') {
+      if (n < 5) return fail('Too short: use five or more words that limit the idea (who it does not help, when it does not work, what it costs).', 'this does not always work: ' + lowFirst(clip(v)));
+      if (!LIMIT.test(v) && !NUANCE.test(v) && !(type === 'PROBLEM' && key === 'nuanceA')) return soft('Five words: good. Now make it a limit: who it does not help, or when it does not work ("… but only if …", "it does not help …").');
+      return out;
+    }
+    if (k === 'position') {
+      if (positionOk(v)) return out;
+      var s = clip(v), first = (s.match(/^[A-Za-z]+/) || [''])[0].toLowerCase(), pf = '';
+      if (/^(should|must|need to|have to)\b/i.test(s)) pf = 'I believe that we ' + s.charAt(0).toLowerCase() + s.slice(1);
+      else if (SH_VERBS[first]) pf = 'I believe that we should ' + lowFirst(s);
+      else if (nWords(s) >= 3 && !/^(i|in my|this essay)\b/i.test(s)) pf = 'I believe that ' + lowFirst(s);
+      return fail('Make it a full sentence with your stance: "I believe that …", "… should …", "… outweigh …".', pf && positionOk(pf) ? pf : '');
+    }
+    if (k === 'rationale') {
+      if (n < 3) return soft('Give one full reason in three or more words. It often starts with "because …".', /^because\b/i.test(v) ? '' : 'because ' + lowFirst(clip(v)));
+      return out;
+    }
+    return out;
+  }
+  function exLevel(l) { return l === 'A1' || l === 'A2' ? 'A2' : l === 'B1' || l === 'B2' || l === 'C1' ? l : 'B2'; }
+  function shapeExamples(key, level, p) {
+    var lv = exLevel(level), mine = {}, out = [];
+    p = p || {};
+    ['A2', 'B1', 'B2', 'C1'].forEach(function (l) { var x = p.vars && p.vars[l] && p.vars[l][key]; if (x && x.ok) mine[lower(clip(x.ok))] = 1; });
+    var all = (C.PROMPTS || []).filter(function (q) { return q.id !== p.id && q.vars && q.vars[lv] && q.vars[lv][key] && q.vars[lv][key].ok; });
+    all.filter(function (q) { return q.type === p.type; }).concat(all.filter(function (q) { return q.type !== p.type; })).forEach(function (q) {
+      var t = clip(q.vars[lv][key].ok), c = shapeCheck(key, t, q.text, q.type);
+      if (mine[lower(t)] || !c.ok || c.soft) return;
+      out.push({ text: t, from: q.title, level: lv });
+    });
+    return out;
+  }
+
+  /* -------------------------------------- one next step per red row (WP7)
+     nextStep(row, pre, level) → { text, sub, link } | null. One concrete action
+     at her level and, where a lesson teaches it, the lesson to open. */
+  var STEP_LESSON = { m01s3: 'M01 · Parts of the question', m02s1: 'M02 · What a position is', m02s2: 'M02 · Position at both ends', m04s1: 'M04 · Mechanism', m04s2: 'M04 · Example', m04s3: 'M04 · Nuance',
+    m05s1: 'M05 · Four frames', m05s3: 'M05 · Own the frame', m06s3: 'M06 · The conclusion', m07s1: 'M07 · Reference words', m07s2: 'M07 · Linker Detox', m10s3: 'M10 · Register', m11s2: 'M11 · Agreement', m12s2: 'M12 · Weigh, do not list', m12s3: 'M12 · Problem and two-part' };
+  function nextStep(r, pre, level) {
+    if (!r || r.status === 'ok') return null;
+    pre = pre || {};
+    var easy = level !== 'B2' && level !== 'C1', id = r.id, bw = pre.bodyWords || [], m = /^b(\d)(mech|ex|nu|len)$/.exec(id);
+    var body = m ? 'Body ' + (Number(m[1]) + 1) : '';
+    function st(e, f, sub) { return { text: easy || !f ? e : f, sub: sub || '', link: sub ? 'Lesson ' + STEP_LESSON[sub] : '' }; }
+    if (id === 'length') {
+      if (r.status === 'warn') return st('Cut the weakest sentence in your longest body paragraph.', 'Cut the weakest sentence in each body paragraph; keep the mechanism, the example and the nuance.');
+      var need = Math.max(1, 250 - (pre.words || 0));
+      if (!bw.length) return st('Write all four paragraphs first: introduction, two body paragraphs, conclusion.', '', 'm05s1');
+      var si = 0; bw.forEach(function (w, i) { if (w < bw[si]) si = i; });
+      var nm = 'Body ' + (si + 1) + ' (' + bw[si] + ' words)';
+      return need <= 45
+        ? st('Add one example sentence to your shorter body paragraph, ' + nm + '. Start it with "For example, in …" and name a real place. You need about ' + need + ' more words.', 'Develop your shorter body paragraph, ' + nm + ': add one concrete example sentence (a named place, school or policy). About ' + need + ' more words are needed.', 'm04s2')
+        : st('Add two sentences to each body paragraph: one example ("For example, in …") and one limit ("However, …"). You need about ' + need + ' more words.', 'Each body paragraph needs about ' + Math.ceil(need / 2) + ' more words: add a concrete example and a nuance sentence to each.', 'm04s2');
+    }
+    if (id === 'bullets') return st('Turn each line into a full sentence, and join the sentences into paragraphs.', '', 'm05s1');
+    if (id === 'paras') return (pre.paras || 0) < 4
+      ? st('Make four paragraphs: introduction, Body 1, Body 2, conclusion. Write in every box, or leave an empty line between paragraphs.', '', 'm05s1')
+      : st('Join the extra paragraphs: keep two body paragraphs, one idea in each.', '', 'm05s1');
+    if (id === 'verdict') return st('Add this to your first and your last paragraph: "the benefits outweigh the drawbacks" (or the other way round).', 'State the verdict in the introduction and again in the conclusion: "… clearly outweigh …".', 'm12s2');
+    if (id === 'extent') return st('Say how far you agree in paragraph one: "I largely agree that …" or "I agree only if …".', '', 'm02s1');
+    if (id === 'twopart') return st('Answer question 1 in Body 1 and question 2 in Body 2.', '', 'm12s3');
+    if (id === 'position') return /^No clear/.test(r.label)
+      ? st('Add one sentence to paragraph one: "I believe that …" or "This essay argues that …".', '', 'm02s1')
+      : /only at the end/.test(r.label) ? st('Put your view in paragraph one too, in new words: "This essay argues that …".', '', 'm02s2')
+      : st('Add one sentence to the conclusion: "For these reasons, I believe that …".', '', 'm02s2');
+    if (id === 'coverage') { var miss = String(r.label).split(': ')[1] || ''; return st('Use the word "' + miss.split(', ')[0] + '" (or a word that means the same) in each body paragraph.', '', 'm01s3'); }
+    if (id === 'plural-c') return st('Add a second cause, for example in Nuance A: "A second cause is …".', '', 'm01s3');
+    if (id === 'plural-s') return st('Add a second measure, for example in Nuance B: "A second step is …".', '', 'm01s3');
+    if (id === 'parts') return st('Write both parts: the cause in Body 1, and a solution that answers it in Body 2.', '', 'm12s3');
+    if (m && m[2] === 'mech') return st('In ' + body + ', after your first sentence, say how it works: "This is because …" or "… by + -ing …".', '', 'm04s1');
+    if (m && m[2] === 'ex') return st('In ' + body + ', add one sentence: "For example, in Bangkok, …". Name a real place, school or rule.', '', 'm04s2');
+    if (m && m[2] === 'nu') return st('In ' + body + ', add one sentence: "However, this does not help …".', '', 'm04s3');
+    if (m && m[2] === 'len') return /only/.test(r.label) ? st('Add one example sentence to ' + body + '.', '', 'm04s2') : st('Keep one idea in ' + body + ': cut the weakest sentence.', '');
+    if (id === 'linkers') return st('Start two sentences without Firstly / Moreover / However. Begin with "This …" instead.', '', 'm07s2');
+    if (id === 'reference') return st('Change one repeated noun to "this …" or "such …": "This rule …", "Such measures …".', '', 'm07s1');
+    if (id === 'cliche') return st('Delete the phrase and say the idea in your own simple words.', '', 'm10s3');
+    if (id === 'unverifiable') return st('Change "research shows" to a real case: "In Bangkok, …".', '', 'm04s2');
+    if (id === 'ban0') return st('Write the full form: "do not", "it is", "cannot".', '', 'm10s3');
+    if (id === 'ban1') return st('Change the informal word: "children", "many", "a great deal of".', '', 'm10s3');
+    if (id === 'ban2') return st('Change "!" to a full stop.', '');
+    if (id === 'ban3') return st('Change "you" to "people", "students" or "families".', '', 'm10s3');
+    if (id === 'rhetorical') return st('Change the question into a statement.', '');
+    if (id === 'repeat') return st('Change some of the repeated words to "this …" or another word with the same meaning.', '', 'm07s1');
+    if (id === 'ipron') return st('Keep "I" for paragraphs one and four. In the body, use "people", "students" or "governments".', '');
+    if (id === 'lang') return st('Read each hint, find the words in your essay, and fix one slip at a time.', '', 'm11s2');
+    if (id === 'template') return st('First make your eleven variables longer, in your own words: add who, where or how much to each one. Longer variables lower the share. Lower your spellbook share only after that.',
+      'Lengthen the variables in your own words (who, where, how much) before you lower the spellbook share: the share falls as your own words grow.', 'm05s3');
+    if (id === 'newidea') return st('Delete the new idea from the conclusion, or move it into a body paragraph.', '', 'm06s3');
+    return null;
+  }
+
   /* ---------------------------------------------------------------- UI */
   function mmss(s) { var m = Math.floor(s / 60), x = s % 60; return m + ':' + (x < 10 ? '0' : '') + x; }
+
+  function pctOf(a, b) { return b ? Math.round(100 * a / b) : 0; }
+  function hashStr(s) { var h = 0; for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 9973; return h; }
+  /* The Type Switch Card (B15, 18 Oct 2026). On a phone the full five-row table pushed the essay
+     boxes far down the page, so a phone shows only this prompt's row, with a tap for the rest. */
+  function switchBlock(type) {
+    var full = T.switchCard(type); if (!full) return '';
+    var L = global.LabContent, r = ((L && L.TYPE_SWITCH) || []).filter(function (x) { return x.id === type; })[0];
+    if (!r) return full;
+    var lb = [['Facet A', r.a], ['Nuance A', r.na], ['Facet B', r.b], ['Nuance B', r.nb], ['Position says', r.pos], ['Easy to miss', r.trap]];
+    return '<div class="wr-switch"><div class="card wr-switch-mini" id="wr-switch-mini"><p class="kicker">Type Switch Card · this prompt</p><b class="wr-switch-name">' + esc(r.name) + '</b>' +
+      '<dl class="wr-switch-dl">' + lb.map(function (x) { return '<div><dt>' + esc(x[0]) + '</dt><dd>' + esc(x[1]) + '</dd></div>'; }).join('') + '</dl>' +
+      '<button type="button" class="btn sm ghost wr-switch-more" id="wr-switch-more" aria-expanded="false" aria-controls="wr-switch-full">Show all five types</button></div>' +
+      '<div class="wr-switch-full" id="wr-switch-full">' + full + '</div></div>';
+  }
+  /* Frame words in a paragraph: runs of 3+ words copied from the frame (between its slots). */
+  function frameMarks(text, frameTexts) {
+    var toks = String(text || '').split(/(\s+)/), idx = [], norm = [];
+    toks.forEach(function (t, i) { if (/\S/.test(t)) { idx.push(i); norm.push(t.toLowerCase().replace(/[^a-z0-9']+/g, '')); } });
+    var mark = new Array(norm.length), segs = [];
+    frameTexts.forEach(function (ft) { String(ft || '').split(/\{\w+\}/).forEach(function (sg) { var w = sg.toLowerCase().replace(/[^a-z0-9' ]+/g, ' ').split(/\s+/).filter(Boolean); if (w.length >= 3) segs.push(w); }); });
+    segs.forEach(function (sw) {
+      for (var i = 0; i < norm.length; i++) for (var j = 0; j < sw.length; j++) {
+        var k = 0; while (i + k < norm.length && j + k < sw.length && norm[i + k] && norm[i + k] === sw[j + k]) k++;
+        if (k >= 3) for (var q = 0; q < k; q++) mark[i + q] = 1;
+      }
+    });
+    var n = 0; for (var z = 0; z < mark.length; z++) if (mark[z]) n++;
+    return { toks: toks, idx: idx, mark: mark, frame: n, total: norm.length };
+  }
+  function sentWords(s) { return lower(s).replace(/[^a-z0-9' ]+/g, ' ').split(/\s+/).filter(Boolean); }
+  /* Is this sentence hers? Not if it is a frame-filled sentence with fewer than three words changed. */
+  function changedSent(s, base) {
+    var w = sentWords(s); if (!w.length) return false;
+    var best = null, bestN = 0;
+    base.forEach(function (b) { var set = {}; b.forEach(function (x) { set[x] = 1; }); var n = w.filter(function (x) { return set[x]; }).length; if (n > bestN) { bestN = n; best = b; } });
+    if (!best) return true;
+    var ws = {}, bs = {}; w.forEach(function (x) { ws[x] = 1; }); best.forEach(function (x) { bs[x] = 1; });
+    return Object.keys(ws).filter(function (x) { return !bs[x]; }).length + Object.keys(bs).filter(function (x) { return !ws[x]; }).length >= 3;
+  }
 
   function mount(host, cfg) {
     var p = promptOf(cfg.prompt);
@@ -538,9 +814,12 @@
     var tier = cfg.tier || 'B2', type = p.type || 'DISCUSS';
     /* guided mode is practice (60%); skeleton and exam use the chosen share or the track default */
     var share = guided ? 0.6 : (SHARES.indexOf(Number(cfg.share)) >= 0 ? Number(cfg.share) : tier === 'C1' ? 0.3 : 0.4);
+    var shareOpts = { share: share, chosen: cfg.share, practice: guided };
+    var level = cfg.level || tier;
     var minutes = cfg.minutes || 40, total = minutes * 60;
     var my = T.load(cfg.studentId); if (!my.choice) my.choice = {}; if (!my.custom) my.custom = {};
-    var state = { t0: Date.now(), left: total, done: false, revision: 0, tick: null, vars: {}, choice: {}, custom: {}, planTicks: {}, landTicks: {}, planOpen: !guided, planOpenedAt: null };
+    var state = { t0: Date.now(), left: total, done: false, revision: 0, tick: null, vars: {}, choice: {}, custom: {}, planTicks: {}, landTicks: {}, planOpen: !guided, planOpenedAt: null,
+      exLvl: exLevel(level), exIdx: {}, exCache: {}, fixes: {}, shapeT: {}, fillBase: {}, prevOpen: {}, relock: null, helped: {} };
     var paras = T.paragraphs(tier, type), labels = T.labels(type);
     paras.forEach(function (pg) { state.choice[pg.key] = my.choice[pg.key] || pg.frames[0].id; if (my.custom[pg.key]) state.custom[pg.key] = my.custom[pg.key]; });
     var PHASES = [['Decode', 0], ['Matrix', 90], ['Write', 300], ['Check', total - 300]];
@@ -557,10 +836,13 @@
       '</div>' +
       '<div class="wr-grid">' +
         '<div class="wr-left">' + Prompts.card(p, { demand: !exam }) +
-          (!exam ? T.switchCard(type) : '') +
+          (!exam ? switchBlock(type) : '') +
           (!exam ? '<div class="card wr-plan"><div class="wr-boxh"><b>The matrix</b><span class="tiny">plan — not counted</span>' + (guided ? '<button class="btn sm" id="wr-fill">Fill the frames →</button>' : '') + '</div>' +
-            C.VARIABLES.map(function (v) { return '<div class="wr-planrow"><label for="wr-v-' + v.key + '" title="' + esc(v.hint) + '">' + v.n + ' · ' + esc(labels[v.key]) + '</label><input id="wr-v-' + v.key + '" data-var="' + v.key + '" placeholder="' + esc(v.hint) + '"></div>'; }).join('') + '</div>' : '') +
-          (!exam ? '<div class="card wr-wards" id="wr-planwards"><div class="wr-boxh"><b>The Plan Wards</b><span class="tiny" id="wr-planscore"></span></div><p class="tiny">Grey lines tick themselves from the eleven keys. The others are yours to tick honestly.</p><div id="wr-planlist"></div>' + (guided ? '<p class="tiny" id="wr-plannote">The paragraph boxes open when the Plan Wards are green, or after ten minutes.</p>' : '') + '</div>' : '') +
+            '<p class="tiny wr-plan-help">Not sure what a box wants? Tap <b>Show an example</b> under it. The examples come from other prompts, so the ideas for this one stay yours.</p>' +
+            C.VARIABLES.map(function (v) { return '<div class="wr-planrow" data-row="' + v.key + '"><label for="wr-v-' + v.key + '" title="' + esc(v.hint) + '">' + v.n + ' · ' + esc(labels[v.key]) + '</label><input id="wr-v-' + v.key + '" data-var="' + v.key + '" placeholder="' + esc(v.hint) + '" autocomplete="off">' +
+              '<div class="wr-help"><button type="button" class="wr-exbtn" data-ex="' + v.key + '" aria-expanded="false" aria-controls="wr-ex-' + v.key + '">Show an example</button><div class="wr-shape" id="wr-sh-' + v.key + '" aria-live="polite"></div></div>' +
+              '<div class="wr-ex hidden" id="wr-ex-' + v.key + '"></div></div>'; }).join('') + '</div>' : '') +
+          (!exam ? '<div class="card wr-wards" id="wr-planwards"><div class="wr-boxh"><b>The Plan Wards</b><span class="tiny" id="wr-planscore"></span></div><p class="tiny">Grey lines tick themselves from the eleven keys. The others are yours to tick honestly.</p><div id="wr-planlist"></div>' + (guided ? '<p class="tiny" id="wr-plannote">The paragraph boxes open when the Plan Wards are green, or after ten minutes. A red box in the matrix shows a "Fix my shape" tip: use it, and the Ward turns green.</p>' : '') + '</div>' : '') +
         '</div>' +
         '<div class="wr-right">' +
           (exam
@@ -571,10 +853,12 @@
                   (guided ? '<select class="wr-frame-pick" data-pick="' + pg.key + '">' + pg.frames.map(function (f) { return '<option value="' + f.id + '"' + (f.id === fr.id ? ' selected' : '') + '>' + esc(f.name) + '</option>'; }).join('') + '</select><button class="linky" data-card="' + i + '">frame</button>' : '') + '</div>' +
                   (guided ? '<div class="wr-card hidden" id="wr-card' + i + '"><b>Frame · edit it into your own words</b><textarea class="wr-frame" data-frame="' + pg.key + '" rows="4" spellcheck="false">' + esc(frameText(pg)) + '</textarea><p class="tiny">Slots: ' + T.tokens(frameText(pg)).map(function (k) { return '{' + esc(labels[k] || k) + '}'; }).join(' · ') + '</p></div>' : '') +
                   (skeleton ? '<p class="tiny wr-skel">' + pg.slots.map(function (k) { return '[' + esc(labels[k] || k) + ']'; }).join(' → ') + '</p>' : '') +
-                  '<textarea id="wr-t' + i + '" rows="' + (i === 0 || i === 3 ? 4 : 6) + '" spellcheck="false" placeholder="' + esc(pg.name) + ' …"></textarea></div>';
+                  '<textarea id="wr-t' + i + '" rows="' + (i === 0 || i === 3 ? 4 : 6) + '" spellcheck="false" placeholder="' + esc(pg.name) + ' …"></textarea>' +
+                  (guided ? '<div class="wr-meter" id="wr-m' + i + '" aria-live="polite"></div><div class="wr-prev hidden" id="wr-prev' + i + '"></div>' : '') + '</div>';
               }).join('')) +
           '<div class="qfoot"><span class="tiny" id="wr-note">Checks, not marks: the panel looks at structure only.</span><span class="grow"></span>' +
           '<button class="btn primary" id="wr-check">Check the Ten Wards →</button></div>' +
+          (!exam ? '<p class="tiny wr-share" id="wr-share" aria-live="polite"></p>' : '') +
           '<div id="wr-panel"></div>' +
         '</div>' +
       '</div></div>';
@@ -582,20 +866,136 @@
 
     var areas = Array.prototype.slice.call(host.querySelectorAll('textarea[id^=wr-t]'));
     function text() { return exam ? areas[0].value : areas.map(function (a) { return a.value.trim(); }).filter(Boolean).join('\n\n'); }
+
+    /* --- "Fill the frames" → her own sentences (WP7). Frame words show grey under each box; Submit
+       waits until every paragraph has at least one sentence she changed (guided mode only). */
+    function baseSents(i) {
+      var out = (state.fillBase[i] || []).slice();
+      sentences(T.tidy(T.fill(frameText(paras[i]), state.vars))).forEach(function (s) { out.push(s); });
+      return out.map(sentWords);
+    }
+    function paraState(i) {
+      var t = areas[i] ? areas[i].value.trim() : ''; if (!t) return null;
+      var base = baseSents(i), ss = sentences(t), own = 0, mine = [];
+      ss.forEach(function (s) { var c = changedSent(s, base); mine.push(c); if (c) own++; });
+      var fm = frameMarks(t, [frameText(paras[i])]);
+      return { words: fm.total, frame: fm.frame, own: own, sents: ss, mine: mine, fm: fm };
+    }
+    function lockList() {
+      if (!guided) return [];
+      return paras.filter(function (pg, i) { var st = paraState(i); return st && st.own === 0; }).map(function (pg) { return pg.name; });
+    }
+    function paintMeter(i) {
+      var el = host.querySelector('#wr-m' + i), pv = host.querySelector('#wr-prev' + i); if (!el) return;
+      var st = paraState(i);
+      if (!st) { el.className = 'wr-meter'; el.innerHTML = ''; if (pv) { pv.innerHTML = ''; pv.classList.add('hidden'); } return; }
+      var need = st.own === 0, open = !!state.prevOpen[i];
+      el.className = 'wr-meter ' + (need ? 'need' : 'good');
+      el.innerHTML = '<span class="wr-mbar" aria-hidden="true"><i style="width:' + pctOf(st.frame, st.words) + '%"></i></span>' +
+        '<span class="wr-mtext"><b>' + st.frame + '</b> frame words · <b>' + (st.words - st.frame) + '</b> your words · ' + st.own + ' of ' + st.sents.length + ' sentence' + (st.sents.length === 1 ? '' : 's') + ' in your own words</span>' +
+        (need ? '<span class="wr-mneed">Change one sentence into your own words (add your reason, your example or your place). Submit stays locked until you do.</span>' : '') +
+        (st.frame ? '<button type="button" class="linky wr-prevbtn" data-prev="' + i + '" aria-expanded="' + open + '" aria-controls="wr-prev' + i + '">' + (open ? 'Hide' : 'Show') + ' the frame words</button>' : '');
+      if (pv) {
+        pv.classList.toggle('hidden', !open || !st.frame);
+        if (open) {
+          var fm = st.fm, k = 0;
+          pv.innerHTML = '<p class="tiny">Grey = still the frame. Dark = your words.</p><p class="wr-prev-t">' + fm.toks.map(function (t) { if (!/\S/.test(t)) return t; var m = fm.mark[k++]; return m ? '<span class="fw">' + esc(t) + '</span>' : esc(t); }).join('') + '</p>';
+        }
+      }
+    }
+    function paintMeters() { if (guided) paras.forEach(function (pg, i) { paintMeter(i); }); }
+    var shareT = null;
+    function paintShare() {
+      var el = host.querySelector('#wr-share'); if (!el) return;
+      var t = text(); if (words(t) < 20) { el.textContent = ''; el.className = 'tiny wr-share'; return; }
+      var got = Math.round((T.ratio(t) || 0) * 100), sh = Math.round(share * 100), over = got > sh;
+      var ch = SHARES.indexOf(Number(cfg.share)) >= 0 ? Math.round(Number(cfg.share) * 100) : 0;
+      el.className = 'tiny wr-share' + (over ? ' over' : '');
+      el.innerHTML = 'Frame share now: <b>' + got + '%</b> · ' + (guided ? 'practice limit ' + sh + '%' + (ch && ch !== sh ? ' (your spellbook: ' + ch + '%)' : '') : 'you chose ' + sh + '%') +
+        (over ? '. To lower it, make your variables longer in your own words first.' : '.');
+    }
     function countW() {
       var n = words(text());
       host.querySelector('#wr-words').textContent = n + ' words';
       if (!exam) areas.forEach(function (a, i) { var el = host.querySelector('#wr-w' + i); if (el) el.textContent = words(a.value); });
     }
-    areas.forEach(function (a) { a.addEventListener('input', countW); });
+    areas.forEach(function (a, i) { a.addEventListener('input', function () {
+      countW(); paintMeter(i); if (state.relock) state.relock();
+      clearTimeout(shareT); shareT = setTimeout(paintShare, 400);
+    }); });
     host.querySelectorAll('[data-card]').forEach(function (b) { b.addEventListener('click', function () { host.querySelector('#wr-card' + b.dataset.card).classList.toggle('hidden'); }); });
-    host.querySelectorAll('[data-var]').forEach(function (inp) { inp.addEventListener('input', function () { state.vars[inp.dataset['var']] = inp.value.trim(); paintPlanWards(); }); });
+
+    /* --- slot-shape help under each matrix box (WP6) */
+    function exList(key) {
+      var ck = key + ':' + state.exLvl;
+      if (!state.exCache[ck]) state.exCache[ck] = shapeExamples(key, state.exLvl, p);
+      return state.exCache[ck];
+    }
+    function exHtml(key, t) {
+      var h = esc(t);
+      if (shapeKind(key) === 'mech') h = h.replace(/^((by |through )?\w+ing)\b/i, '<b class="wr-ex-head">$1</b>');
+      return '“' + h + '”';
+    }
+    function paintEx(key) {
+      var box = host.querySelector('#wr-ex-' + key); if (!box) return;
+      var list = exList(key), say = SHAPE_SAY[shapeKind(key)] || ['', ''];
+      if (state.exIdx[key] == null) state.exIdx[key] = list.length ? hashStr(p.id + key) % list.length : 0;
+      var i = list.length ? state.exIdx[key] % list.length : 0, e = list[i];
+      box.innerHTML = '<p class="wr-ex-shape"><b>Shape: ' + esc(say[0]) + '.</b> ' + esc(say[1]) + '</p>' +
+        (e ? '<p class="wr-ex-line">' + exHtml(key, e.text) + '</p><p class="tiny wr-ex-from">From another prompt, not this one: <i>' + esc(e.from) + '</i> · ' + e.level + ' · ' + (i + 1) + ' of ' + list.length + '. Copy the shape, not the words.</p>'
+          : '<p class="tiny">No example at this level yet. Try another level.</p>') +
+        '<div class="wr-ex-ctl">' + (list.length > 1 ? '<button type="button" class="btn sm" data-exnext="' + key + '">Another example</button>' : '') +
+        '<span class="wr-ex-lv" role="group" aria-label="Level of the example">' + ['A2', 'B1', 'B2', 'C1'].map(function (l) { return '<button type="button" class="lvl-btn' + (l === state.exLvl ? ' on' : '') + '" data-exlvl="' + l + '" data-exkey="' + key + '" aria-pressed="' + (l === state.exLvl) + '">' + l + '</button>'; }).join('') + '</span></div>';
+    }
+    function paintShape(key, live) {
+      var el = host.querySelector('#wr-sh-' + key), inp = host.querySelector('#wr-v-' + key); if (!el || !inp) return;
+      var v = inp.value.trim(), c = shapeCheck(key, v, p.text, type), k = shapeKind(key);
+      state.fixes[key] = '';
+      if (!v) { el.className = 'wr-shape'; el.innerHTML = ''; inp.classList.remove('bad'); return; }
+      if (c.ok && !c.soft) { el.className = 'wr-shape ok'; el.innerHTML = '✓ Right shape: ' + esc((SHAPE_SAY[k] || [''])[0]) + '.'; inp.classList.remove('bad'); return; }
+      /* while she is typing, a new red tip waits for a pause or for her to leave the box */
+      if (live && !/\b(bad|soft)\b/.test(el.className)) { el.className = 'wr-shape'; el.innerHTML = ''; return; }
+      state.fixes[key] = c.fix;
+      el.className = 'wr-shape ' + (c.ok ? 'soft' : 'bad'); inp.classList.toggle('bad', !c.ok);
+      el.innerHTML = '<b>' + (c.ok ? 'Tip' : 'Fix my shape') + ':</b> ' + esc(c.tip) +
+        (c.fix ? ' <span class="wr-try">Try: “' + esc(c.fix) + '”</span> <button type="button" class="btn sm wr-usefix" data-usefix="' + key + '">Use this</button><span class="tiny wr-try-note"> You can edit it after.</span>' : '');
+    }
+    host.querySelectorAll('[data-var]').forEach(function (inp) {
+      var key = inp.dataset['var'];
+      inp.addEventListener('input', function () {
+        state.vars[key] = inp.value.trim(); paintPlanWards(); paintShape(key, true);
+        clearTimeout(state.shapeT[key]); state.shapeT[key] = setTimeout(function () { paintShape(key, false); }, 1500);
+      });
+      inp.addEventListener('change', function () { clearTimeout(state.shapeT[key]); paintShape(key, false); });
+    });
+    /* one delegated listener on this essay's own root (the host outlives the essay) */
+    var root = host.querySelector('.wr');
+    root.addEventListener('click', function (ev) {
+      var b = ev.target && ev.target.closest ? ev.target.closest('button') : null; if (!b || !root.contains(b)) return;
+      var d = b.dataset;
+      if (d.ex) {
+        var box = host.querySelector('#wr-ex-' + d.ex), show = box.classList.contains('hidden');
+        if (show) { paintEx(d.ex); state.helped[d.ex] = (state.helped[d.ex] || 0) + 1; }
+        box.classList.toggle('hidden', !show); b.setAttribute('aria-expanded', String(show)); b.textContent = show ? 'Hide the example' : 'Show an example';
+      } else if (d.exnext) { state.exIdx[d.exnext] = (state.exIdx[d.exnext] || 0) + 1; paintEx(d.exnext); }
+      else if (d.exlvl) { state.exLvl = d.exlvl; paintEx(d.exkey); }
+      else if (d.usefix) {
+        var inp = host.querySelector('#wr-v-' + d.usefix), fx = state.fixes[d.usefix]; if (!inp || !fx) return;
+        inp.value = fx; state.vars[d.usefix] = fx; state.helped[d.usefix + ':fix'] = 1;
+        paintPlanWards(); paintShape(d.usefix, false); inp.focus();
+      } else if (d.prev) { var ix = Number(d.prev); state.prevOpen[ix] = !state.prevOpen[ix]; paintMeter(ix); }
+      else if (d.openSub) {
+        var H = global.PCHost; if (!H || !H.openSub) return;
+        if (H.setReturn) H.setReturn('write');
+        H.openSub(d.openSub);
+      }
+    });
     function planGreen() { var a = planWards(state.vars, p.text); return PLAN_WARDS.every(function (w) { return w.manual ? !!state.planTicks[w.id] : !!a[w.id]; }); }
     function openBoxes(why) {
       if (state.planOpen) return;
       state.planOpen = true; state.planOpenedAt = Math.round((Date.now() - state.t0) / 1000); state.planHow = why;
       host.querySelectorAll('.wr-box[data-para]').forEach(function (b) { b.classList.remove('wr-locked'); });
-      var note = host.querySelector('#wr-plannote'); if (note) note.textContent = why === 'green' ? 'Plan Wards green: the boxes are open. Fill the frames, then edit every sentence into your own words.' : 'Ten minutes are up: the boxes are open. Finish the plan as you write.';
+      var note = host.querySelector('#wr-plannote'); if (note) note.textContent = why === 'green' ? 'Plan Wards green: the boxes are open. Fill the frames, then change at least one sentence in every paragraph into your own words.' : 'Ten minutes are up: the boxes are open. Finish the plan as you write.';
     }
     function paintPlanWards() {
       var box = host.querySelector('#wr-planlist'); if (!box) return;
@@ -607,18 +1007,32 @@
     }
     if (guided) { host.querySelectorAll('.wr-box[data-para]').forEach(function (b) { b.classList.add('wr-locked'); }); }
     paintPlanWards();
+    var swMore = host.querySelector('#wr-switch-more');
+    if (swMore) swMore.addEventListener('click', function () {
+      var full = host.querySelector('#wr-switch-full'), open = !full.classList.contains('open');
+      full.classList.toggle('open', open); swMore.setAttribute('aria-expanded', String(open)); swMore.textContent = open ? 'Hide the other types' : 'Show all five types';
+      if (open) { var d0 = full.querySelector('details'); if (d0) d0.open = true; }
+    });
     host.querySelectorAll('[data-pick]').forEach(function (sel) { sel.addEventListener('change', function () {
       var key = sel.dataset.pick; state.choice[key] = sel.value; delete state.custom[key];
       var pg = paras.filter(function (x) { return x.key === key; })[0], ta = host.querySelector('[data-frame="' + key + '"]'); if (ta) ta.value = frameOf(pg).text;
       my.choice[key] = sel.value; delete my.custom[key]; T.save(cfg.studentId, my);
+      paintMeters();
     }); });
     host.querySelectorAll('[data-frame]').forEach(function (ta) { ta.addEventListener('input', function () { var key = ta.dataset.frame; state.custom[key] = ta.value; my.custom[key] = ta.value; T.save(cfg.studentId, my); }); });
     var fillBtn = host.querySelector('#wr-fill');
     if (fillBtn) fillBtn.addEventListener('click', function () {
       var filled = Object.keys(state.vars).filter(function (k) { return state.vars[k]; }).length;
       if (filled < 6 && !confirm('Only ' + filled + ' of 11 variables are filled. Fill the frames anyway?')) return;
-      paras.forEach(function (pg, i) { if (!areas[i].value.trim() || confirm('Replace the ' + pg.name + ' box?')) areas[i].value = T.tidy(T.fill(frameText(pg), state.vars)); });
-      countW(); host.querySelector('#wr-note').textContent = 'Frames filled. Now edit every sentence into your own words. The Ten Wards measure how much is still spellbook frame.';
+      paras.forEach(function (pg, i) {
+        if (!areas[i].value.trim() || confirm('Replace the ' + pg.name + ' box?')) {
+          areas[i].value = T.tidy(T.fill(frameText(pg), state.vars));
+          state.fillBase[i] = sentences(areas[i].value);
+          if (state.prevOpen[i] == null) state.prevOpen[i] = true;
+        }
+      });
+      countW(); paintMeters(); paintShare(); if (state.relock) state.relock();
+      host.querySelector('#wr-note').textContent = 'Frames filled. Grey words under each box are still the frame. Change at least one sentence in every paragraph into your own words: Submit stays locked until you do.';
     });
 
     function paintPhase() {
@@ -642,40 +1056,58 @@
     });
 
     function showPanel(pre, canRevise) {
-      var pn = host.querySelector('#wr-panel');
+      var pn = host.querySelector('#wr-panel'), canOpen = !exam && global.PCHost && global.PCHost.openSub;
       pn.innerHTML = '<div class="card preflight"><div class="pf-h"><b>The Ten Wards</b><span class="pill ' + (pre.bad ? 'bad' : pre.warn ? 'gold' : 'good') + '">' + esc(pre.summary) + '</span></div>' +
-        pre.rows.map(function (r) { return '<div class="pf-row ' + r.status + '"><span class="pf-dot"></span><div><b>' + esc(r.label) + '</b><p>' + esc(r.note) + '</p></div></div>'; }).join('') +
+        (canOpen && (pre.bad || pre.warn) ? '<p class="tiny">Each red or amber row ends with one next step. A lesson link opens the lesson; "← my essay" brings you back here. The clock keeps running.</p>' : '') +
+        pre.rows.map(function (r) {
+          var ns = r.status !== 'ok' ? nextStep(r, pre, level) : null;
+          return '<div class="pf-row ' + r.status + '" data-row-id="' + esc(r.id) + '"><span class="pf-dot"></span><div><b>' + esc(r.label) + '</b><p>' + esc(r.note) + '</p>' +
+            (ns ? '<p class="pf-next"><span class="pf-next-h">Next step:</span> ' + esc(ns.text) + (ns.sub ? (canOpen ? ' <button type="button" class="pf-link" data-open-sub="' + esc(ns.sub) + '">' + esc(ns.link) + ' →</button>' : ' <span class="tiny">(' + esc(ns.link) + ')</span>') : '') + '</p>' : '') +
+            '</div></div>';
+        }).join('') +
         '<div class="wr-wards" style="margin-top:14px"><div class="wr-boxh"><b>The Landing Check</b><span class="tiny" id="wr-landscore"></span></div><p class="tiny">' + (exam ? 'Which of these did you do in the last five minutes? Tick honestly: the app compares your ticks with the Wards.' : 'Grey lines come from the Wards. Tick the rest yourself before you submit' + (cfg.faultTags && cfg.faultTags.length ? ' (your top faults: ' + esc(cfg.faultTags.slice(0, 5).join(', ')) + ')' : '') + '.') + '</p><div id="wr-landlist"></div></div>' +
+        (!exam ? '<p class="wr-lockmsg hidden" id="wr-lockmsg" role="status"></p>' : '') +
         '<div class="qfoot" style="margin-top:12px">' + (canRevise ? '<button class="btn" id="wr-revise">Revise once</button>' : '') + '<span class="grow"></span><button class="btn primary" id="wr-submit">Submit essay</button></div></div>';
       var auto = landingAuto(pre), items = exam ? LANDING.map(function (l) { return { id: l.id, text: l.text, manual: true }; }) : LANDING;
+      function relock() {
+        var sub = pn.querySelector('#wr-submit'); if (!sub || exam) return;
+        var manualDone = items.every(function (l) { return !l.manual || !!state.landTicks[l.id]; }), lk = lockList(), why = [];
+        if (!manualDone) why.push('Tick every line of the Landing Check.');
+        if (lk.length) why.push('Change at least one sentence into your own words in: ' + lk.join(', ') + '. The grey words under each box show what is still the frame.');
+        sub.disabled = why.length > 0; sub.title = why.join(' ');
+        var lm = pn.querySelector('#wr-lockmsg');
+        if (lm) { lm.classList.toggle('hidden', !why.length); lm.innerHTML = why.length ? '<b>Submit is locked.</b> ' + why.map(esc).join(' ') : ''; }
+      }
       function paintLanding() {
         var box = pn.querySelector('#wr-landlist'), n = items.filter(function (l) { return l.manual ? !!state.landTicks[l.id] : !!auto[l.id]; }).length;
         box.innerHTML = wardList('landing', items, state.landTicks, auto);
         pn.querySelector('#wr-landscore').textContent = n + ' of ' + items.length;
         box.querySelectorAll('[data-ward]').forEach(function (cb) { cb.addEventListener('change', function () { state.landTicks[cb.dataset.ward] = cb.checked; paintLanding(); }); });
-        var sub = pn.querySelector('#wr-submit'), manualDone = items.every(function (l) { return !l.manual || !!state.landTicks[l.id]; });
-        if (!exam) { sub.disabled = !manualDone; sub.title = manualDone ? '' : 'Tick every line of the Landing Check first.'; }
+        relock();
       }
+      state.relock = relock;
       paintLanding();
       pn.scrollIntoView({ behavior: 'smooth', block: 'start' });
       var rv = pn.querySelector('#wr-revise');
-      if (rv) rv.addEventListener('click', function () { state.revision = 1; state.firstText = text(); state.firstPre = pre; pn.innerHTML = ''; areas[0].focus(); });
-      pn.querySelector('#wr-submit').addEventListener('click', function () { finish(false, pre); });
+      if (rv) rv.addEventListener('click', function () { state.revision = 1; state.firstText = text(); state.firstPre = pre; state.relock = null; pn.innerHTML = ''; areas[0].focus(); });
+      pn.querySelector('#wr-submit').addEventListener('click', function () { if (this.disabled) return; finish(false, pre); });
     }
     host.querySelector('#wr-check').addEventListener('click', function () {
       var t = text();
       if (words(t) < 40) { host.querySelector('#wr-note').textContent = 'Write at least a few sentences first.'; return; }
-      showPanel(preflight(t, p, { share: share }), state.revision === 0);
+      showPanel(preflight(t, p, shareOpts), state.revision === 0);
+      paintShare();
     });
     function finish(timedOut, pre) {
       if (state.done) return;
       state.done = true; stop();
-      var t = text(); pre = pre || preflight(t, p, { share: share });
+      var t = text(); pre = pre || preflight(t, p, shareOpts);
       areas.forEach(function (a) { a.disabled = true; });
       var secs = Math.min(total, Math.round((Date.now() - state.t0) / 1000));
+      var own = guided ? paras.map(function (pg, i) { var st = paraState(i); return st ? { frame: st.frame, words: st.words, own: st.own, sents: st.sents.length } : null; }) : null;
       if (cfg.onSubmit) cfg.onSubmit({ promptId: p.id, mode: mode, tier: tier, text: t, words: words(t), seconds: secs, timedOut: !!timedOut,
         preflight: pre, revision: state.revision, firstText: state.firstText || '', firstPreflight: state.firstPre || null,
-        plan: exam ? { landing: state.landTicks, calibration: calibration(pre) } : { vars: state.vars, choice: state.choice, custom: state.custom, planWards: state.planTicks, planOpenedAt: state.planOpenedAt, planHow: state.planHow || null, landing: state.landTicks, calibration: calibration(pre) } });
+        plan: exam ? { landing: state.landTicks, calibration: calibration(pre), share: share } : { vars: state.vars, choice: state.choice, custom: state.custom, planWards: state.planTicks, planOpenedAt: state.planOpenedAt, planHow: state.planHow || null, landing: state.landTicks, calibration: calibration(pre), share: share, shapeHelp: state.helped, ownWords: own } });
       /* how well her own ticks match the Wards: agreements over the lines the app can judge */
       function calibration(pre0) {
         var auto = landingAuto(pre0), keys = Object.keys(auto); if (!keys.length) return null;
@@ -690,5 +1122,6 @@
   /* Shared with lab.js: does this text mention any word of the list (or a word that means the same)? */
   function mentions(t, list) { return hasAny(canon(read(t).text), list, false); }
   global.Writer = { preflight: preflight, checkThesis: checkThesis, checkBody: checkBody, checkRewrite: checkRewrite, markingPrompt: markingPrompt, mount: mount, plain: plain, read: read, mentions: mentions, words: words, sentences: sentences, paragraphs: paragraphs,
+    shapeCheck: shapeCheck, shapeExamples: shapeExamples, nextStep: nextStep, planWards: planWards,
     LEX: { POSITION: POSITION, MECH: MECH, EXAMPLE: EXAMPLE, NUANCE: NUANCE, LINKER_HEAD: LINKER_HEAD, REFERENCE: REFERENCE, CLICHE: CLICHE } };
 })(window);

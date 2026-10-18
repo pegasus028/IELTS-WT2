@@ -22,8 +22,9 @@
   };
   /* Where "back" goes after a lesson or a gate: the Classes, the Map Room or the chapter page. */
   /* After a lesson opened from the Classes list, the way back is the map (T.Chris, Oct 2026). */
-  function homeView() { return { story: 'story', faults: 'faults' }[S.returnTo] || 'plan'; }
-  function homeLabel() { return { story: 'Chapter', faults: 'Mending Room' }[S.returnTo] || 'Map Room'; }
+  /* 'write': a lesson opened from a Ten Wards row in the Scriptorium goes back to the essay (18 Oct 2026). */
+  function homeView() { return { story: 'story', faults: 'faults', write: 'write' }[S.returnTo] || 'plan'; }
+  function homeLabel() { return { story: 'Chapter', faults: 'Mending Room', write: 'My essay' }[S.returnTo] || 'Map Room'; }
 
   /* ------------------------------------------------------------- helpers */
   function toast(msg, ms) {
@@ -820,7 +821,7 @@
     var misses = r.results.filter(function (x) { return !x.correct; });
     var html = '<div class="play"><div class="card result"><div class="score-ring" style="--p:' + pct(score) + '"><i>' + pct(score) + '%</i></div><h3>' + esc(head) + '</h3><p>' + esc(note) + '</p>';
     if (misses.length) html += '<div class="misslist">' + misses.map(function (m) { var rem = C.REMEDIATION[m.item.tag]; return '<div class="miss"><b>' + esc(rem ? rem.name : m.item.tag) + '</b>' + m.item.why + '</div>'; }).join('') + '</div>';
-    html += '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn primary" id="r-map">' + (S.returnTo === 'story' ? 'Back to the chapter' : S.returnTo === 'faults' ? 'Back to the Mending Room' : 'Back to the map') + '</button>' + (r.kind === 'module' || r.kind === 'check' ? '<button class="btn" id="r-again">Try again</button>' : '') + '</div></div></div>';
+    html += '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn primary" id="r-map">' + (S.returnTo === 'story' ? 'Back to the chapter' : S.returnTo === 'faults' ? 'Back to the Mending Room' : S.returnTo === 'write' ? 'Back to my essay' : 'Back to the map') + '</button>' + (r.kind === 'module' || r.kind === 'check' ? '<button class="btn" id="r-again">Try again</button>' : '') + '</div></div></div>';
     $('#view-play').innerHTML = html;
     var earned = P.checkBadges(S.p);
     paintHeader(); sync();
@@ -881,7 +882,7 @@
   function startWrite(cfg) {
     var host = $('#view-write');
     show('write');
-    S.write = W.mount(host, { prompt: cfg.promptId, mode: cfg.uiMode, minutes: cfg.minutes, tier: tier(), studentId: S.p.studentId, share: myShare(), faultTags: topFaultTags(),
+    S.write = W.mount(host, { prompt: cfg.promptId, mode: cfg.uiMode, minutes: cfg.minutes, tier: tier(), level: explainLevel(), studentId: S.p.studentId, share: myShare(), faultTags: topFaultTags(),
       onQuit: function () { S.write = null; show('writer'); },
       onSubmit: function (res) { S.write = null; submitReport(cfg, res); } });
   }
@@ -909,11 +910,12 @@
     var earned = P.checkBadges(p);
     paintHeader(); sync();
     var html = '<div class="play"><div class="card result"><div class="score-ring" style="--p:' + (res.preflight.bad ? 40 : res.preflight.warn ? 75 : 100) + '"><i>' + res.words + '<small style="font-size:.9rem">w</small></i></div>' +
-      '<h3>' + (res.timedOut ? 'Time. The owl has taken the essay' : 'The owl has taken the essay') + '</h3><p>' + esc(res.preflight.summary) + ' Written in ' + mmss(res.seconds) + '. ' + (cfg.kind === 'mock' ? 'T.Chris will mark this one.' : 'It has gone to T.Chris. For the examiners\' band estimate and an upgraded version, send it to the examiners in LevelUp.') + '</p>' +
-      '<div class="misslist">' + res.preflight.rows.filter(function (r) { return r.status !== 'ok'; }).map(function (r) { return '<div class="miss"><b>' + esc(r.label) + '</b>' + esc(r.note) + '</div>'; }).join('') + '</div>' +
-      '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn primary" id="w-levelup">Send to the examiners →</button><button class="btn" id="w-copy">Copy essay</button><button class="btn" id="w-record">See my report card</button><button class="btn ghost" id="w-another">Write another</button></div></div></div>';
+      '<h3>' + (res.timedOut ? 'Time. The owl has taken the essay' : 'The owl has taken the essay') + '</h3><p>' + esc(res.preflight.summary) + ' Written in ' + mmss(res.seconds) + '. ' + (cfg.kind === 'mock' ? 'T.Chris will mark this one.' : 'It has gone to T.Chris: he already has your essay, so you do not need to send it again. If you want, you can also get an AI band estimate and an upgraded version in LevelUp.') + '</p>' +
+      '<div class="misslist">' + res.preflight.rows.filter(function (r) { return r.status !== 'ok'; }).map(function (r) { var ns = W.nextStep ? W.nextStep(r, res.preflight, explainLevel()) : null; return '<div class="miss"><b>' + esc(r.label) + '</b>' + esc(r.note) + (ns ? '<span class="miss-next"><span class="miss-next-h">Next time:</span> ' + esc(ns.text) + (ns.sub ? ' <button class="linky" data-miss-sub="' + esc(ns.sub) + '">' + esc(ns.link) + ' →</button>' : '') + '</span>' : '') + '</div>'; }).join('') + '</div>' +
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn primary" id="w-levelup">Get an AI band estimate (LevelUp)</button><button class="btn" id="w-copy">Copy essay</button><button class="btn" id="w-record">See my report card</button><button class="btn ghost" id="w-another">Write another</button></div></div></div>';
     $('#view-write').innerHTML = html;
     $('#w-levelup').addEventListener('click', function () { handoff(pr, res.text, rep); });
+    $('#view-write').querySelectorAll('[data-miss-sub]').forEach(function (b) { b.addEventListener('click', function () { S.returnTo = 'write'; openSub(b.dataset.missSub); }); });
     $('#w-copy').addEventListener('click', function () { try { navigator.clipboard.writeText(res.text); toast('Essay copied.'); } catch (e) { prompt('Copy your essay', res.text); } });
     $('#w-record').addEventListener('click', function () { show('record'); });
     $('#w-another').addEventListener('click', function () { show('writer'); });

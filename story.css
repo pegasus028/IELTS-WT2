@@ -249,3 +249,62 @@ button.wchip:hover{background:var(--gold-soft)}
 .lvl-btn:focus-visible{outline:3px solid var(--accent-line);outline-offset:2px}
 #view-bootcamp .lvl-bar{margin:0 0 14px}
 .map-head .say-bar,.gatebox .say-bar,.chcard .say-bar{margin:.4rem 0 .5rem}
+
+/* ------------------------------------------- the Scriptorium (18 Oct 2026)
+   Slot-shape help under the matrix boxes, the frame-word meter, the next step
+   on each Ward row and the phone Type Switch Card. */
+.wr-plan .wr-planrow{flex-wrap:wrap;row-gap:4px}
+.wr-plan .wr-planrow input.bad{border-color:var(--no)}
+.wr-plan-help{margin:-2px 0 2px}
+.wr-help{flex:0 0 100%;display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding-left:74px;min-width:0}
+.wr-exbtn{min-height:40px;padding:6px 2px;background:none;border:0;color:var(--accent);font:inherit;font-size:.84rem;font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.wr-shape{font-size:.84rem;line-height:1.45;color:var(--ink-2);max-width:100%}
+.wr-shape:empty{display:none}
+.wr-shape.ok{color:var(--ok)}
+.wr-shape.bad{background:var(--no-soft);border-left:3px solid var(--no);padding:6px 10px;border-radius:var(--r-s)}
+.wr-shape.soft{background:var(--gold-soft);border-left:3px solid var(--gold);padding:6px 10px;border-radius:var(--r-s)}
+.wr-shape .wr-try{display:block;margin-top:4px;font-style:italic;color:var(--ink)}
+.wr-shape .btn.sm{min-height:40px;margin-top:6px}
+.wr-ex{flex:0 0 100%;margin-left:74px;background:var(--surface-2);border:1px solid var(--rule-soft);border-radius:var(--r-s);padding:10px 12px;font-size:.86rem;line-height:1.5;min-width:0}
+.wr-ex-shape b{color:var(--gold)}
+.wr-ex-line{margin:6px 0 2px;font-family:var(--f-display);font-size:1.05rem;color:var(--ink)}
+.wr-ex-head{background:var(--gold-soft);padding:0 3px;border-radius:3px}
+.wr-ex-ctl{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:8px}
+.wr-ex-ctl .btn.sm{min-height:40px}
+.wr-ex-lv{display:flex;gap:4px;flex-wrap:wrap}
+.wr-meter{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;margin-top:6px;font-size:.82rem;color:var(--ink-2)}
+.wr-meter:empty{display:none}
+.wr-mbar{flex:0 0 72px;height:8px;border-radius:99px;background:var(--ok-soft);overflow:hidden;border:1px solid var(--rule-soft)}
+.wr-mbar i{display:block;height:100%;background:var(--ink-3);opacity:.55}
+.wr-mtext{flex:1 1 200px}
+.wr-meter.need .wr-mneed{flex:0 0 100%;color:var(--no);font-weight:700}
+.wr-meter .wr-prevbtn{min-height:40px;font-size:.82rem}
+.wr-prev{margin-top:4px;background:var(--surface-2);border-radius:var(--r-s);padding:8px 11px}
+.wr-prev-t{font-size:.92rem;line-height:1.6;color:var(--ink);font-weight:600}
+.wr-prev-t .fw{color:var(--ink-3);font-weight:400;opacity:.75}
+.wr-share{margin:2px 0 0;text-align:right}
+.wr-share.over{color:var(--no)}
+.pf-row p.pf-next{margin-top:6px;color:var(--ink);font-size:.86rem}
+.pf-next-h{font-weight:700}
+.pf-link{display:inline-flex;align-items:center;min-height:40px;margin:4px 0 0;padding:4px 12px;border-radius:999px;border:1px solid var(--accent-line);background:var(--surface);color:var(--accent);font:inherit;font-size:.82rem;font-weight:700;cursor:pointer}
+.pf-link:hover{background:var(--accent-soft)}
+.wr-lockmsg{margin-top:10px;padding:8px 11px;border-radius:var(--r-s);background:var(--no-soft);border-left:3px solid var(--no);font-size:.86rem;line-height:1.45}
+#wr-submit:disabled{opacity:.5;cursor:not-allowed}
+.miss .miss-next{display:block;margin-top:6px;font-size:.86rem;color:var(--ink)}
+.miss .miss-next .linky{display:inline-flex;align-items:center;min-height:40px;font-weight:700}
+.wr-switch-mini{display:none}
+.wr-switch-dl{display:flex;flex-direction:column;gap:6px;margin:8px 0}
+.wr-switch-dl div{display:flex;gap:8px;font-size:.86rem;line-height:1.4}
+.wr-switch-dl dt{flex:0 0 92px;font-weight:700;color:var(--ink-3);font-size:.78rem}
+.wr-switch-dl dd{margin:0;flex:1;min-width:0}
+.wr-switch-name{display:block;font-family:var(--f-display);font-size:1.05rem}
+.wr-switch-more{min-height:40px}
+@media (max-width:600px){
+  .wr-switch-mini{display:block;padding:12px 14px;margin:0 0 12px}
+  .wr-switch-full{display:none}
+  .wr-switch-full.open{display:block}
+  .wr-help{padding-left:0}
+  .wr-ex{margin-left:0}
+}
+.miss .miss-next-h{font-weight:700}
+.wr-boxh .linky{min-height:40px;padding:0 4px}
