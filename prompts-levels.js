@@ -1540,7 +1540,7 @@
     ]
    },
    "position": {
-    "ok": "print will survive as a local, high-quality product beside online news",
+    "ok": "print should survive as a local, high-quality product beside online news",
     "d": [
      "printed papers will disappear completely once the last older readers have gone",
      "governments should pay to keep national papers printing every day",
@@ -1630,7 +1630,7 @@
     ]
    },
    "position": {
-    "ok": "print will survive as a local, high-quality product while online news reports the day's events",
+    "ok": "print should survive as a local, high-quality product while online news reports daily events",
     "d": [
      "printed newspapers will vanish completely once the last generation of older readers has finally gone",
      "governments should pay to keep the national newspapers in print each day",
@@ -2742,7 +2742,7 @@
  "p-gm-crops": {
   "A2": {
    "core": {
-    "ok": "The part GM crops should play in giving the world enough food.",
+    "ok": "The role of GM crops in giving the world enough food.",
     "d": [
      "The part chemical sprays and fertilisers play in growing more food.",
      "How a changing climate affects the harvests of farmers.",
@@ -2996,7 +2996,7 @@
     ]
    },
    "position": {
-    "ok": "libraries need money as public and online services, not only for lending",
+    "ok": "libraries should be funded as public and online services, not only lenders",
     "d": [
      "libraries need funding because lending paper books is still their main job",
      "councils should close small libraries and build one big city library",
@@ -3652,10 +3652,10 @@
  "p-early-languages": {
   "A2": {
    "core": {
-    "ok": "Teaching a foreign language to children from their first school years.",
+    "ok": "The teaching of a foreign language from the first school years.",
     "d": [
-     "Teaching English as a second language to adults in evening classes.",
-     "Learning about other countries and cultures at primary school.",
+     "The teaching of English as a second language to adults.",
+     "Lessons about other countries and cultures at primary school.",
      "The number of hours primary schools spend on reading and writing."
     ]
    },
@@ -4016,7 +4016,7 @@
  "p-open-university": {
   "A2": {
    "core": {
-    "ok": "Letting students of every level into university and college.",
+    "ok": "Open entry to university and college for students of every level.",
     "d": [
      "The rising cost of university fees for students.",
      "The choice between a university degree and job training after school.",
@@ -5180,10 +5180,10 @@
     ]
    },
    "position": {
-    "ok": "the advantages are bigger if schools and families keep traditions alive too",
+    "ok": "the advantages are greater than the drawbacks if traditions are kept alive",
     "d": [
      "the good and bad sides are equal and depend on each person",
-     "the disadvantages are bigger, as language skills cannot replace a lost culture",
+     "the disadvantages are greater, as language skills cannot replace a lost culture",
      "governments should limit foreign shows to protect their own culture"
     ]
    },
@@ -5362,10 +5362,10 @@
     ]
    },
    "position": {
-    "ok": "the advantages are bigger if videos are kept briefly and carefully controlled",
+    "ok": "the advantages are greater than the risks if videos are carefully controlled",
     "d": [
      "cameras bring equal good and bad, so each town must decide",
-     "the disadvantages are bigger, because lost privacy can never come back",
+     "the disadvantages are greater, because lost privacy can never come back",
      "cameras should be used inside banks and shops, not on streets"
     ]
    },
