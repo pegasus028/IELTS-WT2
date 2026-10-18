@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Headless end-to-end smoke test for Position Control (offline/demo mode).
 Usage: python3 tools/smoke.py   (needs Playwright + Chromium). Screenshots land in tools/shots/."""
-import os, sys, http.server, threading, socketserver, functools
+import os, sys, json, http.server, threading, socketserver, functools
 from playwright.sync_api import sync_playwright
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -112,8 +112,21 @@ with sync_playwright() as p:
     assert page.is_disabled('#wr-submit'), 'a frame-only essay must not be submittable'
     assert 'locked' in page.inner_text('#wr-lockmsg').lower()
     assert page.evaluate("document.querySelectorAll('.pf-row.bad .pf-next, .pf-row.warn .pf-next').length") >= page.evaluate("document.querySelectorAll('.pf-row.bad').length")
-    page.evaluate("document.querySelectorAll('textarea[id^=wr-t]').forEach(function(a){a.value += ' In my own school in Bangkok, the girls in my class saw this happen last year.'; a.dispatchEvent(new Event('input',{bubbles:true}))})")
-    page.wait_for_timeout(200); assert page.is_enabled('#wr-submit'), 'submit should open after the rewrite'
+    # WP11a (19 Oct 2026): filler does not count; each paragraph needs its own sentence with one of her plan words
+    page.evaluate("document.querySelectorAll('textarea[id^=wr-t]').forEach(function(a){a.value += ' This is my own sentence about this part of the essay.'; a.dispatchEvent(new Event('input',{bubbles:true}))})")
+    page.wait_for_timeout(200); assert page.is_disabled('#wr-submit'), 'filler must not open Submit'
+    assert 'own ideas' in page.inner_text('#wr-lockmsg'), page.inner_text('#wr-lockmsg')
+    own = ['My cousin in Chiang Mai talks about %s every week.' % vars_['core'], 'Last year my aunt in Phuket saw %s for herself.' % vars_['exA'],
+           'My teacher in Krabi told our class about %s last term.' % vars_['exB'], 'So my family in Bangkok now agrees that %s.' % vars_['position']]
+    page.evaluate("(function(o){document.querySelectorAll('textarea[id^=wr-t]').forEach(function(a,i){a.value += ' ' + o[i]; a.dispatchEvent(new Event('input',{bubbles:true}))})})(%s)" % json.dumps(own))
+    page.wait_for_timeout(200)
+    # WP13: tap rows — tap a sentence; a row lands after a right tap or two tries
+    for _ in range(6):
+        b2 = page.query_selector('#wr-landlist [data-ward-row]:not(.landed) [data-tap-sent]')
+        if not b2: break
+        b2.click(); page.wait_for_timeout(80)
+    assert page.evaluate("document.querySelectorAll('#wr-landlist [data-ward-row]:not(.landed)').length") == 0
+    assert page.is_enabled('#wr-submit'), 'submit should open after her own sentences and the taps: ' + page.inner_text('#wr-lockmsg')
     page.click('#wr-submit'); page.wait_for_selector('#w-levelup', timeout=4000); shot(page, '11-submitted')
     reps = page.evaluate("JSON.parse(localStorage.getItem('pc.local.v1')).reports.length"); assert reps == 1, reps
 

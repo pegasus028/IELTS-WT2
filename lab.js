@@ -1913,8 +1913,30 @@
   global.addEventListener('pagehide', function () { try { leave(); } catch (e) {} });
   global.addEventListener('resize', function () { if (st.run && !st.run.done && root) stickRunbar(); });
 
+  /* E3 (19 Oct 2026): plan once. The Scriptorium opens its matrix from her latest cast of the
+     same prompt. Casts are already kept per prompt in this device's Lab store (attempts with
+     promptId and vars), which the Lab merges with her ID's copy whenever it opens, so this only
+     reads: nothing new is stored and nothing new is sent to the class sheet.
+     castVars(studentId, promptId) → { vars:{ key: text }, at, status, id, templateName } | null
+     Latest complete cast first; else the latest draft with three or more boxes filled. */
+  function castVars(sid, promptId) {
+    if (!sid || !promptId) return null;
+    var data = st.sid && String(st.sid).toLowerCase() === String(sid).toLowerCase() && st.data ? st.data : null;
+    if (!data) { try { data = JSON.parse(localStorage.getItem('pc.lab.v1.' + String(sid).toLowerCase())); } catch (e) { data = null; } }
+    var list = ((data && data.attempts) || []).filter(function (a) { return a && a.promptId === promptId && a.vars; });
+    function filled(a) { return Object.keys(a.vars).filter(function (k) { return a.vars[k] && String(a.vars[k].text || '').trim(); }).length; }
+    function when(a) { return String(a.completedAt || a.updatedAt || a.createdAt || ''); }
+    function newest(x, y) { return when(y).localeCompare(when(x)); }
+    var pick = list.filter(function (a) { return a.status === 'complete' && filled(a); }).sort(newest)[0] ||
+      list.filter(function (a) { return a.status !== 'complete' && filled(a) >= 3; }).sort(newest)[0];
+    if (!pick) return null;
+    var out = {};
+    Object.keys(pick.vars).forEach(function (k) { var t = pick.vars[k] && String(pick.vars[k].text || '').trim(); if (t) out[k] = t; });
+    return { vars: out, at: when(pick), status: pick.status || '', id: pick.id || '', templateName: pick.templateName || '' };
+  }
+
   global.Lab = {
-    mount: mount, leave: leave,
+    mount: mount, leave: leave, castVars: castVars,
     busy: function () { return !!(st.run && !st.run.done && st.run.busy); },
     /* for tests and the teacher console */
     _state: st, _quickFrame: quickFrame, _quickVar: quickVar, _assemble: assemble, _overallBand: overallBand, _toTokens: toTokens, _compBudget: compBudget,

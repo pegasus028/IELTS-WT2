@@ -8,7 +8,9 @@
    Writer.checkThesis(text, item)               → { ok, notes[] }        (module items)
    Writer.checkBody(text, item)                 → { ok, notes[] }
    Writer.checkRewrite(text, item)              → { ok, notes[] }
-   Writer.mount(host, { prompt, mode:'guided'|'skeleton'|'exam', tier, minutes, studentId, onSubmit, onQuit })
+   Writer.mount(host, { prompt, mode:'guided'|'skeleton'|'exam', tier, minutes, studentId, onSubmit, onQuit,
+                        revisionOf, reviseRow, reviseText, reviseVars })   revise mode when revisionOf + reviseText
+   Writer.lastMeta()                            → { ownShare, ownSentences, fillUsed, landTaps, landAgree, revisionOf, reviseRow }
    Writer.markingPrompt(prompt, text, pre)      → the text a teacher can paste into an AI marker
    Writer.shapeCheck(key, value, promptText, type) → { ok, soft, tip, fix }   (matrix box shapes)
    Writer.shapeExamples(key, level, prompt)     → examples in the right shape from OTHER prompts
@@ -797,16 +799,134 @@
     var n = 0; for (var z = 0; z < mark.length; z++) if (mark[z]) n++;
     return { toks: toks, idx: idx, mark: mark, frame: n, total: norm.length };
   }
-  function sentWords(s) { return lower(s).replace(/[^a-z0-9' ]+/g, ' ').split(/\s+/).filter(Boolean); }
-  /* Is this sentence hers? Not if it is a frame-filled sentence with fewer than three words changed. */
-  function changedSent(s, base) {
-    var w = sentWords(s); if (!w.length) return false;
-    var best = null, bestN = 0;
-    base.forEach(function (b) { var set = {}; b.forEach(function (x) { set[x] = 1; }); var n = w.filter(function (x) { return set[x]; }).length; if (n > bestN) { bestN = n; best = b; } });
-    if (!best) return true;
-    var ws = {}, bs = {}; w.forEach(function (x) { ws[x] = 1; }); best.forEach(function (x) { bs[x] = 1; });
-    return Object.keys(ws).filter(function (x) { return !bs[x]; }).length + Object.keys(bs).filter(function (x) { return !ws[x]; }).length >= 3;
+  /* ------------------------------------------- her own sentence (WP11a, 19 Oct 2026)
+     In guided mode Submit waits for one sentence of her own in every paragraph. The old test
+     (three words changed) let "This is my own sentence about this part of the essay." through,
+     so a sentence now counts as hers only if it passes all five tests:
+       1 six words or more ('short');
+       2 not filler ('filler'): not a stock line, no talk about the writing itself ("my own
+         sentence", "this part of the essay"), and at least two words that carry meaning
+         (not "is", "very", "important", "people", "today" …);
+       3 not the frame ('frame'): at most half of its content words come from any one frame
+         sentence of that paragraph, and it is not a filled frame sentence with a word or two
+         changed;
+       4 at least one word of her own plan for that paragraph ('plan'): her matrix boxes for the
+         paragraph's slots and the Core Topic (in a revision also the words of her first essay
+         that were not frame words);
+       5 not a near-copy of another of her own sentences ('dup').
+     ownTest(s, ctx, mine) → { ok, why:[…], c:{stem:1}, old } — tolerant word matching: plurals,
+     -ing / -ed and the first five letters ("tourists" meets "tourism"). */
+  var OWN_FUNC = {}, OWN_VAGUE = {};
+  ('a an the and or but nor so yet for of to in on at by with from into onto over under about after before during than then as if when while because since although though this that these those it its they them their theirs there here we us our ours you your yours i me my mine myself he she him her his hers is isn are aren was wasn were be been being am do does doesn did didn done doing have has had having can cannot could will would shall should may might must not no yes very also too just only more most much many some any all each every such own same other others another one ones which who whom whose what where how why whether up down out off again still even ever never always often well really quite rather etc get gets got getting make makes made making go goes went going let lets put puts take takes took everyone everybody someone something anything everything nothing somebody anyone way ways lot lots kind sort thing things like').split(' ').forEach(function (w) { OWN_FUNC[w] = 1; });
+  ('people person part parts essay sentence paragraph idea ideas point points word words frame box topic issue issues problem problems question today nowadays world life society good bad big great important true agree disagree think believe feel opinion view views side sides reason reasons example examples matter time day days interesting necessary different number many thing everyone sure clear').split(' ').forEach(function (w) { OWN_VAGUE[w] = 1; });
+  var OWN_META = /\b(my own (sentence|sentences|words|idea|ideas|writing|paragraph|essay)|(this|that|my) (sentence|paragraph|box|frame)\b|this part|part of (the|this|my) essay|own words|in my words|i (wrote|have written|changed|write)\b)/i;
+  var OWN_STOCK = ['this is my own sentence about this part of the essay', 'this is my own sentence', 'this sentence is in my own words', 'i wrote this sentence myself',
+    'this is a very important topic for everyone', 'there are many good and bad points about this', 'many people have different opinions about this topic', 'this is a good idea for many people'];
+  function ownToks(s) { return lower(plain(s)).replace(/[^a-z0-9' ]+/g, ' ').split(/\s+/).map(function (w) { return w.replace(/^'+|'+$/g, '').replace(/'s$/, ''); }).filter(Boolean); }
+  function ownStem(w) {
+    w = w.replace(/'/g, '');
+    if (w.length > 4 && /ies$/.test(w)) w = w.slice(0, -3) + 'y';
+    else if (w.length > 4 && /(ss|x|ch|sh)es$/.test(w)) w = w.slice(0, -2);
+    else if (w.length > 3 && /[^s]s$/.test(w)) w = w.slice(0, -1);
+    if (w.length > 5 && /ing$/.test(w)) { w = w.slice(0, -3); if (/([^aeiou])\1$/.test(w)) w = w.slice(0, -1); }
+    else if (w.length > 5 && /ed$/.test(w)) w = w.slice(0, -2);
+    return w.length > 5 ? w.slice(0, 5) : w;
   }
+  /* c: every content word (stems); sub: the ones that carry meaning (not vague) */
+  function ownContent(s) {
+    var c = {}, sub = {};
+    ownToks(s).forEach(function (w) {
+      if (OWN_FUNC[w]) return;
+      var st = ownStem(w); if (!st) return;
+      c[st] = 1; if (!OWN_VAGUE[w] && !OWN_VAGUE[st]) sub[st] = 1;
+    });
+    return { c: c, sub: sub };
+  }
+  function nKeys(o) { return Object.keys(o).length; }
+  function overlap(a, b) { return Object.keys(a).filter(function (k) { return b[k]; }).length; }
+  function jaccard(a, b) { var i = overlap(a, b), u = nKeys(a) + nKeys(b) - i; return u ? i / u : 0; }
+  function symDiff(a, b) { return nKeys(a) + nKeys(b) - 2 * overlap(a, b); }
+  var STOCK_C = null;
+  function hasSeq(tk, sg) {
+    for (var i = 0; i + sg.length <= tk.length; i++) { var j = 0; while (j < sg.length && tk[i + j] === sg[j]) j++; if (j === sg.length) return true; }
+    return false;
+  }
+  /* a frame sentence for ownTest: its content words, and its runs of 2+ frame words between slots */
+  function frameSent(s) {
+    var o = ownContent(s.replace(/\{\w+\}/g, ' ')), segs = s.split(/\{\w+\}/).map(ownToks).filter(function (x) { return x.length >= 2; });
+    o.segs = segs.reduce(function (n, x) { return n + x.length; }, 0) >= 3 ? segs : [];
+    return o;
+  }
+  function isStock(s) {
+    if (!STOCK_C) STOCK_C = OWN_STOCK.map(function (x) { var o = {}; ownToks(x).forEach(function (w) { o[w] = 1; }); return o; });
+    var me = {}; ownToks(s).forEach(function (w) { me[w] = 1; });
+    return STOCK_C.some(function (x) { return jaccard(me, x) >= 0.75; });
+  }
+  /* ctx: { raw:[{c}] frame sentences without their slots, filled:[{c}] the frame filled with her
+     plan, plan:{stem:1}|null (null = no plan rule, e.g. exam mode), old:[{c}]|null (revision) } */
+  function ownTest(s, ctx, mine) {
+    var why = [], k = ownContent(s), c = k.c, nc = nKeys(c);
+    if (words(s) < 6) why.push('short');
+    if (isStock(s) || OWN_META.test(plain(s)) || nKeys(k.sub) < 2) why.push('filler');
+    var fr = (ctx.raw || []).some(function (f) { return nc && overlap(c, f.c) / nc > 0.5; }) || (ctx.filled || []).some(function (f) { return symDiff(c, f.c) < 3; });
+    /* without her plan (exam mode, or a revision opened without it) a filled frame sentence is
+       found by its frame words: every frame segment of one frame sentence, in order */
+    if (!fr && !(ctx.filled && ctx.filled.length)) {
+      var tk = ownToks(s);
+      fr = (ctx.raw || []).some(function (f) { return f.segs && f.segs.length && f.segs.every(function (sg) { return hasSeq(tk, sg); }); });
+    }
+    if (fr) why.push('frame');
+    if (ctx.plan && !Object.keys(k.sub).some(function (x) { return ctx.plan[x]; })) why.push('plan');
+    if ((mine || []).some(function (m) { return jaccard(c, m) >= 0.7; })) why.push('dup');
+    var old = !!(ctx.old && ctx.old.some(function (o) { return jaccard(c, o.c) >= 0.7 || symDiff(c, o.c) < 3; }));
+    return { ok: !why.length, why: why, c: c, old: old, s: s };
+  }
+
+  /* ------------------------------------------------ what the report carries (19 Oct 2026)
+     Writer.lastMeta() → for the essay just submitted (reset when an essay starts):
+       { ownShare 0..1 (share of words that are hers, not frame), ownSentences n, fillUsed,
+         landTaps { wardKey: 1 | 0 } (1 = the app agreed with her first tap), landAgree 0..1 | null,
+         revisionOf (report id | ''), reviseRow (row key | '') } */
+  var LAST = null;
+  function blankMeta(cfg) { return { ownShare: 0, ownSentences: 0, fillUsed: false, landTaps: {}, landAgree: null, revisionOf: (cfg && cfg.revisionOf) || '', reviseRow: (cfg && cfg.reviseRow) || '' }; }
+  function lastMeta() { return JSON.parse(JSON.stringify(LAST || blankMeta())); }
+  /* Which paragraph a weak Ward row belongs to (-1: any paragraph). ps = her paragraphs. */
+  function reviseTarget(id, row, pre, ps) {
+    var n = ps.length; if (!n) return -1;
+    var lastI = n - 1, b1 = Math.min(1, lastI), b2 = Math.min(2, Math.max(0, n - 2)), m = /^b(\d)(mech|ex|nu|len)$/.exec(id || ''), lb = row ? String(row.label) : '';
+    if (m) return Math.min(Math.max(0, n - 2), 1 + Number(m[1]));
+    if (id === 'position') return /not restated/i.test(lb) ? lastI : 0;
+    if (id === 'verdict' || id === 'extent') return 0;
+    if (id === 'newidea') return lastI;
+    if (id === 'plural-c' || id === 'coverage') return b1;
+    if (id === 'twopart' || id === 'plural-s') return b2;
+    if (id === 'parts') return /No causes/i.test(lb) ? b1 : b2;
+    /* too short: the shorter body paragraph grows; too long: the longer one is cut */
+    if (id === 'length' && pre && pre.bodyWords && pre.bodyWords.length) { var long = row && row.status === 'warn', si = 0; pre.bodyWords.forEach(function (w, i) { if (long ? w > pre.bodyWords[si] : w < pre.bodyWords[si]) si = i; }); return Math.min(lastI, 1 + si); }
+    var q = /"([^"]{3,})"/.exec(lb);
+    if (q) { for (var i = 0; i < n; i++) if (lower(plain(ps[i])).indexOf(lower(q[1])) >= 0) return i; }
+    return -1;
+  }
+  /* ------------------------------------------- the Landing Check you can check (WP13)
+     In guided and skeleton modes a Ward that can be judged on one sentence asks her to tap that
+     sentence; the app checks the tap with a one-sentence version of the Ward's own test. */
+  function sentPosition(s) {
+    var t = read(s).text;
+    if (!(POSITION.test(t) || STANCE.test(t))) return false;
+    if (HEDGE.test(t) && !EXPLICIT.test(t)) return false;
+    if (DEBATE.test(t) && !EXPLICIT.test(t)) {
+      var rest = t.replace(/\b((some|many|other|most) people|others)\s+(think|believe|say|argue|feel|claim)\b[^,;.]*/gi, ' ');
+      return POSITION.test(rest) || STANCE.test(rest);
+    }
+    return true;
+  }
+  function sentExample(s) { return EXAMPLE.test(read(s).text) || PROPER.test(plain(s)); }
+  var TAPS = {
+    position: { q: 'Which sentence in paragraph one gives your position?', inScope: function (j) { return j === 0; }, test: sentPosition,
+      yes: 'Yes — that\'s your position.', no: 'Not quite: a position says what you think. Try again.', none: 'The app cannot find a position in paragraph one either. Add one: "I believe that …".' },
+    moves: { q: 'Which sentence in a body paragraph is an example?', inScope: function (j, n) { return j > 0 && j < n - 1; }, test: sentExample,
+      yes: 'Yes — that\'s an example.', no: 'Not quite: an example names something real, like a place, a school or a rule. Try again.', none: 'The app cannot find an example either. Add one: "For example, in Bangkok, …".' }
+  };
 
   function mount(host, cfg) {
     var p = promptOf(cfg.prompt);
@@ -818,8 +938,12 @@
     var level = cfg.level || tier;
     var minutes = cfg.minutes || 40, total = minutes * 60;
     var my = T.load(cfg.studentId); if (!my.choice) my.choice = {}; if (!my.custom) my.custom = {};
-    var state = { t0: Date.now(), left: total, done: false, revision: 0, tick: null, vars: {}, choice: {}, custom: {}, planTicks: {}, landTicks: {}, planOpen: !guided, planOpenedAt: null,
-      exLvl: exLevel(level), exIdx: {}, exCache: {}, fixes: {}, shapeT: {}, fillBase: {}, prevOpen: {}, relock: null, helped: {} };
+    /* Revise mode (19 Oct 2026): the result screen's "Revise your weakest row" passes the first
+       essay back; only its weak paragraph has to gain a new sentence of her own. */
+    var rt = cfg.reviseText, revise = !!(cfg.revisionOf && rt && (typeof rt === 'string' ? rt.trim() : rt.length));
+    LAST = blankMeta(cfg);
+    var state = { t0: Date.now(), left: total, done: false, revision: revise ? 1 : 0, tick: null, vars: {}, choice: {}, custom: {}, planTicks: {}, landTicks: {}, planOpen: !guided || revise, planOpenedAt: null,
+      exLvl: exLevel(level), exIdx: {}, exCache: {}, fixes: {}, shapeT: {}, fillBase: {}, prevOpen: {}, relock: null, helped: {}, taps: {}, fillUsed: false, prefill: null };
     var paras = T.paragraphs(tier, type), labels = T.labels(type);
     paras.forEach(function (pg) { state.choice[pg.key] = my.choice[pg.key] || pg.frames[0].id; if (my.custom[pg.key]) state.custom[pg.key] = my.custom[pg.key]; });
     var PHASES = [['Decode', 0], ['Matrix', 90], ['Write', 300], ['Check', total - 300]];
@@ -827,7 +951,35 @@
     function frameOf(pg) { return pg.frames.filter(function (f) { return f.id === state.choice[pg.key]; })[0] || pg.frames[0]; }
     function frameText(pg) { return state.custom[pg.key] || frameOf(pg).text; }
 
-    var html = '<div class="wr">' +
+    /* her first essay, by paragraph, and where it goes in the boxes */
+    var old = { paras: [], boxes: [], text: '', sents: null, plan: {}, target: -1, row: null, step: null, pre: null };
+    if (revise) {
+      old.paras = (typeof rt === 'string' ? paragraphs(rt) : rt).map(function (x) { return String(x == null ? '' : x).trim(); }).filter(Boolean);
+      old.text = old.paras.join('\n\n');
+      old.boxes = exam ? [old.text] : old.paras.length <= paras.length ? old.paras.slice() : [old.paras[0], old.paras[1], old.paras.slice(2, -1).join('\n\n'), old.paras[old.paras.length - 1]];
+      old.sents = sentences(old.text).map(function (s) { return ownContent(s); });
+      var fset = {}; paras.forEach(function (pg) { var fc = ownContent(frameText(pg).replace(/\{\w+\}/g, ' ')).c; Object.keys(fc).forEach(function (k) { fset[k] = 1; }); });
+      Object.keys(ownContent(old.text).sub).forEach(function (k) { if (!fset[k]) old.plan[k] = 1; });
+      old.pre = preflight(old.text, p, shareOpts);
+      old.row = (old.pre.rows || []).filter(function (r) { return r.id === cfg.reviseRow; })[0] || null;
+      old.step = old.row ? nextStep(old.row, old.pre, level) : null;
+      var ti = reviseTarget(cfg.reviseRow, old.row, old.pre, old.paras);
+      /* an essay paragraph → its box (a five-paragraph essay puts body 2 and 3 into the second body box) */
+      old.target = ti < 0 || exam ? ti : old.paras.length <= paras.length ? ti : ti === 0 ? 0 : ti === old.paras.length - 1 ? 3 : ti === 1 ? 1 : 2;
+    }
+    function boxName(i) { return exam ? 'paragraph ' + (i + 1) : (paras[i] || {}).name || 'paragraph ' + (i + 1); }
+    function reviseStep() { return old.step && old.step.text ? old.step.text : 'Write one new sentence of your own: your reason, your example or your place.'; }
+    function reviseNoteHtml() { return '<b>Revise this paragraph.</b> ' + esc(reviseStep()); }
+    function reviseBanner() {
+      var lb = old.row ? old.row.label : String(cfg.reviseRow || ''), where = old.target < 0 ? 'any paragraph' : exam ? 'paragraph ' + (old.target + 1) : 'the highlighted paragraph (' + boxName(old.target) + ')';
+      return '<div class="card wr-revise-banner" id="wr-revise-banner"><p class="kicker">Revision · your first essay is in the boxes</p>' +
+        (lb ? '<p><b>Your weakest row:</b> ' + esc(lb) + '</p>' : '') +
+        (old.target < 0 || exam ? '<p class="wr-revise-step"><span class="pf-next-h">Next step:</span> ' + esc(reviseStep()) + '</p>' : '') +
+        '<p class="tiny">Change ' + esc(where) + '. Submit opens when it has one new sentence of your own: write a new one, or rewrite an old one. Nothing else is locked.</p>' +
+        '<p class="wr-revise-status" id="wr-revise-status" role="status" aria-live="polite"></p></div>';
+    }
+
+    var html = '<div class="wr' + (revise ? ' wr-revising' : '') + '"' + (revise ? ' data-revise-target="' + old.target + '"' : '') + '>' +
       '<div class="wr-top">' +
         '<button class="btn ghost sm" id="wr-quit">✕</button>' +
         '<div class="wr-phases" id="wr-phases">' + PHASES.map(function (ph, i) { return '<span data-i="' + i + '">' + ph[0] + '</span>'; }).join('') + '</div>' +
@@ -838,21 +990,23 @@
         '<div class="wr-left">' + Prompts.card(p, { demand: !exam }) +
           (!exam ? switchBlock(type) : '') +
           (!exam ? '<div class="card wr-plan"><div class="wr-boxh"><b>The matrix</b><span class="tiny">plan — not counted</span>' + (guided ? '<button class="btn sm" id="wr-fill">Fill the frames →</button>' : '') + '</div>' +
+            '<p class="wr-fromcast hidden" id="wr-fromcast" role="status"></p>' +
             '<p class="tiny wr-plan-help">Not sure what a box wants? Tap <b>Show an example</b> under it. The examples come from other prompts, so the ideas for this one stay yours.</p>' +
             C.VARIABLES.map(function (v) { return '<div class="wr-planrow" data-row="' + v.key + '"><label for="wr-v-' + v.key + '" title="' + esc(v.hint) + '">' + v.n + ' · ' + esc(labels[v.key]) + '</label><input id="wr-v-' + v.key + '" data-var="' + v.key + '" placeholder="' + esc(v.hint) + '" autocomplete="off">' +
               '<div class="wr-help"><button type="button" class="wr-exbtn" data-ex="' + v.key + '" aria-expanded="false" aria-controls="wr-ex-' + v.key + '">Show an example</button><div class="wr-shape" id="wr-sh-' + v.key + '" aria-live="polite"></div></div>' +
               '<div class="wr-ex hidden" id="wr-ex-' + v.key + '"></div></div>'; }).join('') + '</div>' : '') +
           (!exam ? '<div class="card wr-wards" id="wr-planwards"><div class="wr-boxh"><b>The Plan Wards</b><span class="tiny" id="wr-planscore"></span></div><p class="tiny">Grey lines tick themselves from the eleven keys. The others are yours to tick honestly.</p><div id="wr-planlist"></div>' + (guided ? '<p class="tiny" id="wr-plannote">The paragraph boxes open when the Plan Wards are green, or after ten minutes. A red box in the matrix shows a "Fix my shape" tip: use it, and the Ward turns green.</p>' : '') + '</div>' : '') +
         '</div>' +
-        '<div class="wr-right">' +
+        '<div class="wr-right">' + (revise ? reviseBanner() : '') +
           (exam
             ? '<div class="wr-box"><textarea id="wr-t0" rows="22" spellcheck="false" placeholder="Write your essay here. Leave a blank line between paragraphs. At least 250 words."></textarea></div>'
             : paras.map(function (pg, i) {
                 var fr = frameOf(pg);
-                return '<div class="wr-box" data-para="' + pg.key + '"><div class="wr-boxh"><b>' + esc(pg.name) + '</b><span class="tiny">~' + pg.target + ' words · <i id="wr-w' + i + '">0</i></span>' +
+                return '<div class="wr-box' + (revise && old.target === i ? ' wr-revise-target' : '') + '" data-para="' + pg.key + '"><div class="wr-boxh"><b>' + esc(pg.name) + '</b><span class="tiny">~' + pg.target + ' words · <i id="wr-w' + i + '">0</i></span>' +
                   (guided ? '<select class="wr-frame-pick" data-pick="' + pg.key + '">' + pg.frames.map(function (f) { return '<option value="' + f.id + '"' + (f.id === fr.id ? ' selected' : '') + '>' + esc(f.name) + '</option>'; }).join('') + '</select><button class="linky" data-card="' + i + '">frame</button>' : '') + '</div>' +
                   (guided ? '<div class="wr-card hidden" id="wr-card' + i + '"><b>Frame · edit it into your own words</b><textarea class="wr-frame" data-frame="' + pg.key + '" rows="4" spellcheck="false">' + esc(frameText(pg)) + '</textarea><p class="tiny">Slots: ' + T.tokens(frameText(pg)).map(function (k) { return '{' + esc(labels[k] || k) + '}'; }).join(' · ') + '</p></div>' : '') +
                   (skeleton ? '<p class="tiny wr-skel">' + pg.slots.map(function (k) { return '[' + esc(labels[k] || k) + ']'; }).join(' → ') + '</p>' : '') +
+                  (revise && old.target === i ? '<p class="wr-revise-note" id="wr-revise-note">' + reviseNoteHtml() + '</p>' : '') +
                   '<textarea id="wr-t' + i + '" rows="' + (i === 0 || i === 3 ? 4 : 6) + '" spellcheck="false" placeholder="' + esc(pg.name) + ' …"></textarea>' +
                   (guided ? '<div class="wr-meter" id="wr-m' + i + '" aria-live="polite"></div><div class="wr-prev hidden" id="wr-prev' + i + '"></div>' : '') + '</div>';
               }).join('')) +
@@ -867,33 +1021,88 @@
     var areas = Array.prototype.slice.call(host.querySelectorAll('textarea[id^=wr-t]'));
     function text() { return exam ? areas[0].value : areas.map(function (a) { return a.value.trim(); }).filter(Boolean).join('\n\n'); }
 
-    /* --- "Fill the frames" → her own sentences (WP7). Frame words show grey under each box; Submit
-       waits until every paragraph has at least one sentence she changed (guided mode only). */
-    function baseSents(i) {
-      var out = (state.fillBase[i] || []).slice();
-      sentences(T.tidy(T.fill(frameText(paras[i]), state.vars))).forEach(function (s) { out.push(s); });
-      return out.map(sentWords);
+    if (revise) areas.forEach(function (a, i) { a.value = old.boxes[i] || ''; });
+
+    /* --- "Fill the frames" → her own sentences (WP7, WP11a). Frame words show grey under each box;
+       in guided mode Submit waits until every paragraph has a sentence of her own (ownTest). */
+    function paraTexts() { return exam ? paragraphs(areas[0].value) : areas.map(function (a) { return a.value.trim(); }); }
+    /* an essay paragraph → the frame it was written from (exam: by position) */
+    function frameIdx(j, n) { return !exam ? j : j === 0 ? 0 : j === n - 1 ? 3 : j === 1 ? 1 : 2; }
+    function hasVars() { return Object.keys(state.vars).some(function (k) { return state.vars[k]; }); }
+    function rawFrame(k) { return sentences(frameText(paras[k])).map(frameSent); }
+    function filledFrame(k, j) {
+      var out = exam ? [] : (state.fillBase[j] || []).slice();
+      if (hasVars()) sentences(T.tidy(T.fill(frameText(paras[k]), state.vars))).forEach(function (s) { out.push(s); });
+      return out.map(ownContent);
     }
-    function paraState(i) {
-      var t = areas[i] ? areas[i].value.trim() : ''; if (!t) return null;
-      var base = baseSents(i), ss = sentences(t), own = 0, mine = [];
-      ss.forEach(function (s) { var c = changedSent(s, base); mine.push(c); if (c) own++; });
-      var fm = frameMarks(t, [frameText(paras[i])]);
-      return { words: fm.total, frame: fm.frame, own: own, sents: ss, mine: mine, fm: fm };
+    function planKeys(k) { var ks = T.tokens(frameText(paras[k])).concat(paras[k].slots, ['core']), seen = {}; return ks.filter(function (x) { if (seen[x]) return false; seen[x] = 1; return true; }); }
+    function planStems(k) {
+      var out = {};
+      planKeys(k).forEach(function (key) { Object.keys(ownContent(state.vars[key] || '').sub).forEach(function (x) { out[x] = 1; }); });
+      if (revise) Object.keys(old.plan).forEach(function (x) { out[x] = 1; });
+      return out;
     }
+    /* one of her ideas for this paragraph, to name in the message: the shortest filled box */
+    function planIdea(k) {
+      var best = '', ks = planKeys(k), pick = ks.filter(function (key) { return key !== 'core' && clip(state.vars[key] || ''); });
+      (pick.length ? pick : ks).forEach(function (key) { var v = clip(state.vars[key] || ''); if (v && (!best || nWords(v) < nWords(best))) best = v; });
+      var w = best.split(/\s+/); return w.length > 6 ? w.slice(0, 6).join(' ') + ' …' : best;
+    }
+    function needMsg(res, k, noPlan) {
+      if (noPlan) return 'Write your ideas for this paragraph in the matrix first, then use one of them in a sentence of your own.';
+      var idea = planIdea(k), use = 'Use one of your own ideas' + (idea ? ', like “' + idea + '”,' : '') + ' in a sentence of your own.';
+      function only(w) { return res.some(function (r) { return r.why.length === 1 && r.why[0] === w; }); }
+      if (only('short')) return 'Your sentence is too short: use six words or more.';
+      if (only('dup')) return 'Each paragraph needs its own new sentence: do not copy one from another paragraph.';
+      var fl = res.filter(function (r) { return r.why.indexOf('filler') >= 0 && r.why.indexOf('frame') < 0; })[0];
+      if (fl) { var fw = fl.s.split(/\s+/); return '“' + fw.slice(0, 5).join(' ') + (fw.length > 5 ? ' …' : '') + '” could go in any essay. ' + use; }
+      return use;
+    }
+    /* the whole essay, paragraph by paragraph (order matters: a copy of an earlier own sentence is not new) */
+    function ownReport() {
+      var texts = paraTexts(), n = texts.length, mine = [], planReq = guided || revise;
+      return texts.map(function (t, j) {
+        if (!t) return null;
+        var k = frameIdx(j, n), plan = planStems(k), noPlan = planReq && !nKeys(plan);
+        var ctx = { raw: rawFrame(k), filled: filledFrame(k, j), plan: planReq || nKeys(plan) ? plan : null, old: revise ? old.sents : null };
+        var ss = sentences(t), res = ss.map(function (s) { var r = ownTest(s, ctx, mine); if (r.ok) mine.push(r.c); return r; });
+        var own = res.filter(function (r) { return r.ok; }).length, fresh = res.filter(function (r) { return r.ok && !r.old; }).length;
+        var fm = frameMarks(t, [frameText(paras[k])]);
+        var msg = own ? '' : needMsg(res, k, noPlan);
+        var newMsg = fresh ? '' : own ? 'The sentences of your own here are from your first essay. Write one new sentence of your own here (you can rewrite an old one).' : msg;
+        return { words: fm.total, frame: fm.frame, own: own, fresh: fresh, sents: ss, res: res, fm: fm, msg: msg, newMsg: newMsg };
+      });
+    }
+    function paraState(i) { return ownReport()[i] || null; }
     function lockList() {
-      if (!guided) return [];
-      return paras.filter(function (pg, i) { var st = paraState(i); return st && st.own === 0; }).map(function (pg) { return pg.name; });
+      if (!guided || revise) return [];
+      var rep = ownReport(), out = [];
+      rep.forEach(function (st, i) { if (st && st.own === 0) out.push({ name: boxName(i), msg: st.msg }); });
+      return out;
+    }
+    /* revise mode: the one lock — a new sentence of her own in the weak paragraph (or in any) */
+    function reviseLock() {
+      if (!revise) return null;
+      var rep = ownReport(), idx = old.target >= 0 ? [old.target] : rep.map(function (x, i) { return i; });
+      if (idx.some(function (i) { return rep[i] && rep[i].fresh > 0; })) return null;
+      var st = rep[idx[0]];
+      return (old.target >= 0 ? boxName(old.target).charAt(0).toUpperCase() + boxName(old.target).slice(1) + ': ' : 'Any paragraph: ') + (st ? st.newMsg : 'Write in the paragraph first.');
+    }
+    function paintRevise() {
+      var el = host.querySelector('#wr-revise-status'); if (!el) return;
+      var why = reviseLock();
+      el.className = 'wr-revise-status ' + (why ? 'need' : 'good');
+      el.textContent = why ? why : '✓ A new sentence of your own is there. Check the Ten Wards, then submit.';
     }
     function paintMeter(i) {
       var el = host.querySelector('#wr-m' + i), pv = host.querySelector('#wr-prev' + i); if (!el) return;
       var st = paraState(i);
       if (!st) { el.className = 'wr-meter'; el.innerHTML = ''; if (pv) { pv.innerHTML = ''; pv.classList.add('hidden'); } return; }
-      var need = st.own === 0, open = !!state.prevOpen[i];
+      var need = st.own === 0 && !revise, open = !!state.prevOpen[i];
       el.className = 'wr-meter ' + (need ? 'need' : 'good');
       el.innerHTML = '<span class="wr-mbar" aria-hidden="true"><i style="width:' + pctOf(st.frame, st.words) + '%"></i></span>' +
         '<span class="wr-mtext"><b>' + st.frame + '</b> frame words · <b>' + (st.words - st.frame) + '</b> your words · ' + st.own + ' of ' + st.sents.length + ' sentence' + (st.sents.length === 1 ? '' : 's') + ' in your own words</span>' +
-        (need ? '<span class="wr-mneed">Change one sentence into your own words (add your reason, your example or your place). Submit stays locked until you do.</span>' : '') +
+        (need ? '<span class="wr-mneed">' + esc(st.msg) + ' Submit stays locked until you do.</span>' : '') +
         (st.frame ? '<button type="button" class="linky wr-prevbtn" data-prev="' + i + '" aria-expanded="' + open + '" aria-controls="wr-prev' + i + '">' + (open ? 'Hide' : 'Show') + ' the frame words</button>' : '');
       if (pv) {
         pv.classList.toggle('hidden', !open || !st.frame);
@@ -920,7 +1129,7 @@
       if (!exam) areas.forEach(function (a, i) { var el = host.querySelector('#wr-w' + i); if (el) el.textContent = words(a.value); });
     }
     areas.forEach(function (a, i) { a.addEventListener('input', function () {
-      countW(); paintMeter(i); if (state.relock) state.relock();
+      countW(); paintMeters(); paintRevise(); if (state.relock) state.relock();
       clearTimeout(shareT); shareT = setTimeout(paintShare, 400);
     }); });
     host.querySelectorAll('[data-card]').forEach(function (b) { b.addEventListener('click', function () { host.querySelector('#wr-card' + b.dataset.card).classList.toggle('hidden'); }); });
@@ -995,7 +1204,7 @@
       if (state.planOpen) return;
       state.planOpen = true; state.planOpenedAt = Math.round((Date.now() - state.t0) / 1000); state.planHow = why;
       host.querySelectorAll('.wr-box[data-para]').forEach(function (b) { b.classList.remove('wr-locked'); });
-      var note = host.querySelector('#wr-plannote'); if (note) note.textContent = why === 'green' ? 'Plan Wards green: the boxes are open. Fill the frames, then change at least one sentence in every paragraph into your own words.' : 'Ten minutes are up: the boxes are open. Finish the plan as you write.';
+      var note = host.querySelector('#wr-plannote'); if (note) note.textContent = why === 'green' ? 'Plan Wards green: the boxes are open. Fill the frames, then write one sentence of your own in every paragraph, with one of your own ideas.' : 'Ten minutes are up: the boxes are open. Finish the plan as you write.';
     }
     function paintPlanWards() {
       var box = host.querySelector('#wr-planlist'); if (!box) return;
@@ -1005,7 +1214,36 @@
       box.querySelectorAll('[data-ward]').forEach(function (cb) { cb.addEventListener('change', function () { state.planTicks[cb.dataset.ward] = cb.checked; paintPlanWards(); }); });
       if (guided && n === PLAN_WARDS.length) openBoxes('green');
     }
-    if (guided) { host.querySelectorAll('.wr-box[data-para]').forEach(function (b) { b.classList.add('wr-locked'); }); }
+    if (guided && !revise) { host.querySelectorAll('.wr-box[data-para]').forEach(function (b) { b.classList.add('wr-locked'); }); }
+    if (revise) { var pnote = host.querySelector('#wr-plannote'); if (pnote) pnote.textContent = 'Revision: the boxes are open. Your plan can still change.'; }
+    /* E3 (19 Oct 2026): plan once. Her cast of this prompt in the Spellbook Workshop fills the
+       matrix (in a revision, the plan of her first essay comes first). Every box stays editable. */
+    if (!exam) {
+      var pf = null;
+      if (cfg.reviseVars && typeof cfg.reviseVars === 'object' && nKeys(cfg.reviseVars)) pf = { vars: cfg.reviseVars, from: 'revise' };
+      else if (global.Lab && global.Lab.castVars) {
+        try { var cv = global.Lab.castVars(cfg.studentId, p.id); if (cv && cv.vars && nKeys(cv.vars)) pf = { vars: cv.vars, from: 'cast', at: cv.at || '', status: cv.status || '' }; } catch (e) { pf = null; }
+      }
+      if (pf) {
+        var nf = 0;
+        C.VARIABLES.forEach(function (v) {
+          var x = String(pf.vars[v.key] == null ? '' : pf.vars[v.key]).trim(), inp = host.querySelector('#wr-v-' + v.key);
+          if (!x || !inp) return;
+          inp.value = x; state.vars[v.key] = x; nf++;
+        });
+        if (nf) {
+          state.prefill = { from: pf.from, n: nf, at: pf.at || '' };
+          C.VARIABLES.forEach(function (v) { if (state.vars[v.key]) paintShape(v.key, false); });
+          var fc = host.querySelector('#wr-fromcast'), when = '';
+          if (pf.at) { try { var dt = new Date(pf.at); if (!isNaN(dt.getTime())) when = ' (' + dt.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) + ')'; } catch (e) { when = ''; } }
+          if (fc) {
+            fc.classList.remove('hidden');
+            fc.innerHTML = pf.from === 'revise' ? '<b>Your plan from your first essay is filled in.</b> Change any box you like.'
+              : '<b>Your plan is filled in from your Workshop cast of this prompt' + esc(when) + (pf.status && pf.status !== 'complete' ? ', which you have not finished' : '') + '.</b> You planned it once: change any box you like.';
+          }
+        }
+      }
+    }
     paintPlanWards();
     var swMore = host.querySelector('#wr-switch-more');
     if (swMore) swMore.addEventListener('click', function () {
@@ -1024,6 +1262,7 @@
     if (fillBtn) fillBtn.addEventListener('click', function () {
       var filled = Object.keys(state.vars).filter(function (k) { return state.vars[k]; }).length;
       if (filled < 6 && !confirm('Only ' + filled + ' of 11 variables are filled. Fill the frames anyway?')) return;
+      state.fillUsed = true;
       paras.forEach(function (pg, i) {
         if (!areas[i].value.trim() || confirm('Replace the ' + pg.name + ' box?')) {
           areas[i].value = T.tidy(T.fill(frameText(pg), state.vars));
@@ -1032,7 +1271,7 @@
         }
       });
       countW(); paintMeters(); paintShare(); if (state.relock) state.relock();
-      host.querySelector('#wr-note').textContent = 'Frames filled. Grey words under each box are still the frame. Change at least one sentence in every paragraph into your own words: Submit stays locked until you do.';
+      host.querySelector('#wr-note').textContent = 'Frames filled. Grey words under each box are still the frame. In every paragraph, write one sentence of your own with one of your own ideas: Submit stays locked until you do.';
     });
 
     function paintPhase() {
@@ -1065,24 +1304,67 @@
             (ns ? '<p class="pf-next"><span class="pf-next-h">Next step:</span> ' + esc(ns.text) + (ns.sub ? (canOpen ? ' <button type="button" class="pf-link" data-open-sub="' + esc(ns.sub) + '">' + esc(ns.link) + ' →</button>' : ' <span class="tiny">(' + esc(ns.link) + ')</span>') : '') + '</p>' : '') +
             '</div></div>';
         }).join('') +
-        '<div class="wr-wards" style="margin-top:14px"><div class="wr-boxh"><b>The Landing Check</b><span class="tiny" id="wr-landscore"></span></div><p class="tiny">' + (exam ? 'Which of these did you do in the last five minutes? Tick honestly: the app compares your ticks with the Wards.' : 'Grey lines come from the Wards. Tick the rest yourself before you submit' + (cfg.faultTags && cfg.faultTags.length ? ' (your top faults: ' + esc(cfg.faultTags.slice(0, 5).join(', ')) + ')' : '') + '.') + '</p><div id="wr-landlist"></div></div>' +
-        (!exam ? '<p class="wr-lockmsg hidden" id="wr-lockmsg" role="status"></p>' : '') +
+        '<div class="wr-wards" style="margin-top:14px"><div class="wr-boxh"><b>The Landing Check</b><span class="tiny" id="wr-landscore"></span></div><p class="tiny">' + (exam ? 'Which of these did you do in the last five minutes? Tick honestly: the app compares your ticks with the Wards.'
+          : 'Answer each question by tapping the sentence it asks for: the app checks your tap. Lines marked “whole essay” come from the Wards; lines marked “tick” are yours to tick honestly' + (cfg.faultTags && cfg.faultTags.length ? ' (your top faults: ' + esc(cfg.faultTags.slice(0, 5).join(', ')) + ')' : '') + '.' + (revise ? ' In a revision the Landing Check is optional.' : '')) + '</p><div id="wr-landlist"></div></div>' +
+        (!exam || revise ? '<p class="wr-lockmsg hidden" id="wr-lockmsg" role="status"></p>' : '') +
         '<div class="qfoot" style="margin-top:12px">' + (canRevise ? '<button class="btn" id="wr-revise">Revise once</button>' : '') + '<span class="grow"></span><button class="btn primary" id="wr-submit">Submit essay</button></div></div>';
       var auto = landingAuto(pre), items = exam ? LANDING.map(function (l) { return { id: l.id, text: l.text, manual: true }; }) : LANDING;
+      /* WP13: tap rows (guided and skeleton). Sentences are numbered across the essay as it was at Check. */
+      var tapMode = !exam, sents = [], nBox = exam ? 1 : areas.length;
+      if (tapMode) { var gi = 0; paraTexts().forEach(function (t, j) { sentences(t).forEach(function (s) { sents.push({ i: gi++, p: j, s: s }); }); }); }
+      function tapOf(id) { return tapMode && TAPS[id] ? TAPS[id] : null; }
+      function inScope(id) { var d = TAPS[id]; return sents.filter(function (x) { return d.inScope(x.p, nBox); }); }
+      function tapLanded(id) { return !!(state.taps[id] && state.taps[id].landed); }
+      function tapRow(l) {
+        var d = TAPS[l.id], ts = state.taps[l.id] || {}, sc = inScope(l.id), res = '';
+        if (ts.result) res = '<p class="wr-tapres ' + ts.result.cls + '" role="status">' + esc(ts.result.text) + (ts.result.sent ? ' <span class="wr-tapquote">“' + esc(ts.result.sent) + '”</span>' : '') + '</p>';
+        var list = ts.landed ? '' : '<div class="wr-taplist" role="group" aria-label="' + esc(d.q) + '">' + (sc.length ? sc.map(function (x, k) {
+          var lastP = k > 0 && sc[k - 1].p === x.p;
+          return (lastP ? '' : '<p class="tiny wr-tappara">' + esc(boxName(x.p)) + '</p>') + '<button type="button" class="wr-tapsent' + (ts.wrong && ts.wrong[x.i] ? ' wrong' : '') + '" data-tap-sent="' + x.i + '" data-tap-ward="' + l.id + '">' + esc(x.s) + '</button>';
+        }).join('') : '<p class="tiny">No sentences here yet. Write this paragraph, then press Check again.</p>') + '</div>';
+        return '<li class="tap' + (ts.landed ? ' landed ok' : '') + '" data-ward-row="' + l.id + '"><div class="wr-tapq"><b>' + esc(d.q) + '</b><span class="tiny">' + esc(l.text) + '</span></div>' + list + res + '</li>';
+      }
+      function landHtml() {
+        return '<ul class="wards landing' + (tapMode ? ' tapmode' : '') + '">' + items.map(function (l) {
+          if (tapOf(l.id)) return tapRow(l);
+          var ok = l.manual ? !!state.landTicks[l.id] : !!auto[l.id];
+          return '<li class="' + (ok ? 'ok' : '') + (l.manual ? ' manual' : ' auto') + '"><label><input type="checkbox" data-ward="' + l.id + '"' + (ok ? ' checked' : '') + (l.manual ? '' : ' disabled') + '><span>' + esc(l.text) +
+            (tapMode ? ' <i class="wr-tickonly">' + (l.manual ? 'tick: the app cannot check this on one sentence' : 'whole essay: from the Wards') + '</i>' : '') + '</span></label></li>';
+        }).join('') + '</ul>';
+      }
+      function tap(id, si) {
+        var d = TAPS[id], ts = state.taps[id] || (state.taps[id] = { tries: 0, wrong: {} }), x = sents.filter(function (q) { return q.i === si; })[0];
+        if (!d || !x || ts.landed) return;
+        var ok = d.inScope(x.p, nBox) && d.test(x.s);
+        ts.tries++; if (ts.first == null) ts.first = ok ? 1 : 0;
+        if (ok) { ts.landed = true; ts.chosen = x.i; ts.result = { cls: 'yes', text: d.yes, sent: '' }; return; }
+        ts.wrong[x.i] = 1;
+        if (ts.tries < 2) { ts.result = { cls: 'no', text: d.no, sent: '' }; return; }
+        var pick = inScope(id).filter(function (q) { return d.test(q.s); })[0];
+        ts.landed = true; ts.pick = pick ? pick.i : null;
+        ts.result = pick ? { cls: 'pick', text: 'Not quite. The app would pick this one:', sent: pick.s } : { cls: 'pick', text: d.none, sent: '' };
+      }
       function relock() {
-        var sub = pn.querySelector('#wr-submit'); if (!sub || exam) return;
-        var manualDone = items.every(function (l) { return !l.manual || !!state.landTicks[l.id]; }), lk = lockList(), why = [];
-        if (!manualDone) why.push('Tick every line of the Landing Check.');
-        if (lk.length) why.push('Change at least one sentence into your own words in: ' + lk.join(', ') + '. The grey words under each box show what is still the frame.');
+        var sub = pn.querySelector('#wr-submit'); if (!sub || (exam && !revise)) return;
+        var why = [];
+        if (revise) { var rl = reviseLock(); if (rl) why.push(rl); }
+        else {
+          var tapsLeft = items.filter(function (l) { return tapOf(l.id) && !tapLanded(l.id); }).length;
+          var manualDone = items.every(function (l) { return tapOf(l.id) || !l.manual || !!state.landTicks[l.id]; }), lk = lockList();
+          if (tapsLeft) why.push('Answer ' + (tapsLeft === 1 ? 'the tap question' : 'the ' + tapsLeft + ' tap questions') + ' in the Landing Check: tap the sentence it asks for.');
+          if (!manualDone) why.push('Tick every line of the Landing Check.');
+          lk.forEach(function (x) { why.push(x.name + ': ' + x.msg); });
+        }
         sub.disabled = why.length > 0; sub.title = why.join(' ');
         var lm = pn.querySelector('#wr-lockmsg');
-        if (lm) { lm.classList.toggle('hidden', !why.length); lm.innerHTML = why.length ? '<b>Submit is locked.</b> ' + why.map(esc).join(' ') : ''; }
+        if (lm) { lm.classList.toggle('hidden', !why.length); lm.innerHTML = why.length ? '<b>Submit is locked.</b> ' + why.map(function (w) { return '<span class="wr-lockline">' + esc(w) + '</span>'; }).join(' ') : ''; }
       }
       function paintLanding() {
-        var box = pn.querySelector('#wr-landlist'), n = items.filter(function (l) { return l.manual ? !!state.landTicks[l.id] : !!auto[l.id]; }).length;
-        box.innerHTML = wardList('landing', items, state.landTicks, auto);
+        var box = pn.querySelector('#wr-landlist'), n = items.filter(function (l) { return tapOf(l.id) ? tapLanded(l.id) : l.manual ? !!state.landTicks[l.id] : !!auto[l.id]; }).length;
+        box.innerHTML = landHtml();
         pn.querySelector('#wr-landscore').textContent = n + ' of ' + items.length;
-        box.querySelectorAll('[data-ward]').forEach(function (cb) { cb.addEventListener('change', function () { state.landTicks[cb.dataset.ward] = cb.checked; paintLanding(); }); });
+        box.querySelectorAll('input[data-ward]').forEach(function (cb) { cb.addEventListener('change', function () { state.landTicks[cb.dataset.ward] = cb.checked; paintLanding(); }); });
+        box.querySelectorAll('[data-tap-sent]').forEach(function (b) { b.addEventListener('click', function () { tap(b.dataset.tapWard, Number(b.dataset.tapSent)); paintLanding(); }); });
         relock();
       }
       state.relock = relock;
@@ -1104,9 +1386,18 @@
       var t = text(); pre = pre || preflight(t, p, shareOpts);
       areas.forEach(function (a) { a.disabled = true; });
       var secs = Math.min(total, Math.round((Date.now() - state.t0) / 1000));
-      var own = guided ? paras.map(function (pg, i) { var st = paraState(i); return st ? { frame: st.frame, words: st.words, own: st.own, sents: st.sents.length } : null; }) : null;
+      var rep = ownReport();
+      var own = guided ? paras.map(function (pg, i) { var st = rep[i]; return st ? { frame: st.frame, words: st.words, own: st.own, sents: st.sents.length } : null; }) : null;
+      /* lastMeta (contract with student.js): final at submit */
+      var fw = 0, tw = 0, os = 0; rep.forEach(function (st) { if (st) { fw += st.frame; tw += st.words; os += st.own; } });
+      var lt = {}; Object.keys(state.taps).forEach(function (k) { if (state.taps[k].first != null) lt[k] = state.taps[k].first; });
+      var lk = Object.keys(lt);
+      LAST = { ownShare: tw ? Math.round(1000 * (tw - fw) / tw) / 1000 : 0, ownSentences: os, fillUsed: !!state.fillUsed, landTaps: lt,
+        landAgree: lk.length ? Math.round(1000 * lk.filter(function (k) { return lt[k] === 1; }).length / lk.length) / 1000 : null,
+        revisionOf: String(cfg.revisionOf || ''), reviseRow: String(cfg.reviseRow || '') };
       if (cfg.onSubmit) cfg.onSubmit({ promptId: p.id, mode: mode, tier: tier, text: t, words: words(t), seconds: secs, timedOut: !!timedOut,
-        preflight: pre, revision: state.revision, firstText: state.firstText || '', firstPreflight: state.firstPre || null,
+        preflight: pre, revision: state.revision, firstText: state.firstText || (revise ? old.text : ''), firstPreflight: state.firstPre || (revise ? old.pre : null),
+        meta: lastMeta(), revisionOf: LAST.revisionOf, reviseRow: LAST.reviseRow,
         plan: exam ? { landing: state.landTicks, calibration: calibration(pre), share: share } : { vars: state.vars, choice: state.choice, custom: state.custom, planWards: state.planTicks, planOpenedAt: state.planOpenedAt, planHow: state.planHow || null, landing: state.landTicks, calibration: calibration(pre), share: share, shapeHelp: state.helped, ownWords: own } });
       /* how well her own ticks match the Wards: agreements over the lines the app can judge */
       function calibration(pre0) {
@@ -1115,13 +1406,15 @@
         return { agree: agree, of: keys.length };
       }
     }
-    return { stop: stop, text: text };
+    if (revise) { countW(); paintMeters(); paintRevise(); paintShare(); }
+    return { stop: stop, text: text, meta: lastMeta, revise: revise ? { target: old.target, row: cfg.reviseRow || '' } : null };
   }
 
   global.Prompts = Prompts;
   /* Shared with lab.js: does this text mention any word of the list (or a word that means the same)? */
   function mentions(t, list) { return hasAny(canon(read(t).text), list, false); }
   global.Writer = { preflight: preflight, checkThesis: checkThesis, checkBody: checkBody, checkRewrite: checkRewrite, markingPrompt: markingPrompt, mount: mount, plain: plain, read: read, mentions: mentions, words: words, sentences: sentences, paragraphs: paragraphs,
-    shapeCheck: shapeCheck, shapeExamples: shapeExamples, nextStep: nextStep, planWards: planWards,
+    shapeCheck: shapeCheck, shapeExamples: shapeExamples, nextStep: nextStep, planWards: planWards, lastMeta: lastMeta,
+    _own: { test: ownTest, content: ownContent, stem: ownStem, frameSent: frameSent }, _tap: { position: sentPosition, example: sentExample }, _reviseTarget: reviseTarget,
     LEX: { POSITION: POSITION, MECH: MECH, EXAMPLE: EXAMPLE, NUANCE: NUANCE, LINKER_HEAD: LINKER_HEAD, REFERENCE: REFERENCE, CLICHE: CLICHE } };
 })(window);

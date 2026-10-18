@@ -372,3 +372,30 @@ input::placeholder{color:var(--ink-3)}
 .wr-box.wr-locked textarea,.wr-box.wr-locked select,.wr-box.wr-locked button{pointer-events:none;opacity:.45}
 .wr-box.wr-locked{position:relative}
 .wr-box.wr-locked::after{content:'Opens when the Plan Wards are green';position:absolute;inset:auto 12px 10px auto;font-size:.78rem;color:var(--ink-3)}
+
+/* Scriptorium (19 Oct 2026): own-sentence lock (WP11a), the Landing Check you can check (WP13),
+   revise mode and the plan filled from a Workshop cast (E3) */
+.wards.tapmode li.tap{display:block;padding:10px 12px;border:1px solid var(--rule);border-radius:var(--r-m);background:var(--surface)}
+.wards.tapmode li.tap.landed{border-color:var(--ok);background:var(--ok-soft)}
+.wr-tapq b{display:block;font-size:.95rem;line-height:1.35;color:var(--ink)}
+.wr-tapq .tiny{display:block;margin-top:2px}
+.wr-taplist{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.wr-tappara{margin:4px 0 0;font-weight:700}
+.wr-tapsent{display:block;width:100%;min-height:44px;padding:8px 11px;text-align:left;font:inherit;font-size:.9rem;line-height:1.4;color:var(--ink);background:var(--surface-2);border:1px solid var(--rule);border-radius:var(--r-s);cursor:pointer;overflow-wrap:anywhere}
+.wr-tapsent:hover,.wr-tapsent:focus-visible{border-color:var(--accent-line);background:var(--accent-soft)}
+.wr-tapsent.wrong{border-color:var(--no);background:var(--no-soft)}
+.wr-tapres{margin:8px 0 0;font-size:.88rem;font-weight:700}
+.wr-tapres.yes{color:var(--ok)}
+.wr-tapres.no{color:var(--no)}
+.wr-tapres.pick{color:var(--ink)}
+.wr-tapquote{display:block;margin-top:4px;font-weight:400;font-family:var(--f-display);font-size:1.02rem}
+.wr-tickonly{display:block;font-style:normal;font-size:.76rem;color:var(--ink-3);margin-top:1px}
+.wr-lockline{display:block;margin-top:3px}
+.wr-fromcast{margin:4px 0 8px;padding:7px 10px;border-radius:var(--r-s);background:var(--gold-soft);border-left:3px solid var(--brass);font-size:.86rem;line-height:1.45;color:var(--ink)}
+.wr-revise-banner{padding:12px 14px;margin-bottom:12px;border-left:4px solid var(--brass)}
+.wr-revise-banner p{margin:4px 0 0;font-size:.9rem;line-height:1.45}
+.wr-box.wr-revise-target{outline:2px solid var(--brass);outline-offset:3px;border-radius:var(--r-m);background:var(--gold-soft)}
+.wr-revise-note{margin:6px 0;font-size:.88rem;line-height:1.45;color:var(--ink)}
+.wr-revise-status{font-weight:700;font-size:.88rem}
+.wr-revise-status.need{color:var(--no)}
+.wr-revise-status.good{color:var(--ok)}
