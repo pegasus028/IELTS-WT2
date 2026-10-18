@@ -1154,9 +1154,13 @@
   function paintBootcamp() {
     var bs = bootState(), rank = BC.rankFor(bs.points), nxt = BC.nextRank(bs.points);
     var cleared = Object.keys(bs.missions).filter(function (k) { return bs.missions[k].passed; }).length;
-    var html = '<div class="sect-h"><div><h2>Duelling Hall</h2><p>One prompt, the whole plan, one decision at a time: time, decode, the Core Topic, side A, side B, the position, the frames and the Ten Wards. Every question is a drop-down. Hints cost ' + BC.POINTS.hint + ' points; a correct second choice earns ' + BC.POINTS.second + '. Win a duel at ' + Math.round(BC.POINTS.pass * 100) + '%.</p></div></div>';
+    var html = '<div class="sect-h"><div><h2>Duelling Hall</h2><p>One prompt, the whole plan, one decision at a time: time, decode, the Core Topic, side A, side B, the position, the frames and the Ten Wards. Every question is a drop-down. Hints cost ' + BC.POINTS.hint + ' points; a correct second choice earns ' + BC.POINTS.second + '. Win a duel at ' + Math.round(BC.POINTS.pass * 100) + '%. Fighting a prompt again adds points only when you beat your best on it.</p></div></div>';
     var dt = duelTier();
     html += '<div class="lvl-bar" role="group" aria-label="Choose the level of the answer options"><span class="lvl-lbl">Answer options at my level:</span>' + DUEL_LVLS.map(function (l) { return '<button type="button" class="lvl-btn' + (l === dt ? ' on' : '') + '" data-duel-lvl="' + l + '" aria-pressed="' + (l === dt) + '">' + l + '</button>'; }).join('') + '<span class="tiny" style="flex-basis:100%">The prompts stay in exam English. This changes the English of the eleven-key choices.</span></div>';
+    /* Short duels (Oct 2026): the fixed steps only in the first three duels, then a "Full duel" switch. */
+    var nDuelled = BC.duelled(bs);
+    if (nDuelled < BC.SHORT_AFTER) html += '<p class="tiny" id="bc-mode-note" style="margin:-6px 0 14px">Your first ' + BC.SHORT_AFTER + ' duels ask every step (' + nDuelled + ' of ' + BC.SHORT_AFTER + ' fought). After that, a duel starts at the Core Topic and takes about ten minutes.</p>';
+    else html += '<div class="lvl-bar" role="group" aria-label="Choose short or full duels"><span class="lvl-lbl">Duel length:</span><button type="button" class="lvl-btn' + (bs.full ? '' : ' on') + '" data-duel-mode="short" aria-pressed="' + !bs.full + '">Short duel</button><button type="button" class="lvl-btn' + (bs.full ? ' on' : '') + '" id="bc-full" data-duel-mode="full" aria-pressed="' + !!bs.full + '">Full duel</button><span class="tiny" style="flex-basis:100%">' + (bs.full ? 'Full duel: every step, from the time and the decode to the Ten Wards.' : 'Short duel: from the Core Topic to the frames. Choose Full duel for every step.') + '</span></div>';
     html += '<div class="gates" style="grid-template-columns:repeat(2,1fr)"><div class="gate"><span>Duelling rank</span><b>' + esc(rank.name) + '</b><small>' + bs.points + ' points' + (nxt ? ' · ' + (nxt.min - bs.points) + ' to ' + esc(nxt.name) : ' · top rank') + '</small><div class="bar-line gold"><span style="width:' + (nxt ? Math.round(100 * (bs.points - rank.min) / (nxt.min - rank.min)) : 100) + '%"></span></div></div><div class="gate"><span>Duels won</span><b>' + cleared + '</b><small>of ' + C.PROMPTS.length + ' prompts · win at ' + Math.round(BC.POINTS.pass * 100) + '%</small></div></div>';
     html += '<div class="card" style="padding:14px 16px;margin-bottom:16px"><p class="kicker">The Ten Wards</p><ol class="bc-list">' + BC.CHECKLIST.map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') + '</ol></div>';
     var order = C.PROMPTS.slice().sort(function (a, b) { return Object.keys(C.TYPES).indexOf(a.type) - Object.keys(C.TYPES).indexOf(b.type) || a.title.localeCompare(b.title); });
@@ -1167,37 +1171,58 @@
     $('#view-bootcamp').innerHTML = html;
     $('#view-bootcamp').querySelectorAll('[data-bc]').forEach(function (b) { b.addEventListener('click', function () { startBootcamp(b.dataset.bc); }); });
     $('#view-bootcamp').querySelectorAll('[data-duel-lvl]').forEach(function (b) { b.addEventListener('click', function () { S.p.duelTier = b.dataset.duelLvl; syncSoon(); paintBootcamp(); toast('Duel answers at ' + b.dataset.duelLvl + '.'); }); });
+    $('#view-bootcamp').querySelectorAll('[data-duel-mode]').forEach(function (b) { b.addEventListener('click', function () { bs.full = b.dataset.duelMode === 'full'; syncSoon(); paintBootcamp(); toast(bs.full ? 'Full duels: every step.' : 'Short duels: from the Core Topic.'); }); });
   }
-  function startBootcamp(promptId) {
+  /* B10 (Oct 2026): a duel adds rank points and merits only for the improvement on this prompt's best
+     points (m.bestPts), so a prompt cannot be farmed. Older records have only the best percentage of a
+     full duel; their best points are worked out from it. */
+  function duelBestPts(m, pr, lvl) {
+    if (!m || !(m.attempts > 0)) return 0;
+    if (typeof m.bestPts === 'number') return m.bestPts;
+    var full = pr ? BC.build(pr, m.level || lvl).total : 0;
+    return Math.round((m.best || 0) * full / 100);
+  }
+  function startBootcamp(promptId, forceFull) {
     show('bootrun');
-    var dlv = duelTier();
-    S.boot = BC.mount($('#view-bootrun'), { prompt: promptId, tier: dlv,
+    var dlv = duelTier(), bs0 = bootState(), pr0 = PR.get(promptId);
+    var short = !forceFull && BC.isShortDuel(bs0);
+    var prevBest = duelBestPts(bs0.missions[promptId], pr0, dlv), liveXp = 0;
+    S.boot = BC.mount($('#view-bootrun'), { prompt: promptId, tier: dlv, short: short,
       onQuit: function () { S.boot = null; show('bootcamp'); },
+      onFullDuel: function () { S.boot = null; startBootcamp(promptId, true); },
       onAnswer: function (a) {
         var t = S.p.stats.byTag[a.tag] || (S.p.stats.byTag[a.tag] = { a: 0, c: 0 });
         t.a++; if (a.correct) t.c++;
         S.p.stats.seen++; if (a.correct) S.p.stats.correct++;
-        S.p.xp += a.gain; S.sessItems++; if (a.correct) S.sessCorrect++;
-        api.enqueue([{ ts: new Date().toISOString(), studentId: S.p.studentId, itemId: 'bc-' + a.promptId + '-' + a.id, topic: 'bootcamp', level: dlv, type: 'choose', tag: a.tag, cefr: dlv, correct: a.correct ? 1 : 0, ms: 0, hinted: a.hinted ? 1 : 0, fast: 0, mode: 'bootcamp', given: a.second ? 'second choice' : 'first choice', expected: '' }]);
+        /* merits only once the running score passes the best on this prompt */
+        var due = Math.max(0, a.runPoints - prevBest);
+        if (due > liveXp) { S.p.xp += due - liveXp; liveXp = due; }
+        S.sessItems++; if (a.correct) S.sessCorrect++;
+        /* B14: the chosen option, the key and the time go to the Answer log (same columns) */
+        var given = a.second ? '1st: ' + a.firstGiven + ' | 2nd: ' + a.given : a.given;
+        api.enqueue([{ ts: new Date().toISOString(), studentId: S.p.studentId, itemId: 'bc-' + a.promptId + '-' + a.id, topic: 'bootcamp', level: dlv, type: 'choose', tag: a.tag, cefr: dlv, correct: a.correct ? 1 : 0, ms: Math.round(a.ms || 0), hinted: a.hinted ? 1 : 0, fast: 0, mode: 'bootcamp', given: String(given).slice(0, 400), expected: String(a.expected || '').slice(0, 300) }]);
         paintHeader(); syncSoon();
       },
       onDone: function (res) {
         S.boot = null;
         var bs = bootState(), pctScore = Math.round(100 * res.points / res.total);
         var m = bs.missions[res.promptId] || (bs.missions[res.promptId] = { best: 0, attempts: 0 });
-        m.attempts++; if (pctScore > m.best) m.best = pctScore; m.passed = m.passed || res.passed; m.at = new Date().toISOString(); m.level = res.tier || dlv; if (res.passed) { m.won = m.won || {}; m.won[m.level] = 1; }
+        var gainPts = Math.max(0, res.points - prevBest), firstWin = res.passed && !m.passed;
+        m.attempts++; if (pctScore > m.best) m.best = pctScore; m.bestPts = Math.max(prevBest, res.points); m.passed = m.passed || res.passed; m.at = new Date().toISOString(); m.level = res.tier || dlv; m.lastMode = res.short ? 'short' : 'full'; if (res.passed) { m.won = m.won || {}; m.won[m.level] = 1; }
         var before = BC.rankFor(bs.points).name;
-        bs.points += res.points;
+        bs.points += gainPts;
         var after = BC.rankFor(bs.points);
-        if (res.passed) S.p.xp += 60;
+        if (gainPts > liveXp) { S.p.xp += gainPts - liveXp; liveXp = gainPts; }
+        if (firstWin) S.p.xp += 60;
         var earned = P.checkBadges(S.p);
         paintHeader(); sync();
         var pr = PR.get(res.promptId) || {};
-        $('#view-bootrun').innerHTML = '<div class="play"><div class="card result"><div class="score-ring" style="--p:' + pctScore + '"><i>' + pctScore + '%</i></div><h3>' + (res.passed ? 'Duel won' : 'Duel lost: fight it again') + '</h3><p>' + res.points + ' of ' + res.total + ' points on ' + esc(pr.title) + '. ' + (after.name !== before ? 'You are now ' + esc(after.name) + '!' : 'Duelling rank: ' + esc(after.name) + ' (' + bs.points + ' points).') + '</p>' +
+        var gainLine = m.attempts > 1 ? (gainPts > 0 ? ' +' + gainPts + ' rank points: a new best on this prompt.' : ' No new rank points: your best here is ' + m.bestPts + ' points. Beat it to earn more.') : ' +' + gainPts + ' rank points.';
+        $('#view-bootrun').innerHTML = '<div class="play"><div class="card result"><div class="score-ring" style="--p:' + pctScore + '"><i>' + pctScore + '%</i></div><h3>' + (res.passed ? 'Duel won' : 'Duel lost: fight it again') + '</h3><p>' + res.points + ' of ' + res.total + ' points on ' + esc(pr.title) + (res.short ? ' (short duel)' : '') + '.' + esc(gainLine) + (firstWin ? ' +60 merits for your first win here.' : '') + ' ' + (after.name !== before ? 'You are now ' + esc(after.name) + '!' : 'Duelling rank: ' + esc(after.name) + ' (' + bs.points + ' points).') + '</p>' +
           (function () { var seen = {}, miss = res.log.filter(function (l) { if (l.correct || seen[l.tag]) return false; seen[l.tag] = 1; return true; }); return miss.length ? '<div class="misslist">' + miss.map(function (l) { var rem = C.REMEDIATION[l.tag] || {}; return '<div class="miss"><b>' + esc(rem.name || l.tag) + '</b>' + esc(rem.principle || '') + '</div>'; }).join('') + '</div>' : ''; })() +
           '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn primary" id="bc-back">Back to the Duelling Hall</button><button class="btn" id="bc-again">Duel again</button><button class="btn" id="bc-write">Write this essay in the Scriptorium</button></div></div></div>';
         $('#bc-back').addEventListener('click', function () { show('bootcamp'); });
-        $('#bc-again').addEventListener('click', function () { startBootcamp(res.promptId); });
+        $('#bc-again').addEventListener('click', function () { startBootcamp(res.promptId, forceFull); });
         $('#bc-write').addEventListener('click', function () { startWrite({ promptId: res.promptId, uiMode: 'guided', minutes: 40, kind: 'practice' }); });
         if (earned.length) S.celebrateTimer = setTimeout(function () { celebrate(earned[0], earned.slice(1)); }, 600);
       } });

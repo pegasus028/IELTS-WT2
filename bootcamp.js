@@ -9,9 +9,14 @@
    The matrix steps are built from the prompt's own eleven variables (the
    Matrix Arena bank), at the level the student picks in the hall (A2, B1, B2 or C1; A2/B1 sets in prompts-levels.js).
 
-   Bootcamp.build(prompt, tier)  → { steps:[{ id, title, brief, questions:[{ id, stem, options, answer, hint, why, tag }] }], total }
-   Bootcamp.mount(host, { prompt, tier, onDone, onQuit, onAnswer })
-   Bootcamp.RANKS, Bootcamp.CHECKLIST, Bootcamp.POINTS
+   Bootcamp.build(prompt, tier[, opts])  → { steps:[{ id, title, brief, questions:[{ id, stem, options, answer, hint, why, tag }] }], total, short, skipped }
+     opts.short === true drops the fixed steps and questions (FIXED below) that are the same in every duel.
+     The kept questions keep exactly the options and answer positions of the full build, so
+     build(p, tier) with no opts (the full duel) still answers a short duel too.
+   Bootcamp.mount(host, { prompt, tier, short, onDone, onQuit, onAnswer, onFullDuel })
+   Bootcamp.isShortDuel(progress.bootcamp) → true once SHORT_AFTER different prompts have been duelled,
+     unless the hall's "Full duel" switch (progress.bootcamp.full) is on.
+   Bootcamp.RANKS, Bootcamp.CHECKLIST, Bootcamp.POINTS, Bootcamp.FIXED, Bootcamp.SHORT_AFTER
    =========================================================================== */
 (function (global) {
   'use strict';
@@ -34,6 +39,13 @@
     { min: 450, name: 'Adept' }, { min: 700, name: 'Master Duellist' }, { min: 1000, name: 'Champion' }
   ];
   var POINTS = { first: 10, second: 5, hint: 3, pass: 0.7 };
+  /* Oct 2026 (A1 walkthrough, redundancy row 1): these questions are the same in every duel, so they
+     are asked only in a student's first SHORT_AFTER duels. After that a duel starts at the Core Topic. */
+  var FIXED = { steps: ['time', 'decode', 'check'], questions: ['nom', 'newidea'] };
+  var SHORT_AFTER = 3;
+  /* Different prompts with at least one finished duel. */
+  function duelled(bs) { var m = (bs && bs.missions) || {}; return Object.keys(m).filter(function (k) { return m[k] && m[k].attempts > 0; }).length; }
+  function isShortDuel(bs) { return !(bs && bs.full) && duelled(bs) >= SHORT_AFTER; }
 
   function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   function lc(s) { s = String(s || ''); return s.charAt(0).toLowerCase() + s.slice(1); }
@@ -76,8 +88,8 @@
   var BC_HINT = { core: 'Choose the noun phrase that names the whole issue in this prompt: no wider than the question, and not just one side of it.' };
 
   /* ------------------------------------------------------------ build */
-  function build(p, tier) {
-    qseq = 0;
+  function build(p, tier, opts) {
+    qseq = 0; opts = opts || {};
     /* A2 and B1 answer sets come from prompts-levels.js; the frames stay at B2 below C1. */
     tier = ['A2', 'B1', 'B2', 'C1'].indexOf(tier) >= 0 ? tier : 'B2';
     var V = (p.vars && p.vars[tier]) || (p.vars && p.vars.B2) || {};
@@ -162,7 +174,14 @@
     steps.push({ id: 'check', title: 'The Ten Wards: last 5 minutes', brief: 'Ten wards, in order, every time. ' + CHECKLIST.map(function (c, i) { return (i + 1) + '. ' + c; }).join('  '), questions: chk, checklist: true });
 
     place(steps, hash(p.id + tier) % 4);
-    return { steps: steps, total: steps.reduce(function (a, s) { return a + s.questions.length * POINTS.first; }, 0) };
+    /* The short duel is cut AFTER place(), so every kept question has the same options and answer as in the full duel. */
+    var skipped = { steps: [], questions: [] };
+    if (opts.short === true) {
+      steps = steps.filter(function (st) { if (FIXED.steps.indexOf(st.id) >= 0) { skipped.steps.push(st.id); return false; } return true; });
+      steps.forEach(function (st) { st.questions = st.questions.filter(function (qq) { if (FIXED.questions.indexOf(qq.id) >= 0) { skipped.questions.push(qq.id); return false; } return true; }); });
+      steps = steps.filter(function (st) { return st.questions.length > 0; });
+    }
+    return { steps: steps, total: steps.reduce(function (a, s) { return a + s.questions.length * POINTS.first; }, 0), short: opts.short === true, skipped: skipped };
   }
 
   /* --------------------------------------------------------------- UI */
@@ -171,14 +190,16 @@
 
   function mount(host, cfg) {
     var p = typeof cfg.prompt === 'string' ? global.Prompts.get(cfg.prompt) : cfg.prompt;
-    var mission = build(p, cfg.tier), st = { i: 0, points: 0, answered: {}, log: [] };
+    var mission = build(p, cfg.tier, { short: cfg.short === true }), st = { i: 0, points: 0, answered: {}, log: [], mark: Date.now() };
     var total = mission.total;
+    var stepIds = mission.steps.map(function (s) { return s.id; }).join(',');
     function paint() {
       var step = mission.steps[st.i];
-      var html = '<div class="wr"><div class="wr-top"><button class="btn ghost sm" id="bc-quit">✕</button>' +
+      var html = '<div class="wr" data-duel="' + (mission.short ? 'short' : 'full') + '" data-steps="' + stepIds + '"><div class="wr-top"><button class="btn ghost sm" id="bc-quit">✕</button>' +
         '<div class="wr-phases">' + mission.steps.map(function (s, i) { return '<span class="' + (i === st.i ? 'on' : i < st.i ? 'past' : '') + '">' + (i + 1) + '</span>'; }).join('') + '</div>' +
         '<span class="wr-words">' + st.points + ' / ' + total + ' pts</span></div>' +
-        '<div class="wr-grid"><div class="wr-left">' + global.Prompts.card(p, { demand: st.i >= 1 }) + '</div><div class="wr-right">' +
+        (mission.short && st.i === 0 ? '<div class="msg info" id="bc-short-note" style="margin-bottom:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span style="flex:1 1 220px">Short duel: you know the time, the decode and the Ten Wards by now, so this duel starts at the Core Topic. Want every step? ' + (cfg.onFullDuel ? 'Tap Full duel, or turn on Full duel in the hall.' : 'Turn on Full duel in the Duelling Hall.') + '</span>' + (cfg.onFullDuel ? '<button class="btn sm" id="bc-go-full">Full duel</button>' : '') + '</div>' : '') +
+        '<div class="wr-grid"><div class="wr-left">' + global.Prompts.card(p, { demand: mission.short || st.i >= 1 }) + '</div><div class="wr-right">' +
         '<div class="card theory" style="gap:10px"><p class="kicker">Step ' + (st.i + 1) + ' of ' + mission.steps.length + '</p><h3>' + esc(step.title) + '</h3>' +
         (step.checklist ? '<ol class="bc-list">' + CHECKLIST.map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') + '</ol>' : '<p class="key" style="font-weight:500">' + esc(step.brief) + '</p>') +
         step.questions.map(function (qq) {
@@ -193,6 +214,7 @@
         '<div class="qfoot"><span class="tiny">' + step.questions.filter(function (qq) { return (st.answered[qq.id] || {}).done; }).length + ' of ' + step.questions.length + ' answered</span><span class="grow"></span><button class="btn primary" id="bc-next"' + (step.questions.every(function (qq) { return (st.answered[qq.id] || {}).done; }) ? '' : ' disabled') + '>' + (st.i + 1 >= mission.steps.length ? 'Finish the duel' : 'Next step →') + '</button></div></div></div></div></div>';
       host.innerHTML = html;
       host.querySelector('#bc-quit').addEventListener('click', function () { if (cfg.onQuit) cfg.onQuit(); });
+      var gf = host.querySelector('#bc-go-full'); if (gf) gf.addEventListener('click', function () { cfg.onFullDuel(); });
       host.querySelectorAll('[data-hint]').forEach(function (b) { b.addEventListener('click', function () { var a = st.answered[b.dataset.hint] || (st.answered[b.dataset.hint] = {}); a.hinted = true; paint(); }); });
       host.querySelectorAll('[data-check]').forEach(function (b) { b.addEventListener('click', function () {
         var id = b.dataset.check, qq = step.questions.filter(function (x) { return x.id === id; })[0];
@@ -201,18 +223,25 @@
         if (oi === qq.answer) { a.done = true; a.correct = true; a.gain = Math.max(0, (a.wrongFirst != null ? POINTS.second : POINTS.first) - (a.hinted ? POINTS.hint : 0)); st.points += a.gain; }
         else if (a.wrongFirst == null) { a.wrongFirst = oi; }
         else { a.done = true; a.correct = false; a.gain = 0; }
-        if (a.done) { st.log.push({ id: id, tag: qq.tag, correct: a.correct, hinted: !!a.hinted, second: a.wrongFirst != null }); if (cfg.onAnswer) cfg.onAnswer({ promptId: p.id, id: id, tag: qq.tag, correct: a.correct, hinted: !!a.hinted, second: a.wrongFirst != null, gain: a.gain }); }
+        if (a.done) {
+          /* ms: from the step opening (or the last finished answer on it) to this final choice */
+          var now = Date.now(), ms = Math.max(0, now - st.mark); st.mark = now;
+          st.log.push({ id: id, tag: qq.tag, correct: a.correct, hinted: !!a.hinted, second: a.wrongFirst != null, ms: ms });
+          if (cfg.onAnswer) cfg.onAnswer({ promptId: p.id, id: id, tag: qq.tag, correct: a.correct, hinted: !!a.hinted, second: a.wrongFirst != null, gain: a.gain, ms: ms,
+            given: String(qq.options[oi]), firstGiven: a.wrongFirst != null ? String(qq.options[a.wrongFirst]) : '', expected: String(qq.options[qq.answer]), runPoints: st.points, short: !!mission.short });
+        }
         paint();
         var el = host.querySelector('[data-q="' + id + '"]'); if (el) el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       }); });
       host.querySelector('#bc-next').addEventListener('click', function () {
-        if (st.i + 1 >= mission.steps.length) { if (cfg.onDone) cfg.onDone({ promptId: p.id, tier: (p.vars && p.vars[cfg.tier]) ? cfg.tier : 'B2', points: st.points, total: total, passed: st.points / total >= POINTS.pass, log: st.log }); return; }
-        st.i++; paint(); window.scrollTo({ top: 0 });
+        if (st.i + 1 >= mission.steps.length) { if (cfg.onDone) cfg.onDone({ promptId: p.id, tier: (p.vars && p.vars[cfg.tier]) ? cfg.tier : 'B2', points: st.points, total: total, passed: st.points / total >= POINTS.pass, log: st.log, short: !!mission.short, steps: stepIds.split(',') }); return; }
+        st.i++; st.mark = Date.now(); paint(); window.scrollTo({ top: 0 });
       });
     }
     paint();
-    return { state: st };
+    return { state: st, mission: mission };
   }
 
-  global.Bootcamp = { build: build, mount: mount, RANKS: RANKS, CHECKLIST: CHECKLIST, POINTS: POINTS, rankFor: rankFor, nextRank: nextRank };
+  global.Bootcamp = { build: build, mount: mount, RANKS: RANKS, CHECKLIST: CHECKLIST, POINTS: POINTS, rankFor: rankFor, nextRank: nextRank,
+    FIXED: FIXED, SHORT_AFTER: SHORT_AFTER, duelled: duelled, isShortDuel: isShortDuel };
 })(window);
