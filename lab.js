@@ -733,6 +733,8 @@
       if (a.rating && a.rating.overall != null) { x.rated++; x.sum += a.rating.overall; if (x.best == null || a.rating.overall > x.best) x.best = a.rating.overall; }
     });
     s.pcts = pcts; s.fullPcts = full;
+    /* prompts cast to the end (read by the Your five steps in student.js and the Staff Room) */
+    s.castPrompts = {}; st.data.attempts.forEach(function (a) { if (a.status === 'complete' && a.promptId) s.castPrompts[a.promptId] = (s.castPrompts[a.promptId] || 0) + 1; });
     s.maxVersion = st.data.attempts.reduce(function (m, a) { return Math.max(m, a.version || 1); }, 0);
     s.runs = st.data.attempts.filter(function (a) { return a.status === 'complete'; }).length;
     var best = null; Object.keys(pcts).forEach(function (k) { if (pcts[k].best != null && (best == null || pcts[k].best > best)) best = pcts[k].best; });
@@ -1222,6 +1224,12 @@
     var done = {}; st.data.attempts.forEach(function (a) { if (a.status === 'complete') done[a.promptId] = (done[a.promptId] || 0) + 1; });
     var types = ['all'].concat(Object.keys(C.TYPES));
     var list = C.PROMPTS.filter(function (pr) { return st.filters.type === 'all' || pr.type === st.filters.type; });
+    /* Your five first (student.js decides which), then the rest as extra practice, filtered by type */
+    var sp = host.coreSplit ? host.coreSplit(C.PROMPTS) : { core: [], extra: C.PROMPTS };
+    var extra = sp.extra.filter(function (pr) { return st.filters.type === 'all' || pr.type === st.filters.type; });
+    function pcardHtml(pr, core) {
+      return '<button class="pcard' + (done[pr.id] ? ' done' : '') + (st.asmPrompt === pr.id ? ' lab-picked' : '') + '" data-pp="' + pr.id + '"><span class="pcard-t">' + esc(pr.title) + '</span><span class="pcard-m"><span class="pill gold">' + esc(typeName(pr.type)) + '</span>' + fitPill(pr.type, t) + (done[pr.id] ? '<span class="pill good">done ' + done[pr.id] + '×</span>' : '') + '</span>' + (core && host.coreStepsHtml ? host.coreStepsHtml(pr.id) : '') + '<span class="pcard-r">' + esc(pr.text) + '</span></button>';
+    }
     var html = draftRunsHtml();
     html += '<div class="card lab-pad"><p class="kicker">Step 1 · Your spellbook design</p><div class="lab-row2"><select id="lab-tsel" class="lab-select">' + tpls.map(function (x) {
       return '<option value="' + x.id + '"' + (x.id === t.id ? ' selected' : '') + '>' + esc(x.name) + ' · v' + (x.version || 1) + ' · ' + esc(bpTypeShort(x.type)) + ' · ' + x.pct + '% · ' + esc(levelInfo(x.level).id) + '</option>';
@@ -1233,9 +1241,8 @@
     html += '<div class="card lab-pad"><p class="kicker">Step 3 · Prompt</p><div class="filters" id="lab-ftype">' + types.map(function (ty) {
       return '<button data-ft="' + ty + '"' + (st.filters.type === ty ? ' class="on"' : '') + '>' + (ty === 'all' ? 'All types' : esc(typeName(ty))) + '</button>';
     }).join('') + '</div><p class="lab-cta" style="margin:0 0 10px"><button class="btn sm" id="lab-random">Random prompt</button></p>' +
-      '<div class="promptgrid lab-prompts">' + list.map(function (pr) {
-        return '<button class="pcard' + (done[pr.id] ? ' done' : '') + (st.asmPrompt === pr.id ? ' lab-picked' : '') + '" data-pp="' + pr.id + '"><span class="pcard-t">' + esc(pr.title) + '</span><span class="pcard-m"><span class="pill gold">' + esc(typeName(pr.type)) + '</span>' + fitPill(pr.type, t) + (done[pr.id] ? '<span class="pill good">done ' + done[pr.id] + '×</span>' : '') + '</span><span class="pcard-r">' + esc(pr.text) + '</span></button>';
-      }).join('') + '</div></div>';
+      (sp.core.length ? '<h3 class="lab-five-h" id="lab-five-h">Your five</h3><div class="promptgrid lab-prompts" id="lab-five">' + sp.core.map(function (pr) { return pcardHtml(pr, true); }).join('') + '</div><h3 class="lab-five-h">Extra practice</h3>' : '') +
+      '<div class="promptgrid lab-prompts" id="lab-extra">' + extra.map(function (pr) { return pcardHtml(pr, false); }).join('') + '</div></div>';
     el.innerHTML = html;
     bindDraftRuns();
     $('#lab-tsel').addEventListener('change', function () { st.asmTemplate = this.value; var nt = getTpl(this.value); if (nt && nt.type) st.filters.type = nt.type; paintAsmHome(el); });
