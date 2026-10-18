@@ -12,7 +12,7 @@ L.COMPONENTS.forEach(function (c) {
   if (ids[c.id]) bad('duplicate component id ' + c.id); ids[c.id] = 1;
   if (!L.PARAS.some(function (p) { return p.key === c.para; })) bad(c.id + ': unknown paragraph ' + c.para);
   c.slots.forEach(function (k) { if (KEYS.indexOf(k) < 0) bad(c.id + ': unknown slot ' + k); });
-  ['B2', 'C1'].forEach(function (t) {
+  ['B2', 'C1'].concat(c.examples.A2 ? ['A2'] : []).forEach(function (t) {
     if (!c.examples[t] || c.examples[t].length < 3) bad(c.id + ': needs 3 ' + t + ' examples');
     (c.examples[t] || []).forEach(function (e) {
       const toks = (e.match(/\{(\w+)\}/g) || []).map(function (x) { return x.slice(1, -1); });

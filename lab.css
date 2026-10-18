@@ -286,3 +286,12 @@
 .lab-exvars{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px}
 @media (max-width:900px){.lab-excmp{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:560px){.lab-excmp{grid-template-columns:1fr}}
+/* Oct 2026 (B8/B3): coach on request, AI checks left today, the spellbook in the Scriptorium */
+.lab-aiq.tiny{color:var(--ink-3)}
+.lab-aiq.bad{color:var(--no,#b3261e)}
+.lab-coachnote{margin:6px 0 0;color:var(--ink-3)}
+.lab-offline.quick{background:transparent;border:1px dashed var(--rule);padding:6px 10px}
+.lab-inuse{border-left:3px solid var(--accent,#c9a227)}
+.lab-inuse p{margin:4px 0}
+.lab-acts .btn{min-height:40px}
+@media (max-width:560px){.lab-acts .lab-aiq{flex-basis:100%}}

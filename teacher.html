@@ -48,6 +48,17 @@ table.roster td{padding:8px 10px;border-top:1px solid var(--rule-soft);white-spa
 table.roster tr.r{cursor:pointer}
 table.roster tr.r:hover td{background:var(--surface-2)}
 table.roster tr.sel td{background:var(--accent-soft)}
+/* B13: the name column stays in view while the roster scrolls sideways */
+#roster td:first-child,#roster th:first-child{position:sticky;left:0;z-index:1;background:var(--surface);box-shadow:1px 0 0 var(--rule)}
+#roster th:first-child{z-index:3;background:var(--surface-2)}
+#roster tr.r:hover td:first-child{background:var(--surface-2)}
+#roster tr.sel td:first-child{background:linear-gradient(var(--accent-soft),var(--accent-soft)),var(--surface)}
+#roster td:first-child .who2{max-width:190px;white-space:normal}
+.sb-frames{display:grid;gap:8px;margin-top:6px}
+.sb-frame{border:1px solid var(--rule-soft);border-radius:var(--r-s,8px);padding:8px 10px;background:var(--surface-2)}
+.sb-frame b{display:block;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin-bottom:3px}
+.sb-frame p{margin:0;font-size:.88rem;line-height:1.45;white-space:pre-wrap}
+.sb-slot{font-family:var(--f-mono);font-size:.78rem;color:var(--accent)}
 .who2{display:flex;flex-direction:column;gap:1px}
 .who2 b{font-weight:600}
 .who2 span{font-family:var(--f-mono);font-size:9.5px;color:var(--ink-3)}
@@ -237,7 +248,7 @@ details.disc>summary .count{margin-left:auto;font-family:var(--f-mono);font-size
 <script src="content.js?v=20261018c"></script>
 <script src="prompts.js?v=1"></script>
 <script src="prompts-2.js?v=1"></script>
-<script src="template.js?v=20261011b"></script>
+<script src="template.js?v=20261018ups"></script>
 <script src="models.js?v=1"></script>
 <script src="mocks.js?v=1"></script>
 <script src="topic-00.js?v=20261018c"></script><script src="topic-01.js?v=20261018d"></script><script src="topic-02.js?v=20261018d"></script>
@@ -251,6 +262,6 @@ details.disc>summary .count{margin-left:auto;font-family:var(--f-mono);font-size
 <script src="engine.js?v=20261011c"></script>
 <script src="story-content.js?v=20261012w"></script>
 <script src="api.js?v=20261012"></script>
-<script src="teacher.js?v=20261018lv"></script>
+<script src="teacher.js?v=20261018ups"></script>
 </body>
 </html>
