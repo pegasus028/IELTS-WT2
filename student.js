@@ -70,6 +70,7 @@
     setReturn: function (v) { S.returnTo = v; },
     openSub: function (id) { openSub(id); },
     startCheck: function (levelId) { startCheck(levelId); },
+    testOut: function (levelId) { startCheck(levelId, { testOut: true }); },
     startAssignment: function (id) { startAssignment(id); },
     podInfo: function (topicId) { var t = E.Bank.topic(topicId), md = mdOf(topicId); return t ? { has: !!t.podcast, done: !!md.done, seconds: md.seconds || 0, code: t.code, name: t.name, video: !!t.video, watched: !!md.videoOpens } : null; },
     playVid: function (topicId) { playVideo(E.Bank.topic(topicId)); },
@@ -322,7 +323,7 @@
       var t = C.TOPICS[i], lv = t.levels[0];
       for (var j = 0; j < lv.subs.length; j++) {
         var s = lv.subs[j], rec = p.subs[s.id];
-        if (!rec || rec.best < E.PASS_SUB) return { kind: 'sub', kicker: 'Next lesson', id: s.id, t: t, label: t.code + ' · ' + s.name, sub: t.name + ' — ' + (rec ? 'take it again to pass it' : 'not started'), go: 'Start →' };
+        if (!P.subPassed(p, s.id)) return { kind: 'sub', kicker: 'Next lesson', id: s.id, t: t, label: t.code + ' · ' + s.name, sub: t.name + ' — ' + (rec ? 'take it again to pass it' : 'not started'), go: 'Start →' };
       }
       var ck = p.checks[lv.check.id];
       if (!ck || ck.best < E.PASS_CHECK) return { kind: 'check', kicker: 'Next gate', id: lv.id, t: t, label: t.code + ' · the examiner\'s gate', sub: 'Pass the gate to finish ' + t.name + '.', go: 'Go →' };
@@ -629,6 +630,20 @@
         return '<a class="pcard" style="text-decoration:none" href="' + esc(a.url) + '" target="_blank" rel="noopener"><span class="pcard-t">' + esc(a.name) + ' ↗</span><span class="pcard-m"><span class="pill gold">' + esc(a.topic) + '</span><span class="pill">' + esc(a.format) + '</span></span><span class="pcard-r">' + esc(a.use) + '</span></a>';
       }).join('') + '</div></div>';
   }
+  /* WP4 / E1 helpers for the lesson and gate rows. A gate attempt is drawn
+     from its pool, so the row names the draw, not the pool. */
+  function gateCount(lv) { return Math.min(E.GATE_DRAW || 8, lv.check.items.length); }
+  function lessonNote(rec) {
+    if (!rec) return '';
+    if (rec.testedOut && !(rec.best >= E.PASS_SUB)) return ' · tested out — open any time for review';
+    return rec.attempts ? ' · best ' + pct(rec.best) + '%' : '';
+  }
+  /* "Try the gate first": offered while the three lessons are not all passed. */
+  function testOutRow(p, lv, cls) {
+    if (P.checkUnlocked(p, lv)) return '';
+    if (cls === 'mrow') return '<button class="mrow check testout" data-testout="' + lv.id + '"><span class="mrow-tick"></span><span class="mrow-txt"><span class="mrow-name">Try the gate first</span><span class="mrow-sub">Know this class already? ' + gateCount(lv) + ' questions · pass at 75% and the three lessons count as passed. No penalty if not.</span></span><span class="mrow-score">→</span></button>';
+    return '<button class="ckrow testout" data-testout="' + lv.id + '"><span class="ck-box">?</span><span class="ck-txt"><span class="ck-name">Try the gate first</span><span class="ck-sub">Know this class already? Pass at 75% and the three lessons count as passed. No penalty if not.</span></span><span class="ck-go">try →</span></button>';
+  }
   function paintPlan() {
     var p = S.p, next = nextStep(p);
     if (ST && window.STORY) {
@@ -646,10 +661,10 @@
       var lv = t.levels[0], tp = P.topicPct(p, t), ck = p.checks[lv.check.id], green = ck && ck.best >= E.PASS_CHECK;
       html += '<div class="step' + (green ? ' done' : '') + '"><div class="step-h"><span class="step-n">' + t.n + '</span><span class="step-t"><span class="step-name">' + esc(t.name) + '</span><span class="step-s">' + esc(t.blurb) + '</span></span><span class="step-pct' + (green ? ' good' : '') + '">' + tp + '%</span></div>' +
         '<div class="step-b"><div class="ckgroup">' + mediaDrop('plan-' + t.id) + '<div class="ckgrid">' + ckMedia(t, 'plan-' + t.id) + '<div class="ckstack">' + lv.subs.map(function (s) {
-          var rec = p.subs[s.id], done = rec && rec.best >= E.PASS_SUB;
-          return '<button class="ckrow' + (done ? ' done' : '') + '" data-sub="' + s.id + '"><span class="ck-box">' + (done ? '✓' : '') + '</span><span class="ck-txt"><span class="ck-name">' + esc(s.name) + '</span><span class="ck-sub">' + esc(s.cefr) + ' · ' + s.items.length + ' questions' + (rec ? ' · best ' + pct(rec.best) + '%' : '') + '</span></span><span class="ck-go">' + (done ? 'again' : 'open') + ' →</span></button>';
+          var rec = p.subs[s.id], done = P.subPassed(p, s.id);
+          return '<button class="ckrow' + (done ? ' done' : '') + '" data-sub="' + s.id + '"><span class="ck-box">' + (done ? '✓' : '') + '</span><span class="ck-txt"><span class="ck-name">' + esc(s.name) + '</span><span class="ck-sub">' + esc(s.cefr) + ' · ' + s.items.length + ' questions' + lessonNote(rec) + '</span></span><span class="ck-go">' + (done ? 'again' : 'open') + ' →</span></button>';
         }).join('') +
-        '<button class="ckrow' + (green ? ' done' : '') + '" data-check="' + lv.id + '"' + (P.checkUnlocked(p, lv) ? '' : ' disabled') + '><span class="ck-box">' + (green ? '✓' : '') + '</span><span class="ck-txt"><span class="ck-name">The examiner\'s gate</span><span class="ck-sub">' + (P.checkUnlocked(p, lv) ? lv.check.items.length + ' questions · pass at 75%' : 'pass the three lessons first') + (ck ? ' · best ' + pct(ck.best) + '%' : '') + '</span></span><span class="ck-go">go →</span></button>' +
+        '<button class="ckrow' + (green ? ' done' : '') + '" data-check="' + lv.id + '"' + (P.checkUnlocked(p, lv) ? '' : ' disabled') + '><span class="ck-box">' + (green ? '✓' : '') + '</span><span class="ck-txt"><span class="ck-name">The examiner\'s gate</span><span class="ck-sub">' + (P.checkUnlocked(p, lv) ? gateCount(lv) + ' questions · pass at 75%' : 'pass the three lessons first') + (ck ? ' · best ' + pct(ck.best) + '%' : '') + '</span></span><span class="ck-go">go →</span></button>' + testOutRow(p, lv, 'ckrow') +
         '</div></div></div>' +
         '</div></div>';
     });
@@ -659,6 +674,7 @@
     if (res) res.addEventListener('click', function () { goNext(next); });
     $('#view-plan').querySelectorAll('[data-sub]').forEach(function (b) { b.addEventListener('click', function () { S.returnTo = 'plan'; openSub(b.dataset.sub); }); });
     $('#view-plan').querySelectorAll('[data-check]').forEach(function (b) { b.addEventListener('click', function () { S.returnTo = 'plan'; startCheck(b.dataset.check); }); });
+    $('#view-plan').querySelectorAll('[data-testout]').forEach(function (b) { b.addEventListener('click', function () { S.returnTo = 'plan'; startCheck(b.dataset.testout, { testOut: true }); }); });
     wireMedia($('#view-plan'));
   }
 
@@ -679,11 +695,11 @@
       html += resStrip(t);
       if (open) {
         html += '<div class="sys-body">' + podRow(t, 'row-' + t.id, 'mrow') + lv.subs.map(function (s) {
-          var rec = p.subs[s.id], done = rec && rec.best >= E.PASS_SUB;
-          return '<button class="mrow' + (done ? ' done' : '') + '" data-sub="' + s.id + '"><span class="mrow-tick"></span><span class="mrow-txt"><span class="mrow-name">' + esc(s.name) + '</span><span class="mrow-sub">' + esc(s.cefr) + ' · ' + s.items.length + ' questions</span></span><span class="mrow-score">' + (rec ? pct(rec.best) + '%' : '') + '</span></button>';
+          var rec = p.subs[s.id], done = P.subPassed(p, s.id), tested = rec && rec.testedOut && !(rec.best >= E.PASS_SUB);
+          return '<button class="mrow' + (done ? ' done' : '') + '" data-sub="' + s.id + '"><span class="mrow-tick"></span><span class="mrow-txt"><span class="mrow-name">' + esc(s.name) + '</span><span class="mrow-sub">' + esc(s.cefr) + ' · ' + s.items.length + ' questions' + (tested ? ' · tested out — open any time for review' : '') + '</span></span><span class="mrow-score">' + (rec && rec.attempts ? pct(rec.best) + '%' : '') + '</span></button>';
         }).join('');
         var cu = P.checkUnlocked(p, lv);
-        html += '<button class="mrow check' + (green ? ' done' : '') + '" data-check="' + lv.id + '"' + (cu ? '' : ' disabled') + '><span class="mrow-tick"></span><span class="mrow-txt"><span class="mrow-name">' + esc(lv.check.name) + '</span><span class="mrow-sub">' + (cu ? lv.check.items.length + ' questions · pass at 75%' : 'Pass all three lessons to open the gate') + '</span></span><span class="mrow-score">' + (ck ? pct(ck.best) + '%' : '') + '</span></button></div>';
+        html += '<button class="mrow check' + (green ? ' done' : '') + '" data-check="' + lv.id + '"' + (cu ? '' : ' disabled') + '><span class="mrow-tick"></span><span class="mrow-txt"><span class="mrow-name">' + esc(lv.check.name) + '</span><span class="mrow-sub">' + (cu ? gateCount(lv) + ' questions · pass at 75%' : 'Pass all three lessons to open the gate') + '</span></span><span class="mrow-score">' + (ck ? pct(ck.best) + '%' : '') + '</span></button>' + testOutRow(p, lv, 'mrow') + '</div>';
       }
       html += '</div>';
     });
@@ -692,6 +708,7 @@
     $('#view-map').querySelectorAll('[data-sys]').forEach(function (b) { b.addEventListener('click', function () { S.sysOpen = S.sysOpen === b.dataset.sys ? null : b.dataset.sys; paintMap(); }); });
     $('#view-map').querySelectorAll('[data-sub]').forEach(function (b) { b.addEventListener('click', function () { S.returnTo = 'map'; openSub(b.dataset.sub); }); });
     $('#view-map').querySelectorAll('[data-check]').forEach(function (b) { b.addEventListener('click', function () { S.returnTo = 'map'; startCheck(b.dataset.check); }); });
+    $('#view-map').querySelectorAll('[data-testout]').forEach(function (b) { b.addEventListener('click', function () { S.returnTo = 'map'; startCheck(b.dataset.testout, { testOut: true }); }); });
     wireMedia($('#view-map'));
   }
 
@@ -947,6 +964,8 @@
       '<div class="card theory">' + E.artBand(t.art) + '<p class="kicker">' + esc(s.cefr) + ' · ' + esc(t.name) + '</p><h3>' + esc(s.name) + '</h3>' + lvlBar(tx.lvl) + lsayBar() + '<p class="key">' + tx.key + '</p>' +
       '<div class="prose" data-explain-level="' + tx.lvl + '">' + tx.body.map(function (x) { return '<p>' + x + '</p>'; }).join('') + '</div>';
     if (s.theory.examples && s.theory.examples.length) html += '<div class="exlist">' + s.theory.examples.map(function (x, i) { return '<div><div class="s">' + x.s + '</div><div class="g">' + esc(tx.gloss[i] || x.g) + '</div></div>'; }).join('') + '</div>';
+    var srec = S.p.subs[subId];
+    if (srec && srec.testedOut && !(srec.best >= E.PASS_SUB)) html += '<p class="tiny testout-note" id="p-testedout">You tested out of this lesson at the examiner\'s gate. It counts as passed; open it any time for review.</p>';
     html += '<button class="btn primary wide" id="p-start">Start the ' + s.items.length + ' questions →</button></div></div>';
     $('#view-play').innerHTML = html;
     show('play');
@@ -968,7 +987,8 @@
      PRACTICE RUNNER (inherited)
      ===================================================================== */
   function startRun(kind, items, meta) {
-    S.run = { kind: kind, items: items.slice(), i: 0, results: [], subId: meta.subId, checkId: meta.checkId, title: meta.title, hintedAny: false, t0: 0, fxTopic: meta.fxTopic || '' };
+    S.run = { kind: kind, items: items.slice(), i: 0, results: [], subId: meta.subId, checkId: meta.checkId, levelId: meta.levelId || '', title: meta.title, hintedAny: false, t0: 0, fxTopic: meta.fxTopic || '',
+      testOut: !!meta.testOut, base: meta.base || null, reviewBefore: meta.reviewBefore || null };
     if (kind === 'check') S.run.items = E.shuffle(S.run.items);
     /* B11: an examiner's gate keeps its key until the gate is passed. */
     if (kind === 'check') S.run.keyHidden = !gatePassed(meta.checkId);
@@ -987,7 +1007,28 @@
     return '<div class="verdict-exp">The examiner keeps the answer until you pass the gate. Check this rule and try again.</div>' +
       '<div class="verdict-w"><b>' + esc(rem.name || 'The rule') + '</b>' + (item.hint || rem.principle ? ': ' + esc(item.hint || rem.principle) : '') + '</div>';
   }
-  function startCheck(levelId) { var lv = E.Bank.level(levelId); startRun('check', lv.check.items, { checkId: lv.check.id, title: lv.check.name }); }
+  /* WP4: each attempt is eight questions drawn from the gate's pool of fourteen.
+     E1: opts.testOut = she tries the gate before its lessons are all passed. */
+  function startCheck(levelId, opts) {
+    var lv = E.Bank.level(levelId); if (!lv) return;
+    var items = E.Bank.drawGate ? E.Bank.drawGate(S.p, levelId) : lv.check.items;
+    var testOut = !!(opts && opts.testOut) && !P.checkUnlocked(S.p, lv) && !gatePassed(lv.check.id);
+    var before = null;
+    if (testOut) { before = {}; items.forEach(function (it) { if (S.p.review[it.id]) before[it.id] = 1; }); }
+    startRun('check', items, { checkId: lv.check.id, levelId: levelId, title: testOut ? lv.check.name + ' · trying it first' : lv.check.name, testOut: testOut, reviewBefore: before });
+  }
+  /* E2: a lesson retry re-runs the questions she got wrong plus up to two she
+     got right, shuffled. `base` is the whole lesson's state so far
+     ({ itemId: true|false }); the retry's score is taken over the whole lesson. */
+  function retryNote(r) {
+    var wrong = r.items.filter(function (it) { return !r.base[it.id]; }).length, right = r.items.length - wrong;
+    return 'Retry: the ' + (wrong === 1 ? 'one question' : wrong + ' questions') + ' you missed' + (right ? ', mixed with ' + (right === 1 ? 'one' : 'two') + ' you got right' : '') + '. Your score counts the whole lesson.';
+  }
+  function retryItems(sub, base) {
+    var wrong = sub.items.filter(function (it) { return !base[it.id]; });
+    var right = E.shuffle(sub.items.filter(function (it) { return base[it.id]; })).slice(0, 2);
+    return E.shuffle(wrong.concat(right));
+  }
   var TIMED_TYPES = { choose: 1, judge: 1, spot: 1 };
   var FREE_TYPES = { thesis: 1, bodypara: 1, rewrite: 1 };
 
@@ -999,9 +1040,9 @@
     var timed = !!TIMED_TYPES[item.type] && !item.prompt;
     var combo = r.combo || 0;
     $('#view-play').innerHTML = '<div class="play"><div class="play-top"><button class="btn ghost sm" id="p-quit">✕</button><div class="bar-line thin"><span style="width:' + prog + '%"></span></div>' +
-      (combo >= 3 ? '<span class="combo">▲ ' + combo + ' in a row</span>' : '') + '<span class="qcount">' + (r.i + 1) + ' / ' + r.items.length + '</span>' +
+      (combo >= 3 ? '<span class="combo">▲ ' + combo + ' in a row</span>' : '') + '<span class="qcount">' + (r.base ? 'Retry · ' : r.testOut ? 'Trying it first · ' : '') + (r.i + 1) + ' / ' + r.items.length + '</span>' +
       (timed ? '<div class="timer" id="timer" title="Answer inside 7 seconds for a time bonus"><svg width="38" height="38" viewBox="0 0 38 38"><circle class="track" cx="19" cy="19" r="15" fill="none" stroke-width="4"></circle><circle class="run" id="timer-run" cx="19" cy="19" r="15" fill="none" stroke-width="4" stroke-linecap="round" stroke-dasharray="94.2" stroke-dashoffset="0"></circle></svg><b id="timer-n">7</b></div>' : '') +
-      '</div><div class="card qcard"><div class="qtype"><span>' + esc(E.TYPE_LABEL[item.type] || 'Question') + '</span><span class="lv">' + esc(item.level) + '</span></div><div id="qhost"></div><div id="feedback" role="status" aria-live="polite"></div>' +
+      '</div>' + (r.i === 0 && r.base ? '<p class="tiny retry-note" id="p-retrynote">' + esc(retryNote(r)) + '</p>' : '') + '<div class="card qcard"><div class="qtype"><span>' + esc(E.TYPE_LABEL[item.type] || 'Question') + '</span><span class="lv">' + esc(item.level) + '</span></div><div id="qhost"></div><div id="feedback" role="status" aria-live="polite"></div>' +
       '<div class="qfoot">' + (canHint ? '<button class="btn sm" id="p-hint">Hint</button>' : '') + '<span class="grow"></span><button class="btn primary" id="p-check" disabled>Check</button></div></div></div>';
     var host = $('#qhost');
     var view = E.mount(item, host);
@@ -1060,20 +1101,51 @@
     var r = S.run;
     if (r.cleanup) { r.cleanup(); r.cleanup = null; }
     var correct = r.results.filter(function (x) { return x.correct; }).length, score = correct / r.results.length, passed, head, note;
+    var lessonState = null, lessonMisses = 0, toLessons = [];
     if (r.kind === 'module') {
+      /* E2: the lesson's state over all its questions; a retry keeps what was right before. */
+      var sub = E.Bank.sub(r.subId);
+      lessonState = {};
+      sub.items.forEach(function (it) { lessonState[it.id] = !!(r.base && r.base[it.id]); });
+      r.results.forEach(function (x) { if (x.correct) lessonState[x.item.id] = true; });
+      var nRight = sub.items.filter(function (it) { return lessonState[it.id]; }).length;
+      lessonMisses = sub.items.length - nRight;
+      if (r.base) { score = nRight / sub.items.length; correct = nRight; }
       P.finishSub(S.p, r.subId, score); passed = score >= E.PASS_SUB;
       head = passed ? 'Lesson passed' : 'Not yet: take it again';
       note = passed ? 'You need 60% to pass a lesson, and you have it. Anything you missed has gone to the Mending Room and will come back.' : 'You need 60% to pass this one. Read the explanation again and retry: the misses are worth studying.';
+      if (r.base) note = 'This score counts the whole lesson: ' + nRight + ' of ' + sub.items.length + ' right, with the ones you had right before kept. ' + note;
     } else if (r.kind === 'check') {
-      P.finishCheck(S.p, r.checkId, score, r.hintedAny); passed = score >= E.PASS_CHECK;
+      var missTags = [];
+      r.results.forEach(function (x) { if (!x.correct && missTags.indexOf(x.item.tag) < 0) missTags.push(x.item.tag); });
+      passed = score >= E.PASS_CHECK;
+      P.finishCheck(S.p, r.checkId, score, r.hintedAny, { ids: r.items.map(function (it) { return it.id; }), miss: missTags, testOut: r.testOut });
       head = score >= 1 ? 'A perfect gate. The examiner bows.' : passed ? 'Gate passed' : 'The gate stays shut';
       note = passed ? 'That class is passed. Your year has been recalculated.' : 'You need 75% to pass an examiner\'s gate. The principles you lost marks on are listed below.';
+      var tlv = E.Bank.level(r.levelId);
+      if (r.testOut && tlv) {
+        if (passed) {
+          P.testOut(S.p, tlv);
+          head = score >= 1 ? 'Tested out, and a perfect gate' : 'Tested out: the class is passed';
+          note = 'The examiner lets you through. The three lessons count as passed: they stay open any time for review.';
+        } else {
+          /* no penalty: the questions she missed before any lesson do not go to the Mending Room */
+          r.items.forEach(function (it) { if (!(r.reviewBefore || {})[it.id]) delete S.p.review[it.id]; });
+          toLessons = E.Bank.lessonsForTags(r.levelId, missTags).filter(function (sb) { return !P.subPassed(S.p, sb.id); });
+          if (!toLessons.length) toLessons = tlv.subs.filter(function (sb) { return !P.subPassed(S.p, sb.id); });
+          head = 'Not yet: the lessons first';
+          note = 'No harm done: trying the gate first costs nothing, and these misses do not go to the Mending Room. The lesson' + (toLessons.length > 1 ? 's' : '') + ' below teach' + (toLessons.length > 1 ? '' : 'es') + ' the rules you missed. Then the gate opens the usual way.';
+        }
+      }
     } else { passed = true; head = 'Mending done'; note = 'A question you get right twice in a row leaves the Mending Room for good.'; }
     var misses = r.results.filter(function (x) { return !x.correct; });
     /* B11: the review shows the answers only once the gate is passed (this try or an earlier one). */
     var reviewOpen = function (m) { return r.kind === 'check' ? passed || !r.keyHidden : !m.hidden || gatePassed(E.Bank.checkOf ? E.Bank.checkOf(m.item.id) : ''); };
     var anyKeyless = misses.some(function (m) { return !reviewOpen(m); });
     var moreDue = r.kind === 'faults' ? fxDue(r.fxTopic).length : 0;
+    var againLabel = 'Try again';
+    if (r.kind === 'module' && lessonMisses > 0) againLabel = lessonMisses === 1 ? 'Try the one you missed again' : 'Try the ' + lessonMisses + ' you missed again';
+    else if (r.kind === 'check') againLabel = r.testOut && !passed ? 'Try the gate again' : 'Try again: new questions';
     var html = '<div class="play"><div class="card result"><div class="score-ring" style="--p:' + pct(score) + '"><i>' + pct(score) + '%</i></div><h3>' + esc(head) + '</h3><p>' + esc(note) + '</p>';
     if (anyKeyless) html += '<p class="tiny">The examiner keeps the answers until you pass the gate. Here are the rules to check before you try again.</p>';
     if (misses.length) html += '<div class="misslist">' + misses.map(function (m) {
@@ -1081,8 +1153,9 @@
       if (!reviewOpen(m)) return '<div class="miss"><b>' + esc(rem.name || m.item.tag) + '</b>' + esc(m.item.hint || rem.principle || '') + '</div>';
       return '<div class="miss"><b>' + esc(rem.name || m.item.tag) + '</b>' + m.item.why + (r.kind === 'check' && !FREE_TYPES[m.item.type] ? '<br><span class="tiny">Answer: ' + esc(m.expected) + '</span>' : '') + '</div>';
     }).join('') + '</div>';
+    if (toLessons.length) html += '<div class="testout-lessons" id="r-lessons"><p class="kicker">Go to the lesson' + (toLessons.length > 1 ? 's' : '') + '</p>' + toLessons.map(function (sb) { return '<button class="btn wide" data-to-sub="' + sb.id + '">' + esc(sb.name) + ' →</button>'; }).join('') + '</div>';
     if (r.kind === 'faults') html += '<p class="tiny">' + (moreDue ? moreDue + ' more due' + (r.fxTopic && E.Bank.topic(r.fxTopic) ? ' in ' + esc(E.Bank.topic(r.fxTopic).name) : '') + ' · ' + fxMinutes(Math.min(moreDue, FX_SITTING)) + '.' : 'Nothing more is due' + (r.fxTopic ? ' in this class' : '') + '. Well mended.') + '</p>';
-    html += '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn primary" id="r-map">' + (S.returnTo === 'story' ? 'Back to the chapter' : S.returnTo === 'faults' ? 'Back to the Mending Room' : S.returnTo === 'write' ? 'Back to my essay' : 'Back to the map') + '</button>' + (r.kind === 'module' || r.kind === 'check' ? '<button class="btn" id="r-again">Try again</button>' : '') + (moreDue ? '<button class="btn" id="r-more">Mend ' + Math.min(moreDue, FX_SITTING) + ' more</button>' : '') + '</div></div></div>';
+    html += '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn primary" id="r-map">' + (S.returnTo === 'story' ? 'Back to the chapter' : S.returnTo === 'faults' ? 'Back to the Mending Room' : S.returnTo === 'write' ? 'Back to my essay' : 'Back to the map') + '</button>' + (r.kind === 'module' || r.kind === 'check' ? '<button class="btn" id="r-again">' + esc(againLabel) + '</button>' : '') + (moreDue ? '<button class="btn" id="r-more">Mend ' + Math.min(moreDue, FX_SITTING) + ' more</button>' : '') + '</div></div></div>';
     $('#view-play').innerHTML = html;
     var earned = P.checkBadges(S.p);
     paintHeader(); sync();
@@ -1091,9 +1164,13 @@
     if (more) more.addEventListener('click', function () { startMending(r.fxTopic); });
     var again = $('#r-again');
     if (again) again.addEventListener('click', function () {
-      if (r.kind === 'module') startRun('module', E.Bank.sub(r.subId).items, { subId: r.subId, title: r.title });
-      else startRun('check', r.items, { checkId: r.checkId, title: r.title });
+      if (r.kind === 'module') {
+        var sb = E.Bank.sub(r.subId);
+        if (lessonMisses > 0) startRun('module', retryItems(sb, lessonState), { subId: r.subId, title: r.title, base: lessonState });
+        else startRun('module', sb.items, { subId: r.subId, title: r.title });
+      } else startCheck(r.levelId, { testOut: r.testOut && !passed });
     });
+    $('#view-play').querySelectorAll('[data-to-sub]').forEach(function (b) { b.addEventListener('click', function () { S.run = null; openSub(b.dataset.toSub); }); });
     if (earned.length) S.celebrateTimer = setTimeout(function () { celebrate(earned[0], earned.slice(1)); }, 600);
   }
   function celebrate(badge, rest) {

@@ -93,10 +93,10 @@
               '<p>Read it aloud. If it sounds wrong, the slot and the frame do not fit. Change one of them.</p>'
             ],
             examples: [
-              { s: 'One important part of this issue is the urgent need to reduce the pollution that city traffic creates.', g: 'B2 Standard opener + Facet A of the cars prompt. Noun phrase after "is".' },
+              { s: 'One important part of this issue is the money that visitors bring into local businesses.', g: 'B2 Standard opener + Facet A of the tourism prompt. Noun phrase after "is".' },
               { s: 'At the core of this phenomenon lies the undeniable impact of the imposition of punitive duties in order to improve population health. Its influence stems from raising the marginal cost of nutritionally deficient products until consumption measurably shifts.', g: 'Causality focus with the C1 variables of the fast-food tax prompt: the frame was built for a chain, and the mechanism is a chain.' },
               { s: 'Consider national care insurance paid for by contributions from everyone, as in Japan. This shows the importance of treating care for older people as a duty of the whole society.', g: 'Example first: the named case leads, the facet follows.' },
-              { s: '<s>This idea works by scattered firms reporting lower property costs and better staff retention.</s>', g: 'Example A in the Mechanism A slot. Wrong variable, and the sentence sounds wrong when read aloud.' }
+              { s: '<s>This idea works by Bangkok schools that now sell water instead of fizzy drinks.</s>', g: 'Example A in the Mechanism A slot. Wrong variable, and the sentence sounds wrong when read aloud.' }
             ]
           },
           items: [
@@ -157,10 +157,10 @@
               '<p>Keep the job of the sentence, change the words: "One important part of this issue is X" → "The strongest argument for a ban is X". Change the subject, the verb or the order.</p>'
             ],
             examples: [
-              { s: 'The strongest argument for a ban is the pollution that city traffic pumps into the air every day.', g: 'Same job as "One important part of this issue is …", none of its words. The slot content survives.' },
-              { s: '<s>One important part of this issue is the urgent need to reduce the pollution that city traffic creates.</s>', g: 'The frame verbatim. Correct, and worth less each time the examiner sees it.' },
+              { s: 'What worries most parents first is the sleep that children lose to late-night screens.', g: 'Same job as "One important part of this issue is …", none of its words. The slot content survives.' },
+              { s: '<s>One important part of this issue is the harm that long hours on screens do to children\'s sleep.</s>', g: 'The frame verbatim. Correct, and worth less each time the examiner sees it.' },
               { s: '<s>It goes without saying that pollution is the first side of this burning issue.</s>', g: 'The frame replaced with two clichés. Worse than the frame.' },
-              { s: 'What matters most here is the eating habits that teenagers form and then keep for the rest of their lives.', g: 'The C1 Standard opener rewritten: "fundamental dimension", "relationship" and "issue" are gone; the habits and the teenagers remain.' }
+              { s: 'At the heart of this debate is the income that foreign visitors leave in local hands.', g: 'The C1 Standard opener rewritten: "fundamental dimension", "relationship" and "issue" are gone; the visitors and their income remain.' }
             ]
           },
           items: [
@@ -266,7 +266,46 @@
           _good: 'Set against this is the right of every citizen to travel across the city however they wish.',
           _bad: 'Another very important part of the debate is the freedom of each person to move around and travel as they choose.',
           hint: 'Keep the idea of freedom to travel, but open Body B with words of your own instead of the frame\'s stock phrasing.',
-              why: 'The sentence still opens Body B with Facet B (freedom of movement), but "important", "part" and "debate" are gone. A frame that ten students copy is discounted ten times; a sentence only you wrote is marked on its merits.' }
+              why: 'The sentence still opens Body B with Facet B (freedom of movement), but "important", "part" and "debate" are gone. A frame that ten students copy is discounted ten times; a sentence only you wrote is marked on its merits.' },
+        { id: 'm05ckq9', type: 'choose', tag: 'cc-paragraphing', level: 'B1',
+          stem: 'In the Universal Spine, which slot ends the introduction?',
+          options: ['Facet B', 'The Position', 'The Core Topic', 'The Rationale'],
+          answer: 1,
+          hint: 'Recall the last words of the Spine\'s introduction and the slot that follows them.',
+          why: '"This essay looks at both and argues that {position}": the position closes paragraph one in every Spine, so the examiner knows the verdict before Body A. The Rationale waits for the conclusion.' },
+        { id: 'm05ckq10', type: 'judge', tag: 'cc-one-idea', level: 'B2',
+          given: 'Body A: "The first key point is {facetA}. It works by {mechA}, and {facetB} works in the same way. We can see this clearly in {exA}."',
+          stem: 'Does this Body A keep to one idea?',
+          answer: 1,
+          hint: 'Read the letter on every slot in the paragraph.',
+          why: 'False. {facetB} has moved into Body A, so the paragraph now holds two ideas, and the second has no mechanism, example or nuance of its own. Each body paragraph develops one facet; Facet B opens Body B.' },
+        { id: 'm05ckq11', type: 'choose', tag: 'struct-template', level: 'B2',
+          stem: 'Under exam conditions, what share of unchanged frame text should a B2 writer aim to stay at or below?',
+          options: ['60%', '50%', '40%', '30%'],
+          answer: 2,
+          hint: 'Recall the four Lab shares and which one belongs to the Band 7 track.',
+          why: 'The Lab shares are 60, 50, 40 and 30. Under exam conditions a B1 writer aims at 50% or less, a B2 writer at 40% or less, and a C1 writer at 30% or less; the rest of the essay is her own words inside the slots.' },
+        { id: 'm05ckq12', type: 'build', tag: 'tr-no-position', level: 'B2', prompt: 'p-teen-jobs',
+          stem: 'Build the last sentence of the Universal Spine introduction for this prompt.',
+          tiles: ['This essay', 'looks at both', 'and argues that', 'students should work', 'only a few hours', 'at weekends.'],
+          solution: 'This essay looks at both and argues that students should work only a few hours at weekends.',
+          alt: [],
+          hint: 'Start with the Spine\'s own words for this line, then add the position as a full clause.',
+          why: 'The Spine\'s introduction ends with "This essay looks at both and argues that" and the position as a full clause. The examiner can quote the verdict before Body A begins.' },
+        { id: 'm05ckq13', type: 'spot', tag: 'lr-memorised', level: 'B2', prompt: 'p-libraries',
+          stem: 'Tap the memorised cliché in this introduction.',
+          words: ['In today\'s fast-paced world,', 'libraries', 'are losing', 'some of their visitors', 'to the internet.'],
+          answer: 0,
+          fix: 'Today,',
+          hint: 'Find the chunk that could open an essay on any subject at all.',
+          why: '"In today\'s fast-paced world" could open an essay on any subject, so it shows nothing about this one and reads as memorised language. "Today," or an opener about libraries does the same job in the writer\'s own words.' },
+        { id: 'm05ckq14', type: 'select', tag: 'struct-template', level: 'C1',
+          stem: 'Tick the two changes that lower the share of unchanged frame text without losing a variable.',
+          options: ['Deleting Nuance A and Nuance B', 'Rewriting the openers in your own words', 'Copying the C1 frames instead of the B2 ones', 'Leaving the conclusion out to save words', 'Putting more of your own words inside each slot', 'Adding a fifth paragraph built from frames'],
+          answers: [1, 4],
+          k: 2,
+          hint: 'Ask which changes keep all eleven variables on the page.',
+          why: 'Frame share falls when frame words change and when the slots hold more of your own words. Deleting the nuances or the conclusion loses variables, the C1 frames are just as memorised, and an extra paragraph of frames raises the share.' }
       ] }
     }]
   });

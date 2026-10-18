@@ -23,10 +23,10 @@
               '<p>Not a mechanism: an example (a place you can point at), the facet said again, or the policy itself. The mechanism is the step in between.</p>'
             ],
             examples: [
-              { s: 'A tax raises the price of fast food, so people buy less of it, which in turn improves their diet.', g: 'Three links: price → purchases → diet. Each link answers "and why does that happen?".' },
-              { s: '<s>A tax on fast food would improve the health of the whole population.</s>', g: 'A claim. True or not, it does not say how.' },
+              { s: 'A nightly screen limit takes the tablet away an hour before bed, so the child falls asleep sooner, which in turn leaves her rested for school.', g: 'Three links: the limit → sleep → the school day. Each link answers "and why does that happen?".' },
+              { s: '<s>Limiting screen time is good for children\'s health.</s>', g: 'A claim. True or not, it does not say how.' },
               { s: '<s>This idea works by the sugar tax on fizzy drinks that several countries have introduced.</s>', g: 'An example in the mechanism slot: a policy you can point at, not the process inside it.' },
-              { s: 'Working from home removes travel time and office costs, which in turn raises both freedom and efficiency.', g: 'The mechanism of Facet A in the remote-work prompt: what is removed, and what that removal produces.' }
+              { s: 'Teaching a minority language in village schools gives children a daily reason to use it, which in turn keeps it alive for the next generation.', g: 'The mechanism of Facet B in the minority-languages prompt: what the schools do, and what that produces.' }
             ]
           },
           items: [
@@ -93,9 +93,9 @@
               '<p>The example must show YOUR mechanism, not a nearby one and not the other side. Mark it: "for example", "such as", "we can see this when".</p>'
             ],
             examples: [
-              { s: 'For example, several Bangkok schools have replaced their vending machines with water fountains and fruit stalls.', g: 'A place, a practice, a change the reader can picture. Own country, no invented number.' },
-              { s: '<s>Research shows that students who work part-time develop much better time management.</s>', g: 'Unverifiable. Whose research? The examiner reads it as a memorised move.' },
-              { s: 'We can see this in the low-lying districts of Bangkok built on former rice fields, which flood after a single afternoon storm.', g: 'The example shows the mechanism (sealed soil, overloaded drains) happening in one named place.' },
+              { s: 'For example, passengers on Bangkok\'s MRT can now pay at the gate by tapping a bank card.', g: 'A place, a practice, a change the reader can picture. Own country, no invented number.' },
+              { s: '<s>Research shows that people who read printed newspapers remember far more of the news.</s>', g: 'Unverifiable. Whose research? The examiner reads it as a memorised move.' },
+              { s: 'We can see this on new housing estates around Bangkok, where roads and car parks now cover old orchards and the streets fill after heavy rain.', g: 'The example shows the mechanism (sealed soil, overloaded drains) happening in one named place.' },
               { s: '<s>A clear case is the hillside villages that suffer landslides after weeks of rain.</s>', g: 'Concrete, but a neighbouring topic. The prompt asked about city flooding.' }
             ]
           },
@@ -162,10 +162,10 @@
               '<p>Grammar: "Although [limit], [position still holds]." The paragraph: facet → mechanism → example → nuance, 80–110 words, one idea.</p>'
             ],
             examples: [
-              { s: 'However, a full ban creates problems for workers with no good bus or train service, so the ban must come with better transport.', g: 'Nuance: the limit is named, and the position (cars should leave the centre) survives with a condition.' },
-              { s: '<s>However, a ban would make no real difference to the air, so cars should stay.</s>', g: 'Contradiction. The paragraph has just argued against itself.' },
-              { s: '<s>Moreover, the car industry provides thousands of jobs across the country.</s>', g: 'A new facet, not a limit of this one. It belongs in another paragraph or in no paragraph.' },
-              { s: 'Admittedly, students can still buy the same snacks outside the gate; even so, the school day itself no longer teaches the habit.', g: 'Concede in the first clause, keep the position in the second.' }
+              { s: 'However, a tax hits poorer families hardest, so the money it raises must make healthy food cheaper.', g: 'Nuance: the limit is named, and the position (fast food should be taxed) survives with a condition.' },
+              { s: '<s>However, a tax would change nothing about what people eat, so fast food should stay cheap.</s>', g: 'Contradiction. The paragraph has just argued against itself.' },
+              { s: '<s>Moreover, fast-food chains employ thousands of young people.</s>', g: 'A new facet, not a limit of this one. It belongs in another paragraph or in no paragraph.' },
+              { s: 'Admittedly, many people now find information on their phones; even so, the library is the only free place where they can get help to use it.', g: 'Concede in the first clause, keep the position in the second.' }
             ]
           },
           items: [
@@ -272,7 +272,44 @@
           stem: 'Put the four moves of this body paragraph in order.',
           items: ['The root of the problem is the covering of land that once soaked up rain with concrete and asphalt.', 'Sealed soil sends every drop straight into drains that were built for a much smaller city, which in turn overloads them within minutes.', 'We can see the effect in the low-lying districts of Bangkok built on former rice fields.', 'Unfortunately, that land has already been built on and cannot easily be turned back into fields.'],
           hint: 'Follow the four moves of a body paragraph in their usual order, and check that each sentence picks up what the last one ended on.',
-              why: 'Facet, mechanism, example, nuance: each sentence ends with what the next one is about. The facet names the cause, the mechanism explains the chain, the example shows it in one place, and the nuance admits why it is hard to fix.' }
+              why: 'Facet, mechanism, example, nuance: each sentence ends with what the next one is about. The facet names the cause, the mechanism explains the chain, the example shows it in one place, and the nuance admits why it is hard to fix.' },
+        { id: 'm04ckq9', type: 'choose', tag: 'tr-generalised', level: 'B1', prompt: 'p-competitive-sport',
+          stem: 'Facet A: competition teaches children resilience. Which sentence explains how?',
+          options: ['Many famous athletes say that losing as children made them much stronger.', 'Losing and then training for the next match teaches a child to recover.', 'Competitive sport is popular in schools all over the world.', 'Children should take part in sport at least three times a week.'],
+          answer: 1,
+          hint: 'Ask which sentence shows the steps between the activity and the result.',
+          why: 'The mechanism is a chain: lose, train, play again, and the habit of recovering grows. The athletes\' memories are a claim about other people, and the other two sentences are a fact and a rule that explain nothing.' },
+        { id: 'm04ckq10', type: 'judge', tag: 'tr-no-example', level: 'B2', prompt: 'p-teen-jobs',
+          given: 'In Thailand, many teenagers help in a family shop or at a market stall at weekends.',
+          stem: 'Is this an example the examiner can picture?',
+          answer: 0,
+          hint: 'Ask whether the reader could see the scene, and whether anything in it would need a source.',
+          why: 'True. A family shop or a market stall is a place the reader can see, and it comes from the writer\'s own country. No invented figure is needed: the scene itself is the support.' },
+        { id: 'm04ckq11', type: 'choose', tag: 'tr-no-nuance', level: 'B2', prompt: 'p-free-transport',
+          stem: 'Facet A: free buses would cut traffic in the centre. Which sentence is a nuance that keeps the position?',
+          options: ['However, free buses would make no difference to traffic at all.', 'However, the cut is small unless buses are also frequent and fast.', 'However, bus drivers in many cities are paid very low wages.', 'However, free transport is the most popular policy with young voters.'],
+          answer: 1,
+          hint: 'A nuance admits a weakness of this facet but still leaves the facet standing.',
+          why: 'A nuance names the limit and keeps the facet alive with a condition: the cut is real when buses are frequent and fast. "No difference at all" contradicts the facet, and drivers\' pay and voters are new topics.' },
+        { id: 'm04ckq12', type: 'sort', tag: 'cc-progression', level: 'B2', prompt: 'p-online-learning',
+          stem: 'Sort the sentences of a paragraph about online lessons into their moves.',
+          bins: [{ key: 'm', label: 'Mechanism', hint: 'how it works' }, { key: 'e', label: 'Example', hint: 'where you see it' }, { key: 'n', label: 'Nuance', hint: 'the limit' }],
+          items: [{ text: 'A recorded lesson can be paused and replayed, so a slow learner can follow at her own speed.', bin: 'm' }, { text: 'Classes streamed to children who are in hospital for weeks are a clear case.', bin: 'e' }, { text: 'However, a screen cannot notice the student who has stopped understanding.', bin: 'n' }, { text: 'Because no one has to travel, lesson time is spent on learning rather than on the journey.', bin: 'm' }, { text: 'Students who missed a week through illness and caught up from recordings are a case in point.', bin: 'e' }, { text: 'Admittedly, a slow connection at home can turn a lesson into a series of frozen frames.', bin: 'n' }],
+          hint: 'A mechanism explains why the idea works for any student, an example names a case you can picture, and a nuance admits a weakness.',
+          why: 'Mechanisms carry a chain (pause and replay → her own speed; no travel → time for learning). Examples point at a case (children in hospital, students catching up after illness). Nuances concede a limit with "however" or "admittedly" and leave the facet standing.' },
+        { id: 'm04ckq13', type: 'spot', tag: 'tr-no-example', level: 'B2', prompt: 'p-gm-crops',
+          stem: 'Tap the chunk that makes this example unverifiable.',
+          words: ['Farmers who plant', 'pest-resistant cotton', 'need fewer sprays of chemicals,', 'as everyone knows.'],
+          answer: 3,
+          fix: 'as their spraying records show.',
+          hint: 'Find the chunk that asks the reader to believe something instead of showing it.',
+          why: '"As everyone knows" asks the examiner to accept the point without seeing it. The example itself, farmers spraying less on pest-resistant cotton, is concrete; the support should point at something visible, not at what everyone supposedly knows.' },
+        { id: 'm04ckq14', type: 'choose', tag: 'cc-progression', level: 'C1', prompt: 'p-cashless',
+          stem: 'Mechanism: paying by phone removes the need to carry or count cash. Which example shows this mechanism happening?',
+          options: ['Bangkok street-food stalls that are paid by scanning a QR code.', 'Older shoppers who cannot use a banking app on their phones.', 'The fast growth of online shopping during the years of the pandemic.', 'Banks that close branches in small towns to save money.'],
+          answer: 0,
+          hint: 'Ask which case shows the exact process the mechanism describes, in a place the reader can picture.',
+          why: 'The stalls show the mechanism in one picturable place: no cash to carry or count, just a scan. Older shoppers belong to the other side, online shopping is a different change, and branch closures are a result of the change, not this mechanism at work.' }
       ] }
     }]
   });

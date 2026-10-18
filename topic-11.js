@@ -23,7 +23,7 @@
               '<p>Never add -s to advice, research, information, equipment, knowledge, evidence, progress. Their verbs are singular: research links, evidence shows.</p>'
             ],
             examples: [
-              { s: 'The council introduced a ban on cars in the old town, and the ban cut pollution within a year.', g: 'First mention "a ban", second mention "the ban". Same noun, two articles.' },
+              { s: 'The school set up a reading club in March, and the club now meets every Friday.', g: 'First mention "a reading club", second mention "the club". Same noun, two articles.' },
               { s: '<s>The cars produce most of the smog over Bangkok.</s> → Cars produce most of the smog over Bangkok.', g: 'Cars in general: no article. "The smog over Bangkok" is specified by its phrase, so it keeps "the".' },
               { s: '<s>Teachers give many advices about exams.</s> → Teachers give much advice about exams.', g: 'Advice is uncountable: no -s, and "much" not "many". To count it: several pieces of advice.' },
               { s: 'The privacy of ordinary people matters more than a small fall in petty crime.', g: '"The privacy of …": the of-phrase specifies the noun, so "the" goes in front.' }
@@ -89,10 +89,10 @@
               '<p>Word form: economic (about the economy) vs economical (cheap); benefit (noun) vs beneficial (adjective); success (noun) vs successful (adjective). Spelling: government, environment, argument, necessary, separate, definitely, which, their.</p>'
             ],
             examples: [
-              { s: 'In Thailand, most students attend tutoring centres after school and at weekends.', g: 'Comma after the opening phrase. The reader sees where the sentence proper begins.' },
-              { s: '<s>Cashless payment is convenient, it also leaves a record of every purchase.</s> → Cashless payment is convenient, but it also leaves a record of every purchase.', g: 'A comma splice repaired with "but". A semicolon or a full stop would also work.' },
-              { s: '<s>Tourism is the largest economical activity in Phuket.</s> → Tourism is the largest economic activity in Phuket.', g: 'Economical means cheap to run. The adjective for the economy is economic.' },
-              { s: 'A minimum wage that rises every year helps low-paid workers keep up with prices.', g: 'Head noun "wage", singular, so "helps". The relative clause between them does not change the verb.' }
+              { s: 'In the dry season, smoke from farm fires often hangs over the north of Thailand.', g: 'Comma after the opening phrase. The reader sees where the sentence proper begins.' },
+              { s: '<s>Online lessons save travel time, they also cut students off from friends.</s> → Online lessons save travel time, but they also cut students off from friends.', g: 'A comma splice repaired with "but". A semicolon or a full stop would also work.' },
+              { s: '<s>Floods cause great economical damage to small shops.</s> → Floods cause great economic damage to small shops.', g: 'Economical means cheap to run. The adjective for the economy is economic.' },
+              { s: 'A bus service that runs every ten minutes keeps many drivers off the road.', g: 'Head noun "service", singular, so "keeps". The relative clause between them does not change the verb.' }
             ]
           },
           items: [
@@ -155,10 +155,10 @@
               '<p>Find your own top two families and check for those first in the last five minutes. Stopping your two usual errors is faster than learning new grammar.</p>'
             ],
             examples: [
-              { s: '<s>Schools should give students more informations about online fraud.</s> → more information', g: 'Plural family: information is uncountable. Not a spelling error; the letters are fine.' },
-              { s: '<s>The number of online scams have risen sharply.</s> → has risen', g: 'Agreement family: the head noun is "number", singular.' },
-              { s: '<s>Free buses would be expensive, but the environment benefits would justify the cost.</s> → the environmental benefits', g: 'Word-form family: a noun (environment) is sitting in an adjective slot.' },
-              { s: '<s>Tutoring is expensive, many families pay for it anyway.</s> → Tutoring is expensive, but many families pay for it anyway.', g: 'Punctuation family: a comma splice, repaired with "but".' }
+              { s: '<s>Tourists bring too many luggages onto the island ferries.</s> → too much luggage', g: 'Plural family: luggage is uncountable. Not a spelling error; the letters are fine.' },
+              { s: '<s>The price of fresh vegetables have doubled.</s> → has doubled', g: 'Agreement family: the head noun is "price", singular.' },
+              { s: '<s>The health risks of fast food are clear, but the economy costs are often ignored.</s> → the economic costs', g: 'Word-form family: a noun (economy) is sitting in an adjective slot.' },
+              { s: '<s>Cameras record everyone, few people complain about it.</s> → Cameras record everyone, but few people complain about it.', g: 'Punctuation family: a comma splice, repaired with "but".' }
             ]
           },
           items: [
@@ -255,7 +255,47 @@
           _good: 'The government should definitely give young people more information about online fraud.',
           _bad: 'The goverment should give more informations to kids about online fraud, it is definately necesary.',
           hint: 'Repair the sentence family by family: the spelling of each kit word, countability, register, and how the two clauses are joined.',
-              why: 'Five repairs: goverment → government, informations → information (uncountable), kids → young people, definately → definitely, necesary → necessary, and the comma splice becomes one sentence or two. Each belongs to a family, and each family has its own check.' }
+              why: 'Five repairs: goverment → government, informations → information (uncountable), kids → young people, definately → definitely, necesary → necessary, and the comma splice becomes one sentence or two. Each belongs to a family, and each family has its own check.' },
+        { id: 'm11ckq9', type: 'spot', tag: 'gra-article', level: 'B1', prompt: 'p-climate-action',
+          stem: 'Tap the chunk with the article error.',
+          words: ['The climate change', 'is driving', 'heavier storms', 'across', 'South-East Asia.'],
+          answer: 0,
+          fix: 'Climate change',
+          hint: 'Ask whether the first noun means the thing in general or one particular case of it.',
+          why: '"Climate change" in general takes no article, like "pollution" and "poverty". "The" is added only when a phrase or clause makes it specific.' },
+        { id: 'm11ckq10', type: 'spot', tag: 'gra-plural', level: 'B1', prompt: 'p-online-scams',
+          stem: 'Tap the chunk with the countability error.',
+          words: ['Many young users', 'lack', 'the knowledges', 'needed', 'to spot', 'a fake shop.'],
+          answer: 2,
+          fix: 'the knowledge',
+          hint: 'Ask of each noun whether you could put a number in front of it.',
+          why: '"Knowledge" is uncountable: no -s. To count it, name what is known: "the skills needed to spot a fake shop".' },
+        { id: 'm11ckq11', type: 'spot', tag: 'gra-punctuation', level: 'B2', prompt: 'p-teen-sleep',
+          stem: 'Two full sentences are joined by a comma alone. Tap the chunk and repair it.',
+          words: ['Teenagers need more sleep', 'than adults do, their body clocks', 'also run', 'later at night.'],
+          answer: 1,
+          fix: 'than adults do, and their body clocks',
+          hint: 'Find where one complete sentence ends and the next begins.',
+          why: 'Two full sentences joined by a comma alone make a comma splice. Join them with "and", or use a full stop or a semicolon.' },
+        { id: 'm11ckq12', type: 'choose', tag: 'gra-word-form', level: 'B2', prompt: 'p-elderly-care',
+          stem: 'Choose the right form: "Families who care for an elderly parent often feel ___ exhausted."',
+          options: ['physical', 'physique', 'physicality', 'physically'],
+          answer: 3,
+          hint: 'Ask what kind of word can describe an adjective such as "exhausted".',
+          why: 'The slot describes the adjective "exhausted", so it needs an adverb: physically. "Physical" describes a noun ("physical care"), and "physique" and "physicality" are nouns.' },
+        { id: 'm11ckq13', type: 'spot', tag: 'lr-spelling', level: 'B1', prompt: 'p-cars-city',
+          stem: 'Tap the misspelt chunk.',
+          words: ['Cars', 'damage', 'the enviroment', 'in the centre', 'of most cities.'],
+          answer: 2,
+          fix: 'the environment',
+          hint: 'Check each long word letter by letter, especially in the middle.',
+          why: '"Environment" keeps the n of "environ": environ + ment. It is one of the kit words to know cold, with government, argument, necessary and separate.' },
+        { id: 'm11ckq14', type: 'choose', tag: 'gra-article', level: 'C1', prompt: 'p-tourism',
+          stem: 'Which sentence uses articles correctly?',
+          options: ['The tourism brings money to the islands, but it damages the coral reefs nearby.', 'Tourism brings money to the islands, but it damages the reefs around them.', 'Tourism brings money to the islands, but it damages reef around them.', 'A tourism brings money to these islands, but it damages the coral reefs there.'],
+          answer: 1,
+          hint: 'Check each noun: general or specific, countable or not, and whether it needs an article.',
+          why: '"Tourism" in general takes no article; "the islands" and "the reefs around them" are specific, so they take "the". "The tourism" and "a tourism" treat a general uncountable noun as specific or countable, and "reef" is a countable noun that cannot stand alone in the singular.' }
       ] }
     }]
   });

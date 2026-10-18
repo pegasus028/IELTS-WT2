@@ -638,10 +638,10 @@ window.QM_LESSON_LEVELS = {
     "Finally, choose words you control. <em>Control</em> is safer than <em>curtailment</em>. <em>Access</em> means the right to use something. <em>Admission</em> means entry to a place or an institution, such as a university. A rare word used slightly wrongly lowers the Lexical Resource mark instead of raising it."
    ],
    "examples": [
-    "A noun phrase. Both views fit inside it (the ban and the freedom to drive), and nothing else does.",
+    "A noun phrase. Both views fit inside it (the tax and the freedom to choose), and nothing else does.",
     "View A only. The freedom to drive has nowhere to sit.",
     "A clause. It reads like the prompt copied out and does not fit into the frames.",
-    "From a prompt about students gaining work experience: the verb has become a noun, and the setting is named."
+    "From a prompt about making buses and trains free: the verb has become a noun, and the setting is named."
    ]
   },
   "B2": {
@@ -653,10 +653,10 @@ window.QM_LESSON_LEVELS = {
     "Then choose words you control. <em>Control</em> is safer than <em>curtailment</em>, and <em>access</em> (the right to use something) is not <em>admission</em> (entry to a place or institution, as in admission to university). A rare word used slightly wrongly lowers the Lexical Resource mark instead of raising it."
    ],
    "examples": [
-    "A noun phrase; both views fit inside it (the ban and the freedom to drive), and nothing else does.",
+    "A noun phrase; both views fit inside it (the tax and the freedom to choose), and nothing else does.",
     "View A only. The freedom to drive has nowhere to sit, so half the prompt goes unanswered.",
     "A clause. It reads like the prompt copied out and does not slot into the frames.",
-    "From a prompt saying students should gain work experience: the verb has become a noun, and the setting is named."
+    "From a prompt saying buses and trains should be free: the verb has become a noun, and the setting is named."
    ]
   }
  },
@@ -673,7 +673,7 @@ window.QM_LESSON_LEVELS = {
    "examples": [
     "One part of view A. It fits in one paragraph.",
     "This says how it works. It is the mechanism.",
-    "Too big. <em>Every single</em> and <em>all</em> are too much.",
+    "Too big. <em>All</em> and <em>everywhere</em> are too much.",
     "Two facets in one sentence. Use two paragraphs."
    ]
   },
@@ -689,7 +689,7 @@ window.QM_LESSON_LEVELS = {
    "examples": [
     "One aspect of view A. You can explain, show and limit it in ninety words.",
     "This says how the facet works. It is the mechanism, not the facet.",
-    "Too broad. No later sentence could limit a claim about every source.",
+    "Too broad. No later sentence could limit a claim about all pollution everywhere.",
     "Two facets in one topic sentence. Two ideas need two paragraphs."
    ]
   },
@@ -736,9 +736,9 @@ window.QM_LESSON_LEVELS = {
     "Problem/solution essay: Facet A is the cause. Facet B is the solution. Write a noun phrase, like <em>the clash between X and Y</em>."
    ],
    "examples": [
-    "Money and earnings: the economic lens.",
+    "Money and saving: the economic lens.",
     "Same Core Topic, new facet, new words.",
-    "Economic, but not about city centres. Off topic.",
+    "Economic, but not about working from home. Off topic.",
     "Two lenses in one sentence. That is two ideas."
    ]
   },
@@ -752,9 +752,9 @@ window.QM_LESSON_LEVELS = {
     "Use one lens per paragraph, because two lenses make two ideas. Give each view the lens that makes it strongest. In a problem/solution essay, Facet A is the cause and Facet B is the solution. Use a noun phrase, like <em>the clash between X and Y</em>."
    ],
    "examples": [
-    "Money, earnings and independence: the economic lens.",
+    "Money, saving and costs: the economic lens.",
     "Same Core Topic, but a different facet and different vocabulary.",
-    "Economic, but outside the prompt, which is about city centres.",
+    "Economic, but outside the prompt, which is about working from home.",
     "Two lenses in one topic sentence: health and economic. Two ideas."
    ]
   },
@@ -767,9 +767,9 @@ window.QM_LESSON_LEVELS = {
     "Then choose. A discuss-both-views essay needs one facet for each view, so give each view the lens that makes it strongest. Use one lens per paragraph. A topic sentence that mixes a health cost and an economic cost has two ideas. In a problem/solution essay, the cause is Facet A and the solution that answers it is Facet B. Both are noun phrases, for example <em>the clash between X and Y</em>."
    ],
    "examples": [
-    "Money, earnings and independence: the vocabulary of the economic lens.",
+    "Money, saving and costs: the vocabulary of the economic lens.",
     "Same Core Topic, but a different facet with different vocabulary.",
-    "Economic, but outside the prompt, which is about city centres and the right to drive there.",
+    "Economic, but outside the prompt, which is about what working from home does to staff and companies.",
     "Two lenses in one topic sentence, health and economic, so it holds two ideas."
    ]
   },
@@ -782,9 +782,9 @@ window.QM_LESSON_LEVELS = {
     "Then choose. A discuss-both-views essay needs one facet for each view, so give each view the lens that makes it strongest. Use one lens per paragraph; a topic sentence that mixes the health cost and the economic cost is two ideas. In a problem / solution essay the cause is Facet A, and the solution that answers it is Facet B. Write each as a noun phrase, such as <em>the clash between X and Y</em>. Different students choose different lenses for the same prompt, so their essays never read as memorised."
    ],
    "examples": [
-    "Money, earnings, independence: the vocabulary of the economic lens.",
+    "Money, saving, costs: the vocabulary of the economic lens.",
     "Same Core Topic, different facet, different vocabulary.",
-    "Economic, but outside the prompt, which is about city centres and the right to drive there.",
+    "Economic, but outside the prompt, which is about what working from home does to staff and companies.",
     "Two lenses in one topic sentence, health and economic, so the paragraph would hold two ideas."
    ]
   }
@@ -800,10 +800,10 @@ window.QM_LESSON_LEVELS = {
     "Put the mechanism in sentence two. Start it with <em>\"This idea works by …\"</em>. Explain your idea, not a different one. Stay on the <strong>prompt</strong> (the exam question)."
    ],
    "examples": [
-    "Three links: price, then buying, then diet. Each link says why.",
+    "Three links: the limit, then sleep, then school. Each link says why.",
     "A claim. It does not say how.",
     "An example you can point at, not a mechanism.",
-    "What working from home removes, and what that brings."
+    "What the schools do, and what that brings."
    ]
   },
   "A2": {
@@ -816,10 +816,10 @@ window.QM_LESSON_LEVELS = {
     "The mechanism is sentence two of each body paragraph. Start it with <em>\"This idea works by …\"</em>. It must explain your facet, not a different one. Keep it on the <strong>prompt</strong> (the exam question)."
    ],
    "examples": [
-    "Three links: price, then buying, then diet. Each link answers <em>\"and why does that happen?\"</em>",
+    "Three links: the limit, then sleep, then school. Each link answers <em>\"and why does that happen?\"</em>",
     "A claim. It may be true, but it does not say how.",
     "An example in the mechanism slot: a real tax you can point at, not a process.",
-    "The mechanism for working from home: what it removes, and what that brings."
+    "The mechanism for keeping a language alive: what the schools do, and what that brings."
    ]
   },
   "B1": {
@@ -832,10 +832,10 @@ window.QM_LESSON_LEVELS = {
     "The mechanism is sentence two of every body paragraph. The frames start it with <em>\"This idea works by …\"</em> or <em>\"Its influence stems from …\"</em>, and its verbs are verbs of change: <em>reduces, raises, removes, allows</em>. It must explain this facet, not a different one, and it must stay on the prompt."
    ],
    "examples": [
-    "Three links: price, then purchases, then diet. Each link answers <em>\"and why does that happen?\"</em>",
+    "Three links: the limit, then sleep, then the school day. Each link answers <em>\"and why does that happen?\"</em>",
     "A claim. It may be true, but it does not say how it happens.",
     "An example in the mechanism slot: a policy you can point at, not the process inside it.",
-    "The mechanism for Facet A of the remote-work prompt: what is removed, and what that removal produces."
+    "The mechanism for Facet B of the minority-languages prompt: what the schools do, and what that produces."
    ]
   },
   "B2": {
@@ -847,10 +847,10 @@ window.QM_LESSON_LEVELS = {
     "The mechanism is sentence two of every body paragraph, and the frames give it a fixed home: <em>\"This idea works by …\"</em>, <em>\"Its influence stems from …\"</em>. Its verbs are verbs of change, such as <em>reduces, raises, removes, allows, forces, shifts</em>, joined by <em>because</em>, <em>so</em> and <em>which in turn</em>. It must explain this facet rather than a neighbouring one. It must also stay attached to the prompt: a mechanism about advertising in a tax essay is a well-explained way of going off topic."
    ],
    "examples": [
-    "Three links: price, then purchases, then diet. Each link answers <em>\"and why does that happen?\"</em>",
+    "Three links: the limit, then sleep, then the school day. Each link answers <em>\"and why does that happen?\"</em>",
     "A claim. True or not, it does not say how.",
     "An example in the mechanism slot: a policy you can point at, not the process inside it.",
-    "The mechanism of Facet A in the remote-work prompt: what is removed, and what that removal produces."
+    "The mechanism of Facet B in the minority-languages prompt: what the schools do, and what that produces."
    ]
   }
  },
@@ -963,7 +963,7 @@ window.QM_LESSON_LEVELS = {
     "The four moves make a progression, not a list. Aim for 80 to 110 words and one idea. The app's checker looks for a mechanism marker (<em>because</em>, <em>which in turn</em>, <em>works by</em>). It also needs an example marker (<em>for example</em>, <em>such as</em>, a named place) and a nuance marker (<em>however</em>, <em>although</em>, <em>admittedly</em>). Write 60 to 130 words with no contractions, and use the key nouns of the prompt."
    ],
    "examples": [
-    "Nuance: the limit is named, and the position (cars should leave the centre) survives with a condition.",
+    "Nuance: the limit is named, and the position (fast food should be taxed) survives with a condition.",
     "Contradiction. The paragraph has just argued against itself.",
     "A new facet, not a limit of this one. It belongs in another paragraph or in no paragraph.",
     "Admit the limit in the first clause, and keep the position in the second."
@@ -978,7 +978,7 @@ window.QM_LESSON_LEVELS = {
     "Together, the four moves make a body paragraph a progression, not a list. Aim for 80 to 110 words and one idea. The checker in this app looks for a mechanism marker (<em>because</em>, <em>which in turn</em>, <em>works by</em>) and an example marker (<em>for example</em>, <em>such as</em>, a named place). It also wants a nuance marker (<em>however</em>, <em>although</em>, <em>admittedly</em>), 60 to 130 words, no contractions, and the key nouns of the prompt."
    ],
    "examples": [
-    "Nuance: the limit is named, and the position (cars should leave the centre) survives with a condition.",
+    "Nuance: the limit is named, and the position (fast food should be taxed) survives with a condition.",
     "Contradiction. The paragraph has just argued against itself.",
     "A new facet, not a limit of this one. It belongs in another paragraph or in no paragraph.",
     "Concede in the first clause, keep the position in the second."
@@ -1096,7 +1096,7 @@ window.QM_LESSON_LEVELS = {
     "Read every filled sentence aloud. If it does not sound natural, change the opener or reshape the content. In the opinion frame, Facet A is Reason 1, so Body A starts <em>\"The first reason is …\"</em>. The <em>Question first</em> introduction ends with the position, after <em>before arguing that</em>. That slot takes a full clause with a modal such as <em>should</em>."
    ],
    "examples": [
-    "B2 Standard opener + Facet A of the cars prompt. There is a noun phrase after <em>\"is\"</em>.",
+    "B2 Standard opener + Facet A of the tourism prompt. There is a noun phrase after <em>\"is\"</em>.",
     "Causality focus with the C1 variables of the fast-food tax prompt: the frame was built for a chain.",
     "Example first: the named case leads, and the facet follows.",
     "Example A in the Mechanism A slot. Wrong variable, and the sentence sounds wrong when read aloud."
@@ -1111,7 +1111,7 @@ window.QM_LESSON_LEVELS = {
     "Read every filled sentence aloud. If it does not sound like something a person would say, change the opener or reshape the content. In the opinion frame Facet A is Reason 1, so Body A begins <em>\"The first reason is {Facet A}. It works by {Mechanism A}\"</em>. The <em>Question first</em> introduction ends with the position, after <em>before arguing that</em> and a full clause with a modal such as <em>should</em>."
    ],
    "examples": [
-    "B2 Standard opener + Facet A of the cars prompt. Noun phrase after <em>\"is\"</em>.",
+    "B2 Standard opener + Facet A of the tourism prompt. Noun phrase after <em>\"is\"</em>.",
     "Causality focus with the C1 variables of the fast-food tax prompt: the frame was built for a chain, and the mechanism is a chain.",
     "Example first: the named case leads, the facet follows.",
     "Example A in the Mechanism A slot. Wrong variable, and the sentence sounds wrong when read aloud."
@@ -1132,7 +1132,7 @@ window.QM_LESSON_LEVELS = {
     "Same job, new words. The slot content stays.",
     "The frame word for word. Correct, but worth less.",
     "Two clichés instead of the frame. This is worse.",
-    "The C1 frame words are gone. The habits stay."
+    "The C1 frame words are gone. The visitors' income stays."
    ]
   },
   "A2": {
@@ -1148,7 +1148,7 @@ window.QM_LESSON_LEVELS = {
     "Same job as <em>\"One important part of this issue is …\"</em>, but none of its words.",
     "The frame word for word. Correct, but worth less each time the examiner sees it.",
     "The frame replaced with two clichés. That is worse than the frame.",
-    "The C1 opener rewritten: the frame words are gone, but the habits and teenagers stay."
+    "The C1 opener rewritten: the frame words are gone, but the visitors and their income stay."
    ]
   },
   "B1": {
@@ -1163,7 +1163,7 @@ window.QM_LESSON_LEVELS = {
     "Same job as <em>\"One important part of this issue is …\"</em>, none of its words. The slot content survives.",
     "The frame word for word. Correct, and worth less each time the examiner sees it.",
     "The frame replaced with two clichés. Worse than the frame.",
-    "The C1 Standard opener rewritten: <em>\"fundamental dimension\"</em>, <em>\"relationship\"</em> and <em>\"issue\"</em> are gone; the habits and the teenagers remain."
+    "The C1 Standard opener rewritten: <em>\"fundamental dimension\"</em>, <em>\"relationship\"</em> and <em>\"issue\"</em> are gone; the visitors and their income remain."
    ]
   },
   "B2": {
@@ -1178,7 +1178,7 @@ window.QM_LESSON_LEVELS = {
     "Same job as <em>\"One important part of this issue is …\"</em>, none of its words. The slot content survives.",
     "The frame verbatim. Correct, and worth less each time the examiner sees it.",
     "The frame replaced with two clichés. Worse than the frame.",
-    "The C1 Standard opener rewritten: <em>\"fundamental dimension\"</em>, <em>\"relationship\"</em> and <em>\"issue\"</em> are gone; the habits and the teenagers remain."
+    "The C1 Standard opener rewritten: <em>\"fundamental dimension\"</em>, <em>\"relationship\"</em> and <em>\"issue\"</em> are gone; the visitors and their income remain."
    ]
   }
  },
@@ -1194,8 +1194,8 @@ window.QM_LESSON_LEVELS = {
     "Don't end your verdict with <em>\"it depends\"</em>. A nuance can't cancel your verdict. Write it in your introduction and conclusion. Use new words the second time."
    ],
    "examples": [
-    "Best of both: cleaner air and travel, joined by <em>while</em>.",
-    "Picks one side and says why, with <em>outweigh</em>.",
+    "Best of both: limits and learning, joined by <em>while</em>.",
+    "Picks one side and says why, with <em>heavier</em>.",
     "Fence-sitting. We still can't see what the writer thinks.",
     "One side, absolute. It forgets the nuance from Body A."
    ]
@@ -1210,8 +1210,8 @@ window.QM_LESSON_LEVELS = {
     "Don't add <em>\"it really depends\"</em> after a good verdict. A nuance limits one side, but it can't cancel your position. Write the verdict in the introduction and again in the conclusion, in new words."
    ],
    "examples": [
-    "Takes the best of both: cleaner air (Facet A) and travel (Facet B), joined by <em>while</em>.",
-    "Picks a side and says why. <em>Outweigh</em> answers the question.",
+    "Takes the best of both: limits (Facet A) and learning (Facet B), joined by <em>while</em>.",
+    "Picks a side and says why. <em>Heavier</em> answers the question.",
     "Fence-sitting. It describes the debate, but we can't see the writer's view.",
     "One side as an absolute. It forgets the nuance of Body A."
    ]
@@ -1225,8 +1225,8 @@ window.QM_LESSON_LEVELS = {
     "An opinion essay can agree with a condition. An advantages essay must use the question's word, <em>outweigh</em>, and say which side is heavier. A <em>positive or negative development</em> question needs that adjective. Never take the verdict back with <em>\"although it depends\"</em>: a nuance limits a facet, but it does not cancel the position. Write the verdict in the introduction and again, in fresh words, in the conclusion."
    ],
    "examples": [
-    "Takes the best of both: cleaner air (Facet A) and the freedom to travel (Facet B), joined by <em>while</em>.",
-    "Picks a side and says why. <em>Outweigh</em> answers the question that was asked.",
+    "Takes the best of both: healthy limits (Facet A) and the devices learning needs (Facet B), joined by <em>while</em>.",
+    "Picks a side and says why. <em>Heavier</em> answers the question that was asked.",
     "Fence-sitting. It describes the debate, so the examiner still cannot say what the writer thinks.",
     "One side as an absolute. It forgets the nuance of Body A and over-generalises."
    ]
@@ -1240,8 +1240,8 @@ window.QM_LESSON_LEVELS = {
     "For the other question types the verdict changes its clothes, not its job. An opinion essay states agreement with a condition. An advantages essay must contain the word of the question, <em>outweigh</em>, or a clear scale; calling the sides equal hands the question back to the reader. A <em>positive or negative development</em> question needs the adjective in the sentence. Avoid an escape clause such as <em>\"although it depends\"</em>: a nuance limits a facet, it does not cancel the position. Write the verdict in the introduction and again, in fresh words, in the conclusion."
    ],
    "examples": [
-    "Takes the best of both: cleaner air (Facet A) and the freedom to travel (Facet B), joined by <em>while</em>.",
-    "Picks a side and says why. <em>Outweigh</em> answers the question that was asked, with a reason attached.",
+    "Takes the best of both: healthy limits (Facet A) and the devices learning needs (Facet B), joined by <em>while</em>.",
+    "Picks a side and says why. <em>Heavier</em> answers the question that was asked, with a reason attached.",
     "Fence-sitting. It describes the debate; the examiner still cannot say what the writer thinks.",
     "One side as an absolute. It forgets the nuance of Body A and over-generalises, so the essay contradicts itself."
    ]
@@ -1308,7 +1308,7 @@ window.QM_LESSON_LEVELS = {
     "A principle: any good answer must do two things, and the verdict does both, so the choice is justified.",
     "A restatement. The position in other words; the circle closes and nothing is explained.",
     "A new idea. No paragraph developed it, so it is a claim with no support, and it is not even about the verdict.",
-    "Points back to the cause named in Body A and forward to the solution: the reason the later start is the right answer."
+    "Points back to the cause named in Body A and forward to the solution: the reason absorbent ground is the right answer."
    ]
   }
  },
@@ -1391,8 +1391,8 @@ window.QM_LESSON_LEVELS = {
    "examples": [
     "<em>Such measures</em> points back at both actions.",
     "Two things, in order. <em>The latter</em> picks the second.",
-    "The whole phrase again. <em>Such a ban</em> is shorter.",
-    "Wrong noun: a plan is not a trend. Use <em>such a change</em>."
+    "The whole phrase again. <em>Such a charge</em> is shorter.",
+    "Wrong noun: a plan is not a trend. Use <em>such a plan</em>."
    ]
   },
   "A2": {
@@ -1407,8 +1407,8 @@ window.QM_LESSON_LEVELS = {
    "examples": [
     "<em>Such measures</em> puts two actions together and points back at both.",
     "Two things, in order. <em>The latter</em> picks the second one.",
-    "The whole phrase is repeated. <em>Such a ban</em> says it in three words.",
-    "The wrong noun: a proposal is not a trend. <em>Such a change</em> fits."
+    "The whole phrase is repeated. <em>Such a charge</em> says it in three words.",
+    "The wrong noun: a plan is not a trend. <em>Such a plan</em> fits."
    ]
   },
   "B1": {
@@ -1422,8 +1422,8 @@ window.QM_LESSON_LEVELS = {
    "examples": [
     "<em>Such measures</em> gathers two actions into one and points back at both of them.",
     "Two things are named in order, and <em>the latter</em> picks the second. It needs a pair.",
-    "The whole noun phrase is repeated. <em>Such a ban would change…</em> says the same more briefly.",
-    "The wrong summarising noun: a proposal is not a trend. <em>Such a change</em> fits."
+    "The whole phrase is repeated. <em>Such a charge keeps…</em> says the same more briefly.",
+    "The wrong summarising noun: a plan is not a trend. <em>Such a plan</em> fits."
    ]
   },
   "B2": {
@@ -1437,8 +1437,8 @@ window.QM_LESSON_LEVELS = {
    "examples": [
     "<em>Such measures</em> gathers two actions into one and points back at both, so neither needs repeating.",
     "Two things named, in order; <em>the latter</em> picks the second. It would be meaningless after a single noun.",
-    "The whole noun phrase repeated. <em>Such a ban would change…</em> says the same in three words.",
-    "The wrong summarising noun: a proposal is not a trend. <em>Such a change</em> fits."
+    "The whole phrase repeated. <em>Such a charge keeps…</em> says the same in three words.",
+    "The wrong summarising noun: a plan is not a trend. <em>Such a plan</em> fits."
    ]
   }
  },
@@ -1455,7 +1455,7 @@ window.QM_LESSON_LEVELS = {
    ],
    "examples": [
     "Three linkers, no real joins between the ideas.",
-    "Better: <em>this higher price</em> and <em>so</em> join the ideas.",
+    "Better: <em>this free access</em> and <em>so</em> join the ideas.",
     "Wrong signal: this sentence explains. Delete <em>moreover</em>.",
     "A noun points back at the last sentence. Nothing to cut."
    ]
@@ -1471,7 +1471,7 @@ window.QM_LESSON_LEVELS = {
    ],
    "examples": [
     "Three announcements but no real joins. The linkers hide the chain.",
-    "Detoxed: <em>this higher price</em> and <em>so</em> carry the chain.",
+    "Detoxed: <em>this free access</em> and <em>so</em> carry the chain.",
     "Wrong signal: the second sentence explains, so <em>moreover</em> should go.",
     "The link is a noun that sums up the last sentence. Nothing to cut."
    ]
@@ -1486,8 +1486,8 @@ window.QM_LESSON_LEVELS = {
    ],
    "examples": [
     "Three announcements and no joins. The sentences are a chain, but the linkers hide it.",
-    "Detoxed: the reference (<em>this higher price</em>) and <em>so</em> carry the chain.",
-    "The wrong signal: the second sentence explains. <em>These customers</em> already joins them, so <em>moreover</em> should go.",
+    "Detoxed: the reference (<em>this free access</em>) and <em>so</em> carry the chain.",
+    "The wrong signal: the second sentence explains. <em>These extra passengers</em> already joins them, so <em>moreover</em> should go.",
     "The link is a noun that summarises the last sentence. Nothing to cut."
    ]
   },
@@ -1501,8 +1501,8 @@ window.QM_LESSON_LEVELS = {
    ],
    "examples": [
     "Three announcements, no joins. The sentences are a chain, but the linkers hide it.",
-    "Detoxed: the reference (<em>this higher price</em>) and <em>so</em> carry the chain. No linker attracts attention.",
-    "The wrong signal: the second sentence explains, it does not add. <em>These customers</em> already joins them; <em>moreover</em> should go.",
+    "Detoxed: the reference (<em>this free access</em>) and <em>so</em> carry the chain. No linker attracts attention.",
+    "The wrong signal: the second sentence explains, it does not add. <em>These extra passengers</em> already joins them; <em>moreover</em> should go.",
     "The link is a noun that summarises the last sentence, so the join is already made. Nothing to cut."
    ]
   }
@@ -1518,7 +1518,7 @@ window.QM_LESSON_LEVELS = {
     "Does a sentence not fit the chain? Maybe it is a second facet. Give it a new paragraph. Don't just add <em>Moreover</em>. Don't move it to the conclusion. Each paragraph has one main idea."
    ],
    "examples": [
-    "<em>Drains</em> ends one sentence and starts the next.",
+    "<em>Messages</em> ends one sentence and starts the next.",
     "Wrong order: the new fact comes first, so the reader stops.",
     "The end of one sentence starts the next one.",
     "This is a second facet. It needs Body B."
@@ -1533,7 +1533,7 @@ window.QM_LESSON_LEVELS = {
     "If a sentence cannot attach to the one before, it is in the wrong place. Or it is a second facet. A second facet needs its own paragraph. A linker like <em>Moreover</em> doesn't fix this. The conclusion is also the wrong place. Band 7 wants one central idea in each paragraph."
    ],
    "examples": [
-    "<em>Drains</em> ends the first sentence and starts the second. <em>Streets</em> can start a third.",
+    "<em>Messages</em> ends the first sentence and starts the second. <em>Account</em> can start a third.",
     "Same facts, wrong order: the new fact comes first, so the reader stops.",
     "The object of one sentence becomes the subject of the next. No linker needed.",
     "Not a limit of the first idea. It is the other facet, for Body B."
@@ -1548,8 +1548,8 @@ window.QM_LESSON_LEVELS = {
     "The chain also checks the paragraph. If a sentence cannot attach to the one before, it is either out of order or it belongs somewhere else. A second benefit is not a nuance of the first; it is Facet B, and it needs its own paragraph. Adding <em>Moreover</em> only labels the fault. Band 7 requires one central idea per paragraph, with a blank line between paragraphs."
    ],
    "examples": [
-    "<em>Drains</em> ends the first sentence and opens the second; <em>streets</em> is ready to open the third.",
-    "Same facts, wrong order: the new fact comes first and the known drains last, so the reader stops.",
+    "<em>Messages</em> ends the first sentence and opens the second; <em>account</em> is ready to open the third.",
+    "Same facts, wrong order: the new fact comes first and the known messages last, so the reader stops.",
     "The object of one sentence becomes the subject of the next. No linker is needed.",
     "The second sentence is not a limit of the first. It is the other facet, so it belongs in Body B."
    ]
@@ -1563,8 +1563,8 @@ window.QM_LESSON_LEVELS = {
     "The chain also polices the paragraph. If a sentence cannot be attached to the end of the one before, it is either out of order or it belongs somewhere else. A second benefit inside a paragraph about the first is not a nuance. It is Facet B, and it needs its own paragraph with its own mechanism, example and nuance. A linker would only label the fault, and the conclusion cannot take it either. One central idea per paragraph is the Band 7 requirement, and a blank line between paragraphs is how the examiner sees it."
    ],
    "examples": [
-    "Drains ends the first sentence and opens the second; streets is ready to open the third, so the chain continues.",
-    "Same facts, wrong order: the new fact comes first and the known drains last, so the reader stops.",
+    "Messages ends the first sentence and opens the second; account is ready to open the third, so the chain continues.",
+    "Same facts, wrong order: the new fact comes first and the known messages last, so the reader stops.",
     "The object of one sentence becomes the subject of the next. No linker needed.",
     "The second sentence is not a limit of the first; it is the other facet, and it belongs in Body B."
    ]
@@ -1648,8 +1648,8 @@ window.QM_LESSON_LEVELS = {
     "Keep one live verb (a verb with action). Don't write <em>was the result of</em> or <em>is the reason why</em>. Don't write <em>there was</em> or <em>was the cause of</em>. These have no action."
    ],
    "examples": [
-    "Cause becomes subject, effect becomes object. Reduced is the verb of change.",
-    "Removed becomes removal. There is no when and no so.",
+    "Cause becomes subject, effect becomes object. Cleaned is the verb of change.",
+    "Opened late becomes later opening hours. There is no when and no so.",
     "Too many nouns and only was. There is no action.",
     "One noun subject and one live verb. This is good."
    ]
@@ -1664,8 +1664,8 @@ window.QM_LESSON_LEVELS = {
     "Use this move for the <strong>mechanism</strong> (how a cause leads to an effect)."
    ],
    "examples": [
-    "Cause clause → subject; effect clause → object; <em>reduced</em> is the verb of change.",
-    "<em>Removed</em> becomes <em>removal</em>; <em>more people used</em> becomes <em>raised … use</em>. No when, no so.",
+    "Cause clause → subject; effect clause → object; <em>cleaned</em> is the verb of change.",
+    "<em>Opened late</em> becomes <em>later opening hours</em>; <em>more students studied</em> becomes <em>drew more students</em>. No when, no so.",
     "Too many nouns and only <em>was</em>. The action is lost.",
     "One nominalised subject and one live verb. Dense and easy to read."
    ]
@@ -1680,8 +1680,8 @@ window.QM_LESSON_LEVELS = {
     "Use the move on the sentences that carry the argument: topic sentences and the <strong>mechanism</strong>. With the cause as subject and the effect as object, the mechanism reads as a chain without any linking word."
    ],
    "examples": [
-    "The cause clause becomes the subject, the effect clause becomes the object, and <em>reduced</em> is the verb of change.",
-    "<em>Removed</em> becomes <em>removal</em>; <em>more people used</em> becomes <em>raised … use</em>. There is no when and no so.",
+    "The cause clause becomes the subject, the effect clause becomes the object, and <em>cleaned</em> is the verb of change.",
+    "<em>Opened late</em> becomes <em>later opening hours</em>; <em>more students studied</em> becomes <em>drew more students</em>. There is no when and no so.",
     "Over-nominalised: three nouns made from verbs and only <em>was</em>. The action has been buried.",
     "One nominalised subject and one live verb. The sentence is dense but still readable."
    ]
@@ -1696,8 +1696,8 @@ window.QM_LESSON_LEVELS = {
     "Use the move on the sentences that carry the argument: the topic sentence of each body paragraph and the <strong>mechanism</strong>. With the cause as subject and the effect as object, a mechanism reads as a chain without a single linking word. The rewrite items in this app check exactly this: no clause markers, a cause noun phrase, a verb of change and an effect noun phrase."
    ],
    "examples": [
-    "Cause clause → subject noun phrase; effect clause → object noun phrase; <em>reduced</em> is the verb of change.",
-    "<em>Removed</em> becomes <em>removal</em>; <em>more people used</em> becomes <em>raised … use</em>. No when, no so.",
+    "Cause clause → subject noun phrase; effect clause → object noun phrase; <em>cleaned</em> is the verb of change.",
+    "<em>Opened late</em> becomes <em>later opening hours</em>; <em>more students studied</em> becomes <em>drew more students</em>. No when, no so.",
     "Over-nominalised: three verb-nouns and only <em>was</em>. The action has been buried.",
     "One nominalised subject, one live verb. Dense and readable."
    ]
@@ -1715,10 +1715,10 @@ window.QM_LESSON_LEVELS = {
     "Is your subject too long? Can't you find the head? Don't guess a plural. Write two short sentences. A correct simple sentence scores more."
    ],
    "examples": [
-    "Head noun: adoption. Companies is in a by phrase.",
+    "Head noun: growth. Young people is in an among phrase.",
     "The number of is singular. The head is number.",
-    "A number of means many. The verb matches schools.",
-    "Each is always singular. The verb must be requires."
+    "A number of means many. The verb matches firms.",
+    "Each is always singular. The verb must be needs."
    ]
   },
   "A2": {
@@ -1731,10 +1731,10 @@ window.QM_LESSON_LEVELS = {
     "Band 8 asks for <em>\"the majority of sentences error-free\"</em>. If you cannot find the head, do not guess a plural. Split the sentence into two. A correct simple sentence scores higher than a complex one with an error."
    ],
    "examples": [
-    "Head noun: adoption. Companies is inside a by phrase and does not count.",
+    "Head noun: growth. Young people is inside an among phrase and does not count.",
     "The number of is singular, because the head is number.",
-    "A number of means many, so the verb agrees with schools.",
-    "Each is the head and is always singular, so the verb must be requires."
+    "A number of means many, so the verb agrees with firms.",
+    "Each is the head and is always singular, so the verb must be needs."
    ]
   },
   "B1": {
@@ -1747,10 +1747,10 @@ window.QM_LESSON_LEVELS = {
     "Band 7 asks for <em>\"frequent error-free sentences\"</em> and Band 8 for <em>\"the majority of sentences error-free\"</em>, so one slip costs both. Find the head of any long subject before you write the verb. If you cannot find it, do not guess a plural; split the sentence into two. A correct simple sentence outscores a faulty complex one."
    ],
    "examples": [
-    "Head noun: adoption. Companies is inside a by phrase, so it does not decide the verb.",
+    "Head noun: growth. Young people is inside an among phrase, so it does not decide the verb.",
     "The number of is singular, because the head of the subject is number.",
-    "A number of means many, so the verb agrees with the plural noun schools.",
-    "The head is each, which is always singular, so the verb must be requires."
+    "A number of means many, so the verb agrees with the plural noun firms.",
+    "The head is each, which is always singular, so the verb must be needs."
    ]
   },
   "B2": {
@@ -1762,10 +1762,10 @@ window.QM_LESSON_LEVELS = {
     "Band 7 Grammatical Range and Accuracy asks for <em>\"frequent error-free sentences\"</em>; Band 8 asks for <em>\"the majority of sentences error-free\"</em>. One agreement slip costs both. So audit the pairing: every time you write a subject longer than five words, find its head noun before you write the verb. If the subject has grown so long that you can no longer find the head, do not guess a plural to be safe, and do not add more clauses. Split it into two sentences, each with a subject you can see. A correct simple sentence outscores a faulty complex one."
    ],
    "examples": [
-    "Head noun: adoption. Companies sits inside a by phrase and does not decide the verb.",
+    "Head noun: growth. Young people sits inside an among phrase and does not decide the verb.",
     "The number of is singular: the head is number, and the rest hangs from it.",
-    "A number of means many; the verb agrees with the plural noun schools.",
-    "Head: each, always singular however many measures follow. The verb must be requires."
+    "A number of means many; the verb agrees with the plural noun firms.",
+    "Head: each, always singular however many students follow. The verb must be needs."
    ]
   }
  },
@@ -1782,7 +1782,7 @@ window.QM_LESSON_LEVELS = {
    ],
    "examples": [
     "Seldom + does + subject + base verb. A nuance sentence.",
-    "No auxiliary. Write: Not only does this approach reduce …",
+    "No auxiliary. Write: Not only do free buses cut …",
     "The example comes after it is. The rest follows that.",
     "The what part is one thing, so use is."
    ]
@@ -1798,7 +1798,7 @@ window.QM_LESSON_LEVELS = {
    ],
    "examples": [
     "Seldom + does + subject + base verb. This is the nuance sentence with inversion.",
-    "The auxiliary is missing. Write: Not only does this approach reduce costs …",
+    "The auxiliary is missing. Write: Not only do free buses cut traffic …",
     "The example comes after it is. The rest follows that and is still complete.",
     "A what clause is one subject, so use is. Not … but balances the halves."
    ]
@@ -1814,7 +1814,7 @@ window.QM_LESSON_LEVELS = {
    ],
    "examples": [
     "Seldom + does + subject + base verb. This is the nuance sentence in inverted form.",
-    "The auxiliary is missing. It should be: Not only does this approach reduce costs …",
+    "The auxiliary is missing. It should be: Not only do free buses cut traffic …",
     "The example phrase comes after it is; the rest follows that and is still complete.",
     "A what clause is a singular subject, so the verb is is. Not … but balances the two halves."
    ]
@@ -1829,7 +1829,7 @@ window.QM_LESSON_LEVELS = {
    ],
    "examples": [
     "Seldom + does + subject + base verb. The nuance sentence in inverted form.",
-    "The auxiliary is missing. It should read: Not only does this approach reduce costs …",
+    "The auxiliary is missing. It should read: Not only do free buses cut traffic …",
     "The example phrase sits after it is; the rest of the sentence follows that and is still complete.",
     "A what-clause is a singular subject, so the verb is is. Not … but balances the two halves."
    ]
@@ -1847,10 +1847,10 @@ window.QM_LESSON_LEVELS = {
     "An <em>although</em> clause alone is a <strong>fragment</strong>. Join it with a comma. <em>Although</em> and <em>but</em> together is a <strong>double marker</strong>. Use one. Two parts also work: <em>Admittedly, …; even so, …</em>"
    ],
    "examples": [
-    "The phrase takes the subject a camera. No which.",
-    "Dangling. The drinks did not remove the machines.",
+    "The phrase takes the subject a later bell. No which.",
+    "Dangling. The reading room did not close the library.",
     "The limit comes first. Your position is the main clause.",
-    "A fragment. Although it is cheap has no main clause."
+    "A fragment. Although it is often unchecked has no main clause."
    ]
   },
   "A2": {
@@ -1862,10 +1862,10 @@ window.QM_LESSON_LEVELS = {
     "Concession has two common mistakes. A <strong>fragment</strong> is an <em>although</em> clause with no main clause. Use a comma to join it to the next clause. A <strong>double marker</strong> uses <em>although</em> and <em>but</em> together, so delete one. A two-part version also works: <em>Admittedly, …; even so, …</em>"
    ],
    "examples": [
-    "The phrase borrows the subject a camera. Mechanism and result in one sentence.",
-    "Dangling: the drinks did not remove the machines. Since the school removed them …",
+    "The phrase borrows the subject a later bell. Mechanism and result in one sentence.",
+    "Dangling: the reading room did not close the library. Since the council closed it …",
     "The limit is in the while clause; the position is in the main clause.",
-    "A fragment: Although it is cheap has no main clause. Join it with a comma."
+    "A fragment: Although it is often unchecked has no main clause. Join it with a comma."
    ]
   },
   "B1": {
@@ -1877,10 +1877,10 @@ window.QM_LESSON_LEVELS = {
     "Concession breaks in two ways. A <strong>fragment</strong> is a subordinate clause with a full stop where its main clause should be. Replace the full stop with a comma and join it to the main clause. A <strong>double marker</strong> uses <em>although</em> and <em>but</em> for the same job, so one must go. Use each swap once per paragraph, and read the sentence aloud before you move on."
    ],
    "examples": [
-    "The participle phrase borrows the subject a camera: mechanism and result in one sentence, with no which.",
-    "Dangling: the drinks did not remove the machines. Since the school removed the vending machines, …",
+    "The participle phrase borrows the subject a later bell: mechanism and result in one sentence, with no which.",
+    "Dangling: the reading room did not close the library. Since the council closed the old library, …",
     "The limit is in the subordinate clause and the position is in the main clause.",
-    "A fragment: Although it is cheap has no main clause. Attach it with a comma to the next sentence."
+    "A fragment: Although it is often unchecked has no main clause. Join it to the sentence before it with a comma."
    ]
   },
   "B2": {
@@ -1892,10 +1892,10 @@ window.QM_LESSON_LEVELS = {
     "Concession breaks in two ways, and both are about the main clause. A <strong>fragment</strong> is a subordinate clause with a full stop where its main clause should be. The examiner reads it as an incomplete sentence, one of the most visible errors a script can carry. Replace the stop with a comma and join it to the main clause. A <strong>double marker</strong> uses <em>although</em> and <em>but</em> for the same job; one of them must go. Use each swap once per paragraph, and read the whole sentence aloud: a dangler and a fragment both sound wrong when spoken."
    ],
    "examples": [
-    "The participle phrase borrows the subject a camera. Mechanism and result in one sentence, with no which.",
-    "Dangling: the drinks did not remove the machines. Since the school removed the vending machines, …",
+    "The participle phrase borrows the subject a later bell. Mechanism and result in one sentence, with no which.",
+    "Dangling: the reading room did not close the library. Since the council closed the old library, …",
     "The limit in the subordinate clause, the position in the main clause.",
-    "A fragment: Although it is cheap has no main clause. Attach it with a comma to the sentence that follows."
+    "A fragment: Although it is often unchecked has no main clause. Join it to the sentence before it with a comma."
    ]
   }
  },
@@ -2175,7 +2175,7 @@ window.QM_LESSON_LEVELS = {
     "Other nouns can have -s: lessons, countries, cars. For things in general, use the plural: <em>Schools need computers</em>."
    ],
    "examples": [
-    "First time <em>a ban</em>. Next time <em>the ban</em>.",
+    "First time <em>a reading club</em>. Next time <em>the club</em>.",
     "Cars in general: no article. <em>The smog over Bangkok</em> keeps <em>the</em>.",
     "Advice has no -s. Use <em>much</em>, not <em>many</em>.",
     "The <em>of</em> phrase names one thing, so use <em>the</em>."
@@ -2191,7 +2191,7 @@ window.QM_LESSON_LEVELS = {
     "Countable nouns need -s when they are plural or general: <em>Schools need computers</em>. In the last five minutes, check every noun. Does it need an article? Is the -s correct?"
    ],
    "examples": [
-    "First mention <em>a ban</em>, second mention <em>the ban</em>. Same noun, two articles.",
+    "First mention <em>a reading club</em>, second mention <em>the club</em>. Same noun, two articles.",
     "Cars in general take no article. <em>The smog over Bangkok</em> is specific, so it keeps <em>the</em>.",
     "Advice is uncountable: no -s, and <em>much</em>, not <em>many</em>. Or say several pieces of advice.",
     "The <em>of</em> phrase says which privacy, so <em>the</em> goes in front."
@@ -2206,7 +2206,7 @@ window.QM_LESSON_LEVELS = {
     "These errors rarely stop the reader understanding you. However, Band 7 asks for <em>\"frequent error-free sentences\"</em>, and a missing <em>the</em> means a sentence is not error-free. In your five checking minutes, read once looking only at nouns. Does each singular countable noun have an article? Does each specific <em>of</em> phrase have <em>the</em>? Is each -s on a countable noun?"
    ],
    "examples": [
-    "First mention <em>a ban</em>, second mention <em>the ban</em>. It is the same noun with two articles.",
+    "First mention <em>a reading club</em>, second mention <em>the club</em>. It is the same noun with two articles.",
     "Cars in general take no article. <em>The smog over Bangkok</em> is specified by its phrase, so it keeps <em>the</em>.",
     "Advice is uncountable: no -s, and <em>much</em>, not <em>many</em>. To count it, say several pieces of advice.",
     "The <em>of</em> phrase specifies which privacy, so <em>the</em> goes in front of the noun."
@@ -2221,7 +2221,7 @@ window.QM_LESSON_LEVELS = {
     "These errors rarely stop the reader understanding you, which is why students ignore them. But Band 7 asks for <em>\"frequent error-free sentences\"</em> and Band 8 for <em>\"the majority of sentences error-free\"</em>, and a missing <em>the</em> spoils a sentence as surely as a broken conditional. In the five checking minutes, read once looking only at nouns: an article on every singular countable noun, <em>the</em> before every specifying <em>of</em> phrase, and an -s only on countable nouns."
    ],
    "examples": [
-    "First mention <em>a ban</em>, second mention <em>the ban</em>: the same noun takes two different articles.",
+    "First mention <em>a reading club</em>, second mention <em>the club</em>: the same noun takes two different articles.",
     "Cars in general take no article. <em>The smog over Bangkok</em> is specified by its phrase, so it keeps <em>the</em>.",
     "Advice is uncountable: no -s, and <em>much</em> rather than <em>many</em>. To count it, say several pieces of advice.",
     "<em>The privacy of …</em>: the <em>of</em> phrase specifies which privacy, so <em>the</em> goes in front."
@@ -2239,10 +2239,10 @@ window.QM_LESSON_LEVELS = {
     "Learn these spellings: government, environment, argument, necessary, separate, definitely, which, their, receive."
    ],
    "examples": [
-    "Put a comma after <em>In Thailand</em>.",
+    "Put a comma after <em>In the dry season</em>.",
     "Two full sentences: add <em>but</em> after the comma.",
     "Economical means cheap. For the economy, use <em>economic</em>.",
-    "The head noun is <em>wage</em>, so the verb is <em>helps</em>."
+    "The head noun is <em>service</em>, so the verb is <em>keeps</em>."
    ]
   },
   "A2": {
@@ -2258,7 +2258,7 @@ window.QM_LESSON_LEVELS = {
     "A comma after the opening phrase shows where the main sentence begins.",
     "A comma splice repaired with <em>but</em>. A semicolon or a full stop also works.",
     "Economical means cheap to run. The adjective for the economy is economic.",
-    "The head noun is <em>wage</em>, singular, so the verb is <em>helps</em>."
+    "The head noun is <em>service</em>, singular, so the verb is <em>keeps</em>."
    ]
   },
   "B1": {
@@ -2273,7 +2273,7 @@ window.QM_LESSON_LEVELS = {
     "There is a comma after the opening phrase, so the reader sees where the main clause begins.",
     "A comma splice repaired with <em>but</em>. A semicolon or a full stop would also work.",
     "Economical means cheap to run. The adjective that means to do with the economy is economic.",
-    "The head noun is <em>wage</em>, singular, so the verb is <em>helps</em>. The relative clause does not change it."
+    "The head noun is <em>service</em>, singular, so the verb is <em>keeps</em>. The relative clause does not change it."
    ]
   },
   "B2": {
@@ -2288,7 +2288,7 @@ window.QM_LESSON_LEVELS = {
     "A comma follows the opening phrase, so the reader sees exactly where the main clause begins.",
     "A comma splice repaired with <em>but</em>. A semicolon or a full stop would work equally well.",
     "Economical means cheap to run. The adjective that means to do with the economy is economic.",
-    "The head noun is <em>wage</em>, singular, so the verb is <em>helps</em>. The relative clause between them does not change the verb."
+    "The head noun is <em>service</em>, singular, so the verb is <em>keeps</em>. The relative clause between them does not change the verb."
    ]
   }
  },
@@ -2303,8 +2303,8 @@ window.QM_LESSON_LEVELS = {
     "Find your two usual families. Check them in the last five minutes."
    ],
    "examples": [
-    "Plural family. Information has no -s. The spelling is fine.",
-    "Agreement family. The head noun is <em>number</em>, so use <em>has</em>.",
+    "Plural family. Luggage has no -s. The spelling is fine.",
+    "Agreement family. The head noun is <em>price</em>, so use <em>has</em>.",
     "Word form family. Before a noun, use an adjective.",
     "Punctuation family. Two full sentences need <em>but</em> after the comma."
    ]
@@ -2319,9 +2319,9 @@ window.QM_LESSON_LEVELS = {
     "After ten sentences, count which families you missed. Check your two main families in the last five minutes."
    ],
    "examples": [
-    "Plural family: information is uncountable. It is not a spelling error.",
-    "Agreement family: the head noun is <em>number</em>, which is singular.",
-    "Word-form family: a noun (environment) is in an adjective slot.",
+    "Plural family: luggage is uncountable. It is not a spelling error.",
+    "Agreement family: the head noun is <em>price</em>, which is singular.",
+    "Word-form family: a noun (economy) is in an adjective slot.",
     "Punctuation family: a comma splice, repaired with <em>but</em>."
    ]
   },
@@ -2334,9 +2334,9 @@ window.QM_LESSON_LEVELS = {
     "After ten sentences, count the families you missed. Most students find that two families cause most of their errors, and those two are your five-minute check. Finally, if you are unsure, choose the plainer sentence, because a correct simple sentence outscores a faulty complex one."
    ],
    "examples": [
-    "Plural family: information is uncountable. It is not a spelling error, because the letters are fine.",
-    "Agreement family: the head noun of the subject is <em>number</em>, which is singular.",
-    "Word-form family: a noun (environment) is sitting in a slot that needs an adjective.",
+    "Plural family: luggage is uncountable. It is not a spelling error, because the letters are fine.",
+    "Agreement family: the head noun of the subject is <em>price</em>, which is singular.",
+    "Word-form family: a noun (economy) is sitting in a slot that needs an adjective.",
     "Punctuation family: a comma splice between two full sentences, repaired with <em>but</em>."
    ]
   },
@@ -2349,9 +2349,9 @@ window.QM_LESSON_LEVELS = {
     "Finally, a rule about risk: when unsure, choose the plainer sentence, because a correct simple sentence outscores a faulty complex one."
    ],
    "examples": [
-    "Plural family: information is uncountable. This is not a spelling error; the letters are all correct.",
-    "Agreement family: the head noun of the subject is <em>number</em>, which is singular, so the verb is singular.",
-    "Word-form family: a noun (environment) is sitting in a slot that needs an adjective.",
+    "Plural family: luggage is uncountable. This is not a spelling error; the letters are all correct.",
+    "Agreement family: the head noun of the subject is <em>price</em>, which is singular, so the verb is singular.",
+    "Word-form family: a noun (economy) is sitting in a slot that needs an adjective.",
     "Punctuation family: a comma splice between two full sentences, repaired with the conjunction <em>but</em>."
    ]
   }
@@ -2384,7 +2384,7 @@ window.QM_LESSON_LEVELS = {
    ],
    "examples": [
     "A position with a condition. The examiner can quote it, so it is not a fence.",
-    "Facet A as a reason. <em>\"I agree because paid work builds skills\"</em> makes sense.",
+    "Facet A as a reason. <em>\"I agree because work builds confidence\"</em> makes sense.",
     "The fence. Which part? The examiner cannot say what the writer thinks.",
     "The other side is admitted and then answered. The position stays the same."
    ]
@@ -2400,7 +2400,7 @@ window.QM_LESSON_LEVELS = {
    ],
    "examples": [
     "A position with a condition. The examiner can quote it, so it is not a fence.",
-    "Facet A as a reason: <em>\"I agree because paid work builds skills\"</em> makes sense.",
+    "Facet A as a reason: <em>\"I agree because work builds confidence\"</em> makes sense.",
     "The fence. Which part? The examiner cannot say what the writer thinks.",
     "A counter-argument admitted and then answered, so the position survives the objection."
    ]
@@ -2416,7 +2416,7 @@ window.QM_LESSON_LEVELS = {
    ],
    "examples": [
     "A position with a condition. The examiner can quote it; it is not a fence.",
-    "Facet A as a reason: <em>\"I agree because paid work builds skills\"</em> makes sense.",
+    "Facet A as a reason: <em>\"I agree because work builds confidence\"</em> makes sense.",
     "The fence. Which part? The examiner cannot say what the writer thinks.",
     "A conceded counter-argument, answered. The position survives the objection."
    ]
@@ -2641,7 +2641,7 @@ window.QM_LESSON_LEVELS = {
     "Fails check 6 (too many linkers) and check 4 (no mechanism).",
     "Fails check 7 (memorised phrase) and check 8 (<em>it's</em>, <em>you</em>, <em>kids</em>).",
     "Passes checks 1 and 2: same position, new words.",
-    "Fails check 2: cycle lanes are a new idea."
+    "Fails check 2: petrol prices are a new idea."
    ]
   },
   "A2": {
@@ -2657,7 +2657,7 @@ window.QM_LESSON_LEVELS = {
     "Fails check 6 (a linker on every sentence) and check 4 (no mechanism, no example).",
     "Fails check 7 (a memorised phrase) and check 8 (contractions, <em>you</em>, <em>kids</em>).",
     "Passes checks 1 and 2: the position in fresh words, a reason, nothing new.",
-    "Fails check 2: cycle lanes appear nowhere in the body."
+    "Fails check 2: petrol prices appear nowhere in the body."
    ]
   },
   "B1": {
@@ -2673,7 +2673,7 @@ window.QM_LESSON_LEVELS = {
     "Fails check 6 (a linker on every sentence) and check 4 (four claims, no mechanism, no example).",
     "Fails check 7 (a memorised phrase) and check 8 (contractions, <em>you</em>, <em>kids</em>).",
     "Passes checks 1 and 2: the position restated in fresh words, the reason, nothing new.",
-    "Fails check 2: cycle lanes appear nowhere in the body."
+    "Fails check 2: petrol prices appear nowhere in the body."
    ]
   },
   "B2": {
@@ -2689,7 +2689,7 @@ window.QM_LESSON_LEVELS = {
     "Fails check 6 (a linker on every sentence) and check 4 (four claims, no mechanism, no example).",
     "Fails check 7 (a memorised phrase) and check 8 (contractions, <em>you</em>, <em>kids</em>).",
     "Passes checks 1 and 2: the position restated in fresh words, the reason, nothing new.",
-    "Fails check 2: cycle lanes appear nowhere in the body."
+    "Fails check 2: petrol prices appear nowhere in the body."
    ]
   }
  },

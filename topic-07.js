@@ -23,10 +23,10 @@
               '<p>Three reference words per essay show the examiner the Band 7 range. They also stop you repeating the prompt word, which helps vocabulary too.</p>'
             ],
             examples: [
-              { s: 'Several councils have banned petrol cars from the centre and added bus lanes. <strong>Such measures</strong> have cut the fumes people breathe.', g: '"Such measures" gathers two actions into one and points back at both.' },
-              { s: 'Cameras prevent some crime and provide evidence after the rest. <strong>The latter</strong> matters more to the police.', g: 'Two things named, in order; "the latter" picks the second. It would be meaningless after a single noun.' },
-              { s: '<s>Schools should stop selling sugary drinks. Stopping the sale of sugary drinks in schools would change a daily routine.</s>', g: 'The whole noun phrase repeated. "Such a ban would change…" says the same in three words.' },
-              { s: '<s>A later start would let students sleep longer. This trend only works if phones are managed.</s>', g: 'The wrong summarising noun: a proposal is not a trend. "Such a change" fits.' }
+              { s: 'Several towns have opened late-night reading rooms and lent out laptops. <strong>Such measures</strong> have brought students back to the library.', g: '"Such measures" gathers two actions into one and points back at both.' },
+              { s: 'Schools can ban phones or teach students to manage them. <strong>The latter</strong> builds a habit that lasts after school.', g: 'Two things named, in order; "the latter" picks the second. It would be meaningless after a single noun.' },
+              { s: '<s>Some cities charge drivers to enter the centre. Charging drivers to enter the centre keeps the streets quieter.</s>', g: 'The whole phrase repeated. "Such a charge keeps…" says the same in three words.' },
+              { s: '<s>The council plans to plant trees along the canals. This trend would help to cool the streets.</s>', g: 'The wrong summarising noun: a plan is not a trend. "Such a plan" fits.' }
             ]
           },
           items: [
@@ -95,10 +95,10 @@
               '<p>Keep the linkers that carry meaning: "however", "although", "for example", "because". Cut the counters and adders. One visible linker per paragraph is plenty.</p>'
             ],
             examples: [
-              { s: '<s>Firstly, a tax raises the price of fast food. Moreover, people buy less of it. In addition, their diet improves.</s>', g: 'Three announcements, no joins. The sentences are a chain, but the linkers hide it.' },
-              { s: 'A tax raises the price of fast food, and this higher price means that people buy less of it, so their diet slowly improves.', g: 'Detoxed: the reference ("this higher price") and "so" carry the chain. No linker attracts attention.' },
-              { s: '<s>A weekend job puts a teenager in front of real customers. Moreover, these customers do not accept excuses.</s>', g: 'The wrong signal: the second sentence explains, it does not add. "These customers" already joins them; "moreover" should go.' },
-              { s: 'A camera raises the chance that an offender is identified. This higher risk makes theft less worth trying.', g: 'The link is a noun that summarises the last sentence. Nothing to cut.' }
+              { s: '<s>Firstly, a library lends laptops. Moreover, families without one can search for jobs. In addition, more of them find work.</s>', g: 'Three announcements, no joins. The sentences are a chain, but the linkers hide it.' },
+              { s: 'A library lends laptops, and this free access lets families without one search for jobs, so more of them find work.', g: 'Detoxed: the reference ("this free access") and "so" carry the chain. No linker attracts attention.' },
+              { s: '<s>Free buses put more people on each route. Moreover, these extra passengers make each journey cheaper per person.</s>', g: 'The wrong signal: the second sentence explains, it does not add. "These extra passengers" already joins them; "moreover" should go.' },
+              { s: 'Concrete now covers the soil that once soaked up rain. This sealed ground sends the water straight to the drains.', g: 'The link is a noun that summarises the last sentence. Nothing to cut.' }
             ]
           },
           items: [
@@ -164,10 +164,10 @@
               '<p>Fix by word order: put the known thing first. "The drains, built for a smaller city, overflow within minutes." If a sentence cannot attach to the chain, it may belong in another paragraph.</p>'
             ],
             examples: [
-              { s: 'Sealed soil sends every drop straight into <strong>drains</strong> built for a much smaller city. <strong>Those drains</strong> overflow within minutes, and the water backs up into the <strong>streets</strong>.', g: 'Drains ends the first sentence and opens the second; streets is ready to open the third.' },
-              { s: '<s>Sealed soil sends every drop straight into drains built for a smaller city. Within minutes a much smaller city\'s drains overflow.</s>', g: 'Same facts, wrong order: the new fact comes first and the known drains last, so the reader stops.' },
+              { s: 'Scammers copy the style of a friend\'s <strong>messages</strong>. <strong>Those messages</strong> ask for a quick loan, and the money goes to a stranger\'s <strong>account</strong>.', g: 'Messages ends the first sentence and opens the second; account is ready to open the third.' },
+              { s: '<s>Scammers copy the style of a friend\'s messages. A quick loan is asked for in those messages.</s>', g: 'Same facts, wrong order: the new fact comes first and the known messages last, so the reader stops.' },
               { s: 'A weekend job puts a teenager in front of real <strong>customers</strong>. <strong>Real customers</strong> do not accept excuses, so the student learns to arrive on time.', g: 'The object of one sentence becomes the subject of the next. No linker needed.' },
-              { s: '<s>Working from home gives staff back two hours a day. Staff also lose the chance to learn from colleagues.</s>', g: 'The second sentence is not a limit of the first; it is the other facet, and it belongs in Body B.' }
+              { s: '<s>Tourism brings money into small island towns. Visitors also damage the coral reefs nearby.</s>', g: 'The second sentence is not a limit of the first; it is the other facet, and it belongs in Body B.' }
             ]
           },
           items: [
@@ -256,7 +256,44 @@
           stem: 'An essay is one block of text: introduction, both facets and conclusion with no blank lines. What does the examiner see?',
           options: ['A Band 7 essay, since paragraphing is not part of the descriptors.', 'Cohesion that is mechanical, because far too many linking words were used.', 'No clear central topic per paragraph, which holds Coherence at Band 6.', 'A Task Response problem, because the position is hard to find.'], answer: 2,
           hint: 'Paragraphing belongs to one of the four criteria: which one, and what does its Band 7 line ask for?',
-          why: 'Band 7 Coherence requires "a clear central topic within each paragraph", and without paragraphs there is nothing to show it. Paragraphing is the visible half of planning: four blocks with a blank line between them, one idea in each.' }
+          why: 'Band 7 Coherence requires "a clear central topic within each paragraph", and without paragraphs there is nothing to show it. Paragraphing is the visible half of planning: four blocks with a blank line between them, one idea in each.' },
+        { id: 'm07ckq9', type: 'choose', tag: 'cc-reference', level: 'B1', prompt: 'p-free-transport',
+          stem: '"The council raised parking fees and widened the pavements. ___ was meant to cut traffic; the latter made walking easier." Which fits?',
+          options: ['This trend', 'Such shops', 'The former', 'These drivers'],
+          answer: 2,
+          hint: 'Count the things the first sentence names, then look at the words that open the second half.',
+          why: '"The former" picks the first of two things named in order, raising parking fees, and "the latter" then picks the second. A trend, shops or drivers were never named, so none of them can be pointed back to.' },
+        { id: 'm07ckq10', type: 'judge', tag: 'cc-linker-overuse', level: 'B2', prompt: 'p-minimum-wage',
+          given: 'A higher minimum wage lifts the pay of the lowest-paid workers. That extra money is often spent in local shops.',
+          stem: 'Are these two sentences joined without a listed linker?',
+          answer: 0,
+          hint: 'Look at how the second sentence begins and what it points back to.',
+          why: 'True. "That extra money" points back to the higher pay, so the reader crosses the join without "Moreover" or "In addition". Reference does the joining, and nothing attracts attention.' },
+        { id: 'm07ckq11', type: 'spot', tag: 'cc-reference', level: 'B2', prompt: 'p-architecture',
+          stem: 'Tap the chunk that repeats a whole phrase instead of referring back.',
+          words: ['Many cities', 'now require', 'new buildings near old streets', 'to match their height and colour.', 'Requiring new buildings near old streets to match', 'protects the look of the historic centre.'],
+          answer: 4,
+          fix: 'This rule',
+          hint: 'Find the place where the writer names the same thing a second time, in full.',
+          why: 'The whole requirement is repeated word for word. "This rule" or "Such a requirement" points back to it in two or three words and lets the sentence move on to what is new: the protection of the historic centre.' },
+        { id: 'm07ckq12', type: 'order', tag: 'cc-progression', level: 'B2', prompt: 'p-rural-youth',
+          stem: 'Restore the chain of this body paragraph.',
+          items: ['The main reason young people leave is that universities and skilled jobs are found mostly in the capital.', 'That pattern means a school leaver who wants a degree or a career must move to find one.', 'Such moves can be seen every year in provincial towns, where many school leavers head for Bangkok after their final exams.', 'Admittedly, some of them return later, bringing savings and skills back to their home towns.'],
+          hint: 'Start with the sentence that names the reason, then follow the words each sentence picks up from the one before.',
+          why: 'Universities and jobs in the capital → that pattern; must move → such moves; students → some of them. Each sentence opens with what the last one ended on: facet, mechanism, example, nuance.' },
+        { id: 'm07ckq13', type: 'choose', tag: 'cc-paragraphing', level: 'B2',
+          stem: 'Where should the blank lines go in a four-paragraph Task 2 essay?',
+          options: ['Only before the conclusion, so the verdict stands out.', 'Between each paragraph and the next one.', 'After every sentence, so that each idea can be seen.', 'Nowhere, because blank lines waste space on the page.'],
+          answer: 1,
+          hint: 'Think about what the examiner should see at a glance: how many ideas there are, and where each one starts.',
+          why: 'A blank line between each paragraph and the next shows the examiner four blocks, one idea in each, which is the visible half of Band 7 paragraphing. A line after every sentence breaks the text into notes; no lines at all make one block.' },
+        { id: 'm07ckq14', type: 'select', tag: 'cc-linker-overuse', level: 'C1',
+          stem: 'Tick the two pairs where the linker gives the wrong signal for the relation.',
+          options: ['Fares fell. As a result, more people took the bus.', 'Prices rose sharply. Moreover, people bought less.', 'Cameras deter theft. However, they cannot stop every determined thief.', 'Many students work at weekends. For example, some help in family shops.', 'The district has no drains for heavy rain. In other words, it floods after every storm.', 'Tutoring is expensive. Even so, many families pay for it.'],
+          answers: [1, 4],
+          k: 2,
+          hint: 'For each pair, name the relation between the two sentences before you look at the linker.',
+          why: 'Name the relation first. Prices rising and people buying less is cause and result, so "moreover" (addition) is the wrong signal; flooding after storms is a result of having no drains, not a restatement, so "in other words" is wrong. "As a result", "however", "for example" and "even so" each fit their relation.' }
       ] }
     }]
   });

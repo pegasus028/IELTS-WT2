@@ -23,9 +23,9 @@
               '<p>"It depends", "both sides have a point" and "some people think… others think…" are not positions. A position with a limit ("yes, but only at weekends") is fine.</p>'
             ],
             examples: [
-              { s: 'I believe schools should stop selling sugary drinks, because the eating habits formed at school tend to last for life.', g: 'Marker, claim, reason. Twenty words the examiner can quote and disagree with.' },
+              { s: 'I believe cities should limit the number of tourists, because a place that loses its character loses its visitors too.', g: 'Marker, claim, reason. Twenty words the examiner can quote and disagree with.' },
               { s: '<s>Some people think schools should stop selling sugary drinks, while others believe students should be free to choose.</s>', g: 'A description of the debate. True of the topic, silent about the writer.' },
-              { s: 'Students should gain work experience before leaving school, but only in jobs limited to weekends.', g: 'A position with a limit. Still a side; still quotable.' },
+              { s: 'Fast food should be taxed, but only where a cheaper healthy option is sold nearby.', g: 'A position with a limit. Still a side; still quotable.' },
               { s: '<s>Whether students should work part-time depends on the student and the family.</s>', g: 'The fence. No side, nothing to quote.' }
             ]
           },
@@ -92,10 +92,10 @@
               '<p>Conclusion: say the same position again in new words, with the reason. No fence, no change of side, no new idea. Test: does the conclusion make the same claim as the introduction?</p>'
             ],
             examples: [
-              { s: 'Introduction, last sentence: "This essay looks at both views before arguing that a mix of home and office days serves everyone best."', g: 'The verdict is in paragraph one. The body paragraphs now have a purpose.' },
+              { s: 'Introduction, last sentence: "This essay weighs both views and argues that staff should split the week between home and the office."', g: 'The verdict is in paragraph one. The body paragraphs now have a purpose.' },
               { s: 'Conclusion, first sentence: "For these reasons, a hybrid week, with fixed days in the office, is the arrangement that protects both output and wellbeing."', g: 'The echo: same claim, fresh words, reason attached.' },
               { s: '<s>Introduction: "This essay will discuss both views." Conclusion: "In my opinion, working from home is better."</s>', g: 'The Band 6 shape. The position appears for the first time in the last paragraph.' },
-              { s: '<s>Introduction: "the state should carry the main cost." Conclusion: "families should carry the main cost."</s>', g: 'A reversal. Two positions is no position.' }
+              { s: '<s>Introduction: "prisons should mainly reform offenders." Conclusion: "prisons exist mainly to punish."</s>', g: 'A reversal. Two positions is no position.' }
             ]
           },
           items: [
@@ -152,8 +152,8 @@
               '<p>Do not: repeat the prompt, announce ("this essay will examine"), sit on the fence ("it depends"), or answer a nearby question.</p>'
             ],
             examples: [
-              { s: 'This essay argues that students should not be required to work before finishing school, because study time matters more than early experience.', g: 'Opinion thesis: disagree, and the reason. Twenty-two words.' },
-              { s: 'On balance, the disadvantages of online lessons outweigh the advantages for most secondary students, because a teacher in the room notices confusion that a screen cannot.', g: 'Outweigh thesis: the heavier side, the weighing word, the reason.' },
+              { s: 'This essay argues that schools should not replace printed textbooks with tablets, because screens fail whenever the power or the network does.', g: 'Opinion thesis: disagree, and the reason. Twenty-two words.' },
+              { s: 'On balance, the advantages of street cameras outweigh the disadvantages, because footage solves crimes that no witness saw.', g: 'Outweigh thesis: the heavier side, the weighing word, the reason.' },
               { s: '<s>This essay will examine the effects of free public transport on congestion in large cities.</s>', g: 'An announcement. Replace "will examine" with "argues that" and choose a side.' },
               { s: '<s>Whether students should work part-time depends on the student, and it is hard to say.</s>', g: 'The fence, twice in one sentence.' }
             ]
@@ -260,7 +260,42 @@
           stem: 'The introduction argued for world history, with the national past as its starting point. Which conclusion sentence keeps that position?',
           hint: 'Pair the introduction\'s claim with each conclusion sentence and ask whether they would lead a reader to the same view.',
               options: ['To conclude, children should study only their own country\'s past, since pride comes first.', 'In the end, both national and world history matter, and schools must decide for themselves.', 'Overall, history teaching should also include more lessons on local buildings and records.', 'For these reasons, world history should lead, with the national story as its first chapter.'], answer: 3,
-          why: 'Same claim, fresh words: world history leads, the national past comes first. The first option reverses the position, the second dissolves it into a fence, and the third adds an idea the body never developed.' }
+          why: 'Same claim, fresh words: world history leads, the national past comes first. The first option reverses the position, the second dissolves it into a fence, and the third adds an idea the body never developed.' },
+        { id: 'm02ckq9', type: 'choose', tag: 'tr-no-position', level: 'B1', prompt: 'p-free-transport',
+          stem: 'Which sentence takes a position on this prompt?',
+          options: ['Free buses and trains would cost the government a great deal of money.', 'Traffic in big cities is a growing problem for many governments today.', 'Fares should stay low rather than free, since service matters more.', 'Some people want free transport, while others prefer to pay low fares.'],
+          answer: 2,
+          hint: 'Ask of each sentence whether a reader could argue against it.',
+          why: 'Only the third sentence takes a side someone could reject: fares low, not free, with a reason. The cost sentence is a fact, the traffic sentence is background, and the last one describes what other people think.' },
+        { id: 'm02ckq10', type: 'judge', tag: 'tr-no-position', level: 'B2', prompt: 'p-architecture',
+          given: 'Thesis: "Both traditional and modern buildings have their own beauty, and each city must decide for itself."',
+          stem: 'Is this a clear position?',
+          answer: 1,
+          hint: 'Ask whether the examiner could repeat the writer\'s own view in one sentence.',
+          why: 'False. "Each city must decide for itself" hands the decision away, so the examiner cannot say what the writer thinks. A position could favour one style with a limit, such as bold modern design everywhere except the historic quarter.' },
+        { id: 'm02ckq11', type: 'sort', tag: 'kn-question-type', level: 'B2',
+          stem: 'Sort each thesis by the type of prompt it answers.',
+          bins: [{ key: 'op', label: 'Opinion', hint: 'agree or disagree' }, { key: 'adv', label: 'Advantages', hint: 'which side is heavier' }, { key: 'tw', label: 'Two-part', hint: 'two questions answered' }],
+          items: [{ text: 'I agree that every child should learn a foreign language early, through play rather than tests.', bin: 'op' }, { text: 'I disagree that university should be open to all, since places should follow ability.', bin: 'op' }, { text: 'The advantages of online lessons outweigh the drawbacks, but only for older students.', bin: 'adv' }, { text: 'On balance, foreign pop culture does young people more good than harm.', bin: 'adv' }, { text: 'Tutoring has spread because of exam pressure, and this is largely a negative development.', bin: 'tw' }, { text: 'Young people leave the villages for jobs and degrees, which is mostly negative for the country.', bin: 'tw' }],
+          hint: 'Look for the words in each thesis that answer the instruction: agreement, weighing, or a reason followed by a judgement.',
+          why: 'An opinion thesis answers "agree or disagree"; an advantages thesis reads the scale ("outweigh", "more good than harm"); a two-part thesis answers both questions, why and positive or negative, in one sentence.' },
+        { id: 'm02ckq12', type: 'choose', tag: 'tr-off-topic', level: 'B2', prompt: 'p-competitive-sport',
+          stem: 'Which thesis answers this prompt rather than a neighbouring one?',
+          options: ['Professional athletes earn far too much money for playing games.', 'Youth sport should keep competition but reward effort over results.', 'Physical education should take up more of the school timetable.', 'Children now spend too long on screens and too little time outdoors.'],
+          answer: 1,
+          hint: 'Find the exact question the prompt sets up, then pick the thesis that takes a side on that question.',
+          why: 'The prompt asks whether competition helps or harms children\'s sport. Pay for professionals, the size of the PE timetable and screen time are nearby debates; a confident thesis on any of them is a confident way to go off topic.' },
+        { id: 'm02ckq13', type: 'order', tag: 'tr-position-late', level: 'B2', prompt: 'p-gm-crops',
+          stem: 'Put the sentences of this introduction in order.',
+          items: ['Farmers in many countries now grow crops whose genes have been changed in a laboratory.', 'Supporters say such crops are needed to feed a growing population, while critics fear unknown risks to health and nature.', 'In my view, these crops should be grown, but only after long independent testing.', 'This essay explains why careful use protects both the food supply and the environment.'],
+          hint: 'Ask what the reader must already know for each sentence to make sense.',
+          why: 'Background, the two views, the position, then the plan. The verdict arrives before Body A, so the paragraphs on food and on safety are read as support for it, not as a neutral survey.' },
+        { id: 'm02ckq14', type: 'choose', tag: 'tr-position-late', level: 'C1', prompt: 'p-open-university',
+          stem: 'The introduction said: "I partly agree: most courses should be open to all, but demanding ones need entry tests." Which conclusion keeps that position?',
+          options: ['To conclude, everyone should have a place at university, whatever their marks.', 'Overall, entry should be wide, with tests kept for demanding courses.', 'In the end, this is a complex question with strong arguments on both sides.', 'For these reasons, only students with the highest marks should be admitted.'],
+          answer: 1,
+          hint: 'Hold each conclusion against both halves of the introduction\'s position.',
+          why: 'The same two parts in fresh words: wide entry for most courses, tests for demanding ones. The first and last options each keep only one half, which changes the position, and the third dissolves it into a fence.' }
       ] }
     }]
   });

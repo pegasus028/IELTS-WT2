@@ -23,9 +23,9 @@
               '<p>Use inversion on the nuance sentence and a cleft on the example, once each. Check the rest of the sentence is still complete.</p>'
             ],
             examples: [
-              { s: 'Seldom does a ban on cars account for commuters who have no alternative.', g: 'Seldom + does + subject + base verb. The nuance sentence in inverted form.' },
-              { s: '<s>Not only this approach reduces costs, but it also raises staff morale.</s>', g: 'The auxiliary is missing. "Not only does this approach reduce costs …".' },
-              { s: 'It is in the shops just outside the school gate that this trend is most visible.', g: 'The example phrase sits after "it is"; the rest of the sentence follows "that" and is still complete.' },
+              { s: 'Seldom does a fast-food tax account for families who cannot afford fresh food.', g: 'Seldom + does + subject + base verb. The nuance sentence in inverted form.' },
+              { s: '<s>Not only free buses cut traffic, but they also save families money.</s>', g: 'The auxiliary is missing. "Not only do free buses cut traffic …".' },
+              { s: 'It is on the night buses that the change in fares is felt most.', g: 'The example phrase sits after "it is"; the rest of the sentence follows "that" and is still complete.' },
               { s: 'What drives obesity is not a lack of knowledge but a lack of access to affordable food.', g: 'A what-clause is a singular subject, so "is". "Not … but" balances the two halves.' }
             ]
           },
@@ -89,10 +89,10 @@
               '<p>Two errors: a fragment ("Although it is cheap." with no main clause) and a double marker ("Although …, but …"). One swap per paragraph; read it aloud.</p>'
             ],
             examples: [
-              { s: 'A camera raises the chance that an offender is identified, subsequently making theft less worth attempting.', g: 'The participle phrase borrows the subject "a camera". Mechanism and result in one sentence, no "which".' },
-              { s: '<s>Having removed the vending machines, sugary drinks are now a weekend treat.</s>', g: 'Dangling: the drinks did not remove the machines. "Since the school removed the vending machines, …".' },
+              { s: 'A later bell lets teenagers sleep until their body clocks wake them, thereby making the first lesson more useful.', g: 'The participle phrase borrows the subject "a later bell". Mechanism and result in one sentence, no "which".' },
+              { s: '<s>Having closed the old library, the new reading room is always full.</s>', g: 'Dangling: the reading room did not close the library. "Since the council closed the old library, …".' },
               { s: 'While regulation is costly, the alternative is more costly still.', g: 'The limit in the subordinate clause, the position in the main clause.' },
-              { s: '<s>Free transport attracts people who already walk. Although it is cheap.</s>', g: 'A fragment: "Although it is cheap" has no main clause. Attach it with a comma to the sentence that follows.' }
+              { s: '<s>Online news reaches readers instantly. Although it is often unchecked.</s>', g: 'A fragment: "Although it is often unchecked" has no main clause. Join it to the sentence before it with a comma.' }
             ]
           },
           items: [
@@ -153,10 +153,10 @@
               '<p>Conditionals for solutions: "If governments taxed sugar, consumption would fall." Past: "If cities had invested, the floods would have been less severe." Mixed: "Had cities invested earlier, congestion would be lower today."</p>'
             ],
             examples: [
-              { s: 'Such measures seldom reach the poorest households.', g: 'Plain and error-free. Worth more than any broken inversion of the same idea.' },
+              { s: 'Such fees rarely stop the richest drivers.', g: 'Plain and error-free. Worth more than any broken inversion of the same idea.' },
               { s: 'If governments taxed sugar, consumption would fall.', g: 'Second conditional: past simple in the condition, would + base verb in the result.' },
-              { s: 'Had the city invested in drains a decade ago, the district would not flood every monsoon now.', g: 'Mixed conditional: a past condition (inverted "had") with a present result.' },
-              { s: '<s>If cities had invested in drains earlier, the floods would have be less severe.</s>', g: 'Third conditional broken in the result: "would have been".' }
+              { s: 'Had the school started later last year, its students would be less tired now.', g: 'Mixed conditional: a past condition (inverted "had") with a present result.' },
+              { s: '<s>If the council had built the bus lanes earlier, traffic would have be lighter.</s>', g: 'Third conditional broken in the result: "would have been".' }
             ]
           },
           items: [
@@ -246,7 +246,45 @@
           stem: 'Which "not only" sentence is error-free?',
           hint: 'Check both halves: the auxiliary and verb form after "not only", and whether the "but" clause still has its subject in place.',
           options: ['Not only a higher wage raises incomes, but also it cuts reliance on state subsidy.', 'Not only does a higher wage raises incomes, but it also cuts reliance on state subsidy.', 'Not only does a higher wage raise incomes, but it also cuts reliance on state subsidy.', 'Not only does a higher wage raise incomes, but also cuts it reliance on state subsidy.'], answer: 2,
-          why: 'Auxiliary before the subject, base verb "raise", and a complete second clause "but it also cuts". The first has no auxiliary, the second doubles the tense on "raises", and the fourth scrambles the second clause. Audit every part of a swap; one slip removes the sentence from the error-free count.' }
+          why: 'Auxiliary before the subject, base verb "raise", and a complete second clause "but it also cuts". The first has no auxiliary, the second doubles the tense on "raises", and the fourth scrambles the second clause. Audit every part of a swap; one slip removes the sentence from the error-free count.' },
+        { id: 'm09ckq9', type: 'choose', tag: 'gra-inversion', level: 'B1', prompt: 'p-climate-action',
+          stem: 'Which sentence is a correct inversion of "Personal change rarely cuts emissions on its own"?',
+          options: ['Rarely personal change cuts emissions on its own.', 'Rarely does personal change cuts emissions on its own.', 'Rarely cuts personal change emissions on its own.', 'Rarely does personal change cut emissions on its own.'],
+          answer: 3,
+          hint: 'Turn the plain sentence into a yes/no question first, then put the negative adverb in front.',
+          why: 'Negative adverb, auxiliary, subject, base verb: "Rarely does personal change cut". The first has no auxiliary, the second keeps the -s on the main verb as well as on "does", and the third moves the main verb instead of adding "does".' },
+        { id: 'm09ckq10', type: 'judge', tag: 'gra-participle', level: 'B2', prompt: 'p-remote-work',
+          given: 'Working from home three days a week, staff at the firm save the cost of a monthly train pass.',
+          stem: 'Is the participle phrase attached to the right subject?',
+          answer: 0,
+          hint: 'Ask who is doing the action in the opening phrase, then look at the subject after the comma.',
+          why: 'True. The subject after the comma is "staff", and the staff are the ones working from home, so the opening phrase is attached correctly. Test every -ing opener against the subject that follows it.' },
+        { id: 'm09ckq11', type: 'choose', tag: 'gra-concession', level: 'B2', prompt: 'p-tablets-textbooks',
+          stem: 'Which concession is error-free?',
+          options: ['Despite they are light, tablets break easily in a school bag.', 'Despite being light, tablets break easily in a school bag.', 'Despite of their lightness, tablets break easily in a school bag.', 'Despite light, tablets they break easily in a school bag.'],
+          answer: 1,
+          hint: 'Recall what kind of words may follow "despite", and check the subject of the main clause.',
+          why: '"Despite" is a preposition: it takes a noun phrase or an -ing form ("despite being light", "despite their lightness"), never a clause, and never "of". Doubling the subject ("tablets they") is a separate error.' },
+        { id: 'm09ckq12', type: 'spot', tag: 'gra-cleft', level: 'B2', prompt: 'p-libraries',
+          stem: 'Tap the chunk that breaks this cleft sentence.',
+          words: ['It is', 'in the poorer districts', 'that libraries', 'they matter', 'most.'],
+          answer: 3,
+          fix: 'matter',
+          hint: 'Read what follows "that" as a normal sentence and check that its subject appears only once.',
+          why: 'After "that", the rest of the plain sentence follows with its subject once: "that libraries matter most". "Libraries they" doubles the subject, the same slip as "the tax it".' },
+        { id: 'm09ckq13', type: 'choose', tag: 'gra-conditional', level: 'B2', prompt: 'p-teen-sleep',
+          stem: 'Complete the second conditional: "If schools ___ later, students would sleep closer to their body clocks."',
+          options: ['start', 'would start', 'started', 'will start'],
+          answer: 2,
+          hint: 'Look at the verb in the result clause and choose the if-clause form that pairs with it.',
+          why: 'A second conditional pairs the past simple in the if-clause with would + base verb in the result: "If schools started later, students would sleep …". "Would" does not go in the if-clause, and "start" or "will start" belong to a first conditional, which clashes with "would".' },
+        { id: 'm09ckq14', type: 'build', tag: 'gra-inversion', level: 'C1', prompt: 'p-online-scams',
+          stem: 'Build the inverted sentence about the cause: negative adverb, auxiliary, subject, then the rest.',
+          tiles: ['Seldom', 'do', 'young users', 'check', 'where a payment link', 'really leads.'],
+          solution: 'Seldom do young users check where a payment link really leads.',
+          alt: [],
+          hint: 'Begin with the negative adverb, then the auxiliary that agrees with a plural subject.',
+          why: '"Seldom" at the front pulls the auxiliary "do" before the subject "young users", and the main verb "check" stays in its base form. The plain version is "Young users seldom check where a payment link really leads."' }
       ] }
     }]
   });
