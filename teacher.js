@@ -36,6 +36,7 @@
   var CORE_DEFAULT = { DISCUSS: 'p-fast-food-tax', ADVANTAGE: 'p-cctv-everywhere', OPINION: 'p-free-transport', PROBLEM: 'p-youth-unemployment', TWOPART: 'p-rural-youth' };
   var CORE_AVOID = { 'p-tourism': 1, 'p-teen-jobs': 1, 'p-teen-sleep': 1 };
   var OWN_MIN = 0.3;
+  var BOX = { intro: 'Introduction', bodyA: 'Body A', bodyB: 'Body B', conclusion: 'Conclusion' };
   var T = { roster: [], reports: [], assignments: [], sel: null, detail: null, q: '', sort: 'ready', dir: -1, cohort: 'all', view: 'class', markSel: null, markFilter: 'queue', proj: null };
 
   function toast(m) {
@@ -176,7 +177,7 @@
     else if (typeof r.ownShare === 'number') out.push('<span class="tiny">' + Math.round(r.ownShare * 100) + '% own</span>');
     var ag = agreeOf(r); if (ag != null) out.push('<span class="tiny" title="Landing Check: her ticks agreed with the Wards">landing ' + Math.round(ag * 100) + '%</span>');
     if (r.fillUsed) out.push('<span class="tiny">Fill used</span>');
-    if (r.revisionOf) { var o = (all || T.reports).filter(function (x) { return x.id === r.revisionOf; })[0]; out.push('<span class="flag rev">revision of ' + (o ? esc(String(o.ts).slice(0, 10)) : 'an earlier essay') + (r.reviseRow ? ' · ' + esc(r.reviseRow) : '') + '</span>'); }
+    if (r.revisionOf) { var o = (all || T.reports).filter(function (x) { return x.id === r.revisionOf; })[0]; out.push('<span class="flag rev">revision of ' + (o ? esc(String(o.ts).slice(0, 10)) : 'an earlier essay') + (r.reviseBox || r.reviseRow ? ' · ' + esc(BOX[r.reviseBox] || r.reviseRow) : '') + '</span>'); }
     var n = (all || T.reports).filter(function (x) { return x.revisionOf === r.id; }).length; if (n) out.push('<span class="flag rev">revised ' + n + '×</span>');
     return out.join(' ');
   }
@@ -550,8 +551,8 @@
     h += '<div class="mk-meta" id="mk-meta"><span>Own words: <b>' + (typeof r.ownShare === 'number' ? Math.round(r.ownShare * 100) + '%' : '—') + '</b>' + (frameOnly(r) ? ' <span class="flag frame">mostly frame · no merits</span>' : '') + '</span>' +
       '<span>Own sentences: <b>' + (r.ownSentences == null ? '—' : r.ownSentences) + '</b></span><span>Fill used: <b>' + (r.fillUsed == null ? '—' : r.fillUsed ? 'yes' : 'no') + '</b></span>' +
       '<span>Landing Check agreement: <b>' + pctOrDash(agreeOf(r)) + '</b></span>' + (r.merits != null ? '<span>Merits: <b>' + r.merits + '</b></span>' : '') + '</div>';
-    if (orig || r.revisionOf) h += '<p class="tiny" id="mk-revof">A revision' + (r.reviseRow ? ' of the ' + esc(r.reviseRow) + ' paragraph' : '') + ' of ' + (orig ? '<button class="linky" data-mk-go="' + esc(orig.id) + '">the essay of ' + esc(String(orig.ts).slice(0, 16).replace('T', ' ')) + ' →</button>' : 'an essay not in this list') + '</p>';
-    if (later.length) h += '<p class="tiny" id="mk-revised">Revised later: ' + later.map(function (x) { return '<button class="linky" data-mk-go="' + esc(x.id) + '">' + esc(String(x.ts).slice(0, 16).replace('T', ' ')) + (x.reviseRow ? ' (' + esc(x.reviseRow) + ')' : '') + ' →</button>'; }).join(' ') + '</p>';
+    if (orig || r.revisionOf) h += '<p class="tiny" id="mk-revof">A revision' + (r.reviseBox ? ' of the ' + esc(BOX[r.reviseBox] || r.reviseBox) + ' paragraph' : '') + (r.reviseRow ? ' (weak row: ' + esc(r.reviseRow) + ')' : '') + ' of ' + (orig ? '<button class="linky" data-mk-go="' + esc(orig.id) + '">the essay of ' + esc(String(orig.ts).slice(0, 16).replace('T', ' ')) + ' →</button>' : 'an essay not in this list') + '</p>';
+    if (later.length) h += '<p class="tiny" id="mk-revised">Revised later: ' + later.map(function (x) { return '<button class="linky" data-mk-go="' + esc(x.id) + '">' + esc(String(x.ts).slice(0, 16).replace('T', ' ')) + (x.reviseBox ? ' (' + esc(BOX[x.reviseBox] || x.reviseBox) + ')' : '') + ' →</button>'; }).join(' ') + '</p>';
     h += PR.card(pr, { compact: true });
     h += W.paragraphs(r.text).map(function (t) { return '<div class="mpara">' + esc(t).replace(new RegExp(W.LEX.NUANCE.source, 'gi'), '<span class="cmp">$&</span>') + '</div>'; }).join('');
     if (r.firstText) h += '<details class="disc"><summary>First draft (before revision)</summary><div class="disc-body" style="padding-top:10px">' + W.paragraphs(r.firstText).map(function (t) { return '<div class="mpara">' + esc(t) + '</div>'; }).join('') + '</div></details>';
@@ -777,9 +778,9 @@
     var rows = [['Student ID', 'Name', 'Cohort', 'Classes passed', 'TA', 'CC', 'LR', 'GRA', 'Accuracy %', 'Reports', 'Last band', 'Best band', 'Candles (streak)', 'Last active', 'House', 'Chapter', 'House points', 'Lessons read at', 'Duel level', 'Her five', 'Five set by', 'Five written', 'Five revised', 'Mostly-frame essays', 'Revisions']];
     T.roster.forEach(function (s) { var p = s.progress || P.blank(s.id), g = P.gateReadiness(p), st = storyOf(p), cp = coreProg(s), mine = reportsOf(s.id); rows.push([s.id, p.displayName || s.name, cohortOf(s), P.checksCleared(p), g.TR, g.CC, g.LR, g.GRA, P.accuracy(p), mine.length, lastBand(s.id) || '', p.bestBand || '', p.streak || 0, p.lastActiveDate || '', st.house || '', st.chapter || '', st.hp || 0, p.explainLevel || 'C1', p.duelTier || p.tier || 'B2',
       cp.core.prompts.join(' '), cp.core.by + (cp.core.pending ? ' (pending)' : ''), cp.essays, cp.done, mine.filter(frameOnly).length, mine.filter(function (r) { return r.revisionOf; }).length]); });
-    rows.push([]); rows.push(['Essay ID', 'Student', 'Date', 'Prompt', 'Type', 'Mode', 'Kind', 'Words', 'Seconds', 'Red', 'Amber', 'Template %', 'TR', 'CC', 'LR', 'GRA', 'Overall', 'CEFR', 'Released', 'Comment', 'Own words %', 'Own sentences', 'Fill used', 'Landing agree %', 'Revision of', 'Revised row', 'Mostly frame', 'Merits']);
+    rows.push([]); rows.push(['Essay ID', 'Student', 'Date', 'Prompt', 'Type', 'Mode', 'Kind', 'Words', 'Seconds', 'Red', 'Amber', 'Template %', 'TR', 'CC', 'LR', 'GRA', 'Overall', 'CEFR', 'Released', 'Comment', 'Own words %', 'Own sentences', 'Fill used', 'Landing agree %', 'Revision of', 'Revised row', 'Mostly frame', 'Merits', 'Revised paragraph']);
     T.reports.forEach(function (r) { var b = bandsOf(r) || {}, m = markOf(r) || {}, ag = agreeOf(r); rows.push([r.id, r.studentId, String(r.ts).slice(0, 10), r.promptId, r.type, r.uiMode || '', r.kind, r.words, r.seconds, (r.preflight || {}).bad, (r.preflight || {}).warn, Math.round(((r.preflight || {}).ratio || 0) * 100), bandKey(b, 'tr'), b.cc, b.lr, b.gra, b.overall, m.cefr, r.released ? 'yes' : 'no', m.comment || '',
-      typeof r.ownShare === 'number' ? Math.round(r.ownShare * 100) : '', r.ownSentences == null ? '' : r.ownSentences, r.fillUsed == null ? '' : (r.fillUsed ? 'yes' : 'no'), ag == null ? '' : Math.round(ag * 100), r.revisionOf || '', r.reviseRow || '', frameOnly(r) ? 'yes' : 'no', r.merits == null ? '' : r.merits]); });
+      typeof r.ownShare === 'number' ? Math.round(r.ownShare * 100) : '', r.ownSentences == null ? '' : r.ownSentences, r.fillUsed == null ? '' : (r.fillUsed ? 'yes' : 'no'), ag == null ? '' : Math.round(ag * 100), r.revisionOf || '', r.reviseRow || '', frameOnly(r) ? 'yes' : 'no', r.merits == null ? '' : r.merits, r.reviseBox || '']); });
     download('quillmoor-' + E.today() + '.csv', csv(rows));
   });
   /* Blooket import: Question, Answer 1-4, Time, Correct answers */

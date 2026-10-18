@@ -410,12 +410,14 @@
   function lc(s) { return String(s == null ? '' : s).toLowerCase().trim(); }
   /* The prompts a student practises from (mock-only prompts never appear in these lists). */
   function practicePrompts() { return C.PROMPTS.filter(function (pr) { return !pr.mockOnly; }); }
+  /* mock-only prompts live in CONTENT.MOCK_PROMPTS (Prompts.get finds them): never in her five */
+  function inPractice(id) { return practicePrompts().some(function (pr) { return pr.id === id; }); }
   function coreOk(pr) { return !!(pr && !CORE_AVOID[pr.id] && !pr.mockOnly && pr.vars && pr.vars.A2 && pr.vars.B1); }
   function defaultCore() {
     var all = practicePrompts();
     return CORE_TYPES.map(function (t) {
       var want = PR.get(CORE_DEFAULT[t]);
-      if (coreOk(want) && want.type === t) return want.id;
+      if (coreOk(want) && want.type === t && inPractice(want.id)) return want.id;
       var alt = all.filter(function (pr) { return pr.type === t && coreOk(pr); })[0];
       return alt ? alt.id : null;
     }).filter(Boolean);
@@ -435,11 +437,11 @@
     var p = S.p; if (!p) return false;
     var cur = p.coreSet, row = listOk ? coreRow(p, S.assignments) : null, next = null;
     if (row) {
-      var ids = row.prompts.filter(function (id, i, a) { return !!PR.get(id) && a.indexOf(id) === i; }).slice(0, 5);
+      var ids = row.prompts.filter(function (id, i, a) { return inPractice(id) && a.indexOf(id) === i; }).slice(0, 5);
       if (ids.length) next = { prompts: ids, by: 'teacher', at: row.ts || new Date().toISOString(), row: row.id || '' };
     }
     if (!next) {
-      var curOk = cur && cur.prompts && cur.prompts.length && cur.prompts.every(function (id) { return !!PR.get(id); });
+      var curOk = cur && cur.prompts && cur.prompts.length && cur.prompts.every(inPractice);
       if (curOk && (cur.by === 'app' || !listOk)) return false;
       next = { prompts: defaultCore(), by: 'app', at: new Date().toISOString() };
     }
@@ -526,14 +528,6 @@
      ===================================================================== */
   var PARA_KEYS = ['intro', 'bodyA', 'bodyB', 'conclusion'];
   var PARA_NAME = { intro: 'Introduction', bodyA: 'Body A', bodyB: 'Body B', conclusion: 'Conclusion' };
-  function splitParas(text) {
-    var ps = W.paragraphs(text || ''), out = { intro: '', bodyA: '', bodyB: '', conclusion: '' };
-    if (!ps.length) return out;
-    out.intro = ps[0];
-    if (ps.length === 2) { out.bodyA = ps[1]; return out; }
-    if (ps.length > 2) { out.conclusion = ps[ps.length - 1]; var mid = ps.slice(1, ps.length - 1); out.bodyA = mid[0] || ''; out.bodyB = mid.slice(1).join('\n\n'); }
-    return out;
-  }
   function wardPara(row, pre) {
     var id = row.id || '', lbl = row.label || '', m = /^b(\d+)/.exec(id);
     if (m) return Number(m[1]) === 0 ? 'bodyA' : 'bodyB';
@@ -543,7 +537,8 @@
     if (id === 'twopart' || id === 'plural-s') return 'bodyB';
     if (id === 'plural-c') return 'bodyA';
     if (id === 'parts') return /no causes/i.test(lbl) ? 'bodyA' : 'bodyB';
-    if (id === 'length') { var bw = (pre && pre.bodyWords) || []; return bw.length > 1 && bw[1] < bw[0] ? 'bodyB' : 'bodyA'; }
+    /* too short: the shorter body paragraph grows; too long (amber): the longer one is cut — as writer.js reads it */
+    if (id === 'length') { var bw = (pre && pre.bodyWords) || [], long = row.status === 'warn'; return bw.length > 1 && (long ? bw[1] > bw[0] : bw[1] < bw[0]) ? 'bodyB' : 'bodyA'; }
     return '';
   }
   /* res: the Writer's result (or a saved report): preflight.rows and, in guided mode, plan.ownWords per box. */
@@ -571,10 +566,12 @@
     var s = sc[best], why = s.why ? s.why.label : s.own === 0 ? 'every sentence is still the frame' : s.frame != null && s.frame > 0.05 ? Math.round(s.frame * 100) + '% of it is still frame words' : 'add one more developed sentence with your own reason or example';
     return { key: best, why: why, ward: s.why ? s.why.id : '', base: { key: best, score: s.score, frame: s.frame, own: s.own } };
   }
+  /* reviseRow is the weak paragraph's worst Ward row id (writer.js finds the paragraph from it; '' = any paragraph);
+     reviseBox is the paragraph (box key) this console judges the improvement on. */
   function reviseCfg(rep, res, kind) {
-    var wk = weakestRow(res), paras = splitParas(rep.text || res.text);
-    return { promptId: rep.promptId, uiMode: rep.uiMode || S.uiMode, minutes: 40, kind: 'practice', revisionOf: rep.id, reviseRow: wk.key,
-      reviseText: paras, reviseParas: PARA_KEYS.map(function (k) { return paras[k]; }), reviseWard: wk.ward, reviseWhy: wk.why, reviseBase: wk.base, reviseFrom: kind || 'result' };
+    var wk = weakestRow(res), text = String(res.text || rep.text || '');
+    return { promptId: rep.promptId, uiMode: rep.uiMode || S.uiMode, minutes: 40, kind: 'practice', revisionOf: rep.id, reviseRow: wk.ward,
+      reviseText: text, reviseVars: (res.plan && res.plan.vars) || null, reviseBox: wk.key, reviseWhy: wk.why, reviseBase: wk.base, reviseFrom: kind || 'result' };
   }
   /* The weak row improved: fewer Ward points against that paragraph, or its frame share fell by 10 points. */
   function reviseImproved(cfg, res) {
@@ -585,7 +582,7 @@
   }
   function meritNote(sum, rep) {
     var M = P.MERITS || { essay: 150, short: 60, improve: 50, revise: 80 }, why = sum && sum.meritWhy, xp = (sum && sum.merits) || 0;
-    var row = PARA_NAME[rep.reviseRow] || 'paragraph', own = typeof rep.ownShare === 'number' ? Math.round(rep.ownShare * 100) : null;
+    var row = PARA_NAME[rep.reviseBox] || 'paragraph', own = typeof rep.ownShare === 'number' ? Math.round(rep.ownShare * 100) : null;
     if (why === 'mock') return '+' + xp + ' merits for a mock examination.';
     if (why === 'frame') return 'No merits for this essay. Write more in your own words to earn merits: ' + (own != null ? own + '% of it is yours, and merits start at ' + Math.round(OWN_MIN * 100) + '%.' : 'most of it is still the frame.');
     if (why === 'revise-up') return '+' + xp + ' merits: your ' + row + ' is stronger than before. A better band from the examiners adds ' + M.improve + ' more.';
@@ -1155,8 +1152,8 @@
     var host = $('#view-write');
     show('write');
     S.write = W.mount(host, { prompt: cfg.promptId, mode: cfg.uiMode, minutes: cfg.minutes, tier: tier(), level: explainLevel(), studentId: S.p.studentId, share: myShare(), faultTags: topFaultTags(),
-      /* revision (19 Oct 2026, contract with writer.js): the essay it revises, the weak row (a box key) and her text by box */
-      revisionOf: cfg.revisionOf || '', reviseRow: cfg.reviseRow || '', reviseText: cfg.reviseText || null, reviseParas: cfg.reviseParas || null, reviseWard: cfg.reviseWard || '', reviseWhy: cfg.reviseWhy || '',
+      /* revision (19 Oct 2026, contract with writer.js): the essay it revises, its weak Ward row (row id), her text and her keys */
+      revisionOf: cfg.revisionOf || '', reviseRow: cfg.reviseRow || '', reviseText: cfg.reviseText || null, reviseVars: cfg.reviseVars || null,
       onQuit: function () { S.write = null; show('writer'); },
       onSubmit: function (res) { S.write = null; submitReport(cfg, res); } });
   }
@@ -1176,7 +1173,8 @@
      numbers are worked out from the result: frame words per box (guided) or the frame ratio of the Wards. */
   function writerMeta(cfg, res) {
     var m = null;
-    try { m = W && typeof W.lastMeta === 'function' ? W.lastMeta() : null; } catch (e) { m = null; }
+    m = res && res.meta && typeof res.meta === 'object' ? res.meta : null;
+    if (!m) { try { m = W && typeof W.lastMeta === 'function' ? W.lastMeta() : null; } catch (e) { m = null; } }
     m = m || {};
     var ow = (res.plan && res.plan.ownWords) || [], words = 0, frame = 0, sents = 0, have = false;
     ow.forEach(function (o) { if (o && o.words) { have = true; words += o.words; frame += o.frame || 0; sents += o.own || 0; } });
@@ -1185,7 +1183,7 @@
     return { ownShare: ownShare == null ? null : Math.max(0, Math.min(1, ownShare)), ownSentences: typeof m.ownSentences === 'number' ? m.ownSentences : have ? sents : null,
       fillUsed: typeof m.fillUsed === 'boolean' ? m.fillUsed : null, landTaps: m.landTaps || null,
       landAgree: typeof m.landAgree === 'number' ? m.landAgree : cal && cal.of ? cal.agree / cal.of : null,
-      revisionOf: cfg.revisionOf || m.revisionOf || '', reviseRow: cfg.reviseRow || m.reviseRow || '' };
+      revisionOf: cfg.revisionOf || m.revisionOf || '', reviseRow: cfg.reviseRow || m.reviseRow || '', reviseBox: cfg.reviseBox || '' };
   }
   function submitReport(cfg, res) {
     var p = S.p, pr = PR.get(cfg.promptId) || {};
@@ -1194,6 +1192,7 @@
       text: res.text, words: res.words, seconds: res.seconds, timedOut: res.timedOut, revision: res.revision, firstText: res.firstText,
       preflight: { bad: res.preflight.bad, warn: res.preflight.warn, ratio: res.preflight.ratio, rows: res.preflight.rows.map(function (r) { return { id: r.id, status: r.status, label: r.label, tag: r.tag }; }) },
       plan: res.plan, promptDesc: pr.text, status: 'submitted', released: false };
+    /* Writer.lastMeta() (res.meta): ownShare, ownSentences, fillUsed, landTaps, landAgree, revisionOf, reviseRow */
     var meta = writerMeta(cfg, res);
     Object.keys(meta).forEach(function (k) { rep[k] = meta[k]; });
     if (rep.revisionOf) rep.reviseImproved = reviseImproved(cfg, res);
@@ -1208,7 +1207,7 @@
       '<h3>' + (res.timedOut ? 'Time. The owl has taken the essay' : 'The owl has taken the essay') + '</h3><p>' + esc(res.preflight.summary) + ' Written in ' + mmss(res.seconds) + '. ' + (cfg.kind === 'mock' ? 'T.Chris will mark this one.' : 'It has gone to T.Chris: he already has your essay, so you do not need to send it again. If you want, you can also get an AI band estimate and an upgraded version in LevelUp.') + '</p>' +
       '<div class="misslist">' + res.preflight.rows.filter(function (r) { return r.status !== 'ok'; }).map(function (r) { var ns = W.nextStep ? W.nextStep(r, res.preflight, explainLevel()) : null; return '<div class="miss"><b>' + esc(r.label) + '</b>' + esc(r.note) + (ns ? '<span class="miss-next"><span class="miss-next-h">Next time:</span> ' + esc(ns.text) + (ns.sub ? ' <button class="linky" data-miss-sub="' + esc(ns.sub) + '">' + esc(ns.link) + ' →</button>' : '') + '</span>' : '') + '</div>'; }).join('') + '</div>' +
       '<p class="merit-note' + (rep.merits ? '' : ' none') + '" id="w-merits">' + esc(meritNote(sum, rep)) + '</p>' +
-      (revCfg ? '<div class="card" id="w-revise-card" style="padding:12px 14px;margin:0 auto 12px;max-width:34rem;text-align:left"><p class="kicker">Next: make it stronger</p><p style="margin:0 0 8px">Your weakest row is <b>' + esc(PARA_NAME[revCfg.reviseRow] || revCfg.reviseRow) + '</b>: ' + esc(revCfg.reviseWhy) + '. Rewrite that paragraph in your own words; the rest of your essay stays as it is.</p><button class="btn primary" id="w-revise">Revise your weakest row</button></div>' : '') +
+      (revCfg ? '<div class="card" id="w-revise-card" style="padding:12px 14px;margin:0 auto 12px;max-width:34rem;text-align:left"><p class="kicker">Next: make it stronger</p><p style="margin:0 0 8px">Your weakest row is <b>' + esc(PARA_NAME[revCfg.reviseBox] || revCfg.reviseBox) + '</b>: ' + esc(revCfg.reviseWhy) + '. Rewrite that paragraph in your own words; the rest of your essay stays as it is.</p><button class="btn primary" id="w-revise">Revise your weakest row</button></div>' : '') +
       '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn' + (revCfg ? '' : ' primary') + '" id="w-levelup">Get an AI band estimate (LevelUp)</button><button class="btn" id="w-copy">Copy essay</button><button class="btn" id="w-record">See my report card</button><button class="btn ghost" id="w-another">Write another</button></div></div></div>';
     $('#view-write').innerHTML = html;
     if (revCfg) $('#w-revise').addEventListener('click', function () { startWrite(revCfg); });
@@ -1461,7 +1460,7 @@
         reps.map(function (rp) {
           var bands = bandsOf(rp), pr = PR.get(rp.promptId) || {};
           var revs = reps.filter(function (x) { return x.revisionOf === rp.id; }).length, orig = rp.revisionOf ? reps.filter(function (x) { return x.id === rp.revisionOf; })[0] : null;
-          var link = rp.revisionOf ? ' · revision of the essay of ' + (orig ? String(orig.ts).slice(0, 10) : 'an earlier essay') + (rp.reviseRow ? ' (' + (PARA_NAME[rp.reviseRow] || rp.reviseRow) + ')' : '') : revs ? ' · revised ' + revs + '×' : '';
+          var link = rp.revisionOf ? ' · revision of the essay of ' + (orig ? String(orig.ts).slice(0, 10) : 'an earlier essay') + (rp.reviseBox ? ' (' + (PARA_NAME[rp.reviseBox] || rp.reviseBox) + ')' : '') : revs ? ' · revised ' + revs + '×' : '';
           return '<button class="rep" data-r="' + esc(rp.id) + '"' + (rp.revisionOf ? ' data-rev-of="' + esc(rp.revisionOf) + '" style="margin-left:18px"' : '') + '><span class="rep-t"><span class="rep-n">' + (rp.revisionOf ? '↳ ' : '') + esc(pr.title || rp.promptId) + '</span><span class="rep-s">' + esc(String(rp.ts).slice(0, 10) + ' · ' + typeName(rp.type) + ' · ' + rp.words + ' words · ' + mmss(rp.seconds || 0) + ' · ' + (rp.uiMode || '') + ' · ' + (rp.kind || 'practice') + (rp.preflight ? ' · ' + rp.preflight.bad + ' red' : '') + link + (frameOnly(rp) ? ' · mostly frame' : '')) + '</span></span><span class="rep-b">' + (bands ? fmtBand(bands.overall) : (rp.status === 'submitted' ? '…' : '—')) + '</span></button>';
         }).join('');
       host.querySelectorAll('[data-r]').forEach(function (b) { b.addEventListener('click', function () { openReport(b.dataset.r); }); });
@@ -1474,8 +1473,8 @@
     var mark = rp.released && rp.teacher && rp.teacher.bands ? rp.teacher : (rp.aiVisible && rp.ai ? rp.ai : null);
     var orig = rp.revisionOf ? (S.reports || []).filter(function (x) { return x.id === rp.revisionOf; })[0] : null;
     var later = (S.reports || []).filter(function (x) { return x.revisionOf === rp.id; });
-    var links = (rp.revisionOf ? '<p class="tiny" id="rp-revof">A revision of ' + (orig ? '<button class="linky rev-link" data-rlink="' + esc(orig.id) + '">your essay of ' + esc(String(orig.ts).slice(0, 10)) + ' →</button>' : 'an earlier essay') + (rp.reviseRow ? ' · the row you revised: ' + esc(PARA_NAME[rp.reviseRow] || rp.reviseRow) : '') + '</p>' : '') +
-      (later.length ? '<p class="tiny" id="rp-revised">Revised: ' + later.map(function (x) { return '<button class="linky rev-link" data-rlink="' + esc(x.id) + '">' + esc(String(x.ts).slice(0, 10)) + (x.reviseRow ? ' (' + esc(PARA_NAME[x.reviseRow] || x.reviseRow) + ')' : '') + ' →</button>'; }).join(' ') + '</p>' : '');
+    var links = (rp.revisionOf ? '<p class="tiny" id="rp-revof">A revision of ' + (orig ? '<button class="linky rev-link" data-rlink="' + esc(orig.id) + '">your essay of ' + esc(String(orig.ts).slice(0, 10)) + ' →</button>' : 'an earlier essay') + (rp.reviseBox ? ' · the paragraph you revised: ' + esc(PARA_NAME[rp.reviseBox] || rp.reviseBox) : '') + '</p>' : '') +
+      (later.length ? '<p class="tiny" id="rp-revised">Revised: ' + later.map(function (x) { return '<button class="linky rev-link" data-rlink="' + esc(x.id) + '">' + esc(String(x.ts).slice(0, 10)) + (x.reviseBox ? ' (' + esc(PARA_NAME[x.reviseBox] || x.reviseBox) + ')' : '') + ' →</button>'; }).join(' ') + '</p>' : '');
     var html = '<div class="play"><div class="play-top"><button class="btn ghost sm" id="rp-back">← Report Card</button><span style="flex:1"></span><span class="qcount">' + esc(String(rp.ts).slice(0, 10)) + '</span></div>' + links + PR.card(pr, { compact: true }) +
       '<div class="model">' + W.paragraphs(rp.text).map(function (t) { return '<div class="mpara">' + esc(t) + '</div>'; }).join('') + '</div>';
     if (mark) {

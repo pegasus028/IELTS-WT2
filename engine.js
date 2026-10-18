@@ -966,7 +966,7 @@
       words: rep.words, seconds: rep.seconds, bad: rep.preflight ? rep.preflight.bad : 0, warn: rep.preflight ? rep.preflight.warn : 0,
       timedOut: !!rep.timedOut, kind: rep.kind || 'practice', bands: rep.bands || null,
       ownShare: typeof rep.ownShare === 'number' ? rep.ownShare : null, landAgree: typeof rep.landAgree === 'number' ? rep.landAgree : null,
-      revisionOf: rep.revisionOf || '', reviseRow: rep.reviseRow || '' };
+      revisionOf: rep.revisionOf || '', reviseRow: rep.reviseRow || '', reviseBox: rep.reviseBox || '' };
     var prior = p.reports.slice();
     p.reports.push(summary);
     if (p.reports.length > 40) p.reports = p.reports.slice(-40);
