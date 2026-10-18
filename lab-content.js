@@ -42,7 +42,18 @@
   ];
 
   /* ------------------------------------------------------ target levels */
+  /* `tier` picks the example lines and model answers when a level has none
+     of its own (A2 and B1 study the B2 lines; A2 also has its own simpler
+     lines, examples.A2). Optional per-level fields:
+       pct      the share to start with (A2: the 60% training frame)
+       lineLo   lower edge of a template line's word budget, as a share of
+                its target (default 0.7)
+       varLo    the same for a variable (default 0.6)
+       shortTip what the quick check says when a variable is too short     */
   LAB.LEVELS = [
+    { id: 'A2', band: '4.5–5', bandLo: 4.5, bandHi: 5, tier: 'B2', name: 'From A2 · aim for Band 4.5–5', pct: 60, lineLo: 0.5, varLo: 0.45,
+      note: 'Short, clear sentences in everyday words. Start with the 60% spellbook. Make your ideas longer before you choose a smaller share.',
+      shortTip: 'Make the idea longer first: add who, where or why. A longer idea is better than a smaller share.' },
     { id: 'B1', band: '5.5–6', bandLo: 5.5, bandHi: 6, tier: 'B2', name: 'From B1 · aim for Band 5.5–6', note: 'Clear, accurate sentences with everyday academic words.' },
     { id: 'B2', band: '6.5–7', bandLo: 6.5, bandHi: 7, tier: 'B2', name: 'From B2 · aim for Band 6.5–7', note: 'The Band 7 track: plain frames, precise ideas, few errors.' },
     { id: 'C1', band: '7.5–8', bandLo: 7.5, bandHi: 8, tier: 'C1', name: 'From C1 · aim for Band 7.5–8', note: 'The Band 8 track: nominalised noun phrases, flexible structures, rare errors.' },
@@ -92,6 +103,7 @@
       why: 'Task Response starts here: the examiner checks that you are answering THIS prompt. A neutral opener also sets a formal register (Lexical Resource).',
       tip: 'No "Nowadays", no "In this modern era", no "hot topic". The line must still make sense when the Core Topic is about cars, schools or prisons.',
       examples: {
+        A2: ['Many people have different ideas about {core}.', 'The question of {core} is important for many families.', 'In many countries, people often talk about {core}.'],
         B2: ['People often discuss the topic of {core} because it has many different effects.', 'The question of {core} is one that many people feel strongly about.', 'In recent years, {core} has become an important public debate.'],
         C1: ['The ongoing discourse surrounding {core} frequently highlights its multifaceted implications.', 'A defining characteristic of the modern debate on {core} is its inherent complexity.', 'Few policy questions have generated as much sustained discussion as {core}.']
       } },
@@ -100,6 +112,7 @@
       why: 'This is the plan of the essay. Naming both facets here lets the body paragraphs follow a clear progression (Coherence and Cohesion).',
       tip: 'Use one sentence with a contrast (while, whereas, yet). Do not write "I will discuss both sides".',
       examples: {
+        A2: ['Some people think about {facetA}, but others think about {facetB}.', 'One side is {facetA}, and the other side is {facetB}.', 'Some people talk about {facetA}, while others talk about {facetB}.'],
         B2: ['While many people focus on {facetA}, it is also important to consider {facetB}.', 'Some point to {facetA}, while others are more concerned with {facetB}.', 'On one side there is {facetA}; on the other there is {facetB}.'],
         C1: ['While considerable attention is paid to {facetA}, the significance of {facetB} is equally difficult to ignore.', 'The debate is typically framed as a contest between {facetA} and {facetB}.', 'Proponents emphasise {facetA}, whereas critics point to {facetB}.']
       } },
@@ -108,6 +121,7 @@
       why: 'A clear position presented throughout is a Band 7 requirement. IELTS guidance says to state it in the introduction, not only at the end.',
       tip: 'Short and direct. "This essay argues that [Position]." is enough.',
       examples: {
+        A2: ['I think that {position}.', 'In my opinion, {position}.', 'My answer is that {position}.'],
         B2: ['In my view, {position}.', 'This essay looks at both sides before arguing that {position}.', 'I believe that {position}, and this essay explains why.'],
         C1: ['This essay contends that {position}.', 'On balance, this essay maintains that {position}.', 'The argument advanced here is that {position}.']
       } },
@@ -116,6 +130,7 @@
       why: 'One clear central topic per paragraph is a Band 7 Coherence and Cohesion requirement.',
       tip: 'Avoid "Firstly". Name the facet as the subject or the focus of the sentence.',
       examples: {
+        A2: ['The first idea is {facetA}.', 'One important point is {facetA}.', 'One side of this question is {facetA}.'],
         B2: ['One important part of this issue is {facetA}.', 'The first side of the debate is {facetA}.', 'A strong argument on one side is {facetA}.'],
         C1: ['A fundamental dimension of this issue is its relationship to {facetA}.', 'At the heart of the first view lies {facetA}.', 'The primary justification often cited within this context is {facetA}.']
       } },
@@ -124,6 +139,7 @@
       why: 'Band 6–7 essays make general claims. Explaining the mechanism is what "well extended and supported" ideas look like (Task Response).',
       tip: 'Your lead-in decides the grammar of the slot. After "by" or "through", Mechanism A must start with an -ing verb.',
       examples: {
+        A2: ['This works by {mechA}.', 'This helps by {mechA}.', 'It happens through {mechA}.'],
         B2: ['This idea works by {mechA}.', 'It works by {mechA}.', 'This happens through {mechA}.'],
         C1: ['This dynamic operates primarily by {mechA}.', 'Its influence stems from {mechA}.', 'The argument rests on {mechA}.']
       } },
@@ -132,6 +148,7 @@
       why: 'The Band 7 limit is "a tendency to over-generalise". A named, concrete example is the cure.',
       tip: 'Avoid a bare "For example,". Choose a lead-in that fits a noun phrase or a clause, and remember which one it needs.',
       examples: {
+        A2: ['A good example is {exA}.', 'We can see this in {exA}.', 'One real example is {exA}.'],
         B2: ['We can see this happening in the real world in {exA}.', 'A clear example is {exA}.', 'This is easy to see in {exA}.'],
         C1: ['Such a trajectory frequently manifests in real-world scenarios, such as {exA}.', 'It is within cases like {exA} that this dynamic is most visible.', 'The clearest evidence of this is {exA}.']
       } },
@@ -140,6 +157,7 @@
       why: 'Showing the limits of a view proves a developed position (Task Response) and is the natural place for a concession or inversion (Grammatical Range).',
       tip: 'The nuance stays inside side A. If it starts arguing side B, paragraph B will repeat it.',
       examples: {
+        A2: ['But this is not always true, because {nuanceA}.', 'Even so, {nuanceA}.', 'There is one problem with this idea: {nuanceA}.'],
         B2: ['However, looking only at this side misses an important point; in reality, {nuanceA}.', 'Even so, {nuanceA}, so this argument has its limits.', 'It would be a mistake, though, to stop here: {nuanceA}.'],
         C1: ['Yet viewing this element in a vacuum overlooks critical context; indeed, {nuanceA}.', 'Notwithstanding this, an overreliance on this perspective ignores the fact that {nuanceA}.', 'Seldom, however, is this the whole story: {nuanceA}.']
       } },
@@ -148,6 +166,7 @@
       why: 'At Band 9, cohesion "very rarely attracts attention". A meaningful transition connects the paragraphs through ideas, not signposts.',
       tip: 'Link back to paragraph A through meaning: "Equally significant…", "Just as important…".',
       examples: {
+        A2: ['The second idea is {facetB}.', 'On the other side, there is {facetB}.', 'Another important point is {facetB}.'],
         B2: ['Another very important part of the debate is {facetB}.', 'Just as important is {facetB}.', 'The other side of the question is {facetB}.'],
         C1: ['Equally significant is the relationship between this issue and {facetB}.', 'Parallel to this dynamic is {facetB}.', 'This picture is complicated, however, by {facetB}.']
       } },
@@ -156,6 +175,7 @@
       why: 'Same job as Mechanism A: an idea is only "extended" when the reader sees how it works.',
       tip: 'Vary it from Mechanism A. If A used "by + -ing", try "through + -ing" or "because + clause" here.',
       examples: {
+        A2: ['This works through {mechB}.', 'This happens because {mechB}.', 'It helps by {mechB}.'],
         B2: ['This side is based on {mechB}.', 'It works through {mechB}.', 'Supporters point to {mechB}.'],
         C1: ['This dimension functions through {mechB}.', 'The underlying process is {mechB}.', 'Its force derives from {mechB}.']
       } },
@@ -164,6 +184,7 @@
       why: 'Support at Band 8 is specific: a place, a policy, a figure you know is true, or your own experience.',
       tip: 'Make it a different structure from Example A so the paragraphs do not read like a copy.',
       examples: {
+        A2: ['One example is {exB}.', 'This is clear in {exB}.', 'We can see this in the case of {exB}.'],
         B2: ['This usually leads to results like {exB}.', 'A good example of this is {exB}.', 'We see this in {exB}.'],
         C1: ['This is evidenced by {exB}.', 'The point is clearly illustrated by {exB}.', 'The effect is visible in {exB}.']
       } },
@@ -172,6 +193,7 @@
       why: 'Balance and a qualified view show a well-developed position (Task Response). In an agree/disagree essay this line can be your rebuttal.',
       tip: 'Vary the structure from Nuance A: if A used "Yet…", try "While…" or an inversion here.',
       examples: {
+        A2: ['But we must be careful, because {nuanceB}.', 'Still, {nuanceB}.', 'This idea also has a problem: {nuanceB}.'],
         B2: ['Still, we must be careful with this view, because {nuanceB}.', 'Yet {nuanceB}, which means this view cannot be accepted without question.', 'At the same time, {nuanceB}.'],
         C1: ['Nevertheless, {nuanceB}, a consideration that tempers any uncritical endorsement of this view.', 'It would be simplistic, however, to accept this without qualification: {nuanceB}.', 'While the impact of this dynamic is profound, it must be weighed against the reality that {nuanceB}.']
       } },
@@ -180,6 +202,7 @@
       why: 'Lower bands copy their introduction. A fresh opener shows control of paragraphing and progression (Coherence and Cohesion).',
       tip: 'This is the second mention of the Core Topic. When you fill it, reword it.',
       examples: {
+        A2: ['In conclusion, {core} has two sides.', 'To sum up, there are two ways to look at {core}.', 'Overall, {core} is not a simple question.'],
         B2: ['To sum up, looking at {core} from only one side is not enough.', 'In conclusion, both sides of {core} have real strengths and real limits.', 'Overall, {core} cannot be judged from one side alone.'],
         C1: ['In conclusion, reducing {core} to a single consequence fails to capture its full complexity.', 'Ultimately, viewing {core} through a single lens is too narrow.', 'Taken together, the arguments show that {core} resists a simple verdict.']
       } },
@@ -188,6 +211,7 @@
       why: 'The conclusion must match the position in the introduction, fully developed (Task Response).',
       tip: 'The second mention of your Position. Same idea as the introduction, new words.',
       examples: {
+        A2: ['I believe that {position}.', 'So, my view is that {position}.', 'For me, the best answer is that {position}.'],
         B2: ['A better way to look at it is that {position}.', 'My own position is that {position}.', 'The most reasonable view is that {position}.'],
         C1: ['A more accurate evaluation recognises that {position}.', 'The evidence considered here supports the view that {position}.', 'A sustainable resolution demands that {position}.']
       } },
@@ -196,6 +220,7 @@
       why: 'A justified conclusion; an unjustified one is a Band 6 description ("conclusions may be unclear, unjustified or repetitive").',
       tip: 'A principle, not a new example. No new ideas in the conclusion.',
       examples: {
+        A2: ['This is because {rationale}.', 'The main reason is that {rationale}.', 'This is the best answer because {rationale}.'],
         B2: ['This view makes the most sense because {rationale}.', 'This is mainly because {rationale}.', 'This matters because {rationale}.'],
         C1: ['This perspective is ultimately the most valid because {rationale}.', 'Such an approach is not merely preferable but necessary, since {rationale}.', 'The case rests on a simple principle: {rationale}.']
       } }

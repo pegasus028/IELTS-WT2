@@ -32,7 +32,7 @@
     blurb: 'Nearly 300 mm of rain in two days, all 50 districts declared disaster zones, schools closed and phones buzzing with flood alerts.',
     order: ['DISCUSS', 'OPINION', 'ADVANTAGE', 'PROBLEM', 'TWOPART'],
     /* Blueprint level → which band of ideas the test drive uses. */
-    bandFor: { B1: 6, B2: 7, C1: 8, C2: 8 },
+    bandFor: { A2: 6, B1: 6, B2: 7, C1: 8, C2: 8 },
     bands: [
       { band: 6, name: 'Band 6', cefr: 'B1' },
       { band: 7, name: 'Band 7', cefr: 'B2' },

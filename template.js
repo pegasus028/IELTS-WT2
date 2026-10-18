@@ -11,7 +11,9 @@
    Template.tokens(text)                → ['core','facetA',…]
    Template.compose(tier, type, vars, choice, custom) → the whole essay as text
    Template.ratio(essay, tier, type)    → share of the essay that is unchanged frame text (0–1)
-   Template.load(studentId) / save(studentId, custom)   "my template" per student
+   Template.load(studentId) / save(studentId, custom)   "my template" per student (also on p.spellbook)
+   Template.setShare(studentId, pct) / share(studentId) the chosen template share
+   Template.inUse(studentId)            → { kind, text, … } which spellbook the Scriptorium uses
    Template.SWAPS, Template.FADE
 
    Frames are written with {key} tokens. TO CHANGE THE TEMPLATE: edit the
@@ -285,11 +287,108 @@
     frameWords._c = set; return set;
   }
 
-  /* ----------------------------------------------------- my template */
+  /* ----------------------------------------------------- my template
+     My Spellbook: { tier, choice:{para:frameId}, custom:{para:text}, at,
+     fromLab, fromLabName, fromLabAt, edited, prev, share, shareAt }.
+     Kept on this device (pc.template.<id>) AND on the progress object
+     (p.spellbook), which syncs to the class sheet with api.save, so it
+     follows the student to another device and the Staff Room can read it.
+     The newer copy (by `at`) wins; the template share (by `shareAt`) is
+     compared on its own, because the Workshop sets it separately.
+     `prev` is the version a "Use in the Scriptorium" or a reset replaced,
+     so it can be brought back.                                          */
   function key(studentId) { return 'pc.template.' + String(studentId || 'anon').toLowerCase(); }
-  function load(studentId) { try { return JSON.parse(localStorage.getItem(key(studentId))) || { tier: 'B2', choice: {}, custom: {} }; } catch (e) { return { tier: 'B2', choice: {}, custom: {} }; } }
-  function save(studentId, custom) { try { localStorage.setItem(key(studentId), JSON.stringify(custom)); } catch (e) {} }
+  function shareKey(studentId) { return 'pc.share.' + studentId; }
+  function blank() { return { tier: 'B2', choice: {}, custom: {} }; }
+  function nowIso() { return new Date().toISOString(); }
+  function copy(o) { return o ? JSON.parse(JSON.stringify(o)) : o; }
+  function sameId(a, b) { return String(a || '').toLowerCase() === String(b || '').toLowerCase(); }
+  function hostP(studentId) {
+    var h = global.PCHost, p = null;
+    try { p = h && h.p; } catch (e) { p = null; }
+    return p && sameId(p.studentId, studentId) ? p : null;
+  }
+  function readLocal(studentId) { try { return JSON.parse(localStorage.getItem(key(studentId))) || null; } catch (e) { return null; } }
+  function writeLocal(studentId, obj) { try { localStorage.setItem(key(studentId), JSON.stringify(obj)); } catch (e) {} }
+  function hasContent(o) { return !!o && (Object.keys(o.choice || {}).length > 0 || Object.keys(o.custom || {}).length > 0 || !!o.fromLab); }
+  /* Copy onto the progress object and ask the app to sync it soon. */
+  function mirror(studentId, obj) {
+    var p = hostP(studentId); if (!p) return;
+    var c = copy(obj);
+    if (c.prev) delete c.prev.prev;
+    p.spellbook = c;
+    try { if (global.PCHost.syncSoon) global.PCHost.syncSoon(); } catch (e) {}
+  }
+  function load(studentId) {
+    var local = readLocal(studentId), p = hostP(studentId), remote = p && p.spellbook ? p.spellbook : null, changed = false;
+    if (remote && remote.at && (!local || String(remote.at) > String(local.at || ''))) {
+      var keepShare = local && local.shareAt ? { share: local.share, shareAt: local.shareAt } : null;
+      local = copy(remote);
+      if (keepShare && String(keepShare.shareAt) > String(local.shareAt || '')) { local.share = keepShare.share; local.shareAt = keepShare.shareAt; }
+      changed = true;
+    } else if (remote && local && remote.shareAt && String(remote.shareAt) > String(local.shareAt || '')) {
+      local.share = remote.share; local.shareAt = remote.shareAt; changed = true;
+    }
+    if (changed) {
+      writeLocal(studentId, local);
+      if (local.share) { try { localStorage.setItem(shareKey(studentId), String(local.share)); } catch (e) {} }
+    }
+    /* A spellbook made on this device before it was saved to the sheet. */
+    if (local && p && !(remote && remote.at) && hasContent(local)) {
+      if (!local.at) { local.at = nowIso(); writeLocal(studentId, local); }
+      mirror(studentId, local);
+    }
+    local = local || blank();
+    if (!local.choice) local.choice = {};
+    if (!local.custom) local.custom = {};
+    return local;
+  }
+  function save(studentId, obj) {
+    obj = obj || blank();
+    var old = readLocal(studentId) || {};
+    if (obj.prev === undefined && old.prev) obj.prev = old.prev;
+    if (obj.prev === null) delete obj.prev;
+    if (obj.share === undefined && old.share != null) { obj.share = old.share; obj.shareAt = old.shareAt; }
+    obj.at = nowIso();
+    writeLocal(studentId, obj);
+    mirror(studentId, obj);
+  }
+  /* The template share (%) of the student's latest complete Workshop design. */
+  function setShare(studentId, pct) {
+    pct = Number(pct); if (!pct) return;
+    var at = nowIso(), obj = readLocal(studentId) || blank();
+    obj.share = pct; obj.shareAt = at;
+    writeLocal(studentId, obj);
+    try { localStorage.setItem(shareKey(studentId), String(pct)); } catch (e) {}
+    var p = hostP(studentId);
+    if (p) {
+      if (!p.spellbook) { p.spellbook = copy(obj); if (p.spellbook.prev) delete p.spellbook.prev.prev; }
+      p.spellbook.share = pct; p.spellbook.shareAt = at;
+      try { if (global.PCHost.syncSoon) global.PCHost.syncSoon(); } catch (e) {}
+    }
+  }
+  function share(studentId) {
+    var my = load(studentId), legacy = null;
+    try { legacy = Number(localStorage.getItem(shareKey(studentId))) || null; } catch (e) {}
+    var v = Number(my.share) || legacy;
+    var p = hostP(studentId);
+    if (v && p && !(p.spellbook && p.spellbook.share)) setShare(studentId, v);
+    return v || null;
+  }
+  /* Which spellbook the Scriptorium is using, in words for the student. */
+  function inUse(studentId) {
+    var my = load(studentId), custom = Object.keys(my.custom || {}).filter(function (k) { return String(my.custom[k] || '').trim(); }).length;
+    var chosen = Object.keys(my.choice || {}).length;
+    var d = { kind: 'standard', name: my.fromLabName || '', edits: custom, prev: !!my.prev, share: my.share || null };
+    if (my.fromLab) d.kind = my.edited ? 'lab-edited' : 'lab';
+    else if (custom || chosen) d.kind = 'own';
+    d.text = d.kind === 'lab' ? 'The Scriptorium is using your Workshop design' + (d.name ? ' "' + d.name + '"' : '') + ', copied into My Spellbook.'
+      : d.kind === 'lab-edited' ? 'The Scriptorium is using My Spellbook: your Workshop design' + (d.name ? ' "' + d.name + '"' : '') + ', with your later edits in My Spellbook.'
+      : d.kind === 'own' ? 'The Scriptorium is using My Spellbook: the frames you chose' + (custom ? ' and edited (' + custom + ' of 4)' : '') + ' here.'
+      : 'The Scriptorium is using the standard frames in My Spellbook. Nothing has been edited yet.';
+    return d;
+  }
 
   global.Template = { switchCard: switchCard, TIERS: TIERS, PLAYBOOKS: PLAYBOOKS, SWAPS: SWAPS, FADE: FADE, LABEL: LABEL,
-    labels: labels, tokens: tokens, fill: fill, tidy: tidy, paragraphs: paragraphs, compose: compose, ratio: ratio, frameWords: frameWords, load: load, save: save, esc: esc };
+    labels: labels, tokens: tokens, fill: fill, tidy: tidy, paragraphs: paragraphs, compose: compose, ratio: ratio, frameWords: frameWords, load: load, save: save, setShare: setShare, share: share, inUse: inUse, esc: esc };
 })(window);

@@ -376,7 +376,7 @@
     var count = {}; Object.keys((S.p && S.p.review) || {}).forEach(function (id) { var it = E.Bank.item(id); if (it && it.tag) count[it.tag] = (count[it.tag] || 0) + 1; });
     return Object.keys(count).sort(function (a, b) { return count[b] - count[a]; }).slice(0, 5).map(function (t) { return (C.REMEDIATION[t] || {}).name || t; });
   }
-  function myShare() { try { var v = Number(localStorage.getItem('pc.share.' + S.p.studentId)); return v ? v / 100 : null; } catch (e) { return null; } }
+  function myShare() { try { var v = T.share ? T.share(S.p.studentId) : Number(localStorage.getItem('pc.share.' + S.p.studentId)); return v ? v / 100 : null; } catch (e) { return null; } }
   function partnerLink(tag) {
     var ps = C.partnerFor ? C.partnerFor(tag) : [];
     if (!ps.length) return '';
@@ -964,7 +964,7 @@
     var paras = T.paragraphs(tr, S.tplType), labels = T.labels(S.tplType);
     var html = '<div class="sect-h"><div><h2>My Spellbook</h2><p>The eleven keys slot into four frames. Choose an opener for each paragraph and edit it into your own words: that version follows you into the Scriptorium. Frames are scaffolding; the marks are inside the keys.</p></div><span class="pill on">' + esc(T.TIERS[tr].name) + '</span></div>';
     html += '<div class="filters">' + Object.keys(C.TYPES).map(function (k) { return '<button data-tt="' + k + '"' + (S.tplType === k ? ' class="on"' : '') + '>' + esc(C.TYPES[k].name) + '</button>'; }).join('') + '</div>';
-    if (my.fromLab) html += '<div class="card" style="padding:12px 16px;margin-bottom:14px"><p class="kicker">From the Spellbook Workshop</p><p class="tiny">Your frames below are the spellbook you built in the Workshop. Edit them here or build a new version there; the Scriptorium uses whatever is here.</p></div>';
+    html += spellbookInUseCard(my);
     html += T.switchCard(S.tplType);
     html += '<div class="card" style="padding:14px 16px;margin-bottom:14px"><p class="kicker">The eleven keys · ' + esc(typeName(S.tplType)) + '</p><ol class="bc-list">' + C.VARIABLES.map(function (v) { return '<li><b>' + esc(labels[v.key]) + '</b> — ' + esc(v.hint) + '</li>'; }).join('') + '</ol></div>';
     paras.forEach(function (pg) {
@@ -978,9 +978,30 @@
     html += '<div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" id="tpl-reset">Reset my spellbook</button><span class="tiny" style="align-self:center">The track is set in Your Trunk.</span></div>';
     $('#view-template').innerHTML = html;
     $('#view-template').querySelectorAll('[data-tt]').forEach(function (b) { b.addEventListener('click', function () { S.tplType = b.dataset.tt; paintTemplate(); }); });
-    $('#view-template').querySelectorAll('[data-tpick]').forEach(function (sel) { sel.addEventListener('change', function () { my.choice[sel.dataset.tpick] = sel.value; delete my.custom[sel.dataset.tpick]; T.save(S.p.studentId, my); paintTemplate(); }); });
-    $('#view-template').querySelectorAll('[data-tframe]').forEach(function (ta) { ta.addEventListener('input', function () { if (ta.value.trim()) my.custom[ta.dataset.tframe] = ta.value; else delete my.custom[ta.dataset.tframe]; T.save(S.p.studentId, my); }); });
-    $('#tpl-reset').addEventListener('click', function () { if (confirm('Reset your spellbook choices and edits?')) { T.save(S.p.studentId, { tier: tr, choice: {}, custom: {} }); paintTemplate(); } });
+    $('#view-template').querySelectorAll('[data-tpick]').forEach(function (sel) { sel.addEventListener('change', function () { my.choice[sel.dataset.tpick] = sel.value; delete my.custom[sel.dataset.tpick]; if (my.fromLab) my.edited = true; T.save(S.p.studentId, my); paintTemplate(); }); });
+    $('#view-template').querySelectorAll('[data-tframe]').forEach(function (ta) { ta.addEventListener('input', function () { if (ta.value.trim()) my.custom[ta.dataset.tframe] = ta.value; else delete my.custom[ta.dataset.tframe]; if (my.fromLab) my.edited = true; T.save(S.p.studentId, my); }); });
+    $('#tpl-reset').addEventListener('click', function () { if (confirm('Reset your spellbook choices and edits? You can bring them back afterwards.')) { T.save(S.p.studentId, { tier: tr, choice: {}, custom: {}, prev: spellbookSnapshot(my) }); paintTemplate(); toast('Spellbook reset to the standard frames.'); } });
+    var rs = $('#tpl-restore'); if (rs) rs.addEventListener('click', function () {
+      var back = my.prev; if (!back) return;
+      back = JSON.parse(JSON.stringify(back)); back.prev = spellbookSnapshot(my);
+      T.save(S.p.studentId, back); paintTemplate(); toast('Your earlier spellbook is back. The one it replaced is kept as the earlier version.');
+    });
+  }
+
+  /* One spellbook in the Scriptorium: say which, and what the Workshop design is to it. */
+  function spellbookSnapshot(my) {
+    var c = JSON.parse(JSON.stringify(my || {})); delete c.prev; delete c.share; delete c.shareAt; return c;
+  }
+  function spellbookInUseCard(my) {
+    var u = T.inUse ? T.inUse(S.p.studentId) : { kind: my.fromLab ? 'lab' : 'standard', text: '' };
+    var designs = (S.p.lab && S.p.lab.templatesComplete) || 0, sh = myShare();
+    var other = u.kind === 'lab' || u.kind === 'lab-edited'
+      ? 'Your Workshop design (14 lines with [slots]) is where these frames came from: it is the earlier version. Small changes: edit the frames here. Big changes: build a new version in the Workshop and press Use in the Scriptorium again, which replaces these frames.'
+      : designs ? 'You also have ' + designs + ' Workshop design' + (designs > 1 ? 's' : '') + '. ' + (designs > 1 ? 'They are' : 'It is') + ' not in the Scriptorium. In the Workshop, Use in the Scriptorium replaces the four frames below with that design.'
+      : 'The Spellbook Workshop builds a fuller spellbook (14 lines). Use in the Scriptorium there replaces the four frames below.';
+    return '<div class="card" id="tpl-inuse" style="padding:12px 16px;margin-bottom:14px"><p class="kicker">The spellbook in the Scriptorium</p><p><b>' + esc(u.text) + '</b></p>' +
+      '<p class="tiny">' + esc(other) + (sh ? ' Template share for skeleton and exam essays: ' + Math.round(sh * 100) + '%.' : '') + ' Saved to your ID, so it is the same on every device.</p>' +
+      (my.prev ? '<p style="margin-top:8px"><button class="btn sm" id="tpl-restore">Bring back my earlier spellbook</button> <span class="tiny">' + esc(my.prev.fromLabName ? 'Workshop design "' + my.prev.fromLabName + '"' : 'the frames you had before') + '</span></p>' : '') + '</div>';
   }
 
   /* =====================================================================

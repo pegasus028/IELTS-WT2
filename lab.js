@@ -35,7 +35,7 @@
     if (!o) return comp;
     var m = extend({}, comp);
     ['name', 'fn', 'why', 'tip'].forEach(function (k) { if (o[k]) m[k] = o[k]; });
-    m.examples = { B2: (o.examples && o.examples.B2) || comp.examples.B2, C1: (o.examples && o.examples.C1) || comp.examples.C1 };
+    m.examples = { A2: (o.examples && (o.examples.A2 || o.examples.B2)) || comp.examples.A2, B2: (o.examples && o.examples.B2) || comp.examples.B2, C1: (o.examples && o.examples.C1) || comp.examples.C1 };
     m.base = comp;
     return m;
   }
@@ -84,7 +84,24 @@
   function mmss(sec) { sec = Math.max(0, Math.round(sec)); var m = Math.floor(sec / 60), s = sec % 60; return m + ':' + (s < 10 ? '0' : '') + s; }
   function fmtBand(b) { return (b == null || isNaN(b)) ? '—' : (Math.round(b * 2) / 2).toFixed(1); }
   function pctStr(x) { return Math.round((x || 0) * 100) + '%'; }
-  function levelInfo(id) { return L.LEVELS.filter(function (l) { return l.id === id; })[0] || L.LEVELS[1]; }
+  function levelInfo(id) { return L.LEVELS.filter(function (l) { return l.id === id; })[0] || L.LEVELS.filter(function (l) { return l.id === 'B2'; })[0] || L.LEVELS[0]; }
+  /* Which example lines a level studies: its own set if lab-content.js has
+     one (A2), otherwise its tier's (B2 or C1). The "other" set is the next
+     one up, so an A2 writer can look at the B2 lines. */
+  function exKey(comp, levelId) { var lv = levelInfo(levelId); return comp.examples && comp.examples[lv.id] ? lv.id : lv.tier; }
+  function otherExKey(key) { return key === 'C1' ? 'B2' : key === 'A2' ? 'B2' : 'C1'; }
+  /* Model answers in the prompt bank: the level's own set where one exists
+     (prompts-levels.js adds A2 and B1), otherwise the tier's. */
+  function modelTier(pr, levelId) { var lv = levelInfo(levelId); return pr && pr.vars && pr.vars[lv.id] ? lv.id : lv.tier; }
+  /* The student's level from the app (the lesson-level buttons), used as the
+     default target for a new spellbook design. */
+  function studentLevel() {
+    var v = host && host.p ? host.p.explainLevel : '';
+    if (!v) { try { v = localStorage.getItem('qm.explain.lvl'); } catch (e) {} }
+    if (v === 'A1' || v === 'A2') return 'A2';
+    if (v === 'B1' || v === 'B2') return v;
+    return host && host.tier && host.tier() === 'C1' ? 'C1' : 'B2';
+  }
   function tierOf(levelId) { return levelInfo(levelId).tier; }
   function cefrIdx(c) { return L.CEFR_ORDER.indexOf(String(c || '').toUpperCase().replace(/[^ABC12]/g, '').slice(0, 2)); }
   function typeName(t) { return (C.TYPES[t] || {}).name || t; }
@@ -197,10 +214,10 @@
 
   /* ------------------------------------------------------------- budgets */
   function frameBudget(pct) { return Math.round(L.ESSAY_WORDS * pct / 100); }
-  function compBudget(pct, compId) {
+  function compBudget(pct, compId, level) {
     var total = L.COMPONENTS.reduce(function (s, c) { return s + c.weight; }, 0);
     var t = Math.max(2, Math.round(frameBudget(pct) * COMP[compId].weight / total));
-    return { target: t, lo: Math.max(1, Math.round(t * 0.7)), hi: Math.round(t * 1.3) + 1 };
+    return { target: t, lo: Math.max(1, Math.round(t * (levelInfo(level).lineLo || 0.7))), hi: Math.round(t * 1.3) + 1 };
   }
   /* Slot occurrences in the finished template decide each variable's share. */
   function occurrences(tpl) {
@@ -213,7 +230,7 @@
     var left = Math.max(60, L.ESSAY_WORDS - fw);
     var units = 0; Object.keys(occ).forEach(function (k) { units += (L.VAR_GUIDE[k] ? L.VAR_GUIDE[k].weight : 1) * occ[k]; });
     var t = Math.max(3, Math.round(left * (L.VAR_GUIDE[key] ? L.VAR_GUIDE[key].weight : 1) / (units || 1)));
-    return { target: t, lo: Math.max(2, Math.round(t * 0.6)), hi: Math.round(t * 1.6) + 2 };
+    return { target: t, lo: Math.max(2, Math.round(t * (levelInfo(tpl.level).varLo || 0.6))), hi: Math.round(t * 1.6) + 2 };
   }
   function templateFrameWords(tpl) { return L.COMPONENTS.reduce(function (s, c) { return s + frameWords((tpl.lines[c.id] || {}).text || ''); }, 0); }
 
@@ -436,9 +453,29 @@
     if (changed) persist();
     return changed;
   }
+  /* Keep a change on this device only (marked to sync). Coaching a line or a
+     variable saves here; the class sheet gets the run on Next and on finish. */
+  function saveLocal(kind, obj) {
+    obj.updatedAt = nowIso();
+    upsert(st.data[kind === 'template' ? 'templates' : 'attempts'], obj);
+    if (global.API && global.API.url) st.data.dirty[obj.id] = kind;
+    persist();
+  }
+  /* Next: the sheet copy is refreshed at most once every few minutes during a
+     run or a design (and always on finish, Save and leave, Save draft). */
+  var PUSH_GAP = 4 * 60000;
+  function saveOnNext(kind, obj, holder) {
+    if (!holder.pushedAt || Date.now() - holder.pushedAt > PUSH_GAP) { holder.pushedAt = Date.now(); return saveItem(kind, obj); }
+    saveLocal(kind, obj); return Promise.resolve(false);
+  }
   function saveItem(kind, obj) {
     obj.updatedAt = nowIso();
-    if (kind === 'template' && obj.pct) { try { localStorage.setItem('pc.share.' + st.sid, String(obj.pct)); } catch (e) {} }
+    /* The chosen share follows the student's latest COMPLETE design (a draft
+       does not count): Template keeps it on this device and on her ID. */
+    if (kind === 'template' && obj.pct && obj.status === 'complete') {
+      if (T.setShare) T.setShare(st.sid, obj.pct);
+      else { try { localStorage.setItem('pc.share.' + st.sid, String(obj.pct)); } catch (e) {} }
+    }
     upsert(st.data[kind === 'template' ? 'templates' : 'attempts'], obj);
     /* No class server configured (demo mode): this device is the store. */
     if (!(global.API && global.API.url)) { persist(); return Promise.resolve(true); }
@@ -484,6 +521,46 @@
       if (!j || !j.ok) throw new Error((j && j.error) || 'Server error');
       return j;
     }, function (e) { clearTimeout(timer); throw e; });
+  }
+  /* ------------------------------------------------- AI checks left today
+     Lab.gs allows LAB_STUDENT_DAILY (250) AI calls per student per day
+     (Bangkok time) and does not report the count, so the Lab counts its own
+     coach and rating calls on this device and labels the figure an estimate.
+     If a reply ever carries quota figures they are used instead.        */
+  var AIQ_MAX = 250;
+  function bkkDay() { return new Date(Date.now() + 7 * 3600000).toISOString().slice(0, 10); }
+  function aiqKey() { return 'pc.lab.aiq.' + String(st.sid || 'anon').toLowerCase(); }
+  function aiqRead() {
+    try { var o = JSON.parse(localStorage.getItem(aiqKey())); if (o && o.day === bkkDay()) return o; } catch (e) {}
+    return { day: bkkDay(), n: 0 };
+  }
+  function aiqWrite(o) { try { localStorage.setItem(aiqKey(), JSON.stringify(o)); } catch (e) {} }
+  function aiqLeft() { var o = aiqRead(); return { left: Math.max(0, (o.max || AIQ_MAX) - (o.n || 0)), exact: !!o.exact, out: !!o.out }; }
+  function aiqText() { var q = aiqLeft(); return q.out ? 'No AI checks left today' : 'AI checks left today: ' + q.left + (q.exact ? '' : ' (estimate)'); }
+  function aiqPaint() { $$('.lab-aiq').forEach(function (x) { x.textContent = aiqText(); x.classList.toggle('bad', aiqLeft().out); }); }
+  function aiqHtml(cls) { return st.ai === false ? '' : '<span class="lab-aiq ' + (cls || 'tiny') + (aiqLeft().out ? ' bad' : '') + '" title="Lab.gs allows ' + AIQ_MAX + ' AI checks a day. Quick checks are free.">' + esc(aiqText()) + '</span>'; }
+  function aiqNote(res) {
+    var o = aiqRead(), q = res && (res.quota || res.ai_quota);
+    if (q && (q.used != null || q.remaining != null)) {
+      o.max = Number(q.limit) || AIQ_MAX;
+      o.n = q.used != null ? Number(q.used) : o.max - Number(q.remaining);
+      o.exact = true;
+    } else o.n = (o.n || 0) + 1;
+    /* Only the server's own figures (or its refusal) switch the coach off;
+       this device's count is an estimate and never blocks a request.   */
+    o.out = o.exact ? o.n >= (o.max || AIQ_MAX) : !!o.out;
+    aiqWrite(o); aiqPaint();
+  }
+  function aiqSpent() { var o = aiqRead(); o.n = o.max || AIQ_MAX; o.out = true; aiqWrite(o); aiqPaint(); }
+  /* An AI call (lab.coach or lab.rate) that keeps the count. */
+  function aiCall(action, payload, ms) {
+    if (st.ai === false) return Promise.reject(new Error('offline'));
+    return server(action, payload, ms).then(function (res) { aiqNote(res); return res; }, function (e) {
+      var msg = String(e && e.message || e);
+      if (/used (today's|today’s) AI|has used today/i.test(msg)) aiqSpent();
+      else if (!/^offline$|Not signed in/i.test(msg)) aiqNote(null);
+      throw e;
+    });
   }
   function checkStatus() {
     if (!online()) { st.ai = false; st.aiNote = 'Offline: quick checks only. Your work is kept on this device.'; return Promise.resolve(); }
@@ -537,8 +614,8 @@
   }
 
   /* One template line. */
-  function quickFrame(comp, rawText, pct) {
-    var conv = toTokens(rawText), text = conv.text.trim(), res = { text: text, blocking: [], issues: [], errors: [], budget: compBudget(pct, comp.id) };
+  function quickFrame(comp, rawText, pct, level) {
+    var conv = toTokens(rawText), text = conv.text.trim(), res = { text: text, blocking: [], issues: [], errors: [], budget: compBudget(pct, comp.id, level) };
     if (!text) { res.blocking.push('Write the line first.'); return res; }
     conv.unknown.forEach(function (u) { res.blocking.push('[' + u + '] is not a slot name. Use the slot buttons above the box.'); });
     var toks = tokensIn(text);
@@ -552,8 +629,8 @@
     res.budget.ok = res.words >= res.budget.lo && res.words <= res.budget.hi;
     if (res.words > res.budget.hi) res.issues.push({ kind: 'warn', msg: res.words + ' template words: over the ' + res.budget.lo + '–' + res.budget.hi + ' budget for a ' + pct + '% template. Trim words that carry no meaning.' });
     if (res.words < res.budget.lo) res.issues.push({ kind: 'tip', msg: res.words + ' template words: under the ' + res.budget.lo + '–' + res.budget.hi + ' budget. Fine if the line still does its job.' });
-    var ex = comp.examples.B2.concat(comp.examples.C1), worst = 0, worstEx = '';
-    if (comp.base) ex = ex.concat(comp.base.examples.B2, comp.base.examples.C1);
+    var ex = comp.examples.B2.concat(comp.examples.C1, comp.examples.A2 || []), worst = 0, worstEx = '';
+    if (comp.base) ex = ex.concat(comp.base.examples.B2, comp.base.examples.C1, comp.base.examples.A2 || []);
     ex.forEach(function (e) {
       var a = text.replace(/\{\w+\}/g, ' slotx '), b = e.replace(/\{\w+\}/g, ' slotx ');
       var run = longestRun(a, b), tri = trigramOverlap(a, b), score = Math.max(run >= 5 ? 1 : 0, tri);
@@ -579,12 +656,12 @@
     res.words = words(value);
     res.budget.ok = res.words >= res.budget.lo && res.words <= res.budget.hi;
     if (res.words > res.budget.hi) res.issues.push({ kind: 'warn', msg: res.words + ' words: longer than the ' + res.budget.lo + '–' + res.budget.hi + ' this slot needs. One idea, said precisely.' });
-    if (res.words < res.budget.lo) res.issues.push({ kind: 'warn', msg: res.words + ' words: shorter than the ' + res.budget.lo + '–' + res.budget.hi + ' this slot needs. Your ideas carry the essay: extend it.' });
+    if (res.words < res.budget.lo) res.issues.push({ kind: 'warn', msg: res.words + ' words: shorter than the ' + res.budget.lo + '–' + res.budget.hi + ' this slot needs. Your ideas carry the essay: extend it.' + (levelInfo(ctx.level).shortTip ? ' ' + levelInfo(ctx.level).shortTip : '') });
     var pr = ctx.prompt, run = longestRun(value, pr.text);
     res.copied = run >= 5 || (run >= 4 && run >= res.words * 0.6);
     if (res.copied) res.issues.push({ kind: 'warn', msg: 'Copied from the prompt (' + run + ' words in a row). Examiners discount copied wording: say it in your own words.' });
-    var model = ((pr.vars || {})[ctx.tier] || {})[key];
-    if (model && similarity(value, model.ok) > 0.85) { res.copied = true; res.issues.push({ kind: 'warn', msg: 'This is the model answer from the bank. Use your own idea.' }); }
+    var models = [ctx.mtier || ctx.tier, ctx.tier].map(function (t) { return ((pr.vars || {})[t] || {})[key]; });
+    if (models.some(function (m) { return m && similarity(value, m.ok) > 0.85; })) { res.copied = true; res.issues.push({ kind: 'warn', msg: 'This is the model answer from the bank. Use your own idea.' }); }
     if (key === 'core' && pr.keyNouns && pr.keyNouns.length) {
       var low = value.toLowerCase(), hit = W && W.mentions ? W.mentions(value, pr.keyNouns) : pr.keyNouns.some(function (n) { return low.indexOf(String(n).toLowerCase()) >= 0; });
       if (!hit) res.issues.push({ kind: 'warn', msg: 'None of the prompt\'s key words (' + pr.keyNouns.slice(0, 4).join(', ') + ') is here. Keep the Core Topic anchored to the prompt, or the essay may drift off topic.' });
@@ -612,7 +689,7 @@
     var fn = ai && ai.fn ? ai.fn.verdict : null;
     if (fn === 'meets') rows.push(['Does its job', P.functionMet]);
     else if (fn === 'partly') rows.push(['Partly does its job', P.functionPartly]);
-    else if (!ai) rows.push(['Job not checked (offline)', q.issues.some(function (i) { return i.kind === 'warn'; }) ? 0 : P.functionPartly]);
+    else if (!ai) rows.push([opts.quick ? 'Job not checked (quick check)' : 'Job not checked (offline)', q.issues.some(function (i) { return i.kind === 'warn'; }) ? 0 : P.functionPartly]);
     else rows.push(['Does not do its job yet', 0]);
     var errs = mergedErrors(q, ai).length;
     if (ai) rows.push([errs === 0 ? 'No errors' : errs === 1 ? 'One error' : errs + ' errors', errs === 0 ? P.errorFree : errs === 1 ? P.oneError : 0]);
@@ -705,11 +782,11 @@
     var aiTxt = st.ai == null ? 'Checking the coach…' : st.aiNote;
     root.innerHTML =
       '<div class="lab">' +
-      '<div class="sect-h"><div><h2>Spellbook Workshop</h2><p>Build your own Task 2 spellbook (your template) in your own words, one line at a time, then test it on real prompts. Every line and every variable is coached, scored and saved to your ID.</p></div></div>' +
+      '<div class="sect-h"><div><h2>Spellbook Workshop</h2><p>Build your own Task 2 spellbook (your template) in your own words, one line at a time, then test it on real prompts. Every line and every variable is checked and scored. The coach reads the first one for you, and any other one when you press Coach this line. Your work is saved to your ID.</p></div></div>' +
       '<div class="lab-top"><div class="tabs lab-tabs">' +
         [['studio', 'Design'], ['assembly', 'Cast it on a prompt'], ['score', 'Spellbook record']].concat(global.LabExamples ? [['examples', 'Examples']] : []).map(function (t) { return '<button class="tab' + (st.tab === t[0] ? ' on' : '') + '" data-ltab="' + t[0] + '">' + t[1] + '</button>'; }).join('') +
       '</div><div class="lab-chips"><div class="chip lab-chipwrap"><b id="lab-chip-pts" class="lab-num">' + (s.points || 0) + '</b><span>Lab points</span></div><div class="chip"><b id="lab-chip-rank">' + esc(r.rank.name) + '</b><span>Lab rank</span></div></div></div>' +
-      '<p class="lab-ai"><span class="pill' + aiCls + '">' + esc(aiTxt) + '</span>' + (Object.keys(st.data.dirty || {}).length ? ' <span class="pill gold">' + Object.keys(st.data.dirty).length + ' waiting to sync</span>' : '') + '</p>' +
+      '<p class="lab-ai"><span class="pill' + aiCls + '">' + esc(aiTxt) + '</span> ' + aiqHtml('pill') + (Object.keys(st.data.dirty || {}).length ? ' <span class="pill gold">' + Object.keys(st.data.dirty).length + ' waiting to sync</span>' : '') + '</p>' +
       '<div id="lab-body"></div></div>';
     $$('[data-ltab]').forEach(function (b) {
       b.addEventListener('click', function () {
@@ -750,22 +827,24 @@
   function paintStudio(el) {
     var list = st.data.templates.slice().sort(function (a, b) { return String(b.updatedAt).localeCompare(String(a.updatedAt)); });
     var html = '<div class="lab-hero card"><div><p class="kicker">Design</p><h3>Your spellbook, in your words</h3>' +
-      '<ol class="lab-steps"><li><b>Choose the share</b> of the essay your spellbook will carry: 60, 50, 40 or 30%.</li><li><b>Choose your target</b> level and band.</li><li><b>Rewrite 14 lines</b>, each with a job to do. Study the examples, then write your own, and the coach checks each one. A <b>test drive</b> drops every line into a real essay on the Bangkok floods, so you can see your spellbook at work.</li><li><b>Save it</b>, then cast it on a prompt.</li></ol></div>' +
+      '<ol class="lab-steps"><li><b>Choose the share</b> of the essay your spellbook will carry: 60, 50, 40 or 30%.</li><li><b>Choose your target</b> level and band.</li><li><b>Rewrite 14 lines</b>, each with a job to do. Study the examples, then write your own. The coach reads line 1; after that, ask for it on any line. A <b>test drive</b> drops every line into a real essay on the Bangkok floods, so you can see your spellbook at work.</li><li><b>Save it</b>, then cast it on a prompt.</li></ol></div>' +
       '<button class="btn primary" id="lab-new">New spellbook design →</button></div>';
-    if (!list.length) html += '<p class="tiny lab-empty">No spellbook designs yet. Your first one takes about 30–40 minutes: fourteen short lines, each coached.</p>';
+    var usedId = inUseId();
+    if (list.length) html += '<div class="card lab-pad lab-inuse"><p class="kicker">The spellbook in the Scriptorium</p><p id="lab-inuse-t"><b>' + esc(inUseText()) + '</b></p><p class="tiny">My Spellbook holds what the Scriptorium uses (four frames). A design here (14 lines) reaches the Scriptorium only when you press <b>Use in the Scriptorium</b>: that replaces the four frames with the design\'s 14 lines. What it replaces is kept in My Spellbook as your earlier spellbook, and you can bring it back.</p></div>';
+    if (!list.length) html += '<p class="tiny lab-empty">No spellbook designs yet. Your first one takes about 30–40 minutes: fourteen short lines. The coach reads line 1 for you, and any other line when you ask.</p>';
     else html += '<div class="lab-grid">' + list.map(function (t) {
       var lv = levelInfo(t.level), done = tplDone(t), score = tplScore(t);
       return '<div class="card lab-tcard' + (t.status === 'complete' ? ' done' : '') + '">' +
         '<div class="lab-tcard-h"><b>' + esc(t.name) + '</b><span class="pill">v' + (t.version || 1) + '</span></div>' +
-        '<div class="lab-pills"><span class="pill gold">' + t.pct + '% template</span><span class="pill">' + esc(lv.name) + '</span><span class="pill on">' + esc(bpTypeShort(t.type)) + '</span>' +
+        '<div class="lab-pills"><span class="pill gold">' + t.pct + '% template</span><span class="pill">' + esc(lv.name) + '</span><span class="pill on">' + esc(bpTypeShort(t.type)) + '</span>' + (t.id === usedId ? '<span class="pill good">in the Scriptorium</span>' : '') +
         (t.status === 'complete' ? '<span class="pill good">Complete · ' + Math.round(score / (L.COMPONENTS.length * L.POINTS.lineMax) * 100) + '% spellbook design score</span>' : '<span class="pill">Draft · ' + done + '/14 lines</span>') + '</div>' +
         '<p class="tiny">' + templateFrameWords(t) + ' template words · updated ' + esc(fmtDate(t.updatedAt)) + '</p>' +
         '<div class="lab-acts">' + (t.status === 'complete'
-          ? '<button class="btn sm" data-topen="' + t.id + '">View</button><button class="btn sm" data-tver="' + t.id + '">New version</button><button class="btn sm" data-tcopy="' + t.id + '" title="Start a spellbook design at another share from these lines">Copy at another share</button><button class="btn sm" data-tuse="' + t.id + '">Use on a prompt →</button><button class="btn sm ghost" data-twriter="' + t.id + '">Use in the Scriptorium</button>'
+          ? '<button class="btn sm" data-topen="' + t.id + '">View</button><button class="btn sm" data-tver="' + t.id + '">New version</button><button class="btn sm" data-tcopy="' + t.id + '" title="Start a spellbook design at another share from these lines">Copy at another share</button><button class="btn sm" data-tuse="' + t.id + '">Use on a prompt →</button><button class="btn sm ghost" data-twriter="' + t.id + '" title="' + esc(REPLACES) + '">Use in the Scriptorium</button>'
           : '<button class="btn sm primary" data-tcont="' + t.id + '">Continue</button><button class="btn sm ghost" data-tdel="' + t.id + '">Delete draft</button>') + '</div></div>';
     }).join('') + '</div>';
     el.innerHTML = html;
-    $('#lab-new').addEventListener('click', function () { st.setup = { pct: 40, level: host.tier ? (host.tier() === 'C1' ? 'C1' : 'B2') : 'B2', type: '', name: '' }; st.view = 'setup'; paintBody(); scrollTop(); });
+    $('#lab-new').addEventListener('click', function () { var lv0 = studentLevel(); st.setup = { pct: levelInfo(lv0).pct || 40, level: lv0, type: '', name: '' }; st.view = 'setup'; paintBody(); scrollTop(); });
     $$('[data-tcopy]').forEach(function (b) { b.addEventListener('click', function () {
       var src = getTpl(b.dataset.tcopy), next = [60, 50, 40, 30].filter(function (x) { return x < src.pct; })[0] || [60, 50, 40, 30].filter(function (x) { return x !== src.pct; })[0];
       st.setup = { pct: next, level: src.level, type: src.type || '', name: '', from: src.id }; st.view = 'setup'; paintBody(); scrollTop();
@@ -774,7 +853,7 @@
     $$('[data-topen]').forEach(function (b) { b.addEventListener('click', function () { var tp = getTpl(b.dataset.topen); st.drive.type = tp.type || st.drive.type; st.build = { tpl: tp, idx: 0, readOnly: true }; st.view = 'summary'; paintBody(); scrollTop(); }); });
     $$('[data-tver]').forEach(function (b) { b.addEventListener('click', function () { newVersion(getTpl(b.dataset.tver)); }); });
     $$('[data-tuse]').forEach(function (b) { b.addEventListener('click', function () { st.asmTemplate = b.dataset.tuse; st.filters.type = getTpl(b.dataset.tuse).type || 'all'; st.tab = 'assembly'; st.run = null; paint(); scrollTop(); }); });
-    $$('[data-twriter]').forEach(function (b) { b.addEventListener('click', function () { useInWriter(getTpl(b.dataset.twriter)); }); });
+    $$('[data-twriter]').forEach(function (b) { b.addEventListener('click', function () { useInWriter(getTpl(b.dataset.twriter)); paintStudio(el); }); });
     $$('[data-tdel]').forEach(function (b) { b.addEventListener('click', function () {
       if (!confirm('Delete this draft spellbook design? This cannot be undone.')) return;
       st.data.templates = st.data.templates.filter(function (t) { return t.id !== b.dataset.tdel; });
@@ -814,7 +893,7 @@
     el.innerHTML = html;
     $('#lab-cancel').addEventListener('click', function () { st.view = 'home'; paintBody(); });
     $$('input[name=lab-pct]').forEach(function (r) { r.addEventListener('change', function () { s.pct = +r.value; s.name = ''; paintSetup(el); }); });
-    $$('[data-lv]').forEach(function (b) { b.addEventListener('click', function () { s.level = b.dataset.lv; if (!advanced(s.level)) s.type = ''; s.name = ''; paintSetup(el); }); });
+    $$('[data-lv]').forEach(function (b) { b.addEventListener('click', function () { s.level = b.dataset.lv; if (!advanced(s.level)) s.type = ''; if (levelInfo(s.level).pct && !src) s.pct = levelInfo(s.level).pct; s.name = ''; paintSetup(el); }); });
     $$('[data-bt]').forEach(function (b) { b.addEventListener('click', function () { s.type = b.dataset.bt; s.name = ''; paintSetup(el); }); });
     $('#lab-name').addEventListener('input', function () { s.name = this.value; });
     $('#lab-startbuild').addEventListener('click', function () {
@@ -852,16 +931,26 @@
     L.PARAS.forEach(function (pg) {
       custom[pg.key] = L.COMPONENTS.filter(function (c) { return c.para === pg.key; }).map(function (c) { return (t.lines[c.id] || {}).text || ''; }).join(' ').trim();
     });
-    T.save(st.sid, { tier: tierOf(t.level), choice: {}, custom: custom, fromLab: t.id });
+    /* What it replaces is kept as `prev`, so My Spellbook can bring it back. */
+    var before = T.load(st.sid), had = T.inUse ? T.inUse(st.sid) : { kind: 'standard' }, keep;
+    if (had.kind === 'standard' || (before.fromLab === t.id && !before.edited)) keep = undefined;
+    else { keep = JSON.parse(JSON.stringify(before)); delete keep.prev; delete keep.share; delete keep.shareAt; }
+    var label = t.name + ' v' + (t.version || 1);
+    T.save(st.sid, { tier: tierOf(t.level), choice: {}, custom: custom, fromLab: t.id, fromLabName: label, fromLabAt: nowIso(), prev: keep });
     if (host.p) host.p.tier = tierOf(t.level);
-    toast('"' + t.name + '" is now your spellbook in the Scriptorium (' + tierOf(t.level) + ' track).');
+    var what = had.kind === 'standard' ? 'the standard frames' : had.kind === 'own' ? 'the frames you chose and edited in My Spellbook' : before.fromLab === t.id && !before.edited ? 'the same design (no change)' : had.kind === 'lab-edited' ? 'your edited copy of "' + had.name + '"' : 'your earlier spellbook' + (had.name ? ' ("' + had.name + '")' : '');
+    toast('"' + label + '" is now the spellbook in the Scriptorium. It replaced ' + what + (keep ? '; My Spellbook can bring that back.' : '.'));
   }
+  function inUseText() { return T.inUse ? T.inUse(st.sid).text : ''; }
+  function inUseId() { try { return T.load(st.sid).fromLab || ''; } catch (e) { return ''; } }
+  var REPLACES = 'Use in the Scriptorium replaces the four frames in My Spellbook with this design\'s 14 lines. What it replaces is kept there as your earlier spellbook, and you can bring it back.';
 
   /* ------------------------------------------------------------- builder */
   function paintBuild(el) {
-    var b = st.build, t = b.tpl, comp = compFor(t.type, L.COMPONENTS[b.idx]), ln = t.lines[comp.id] || {}, lv = levelInfo(t.level), tier = lv.tier;
+    var b = st.build, t = b.tpl, comp = compFor(t.type, L.COMPONENTS[b.idx]), ln = t.lines[comp.id] || {}, lv = levelInfo(t.level), exk = exKey(comp, t.level), exo = otherExKey(exk);
     var meanings = slotMeanings(t.type).filter(function (m) { return comp.slots.indexOf(m.key) >= 0; });
-    var budget = compBudget(t.pct, comp.id), para = L.PARAS.filter(function (p) { return p.key === comp.para; })[0];
+    var first = b.idx === 0, aiOn = st.ai !== false, aiOut = aiqLeft().out;
+    var budget = compBudget(t.pct, comp.id, t.level), para = L.PARAS.filter(function (p) { return p.key === comp.para; })[0];
     var draft = ln.draft != null ? ln.draft : toLabels(ln.text || '');
     var html = '<div class="lab-back"><button class="btn sm ghost" id="lab-bhome">← Spellbook designs</button><span class="tiny">' + esc(t.name) + ' · v' + (t.version || 1) + ' · ' + esc(bpTypeShort(t.type)) + ' · ' + t.pct + '% · ' + esc(lv.name) + '</span></div>';
     html += '<div class="lab-rail">' + L.PARAS.map(function (pg) {
@@ -876,9 +965,9 @@
       '<p class="lab-fn">' + esc(comp.fn) + '</p>' +
       (meanings.length ? '<p class="lab-typenote">' + esc(bpTypeInfo(t.type) ? bpTypeInfo(t.type).name : '') + ' spellbook design: ' + meanings.map(function (m) { return '<b>[' + esc(m.generic) + ']</b> = ' + esc(m.meaning.toLowerCase()); }).join(' · ') + '</p>' : '') +
       '<div class="lab-why"><div class="lab-pills">' + comp.crit.map(function (k) { return '<span class="pill on">' + k + '</span>'; }).join('') + '<span class="pill gold">≈ ' + budget.target + ' template words (' + budget.lo + '–' + budget.hi + ')</span></div><p>' + esc(comp.why) + '</p><p class="tiny"><b>Watch out:</b> ' + esc(comp.tip) + '</p></div>' +
-      '<div class="lab-ex"><div class="lab-ex-h"><b>Study these, then write your own</b><button class="linky" id="lab-othertier">' + (st.showOtherTier ? 'Hide' : 'Show') + ' the ' + (tier === 'C1' ? 'B2' : 'C1') + ' versions</button></div>' +
-        comp.examples[tier].map(function (e) { return '<div class="lab-exrow">' + slotChips(e) + '</div>'; }).join('') +
-        (st.showOtherTier ? '<p class="kicker" style="margin-top:8px">' + (tier === 'C1' ? 'B2' : 'C1') + '</p>' + comp.examples[tier === 'C1' ? 'B2' : 'C1'].map(function (e) { return '<div class="lab-exrow alt">' + slotChips(e) + '</div>'; }).join('') : '') +
+      '<div class="lab-ex"><div class="lab-ex-h"><b>Study these, then write your own</b><button class="linky" id="lab-othertier">' + (st.showOtherTier ? 'Hide' : 'Show') + ' the ' + exo + ' versions</button></div>' +
+        comp.examples[exk].map(function (e) { return '<div class="lab-exrow">' + slotChips(e) + '</div>'; }).join('') +
+        (st.showOtherTier ? '<p class="kicker" style="margin-top:8px">' + exo + '</p>' + comp.examples[exo].map(function (e) { return '<div class="lab-exrow alt">' + slotChips(e) + '</div>'; }).join('') : '') +
       '</div>' +
       '<div class="lab-write"><div class="lab-slotbtns"><span class="tiny">Insert:</span>' + comp.slots.map(function (k) { var mm = meanings.filter(function (m) { return m.key === k; })[0]; return '<button class="lab-slotbtn" data-ins="' + k + '"' + (mm ? ' title="' + esc(mm.meaning) + '"' : '') + '>[' + esc(L.SLOT_LABEL[k]) + ']' + (mm ? ' <span class="tiny">' + esc(mm.meaning.toLowerCase()) + '</span>' : '') + '</button>'; }).join('') + '</div>' +
         '<label class="sr" for="lab-line">Your line</label><textarea id="lab-line" rows="3" spellcheck="true" placeholder="Write the line in your own words and include ' + comp.slots.map(function (k) { return '[' + L.SLOT_LABEL[k] + ']'; }).join(' and ') + '">' + esc(draft) + '</textarea>' +
@@ -886,12 +975,15 @@
         '<div class="lab-preview" id="lab-preview"></div>' +
       '</div>' +
       (driveOk() ? '<div id="lab-drive"></div>' : '') +
-      '<div class="lab-acts"><button class="btn primary" id="lab-coach"' + (b.busy ? ' disabled' : '') + '>' + (ln.tries ? 'Coach me again' : 'Coach me') + '</button><span class="tiny" id="lab-tries">' + (ln.tries ? 'Try ' + (ln.tries + 1) + ' · best so far ' + (ln.bestPts || 0) + ' pts' : '') + '</span></div>' +
+      '<div class="lab-acts"><button class="btn primary" id="lab-coach"' + (b.busy ? ' disabled' : '') + '>' + (first ? (ln.tries ? 'Coach me again' : 'Coach me') : (ln.tries ? 'Quick check again' : 'Quick check')) + '</button>' +
+        (!first && aiOn ? '<button class="btn" id="lab-coachai"' + (b.busy || aiOut ? ' disabled' : '') + '>Coach this line</button>' : '') +
+        '<span class="tiny" id="lab-tries">' + (ln.tries ? 'Try ' + (ln.tries + 1) + ' · best so far ' + (ln.bestPts || 0) + ' pts' : '') + '</span>' + aiqHtml() + '</div>' +
+      (!first && aiOn ? '<p class="tiny lab-coachnote">' + COACH_NOTE + '</p>' : '') +
       '<div id="lab-fb">' + (b.fb ? renderFeedback(b.fb, { kind: 'frame' }) : (ln.last ? '<p class="kicker">Last coaching</p>' + renderFeedback(ln.last, { kind: 'frame', stored: true }) : '')) + '</div>' +
     '</div>';
     html += '<div class="lab-nav"><button class="btn" id="lab-prev"' + (b.idx === 0 ? ' disabled' : '') + '>← Previous line</button><button class="btn ghost" id="lab-savedraft">Save draft</button>' +
-      (b.idx < L.COMPONENTS.length - 1 ? '<button class="btn primary" id="lab-next"' + (ln.last ? '' : ' disabled title="Get coaching on this line first"') + '>Next line →</button>'
-        : '<button class="btn primary" id="lab-finishbp"' + (tplDone(t) === L.COMPONENTS.length ? '' : ' disabled title="Every line needs coaching first"') + '>Review the spellbook design →</button>') + '</div>';
+      (b.idx < L.COMPONENTS.length - 1 ? '<button class="btn primary" id="lab-next"' + (ln.last ? '' : ' title="Runs the quick check on this line, then moves on"') + '>Next line →</button>'
+        : '<button class="btn primary" id="lab-finishbp"' + (tplDone(t) === L.COMPONENTS.length ? '' : ' title="Runs the quick check on this line; every line needs a check"') + '>Review the spellbook design →</button>') + '</div>';
     el.innerHTML = html;
 
     var ta = $('#lab-line');
@@ -909,13 +1001,27 @@
     ta.addEventListener('input', live); live();
     $$('[data-ins]').forEach(function (btn) { btn.addEventListener('click', function () { insertAtCursor(ta, '[' + L.SLOT_LABEL[btn.dataset.ins] + ']'); live(); }); });
     $('#lab-othertier').addEventListener('click', function () { st.showOtherTier = !st.showOtherTier; paintBuild(el); });
-    $('#lab-bhome').addEventListener('click', function () { keepDraft(); st.view = 'home'; st.build = null; paintBody(); });
+    $('#lab-bhome').addEventListener('click', function () { keepDraft(); saveItem('template', t); st.view = 'home'; st.build = null; paintBody(); });
     $$('[data-go]').forEach(function (d) { d.addEventListener('click', function () { keepDraft(); b.idx = +d.dataset.go; b.fb = null; paintBuild(el); }); });
     $('#lab-prev').addEventListener('click', function () { keepDraft(); b.idx--; b.fb = null; paintBuild(el); scrollTop(); });
-    var nx = $('#lab-next'); if (nx) nx.addEventListener('click', function () { keepDraft(); b.idx++; b.fb = null; paintBuild(el); scrollTop(); });
-    var fin = $('#lab-finishbp'); if (fin) fin.addEventListener('click', function () { keepDraft(); st.view = 'summary'; paintBody(); scrollTop(); });
+    /* Next and Review: a line not checked in its current wording gets the
+       quick check first (free); it moves on unless the check finds a blocker. */
+    function checkedNow() { var l = t.lines[comp.id]; return !!(l && l.last && l.text && l.text === toTokens(ta.value).text.trim()); }
+    var nx = $('#lab-next'); if (nx) nx.addEventListener('click', function () {
+      if (b.busy) return;
+      keepDraft(); if (!checkedNow() && !coachLine('quick', true)) return;
+      b.idx++; b.fb = null; saveOnNext('template', t, b); paintBuild(el); scrollTop();
+    });
+    var fin = $('#lab-finishbp'); if (fin) fin.addEventListener('click', function () {
+      if (b.busy) return;
+      keepDraft(); if (!checkedNow() && !coachLine('quick', true)) return;
+      var gap = L.COMPONENTS.filter(function (c) { var l = t.lines[c.id]; return !(l && l.text && l.last); })[0];
+      if (gap) { toast('Line ' + gap.n + ' still needs a check.'); persist(); openBuild(t, gap.n - 1); return; }
+      saveOnNext('template', t, b); st.view = 'summary'; paintBody(); scrollTop();
+    });
     $('#lab-savedraft').addEventListener('click', function () { keepDraft(); saveItem('template', t).then(function (ok) { toast(savedMsg(ok, 'Draft saved')); }); });
-    $('#lab-coach').addEventListener('click', function () { coachLine(); });
+    $('#lab-coach').addEventListener('click', function () { coachLine(first ? 'auto' : 'quick'); });
+    var cai = $('#lab-coachai'); if (cai) cai.addEventListener('click', function () { coachLine('ai'); });
     function keepDraft() { ln.draft = ta.value; t.lines[comp.id] = ln; persist(); }
   }
   function insertAtCursor(ta, txt) {
@@ -927,13 +1033,23 @@
     var pos = (pre + txt).length; ta.focus(); try { ta.setSelectionRange(pos, pos); } catch (err) {}
   }
 
-  function coachLine() {
+  var COACH_NOTE = 'The first one is always coached. After that, the coach reads only when you ask: <b>Coach this line</b> uses one AI check. Quick check and Next are free.';
+  var QUICK_WHY = 'Quick check: spelling, slots, word budget and copied words. Press Coach this line when you want the coach to read the job, the level and the band.';
+  var OUT_WHY = 'No AI checks left today, so only the quick check ran. The coach is back tomorrow.';
+  /* mode 'auto': the coach on line 1, the quick check after it; 'ai': the
+     coach (one AI check); 'quick': the free quick check. `silent` records
+     the result without repainting (Next / Review). Returns false when the
+     quick check found something that must be fixed first. */
+  function coachLine(mode, silent) {
     var b = st.build, t = b.tpl, comp = compFor(t.type, L.COMPONENTS[b.idx]), ln = t.lines[comp.id] || (t.lines[comp.id] = {});
-    var raw = $('#lab-line').value, q = quickFrame(comp, raw, t.pct);
-    if (q.blocking.length) { b.fb = { blocking: q.blocking }; $('#lab-fb').innerHTML = renderFeedback(b.fb, { kind: 'frame' }); return; }
-    b.busy = true; $('#lab-coach').disabled = true; $('#lab-fb').innerHTML = coachWaiting();
+    var raw = $('#lab-line').value, q = quickFrame(comp, raw, t.pct, t.level);
+    if (q.blocking.length) { b.fb = { blocking: q.blocking }; $('#lab-fb').innerHTML = renderFeedback(b.fb, { kind: 'frame' }); try { $('#lab-fb').scrollIntoView({ block: 'nearest' }); } catch (e) {} return false; }
+    var useAi = mode === 'ai' || (mode === 'auto' && b.idx === 0), why = '';
+    if (useAi && aiqLeft().out) { useAi = false; why = OUT_WHY; }
+    if (!useAi) { applyLine(q, null, why || QUICK_WHY, silent); return true; }
+    b.busy = true; $('#lab-coach').disabled = true; var cai = $('#lab-coachai'); if (cai) cai.disabled = true; $('#lab-fb').innerHTML = coachWaiting();
     var lv = levelInfo(t.level);
-    var ask = st.ai === false ? Promise.reject(new Error('offline')) : server('lab.coach', {
+    var ask = aiCall('lab.coach', {
       kind: 'frame', level: lv.id, band: lv.band, pct: t.pct, type: t.type ? typeName(t.type) : '',
       component: { id: comp.id, name: comp.name, fn: comp.fn, why: comp.why, slots: comp.slots.map(function (k) { var mm = slotMeanings(t.type).filter(function (m) { return m.key === k; })[0]; return L.SLOT_LABEL[k] + (mm ? ' (= ' + mm.meaning + ')' : ''); }), paragraph: comp.para },
       line: toLabels(q.text), words: q.words, budget: { lo: q.budget.lo, hi: q.budget.hi },
@@ -941,26 +1057,32 @@
     }, TIMEOUT_COACH).then(function (r) { return r.coach; });
     ask.catch(function (e) { st.lastAiError = String(e && e.message || e); return null; }).then(function (ai) {
       b.busy = false;
-      var sc = scoreOf(q, ai, { level: lv.id });
-      var fb = compactFb(q, ai, sc);
-      ln.text = q.text; ln.draft = toLabels(q.text); ln.tries = (ln.tries || 0) + 1; ln.last = fb;
-      var floor = Math.max(ln.bestPts || 0, ln.base || 0);
-      var gain = Math.max(0, sc.total - floor);
-      fb.gain = gain; fb.improved = ln.tries > 1 && sc.total > (ln.bestPts || 0);
-      ln.bestPts = Math.max(ln.bestPts || 0, sc.total);
-      if (ai && ai.slotForm && comp.slots.length === 1) t.slotNotes[comp.slots[0]] = String(ai.slotForm).slice(0, 180);
-      t.lines[comp.id] = ln;
-      b.fb = fb;
-      saveItem('template', t);
-      award(gain);
-      paintBuild(body());
-      var fbEl = $('#lab-fb'); if (fbEl) try { fbEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e2) {}
+      applyLine(q, ai, ai ? '' : (aiqLeft().out ? OUT_WHY : ''), false);
     });
+    return true;
+  }
+  function applyLine(q, ai, why, silent) {
+    var b = st.build, t = b.tpl, comp = compFor(t.type, L.COMPONENTS[b.idx]), ln = t.lines[comp.id] || (t.lines[comp.id] = {}), lv = levelInfo(t.level);
+    var sc = scoreOf(q, ai, { level: lv.id, quick: !ai && !!why });
+    var fb = compactFb(q, ai, sc, why);
+    ln.text = q.text; ln.draft = toLabels(q.text); ln.tries = (ln.tries || 0) + 1; ln.last = fb;
+    var floor = Math.max(ln.bestPts || 0, ln.base || 0);
+    var gain = Math.max(0, sc.total - floor);
+    fb.gain = gain; fb.improved = ln.tries > 1 && sc.total > (ln.bestPts || 0);
+    ln.bestPts = Math.max(ln.bestPts || 0, sc.total);
+    if (ai && ai.slotForm && comp.slots.length === 1) t.slotNotes[comp.slots[0]] = String(ai.slotForm).slice(0, 180);
+    t.lines[comp.id] = ln;
+    b.fb = fb;
+    saveLocal('template', t);
+    award(gain);
+    if (silent) return;
+    paintBuild(body());
+    var fbEl = $('#lab-fb'); if (fbEl) try { fbEl.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e2) {}
   }
   function coachWaiting() { return '<div class="lab-wait"><span class="lab-spin"></span> The coach is reading your line…</div>'; }
 
   /* Keep feedback small enough to store with the template / attempt. */
-  function compactFb(q, ai, sc) {
+  function compactFb(q, ai, sc, why) {
     var errs = mergedErrors(q, ai).slice(0, 8).map(function (e) { return { original: String(e.original || '').slice(0, 80), correction: String(e.correction || '').slice(0, 80), type: e.type || '', explain: String(e.explain || '').slice(0, 160) }; });
     return {
       ai: !!ai, points: sc.total, rows: sc.rows, errors: errs.length, errorList: errs,
@@ -974,7 +1096,8 @@
       slotForm: ai && ai.slotForm ? String(ai.slotForm).slice(0, 180) : '',
       words: q.words, budget: { lo: q.budget.lo, hi: q.budget.hi, ok: q.budget.ok }, copied: !!q.copied,
       issues: (q.issues || []).map(function (i) { return { kind: i.kind, msg: String(i.msg).slice(0, 240) }; }).slice(0, 8),
-      offlineWhy: ai ? '' : (st.ai === false ? st.aiNote : 'The coach could not be reached this time, so only the quick check ran.'),
+      quick: !ai && !!why,
+      offlineWhy: ai ? '' : why ? why : (st.ai === false ? st.aiNote : 'The coach could not be reached this time, so only the quick check ran.'),
       ts: nowIso()
     };
   }
@@ -987,7 +1110,7 @@
     html += '<div class="lab-fb-top"><div class="lab-score"><b class="lab-num">' + fb.points + '</b><span>pts</span></div><div class="lab-fb-rows">' +
       (fb.rows || []).map(function (r) { return '<span class="lab-row' + (r[1] > 0 ? ' plus' : '') + '">' + esc(r[0]) + ' <i>' + (r[1] > 0 ? '+' + r[1] : '0') + '</i></span>'; }).join('') + '</div></div>';
     if (!opts.stored && fb.gain != null) html += '<p class="lab-gain">' + (fb.gain > 0 ? '+' + fb.gain + ' Lab points' + (fb.improved ? ': better than your last try' : '') : 'No new points: beat your best on this ' + (opts.kind === 'frame' ? 'line' : 'slot') + ' to earn more.') + '</p>';
-    if (!fb.ai) html += '<p class="lab-offline">Quick check only. ' + esc(fb.offlineWhy || '') + '</p>';
+    if (!fb.ai) html += '<p class="lab-offline' + (fb.quick ? ' quick' : '') + '">' + (fb.quick ? '' : 'Quick check only. ') + esc(fb.offlineWhy || '') + '</p>';
     var chips = [];
     if (fb.cefr) chips.push('<span class="pill ' + (target >= 0 && cefrIdx(fb.cefr) < target ? 'bad' : 'good') + '">CEFR ' + esc(fb.cefr) + '</span>');
     if (fb.band != null) chips.push('<span class="pill">≈ Band ' + fmtBand(fb.band) + ' language</span>');
@@ -1036,7 +1159,8 @@
       }).join('') + '</div>';
     }).join('');
     if (t.status === 'complete') {
-      html += '<div class="lab-nav"><button class="btn" id="lab-sver">New version</button><button class="btn ghost" id="lab-swriter">Use in the Scriptorium</button><button class="btn primary" id="lab-suse">Use on a prompt →</button></div>';
+      html += '<div class="card lab-pad lab-inuse"><p class="kicker">The spellbook in the Scriptorium</p><p id="lab-inuse-t"><b>' + esc(inUseText()) + '</b></p><p class="tiny">' + esc(REPLACES) + '</p></div>' +
+        '<div class="lab-nav"><button class="btn" id="lab-sver">New version</button><button class="btn ghost" id="lab-swriter" title="' + esc(REPLACES) + '">Use in the Scriptorium' + (inUseId() === t.id ? ' again' : '') + '</button><button class="btn primary" id="lab-suse">Use on a prompt →</button></div>';
     } else {
       html += '<div class="lab-nav"><button class="btn" id="lab-sback">← Back to line 14</button><button class="btn primary" id="lab-save"' + (tplDone(t) === 14 ? '' : ' disabled') + '>Save spellbook design (+' + L.POINTS.blueprint + ')</button></div>';
     }
@@ -1063,7 +1187,7 @@
     });
     var sb = $('#lab-sback'); if (sb) sb.addEventListener('click', function () { openBuild(t, 13); });
     var vr = $('#lab-sver'); if (vr) vr.addEventListener('click', function () { newVersion(t); });
-    var wr = $('#lab-swriter'); if (wr) wr.addEventListener('click', function () { useInWriter(t); });
+    var wr = $('#lab-swriter'); if (wr) wr.addEventListener('click', function () { useInWriter(t); paintSummary(el); });
     var us = $('#lab-suse'); if (us) us.addEventListener('click', function () { st.asmTemplate = t.id; st.filters.type = t.type || 'all'; st.tab = 'assembly'; st.run = null; paint(); scrollTop(); });
   }
   function kpi(v, label, sub) { return '<div class="lab-kpi"><b class="lab-num">' + v + '</b><span>' + esc(label) + '</span>' + (sub ? '<small>' + sub + '</small>' : '') + '</div>'; }
@@ -1150,7 +1274,7 @@
     };
     if (!a.rootId) a.rootId = a.id;
     if (parent) Object.keys(parent.vars || {}).forEach(function (k) { var v = parent.vars[k]; a.vars[k] = { text: v.text || '', text2: v.text2 || '', base: v.last ? v.last.points : 0 }; });
-    saveItem('attempt', a);
+    saveLocal('attempt', a);
     resumeRun(a, tpl, pr);
   }
   function maxVersion(rootId) { return st.data.attempts.reduce(function (m, x) { return (x.rootId === rootId || x.id === rootId) ? Math.max(m, x.version || 1) : m; }, 1); }
@@ -1159,7 +1283,7 @@
     if (!tpl || !pr) { toast('That run\'s spellbook design or prompt is no longer available.'); return; }
     var order = slotOrder(tpl), occ = occurrences(tpl), idx = 0;
     for (var i = 0; i < order.length; i++) { if (!(a.vars[order[i]] && a.vars[order[i]].last)) { idx = i; break; } if (i === order.length - 1) idx = i; }
-    st.run = { a: a, tpl: tpl, pr: pr, order: order, occ: occ, idx: idx, tier: tierOf(a.level), labels: labelsFor(pr.type),
+    st.run = { a: a, tpl: tpl, pr: pr, order: order, occ: occ, idx: idx, tier: tierOf(a.level), mtier: modelTier(pr, a.level), labels: labelsFor(pr.type),
       elapsed: (a.clock && a.clock.elapsed) || 0, cardElapsed: 0, running: false, last: 0, phase: 'edit', fb: null, busy: false, done: false, showModel: false, autos: 0, overtime: false };
     st.tab = 'assembly';
     paint(); scrollTop();
@@ -1213,6 +1337,8 @@
     var r = st.run, a = r.a, key = r.order[r.idx], g = L.VAR_GUIDE[key] || {}, v = a.vars[key] || (a.vars[key] = { text: '', text2: '' });
     var pr = r.pr, lab = r.labels, needs2 = (r.occ[key] || 0) > 1, budget = varBudget(r.tpl, key);
     var tries = v.tries || 0, maxT = a.timing === '2min' ? 1 : MAX_TRIES, canRetry = tries < maxT;
+    var first = r.idx === 0, last = r.idx === r.order.length - 1, aiOn = st.ai !== false, aiOut = aiqLeft().out;
+    var nextBtn = function (cls) { return last ? '<button class="btn ' + cls + '" id="lab-vfinish">Assemble and rate my essay →</button>' : '<button class="btn ' + cls + '" id="lab-vnext">Next variable →</button>'; };
     var runPts = Object.keys(a.vars).reduce(function (s, k) { return s + (a.vars[k].gained || 0); }, 0);
     var html = '<div class="lab-runbar"><div class="lab-runbar-l"><button class="linky" id="lab-pshow">' + esc(pr.title) + ' ▾</button><span class="tiny">' + esc(typeName(pr.type)) + ' · ' + a.pct + '% · ' + esc(levelInfo(a.level).id) + (a.version > 1 ? ' · version ' + a.version : '') + '</span></div>' +
       '<div class="lab-runbar-r"><span class="tiny">' + (r.idx + 1) + '/' + r.order.length + '</span><span class="combo">' + runPts + ' pts</span>' +
@@ -1232,13 +1358,18 @@
         (needs2 ? '<label class="lab-lbl" for="lab-val2">Second mention, reworded (+' + L.POINTS.reworded + ')</label><textarea id="lab-val2" rows="2" spellcheck="true"' + (r.phase !== 'edit' ? ' readonly' : '') + ' placeholder="Same idea, new words: a synonym, a shell noun (&quot;this policy&quot;), or your Concept Swap alternative">' + esc(v.text2 || '') + '</textarea>' : '') +
         '<div class="lab-meter"><span id="lab-wc" class="lab-num"></span><div class="bar-line thin"><span id="lab-wbar"></span></div></div>' +
       '</div>';
-    if (r.phase === 'edit') html += '<div class="lab-acts"><button class="btn primary" id="lab-vcoach"' + (r.busy ? ' disabled' : '') + '>' + (tries ? 'Coach me again' : 'Coach me') + '</button><span class="tiny">' + (a.timing === '2min' ? 'One try: the card submits itself at 0:00.' : 'Try ' + (tries + 1) + ' of ' + maxT + '.') + '</span></div>';
+    if (r.phase === 'edit') html += '<div class="lab-acts"><button class="btn primary" id="lab-vcoach"' + (r.busy ? ' disabled' : '') + '>' + (first ? (tries ? 'Coach me again' : 'Coach me') : (tries ? 'Quick check again' : 'Quick check')) + '</button>' +
+      (!first && aiOn ? '<button class="btn" id="lab-vai"' + (r.busy || aiOut ? ' disabled' : '') + '>Coach this line</button>' : '') + nextBtn('ghost') +
+      '<span class="tiny">' + (a.timing === '2min' ? 'One try: the card submits itself at 0:00.' : 'Try ' + (tries + 1) + ' of ' + maxT + '.') + '</span>' + aiqHtml() + '</div>' +
+      (!first && aiOn ? '<p class="tiny lab-coachnote">' + COACH_NOTE + '</p>' : '');
     html += '<div id="lab-fb">' + (r.busy ? coachWaiting() : r.fb ? renderFeedback(r.fb, { kind: 'var', level: a.level }) : '') + '</div>';
     if (r.phase === 'feedback') {
-      var model = ((pr.vars || {})[r.tier] || {})[key];
-      html += (model ? '<div class="lab-model"><button class="linky" id="lab-model">' + (r.showModel ? 'Hide' : 'Compare with a') + ' model ' + esc(r.tier) + ' answer</button>' + (r.showModel ? '<p>' + esc(model.ok) + '</p>' : '') + '</div>' : '') +
-        '<div class="lab-acts">' + (canRetry && !v.auto ? '<button class="btn" id="lab-vretry">Revise and coach again</button>' : '') +
-        (r.idx < r.order.length - 1 ? '<button class="btn primary" id="lab-vnext">Next variable →</button>' : '<button class="btn primary" id="lab-vfinish">Assemble and rate my essay →</button>') + '</div>';
+      var mt = ((pr.vars || {})[r.mtier] || {})[key] ? r.mtier : r.tier, model = ((pr.vars || {})[mt] || {})[key];
+      var askAi = aiOn && r.fb && !r.fb.ai && !r.fb.blocking && !v.auto && (canRetry || !v.aiTries);
+      html += (model ? '<div class="lab-model"><button class="linky" id="lab-model">' + (r.showModel ? 'Hide' : 'Compare with a') + ' model ' + esc(mt) + ' answer</button>' + (r.showModel ? '<p>' + esc(model.ok) + '</p>' : '') + '</div>' : '') +
+        '<div class="lab-acts">' + (canRetry && !v.auto ? '<button class="btn" id="lab-vretry">' + (first ? 'Revise and coach again' : 'Revise and check again') + '</button>' : '') +
+        (askAi ? '<button class="btn" id="lab-vai"' + (aiOut ? ' disabled' : '') + '>Coach this line</button>' : '') +
+        nextBtn('primary') + (askAi ? aiqHtml() : '') + '</div>';
     }
     html += '</div>';
     html += '<div class="lab-nav lab-runwrap"><button class="btn ghost" id="lab-rquit">Save and leave</button>' + (r.idx > 0 ? '<button class="btn ghost" id="lab-rprev">← Previous variable</button>' : '') + '</div>';
@@ -1255,13 +1386,18 @@
     }
     ta.addEventListener('input', live); if (ta2) ta2.addEventListener('input', live); live();
     $('#lab-pshow').addEventListener('click', function () { r.promptOpen = !r.promptOpen; $('#lab-prompt').classList.toggle('hidden', !r.promptOpen); });
-    var c = $('#lab-vcoach'); if (c) c.addEventListener('click', function () { coachVar(false); });
+    var c = $('#lab-vcoach'); if (c) c.addEventListener('click', function () { coachVar(false, first ? 'auto' : 'quick'); });
+    var cai = $('#lab-vai'); if (cai) cai.addEventListener('click', function () { if (!r.busy) coachVar(false, 'ai'); });
+    /* Next / finish straight from the edit card: the free quick check runs on
+       a variable not yet checked in its current wording, then she moves on. */
+    function checkedNow() { return !!(v.last && v.checked === String(v.text || '') + '|' + String(v.text2 || '')); }
+    function moveOn(go) { if (r.busy) return; if (r.phase === 'edit' && !checkedNow() && !coachVar(false, 'quick', true)) return; go(); }
     var rt = $('#lab-vretry'); if (rt) rt.addEventListener('click', function () { r.phase = 'edit'; r.fb = null; r.showModel = false; r.cardElapsed = a.timing === '2min' ? r.cardElapsed : 0; paintRun(el); startClock(); ta = $('#lab-val'); if (ta) ta.focus(); });
-    var nx = $('#lab-vnext'); if (nx) nx.addEventListener('click', function () { gotoVar(r.idx + 1); });
-    var fi = $('#lab-vfinish'); if (fi) fi.addEventListener('click', function () { finishRun(); });
+    var nx = $('#lab-vnext'); if (nx) nx.addEventListener('click', function () { moveOn(function () { gotoVar(r.idx + 1); }); });
+    var fi = $('#lab-vfinish'); if (fi) fi.addEventListener('click', function () { moveOn(function () { finishRun(); }); });
     var md = $('#lab-model'); if (md) md.addEventListener('click', function () { r.showModel = !r.showModel; paintRun(el); });
     var pv = $('#lab-rprev'); if (pv) pv.addEventListener('click', function () { gotoVar(r.idx - 1); });
-    $('#lab-rquit').addEventListener('click', function () { pauseClock(); saveItem('attempt', a); st.run = null; toast('Run saved. Continue it from Cast it on a prompt.'); paintBody(); });
+    $('#lab-rquit').addEventListener('click', function () { pauseClock(); var t0 = $('#lab-val'), t2 = $('#lab-val2'); if (t0 && r.phase === 'edit') v.text = t0.value; if (t2 && r.phase === 'edit') v.text2 = t2.value; saveItem('attempt', a); st.run = null; toast('Run saved. Continue it from Cast it on a prompt.'); paintBody(); });
     stickRunbar();
     paintClock();
     if (r.phase === 'edit' && !r.busy) { startClock(); if (!ta.value) try { ta.focus({ preventScroll: true }); } catch (e) {} }
@@ -1274,12 +1410,15 @@
   }
   function gotoVar(i) {
     var r = st.run; pauseClock();
+    var fwd = i > r.idx;
     r.idx = Math.max(0, Math.min(r.order.length - 1, i)); r.cardElapsed = 0; r.fb = null; r.showModel = false;
     var v = r.a.vars[r.order[r.idx]];
     r.phase = v && v.last && ((v.tries || 0) >= (r.a.timing === '2min' ? 1 : MAX_TRIES) || v.auto) ? 'feedback' : 'edit';
     if (r.phase === 'feedback') r.fb = v.last;
     else if (v && v.last) { r.phase = 'feedback'; r.fb = v.last; }
-    saveItem('attempt', r.a);
+    /* B9: the sheet copy is refreshed on Next (at most every few minutes)
+       and on finish, not after every coached variable. */
+    if (fwd) saveOnNext('attempt', r.a, r); else saveLocal('attempt', r.a);
     paintRun(body()); scrollTop();
   }
   /* Every template line that holds the slot, filled with what is written so far. */
@@ -1297,30 +1436,45 @@
     return wrap ? '<div id="lab-wherelines">' + out.join('') + '</div>' : out.join('');
   }
 
-  function coachVar(auto) {
+  /* mode 'auto': the coach on variable 1, the quick check after it; 'ai':
+     the coach (one AI check); 'quick': the free quick check. `silent`
+     records the result without repainting (Next / finish from the edit
+     card). The 2-minute card submits itself with auto = true. Returns
+     false when the quick check found something to fix first.          */
+  function coachVar(auto, mode, silent) {
     var r = st.run, a = r.a, key = r.order[r.idx], v = a.vars[key] || (a.vars[key] = {});
     var ta = $('#lab-val'), ta2 = $('#lab-val2');
     if (ta) v.text = ta.value; if (ta2) v.text2 = ta2.value;
+    mode = mode || 'auto';
     pauseClock();
     var needs2 = (r.occ[key] || 0) > 1, lv = levelInfo(a.level);
     if (auto && !String(v.text || '').trim()) {
       v.auto = true; v.tries = (v.tries || 0) + 1; r.autos++;
       v.last = { ai: false, points: 0, rows: [['Timed out: empty', 0]], errors: 0, errorList: [], words: 0, budget: varBudget(r.tpl, key), issues: [{ kind: 'warn', msg: 'Time ran out before anything was written.' }], ts: nowIso() };
-      r.fb = v.last; r.phase = 'feedback'; r.busy = false; saveItem('attempt', a); paintRun(body()); return;
+      v.checked = String(v.text || '') + '|' + String(v.text2 || '');
+      r.fb = v.last; r.phase = 'feedback'; r.busy = false; saveLocal('attempt', a); paintRun(body()); return true;
     }
-    var q = quickVar(key, v.text, v.text2, { tpl: r.tpl, prompt: r.pr, tier: r.tier, needs2: needs2 });
-    if (q.blocking.length && !auto) { r.busy = false; r.fb = { blocking: q.blocking }; $('#lab-fb').innerHTML = renderFeedback(r.fb, {}); startClock(); return; }
+    var q = quickVar(key, v.text, v.text2, { tpl: r.tpl, prompt: r.pr, tier: r.tier, mtier: r.mtier, level: a.level, needs2: needs2 });
+    if (q.blocking.length && !auto) {
+      r.busy = false; r.fb = { blocking: q.blocking }; $('#lab-fb').innerHTML = renderFeedback(r.fb, {});
+      try { $('#lab-fb').scrollIntoView({ block: 'nearest' }); } catch (e) {}
+      startClock(); return false;
+    }
     if (auto) { v.auto = true; r.autos++; }
+    var speed = a.timing === '2min' && !auto ? Math.min(L.POINTS.speedMax, Math.floor(Math.max(0, 120 - r.cardElapsed) / 15) * L.POINTS.speedPer15s) : 0;
+    var useAi = mode === 'ai' || (mode === 'auto' && r.idx === 0), why = '';
+    if (useAi && aiqLeft().out) { useAi = false; why = OUT_WHY; }
+    if (!useAi) { applyVar(r, key, q, null, why || QUICK_WHY, { needs2: needs2, speed: speed, silent: silent }); return true; }
     r.busy = true; r.phase = 'wait';
     var fbEl = $('#lab-fb'); if (fbEl) fbEl.innerHTML = coachWaiting();
-    var vc = $('#lab-vcoach'); if (vc) vc.disabled = true;
-    var speed = a.timing === '2min' && !auto ? Math.min(L.POINTS.speedMax, Math.floor(Math.max(0, 120 - r.cardElapsed) / 15) * L.POINTS.speedPer15s) : 0;
+    ['#lab-vcoach', '#lab-vai', '#lab-vnext', '#lab-vfinish', '#lab-vretry'].forEach(function (id) { var x = $(id); if (x) x.disabled = true; });
     var sentence = assemble(r.tpl, a.vars, { labels: r.labels });
     var ctxLines = [];
     L.COMPONENTS.forEach(function (c) { if (((r.tpl.lines[c.id] || {}).text || '').indexOf('{' + key + '}') >= 0) ctxLines.push(c.id); });
     var paraKeys = ctxLines.map(function (id) { return COMP[id].para; });
     var paraText = sentence.paras.filter(function (p) { return paraKeys.indexOf(p.key) >= 0; }).map(function (p) { return p.text; });
-    var ask = st.ai === false ? Promise.reject(new Error('offline')) : server('lab.coach', {
+    v.aiTries = (v.aiTries || 0) + 1;
+    var ask = aiCall('lab.coach', {
       kind: 'variable', level: lv.id, band: lv.band, pct: a.pct,
       prompt: { text: r.pr.text, type: typeName(r.pr.type), demand: (C.TYPES[r.pr.type] || {}).demand || '' },
       variable: { key: key, label: r.labels[key] || L.SLOT_LABEL[key], does: (L.VAR_GUIDE[key] || {}).does, form: slotFormHint(r.tpl, key)[0] || (L.VAR_GUIDE[key] || {}).form },
@@ -1328,19 +1482,26 @@
       inContext: paraText,
       filled: r.order.filter(function (k) { return k !== key && a.vars[k] && a.vars[k].text; }).map(function (k) { return (r.labels[k] || L.SLOT_LABEL[k]) + ': ' + a.vars[k].text; })
     }, TIMEOUT_COACH).then(function (res) { return res.coach; });
-    ask.catch(function () { return null; }).then(function (ai) {
-      var sc = scoreOf(q, ai, { level: lv.id, needs2: needs2, speed: speed });
-      var fb = compactFb(q, ai, sc);
-      v.tries = (v.tries || 0) + 1; v.last = fb; v.secs = Math.round((v.secs || 0) + r.cardElapsed);
-      var floor = Math.max(v.best || 0, v.base || 0), gain = Math.max(0, sc.total - floor);
-      fb.gain = gain; fb.improved = v.tries > 1 && sc.total > (v.best || 0);
-      v.best = Math.max(v.best || 0, sc.total); v.gained = (v.gained || 0) + gain;
-      r.fb = fb; r.phase = 'feedback'; r.busy = false; r.cardElapsed = a.timing === '2min' ? r.cardElapsed : 0;
-      a.clock = { elapsed: Math.round(r.elapsed) };
-      saveItem('attempt', a);
-      award(gain);
-      if (st.tab === 'assembly' && st.run === r) { paintRun(body()); var f2 = $('#lab-fb'); if (f2) try { f2.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) {} }
+    ask.catch(function (e) { st.lastAiError = String(e && e.message || e); return null; }).then(function (ai) {
+      applyVar(r, key, q, ai, ai ? '' : (aiqLeft().out ? OUT_WHY : ''), { needs2: needs2, speed: speed });
     });
+    return true;
+  }
+  function applyVar(r, key, q, ai, why, opts) {
+    var a = r.a, v = a.vars[key] || (a.vars[key] = {}), lv = levelInfo(a.level);
+    var sc = scoreOf(q, ai, { level: lv.id, needs2: opts.needs2, speed: opts.speed, quick: !ai && !!why });
+    var fb = compactFb(q, ai, sc, why);
+    v.tries = (v.tries || 0) + 1; v.last = fb; v.secs = Math.round((v.secs || 0) + r.cardElapsed);
+    v.checked = String(v.text || '') + '|' + String(v.text2 || '');
+    var floor = Math.max(v.best || 0, v.base || 0), gain = Math.max(0, sc.total - floor);
+    fb.gain = gain; fb.improved = v.tries > 1 && sc.total > (v.best || 0);
+    v.best = Math.max(v.best || 0, sc.total); v.gained = (v.gained || 0) + gain;
+    r.fb = fb; r.phase = 'feedback'; r.busy = false; r.cardElapsed = a.timing === '2min' ? r.cardElapsed : 0;
+    a.clock = { elapsed: Math.round(r.elapsed) };
+    saveLocal('attempt', a);
+    award(gain);
+    if (opts.silent) return;
+    if (st.tab === 'assembly' && st.run === r) { paintRun(body()); var f2 = $('#lab-fb'); if (f2) try { f2.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch (e) {} }
   }
 
   /* ------------------------------------------------------------- finish */
@@ -1358,7 +1519,7 @@
   function rateAttempt(a, tpl, pr) {
     var lv = levelInfo(a.level);
     if (st.ai === false) return Promise.resolve(null);
-    return server('lab.rate', {
+    return aiCall('lab.rate', {
       level: lv.id, band: lv.band, pct: a.pct,
       prompt: { text: pr.text, type: typeName(pr.type), demand: (C.TYPES[pr.type] || {}).demand || '' },
       essay: a.essay, words: a.words, share: a.share,
@@ -1743,7 +1904,7 @@
         if (mergeServer(r) && root && !st.run && !st.build) { recompute(); paint(); }
       }).catch(function () {});
     }
-    if (st.ai !== true) checkStatus().then(function () { if (root && document.body.contains(root)) { var pill = root.querySelector('.lab-ai .pill'); if (pill) { pill.className = 'pill ' + (st.ai ? 'good' : 'bad'); pill.textContent = st.aiNote; } } });
+    if (st.ai !== true) checkStatus().then(function () { if (root && document.body.contains(root)) { var pill = root.querySelector('.lab-ai .pill'); if (pill) { pill.className = 'pill ' + (st.ai ? 'good' : 'bad'); pill.textContent = st.aiNote; } if (st.ai === false) $$('.lab-aiq').forEach(function (x) { x.style.display = 'none'; }); } });
   }
   function leave() {
     if (st.run && !st.run.done) { pauseClock(); saveItem('attempt', st.run.a); }

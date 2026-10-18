@@ -271,6 +271,53 @@
   }
 
   /* ------------------------------------------------------------- student */
+  /* My Spellbook (template.js keeps a copy on the progress object, p.spellbook):
+     the four frames the Scriptorium uses, where they came from and the share. */
+  function sbFrame(tier, id) {
+    var TT = window.Template; if (!TT || !id) return null;
+    var out = null;
+    Object.keys(C.TYPES).forEach(function (ty) { if (out) return; TT.paragraphs(tier, ty).forEach(function (pg) { pg.frames.forEach(function (f) { if (!out && f.id === id) out = f; }); }); });
+    return out;
+  }
+  function sbText(text) {
+    var TT = window.Template, lab = (TT && TT.LABEL) || {};
+    return esc(text).replace(/\{(\w+)\}/g, function (m, k) { return '<span class="sb-slot">[' + esc(lab[k] || k) + ']</span>'; });
+  }
+  function spellbookHtml(p) {
+    var TT = window.Template; if (!TT) return '';
+    var sb = p.spellbook || null, tier = (sb && sb.tier === 'C1') || (!sb && p.tier === 'C1') ? 'C1' : 'B2';
+    var paras = TT.paragraphs(tier, 'DISCUSS'), choice = (sb && sb.choice) || {}, custom = (sb && sb.custom) || {};
+    var edits = Object.keys(custom).filter(function (k) { return String(custom[k] || '').trim(); }).length;
+    var src = !sb ? 'not saved to the sheet yet' : sb.fromLab ? 'Workshop design' + (sb.fromLabName ? ' "' + sb.fromLabName + '"' : '') + (sb.edited ? ', edited in My Spellbook since' : '') : edits || Object.keys(choice).length ? 'her own frames in My Spellbook' : 'the standard frames';
+    var share = sb && sb.share ? sb.share + '%' : '—';
+    var h = '<details class="disc"><summary>My Spellbook (what the Scriptorium uses)<span class="count">' + esc(src) + ' · share ' + esc(share) + '</span></summary><div class="disc-body" style="padding-top:10px">';
+    if (!sb) {
+      h += '<p class="tiny">This student\'s spellbook has not reached the class sheet yet. It is saved with her progress the next time she opens My Spellbook, the Scriptorium or the Spellbook Workshop on the device where she edited it.</p></div></details>';
+      return h;
+    }
+    h += '<p class="tiny">Source: ' + esc(src) + ' · ' + tier + ' track · template share for skeleton and exam essays: ' + esc(share) + ' · ' + edits + ' of 4 frames edited · updated ' + esc(ago(sb.at)) + (sb.prev ? ' · an earlier version is kept' : '') + '.</p><div class="sb-frames">';
+    paras.forEach(function (pg) {
+      var own = String(custom[pg.key] || '').trim(), fr = sbFrame(tier, choice[pg.key]) || pg.frames[0];
+      h += '<div class="sb-frame"><b>' + esc(pg.name) + ' · ' + (own ? 'her own wording' : 'standard: ' + esc(fr.name)) + '</b><p>' + sbText(own || fr.text) + '</p></div>';
+    });
+    h += '</div></div></details>';
+    return h;
+  }
+  /* Duelling Hall (student.js keeps p.bootcamp = { points, missions:{ promptId:{ best, attempts, passed, level, won, at } } }). */
+  function duelHtml(p) {
+    var bc = p.bootcamp || {}, ms = bc.missions || {}, ids = Object.keys(ms);
+    if (!ids.length) return '';
+    var won = ids.filter(function (k) { return ms[k].passed; }).length, lv = {};
+    ids.forEach(function (k) { var l = ms[k].level || '—'; lv[l] = (lv[l] || 0) + 1; });
+    var lvTxt = Object.keys(lv).sort().map(function (l) { return l + ' ×' + lv[l]; }).join(', ');
+    ids.sort(function (a, b) { return String(ms[b].at || '').localeCompare(String(ms[a].at || '')); });
+    return '<details class="disc"><summary>Duelling Hall<span class="count">' + won + ' won of ' + ids.length + ' duelled · ' + (bc.points || 0) + ' pts · at ' + esc(lvTxt) + '</span></summary><div class="disc-body" style="padding-top:10px;max-height:340px;overflow:auto">' +
+      '<table class="roster" style="min-width:0"><thead><tr><th>Prompt</th><th>Best</th><th>Duels</th><th>Level</th><th>Won at</th><th>Last</th></tr></thead><tbody>' +
+      ids.map(function (k) {
+        var m = ms[k], pr = PR.get(k) || {};
+        return '<tr' + (m.passed ? '' : ' style="background:var(--no-soft)"') + '><td>' + esc(pr.title || k) + (pr.type ? ' <span class="tiny">' + esc(typeName(pr.type)) + '</span>' : '') + '</td><td class="num">' + (m.best != null ? m.best + '%' : '—') + '</td><td class="num">' + (m.attempts || 0) + '</td><td>' + esc(m.level || '—') + '</td><td>' + esc(Object.keys(m.won || {}).join(', ') || (m.passed ? 'yes' : '—')) + '</td><td>' + esc(ago(m.at)) + '</td></tr>';
+      }).join('') + '</tbody></table><p class="tiny" style="margin-top:8px">Best % per prompt and the level of the answer options she duelled at. Rows in red are not won yet. The choices themselves are in the Answer log.</p></div></details>';
+  }
   function openStudent(id) {
     api.detail(id).then(function (d) {
       if (!d || !d.ok) { $('#detail').innerHTML = '<div class="empty">Could not load that student.</div>'; return; }
@@ -305,6 +352,7 @@
           ['60', '50', '40', '30'].map(function (k) { var x = pcs[k] || {}; return '<tr><td>' + k + '%</td><td>' + (x.n || 0) + '</td><td>' + (x.rated ? fmtBand(x.sum / x.rated) : '—') + '</td><td>' + (x.best != null ? fmtBand(x.best) : '—') + '</td></tr>'; }).join('') +
           '</tbody></table><p class="tiny" style="margin-top:8px">' + (lab.templatesComplete || 0) + ' spellbook design(s) saved. Every line, essay and piece of coaching is in the LabTemplates and LabAttempts tabs of the class sheet.</p></div></details>';
       }
+      h += spellbookHtml(p) + duelHtml(p);
       /* diagnosis */
       h += '<details class="disc" open><summary>Teaching focus<span class="count">' + weak.length + ' areas</span></summary><div class="disc-body">';
       if (!weak.length) h += '<p class="tiny" style="padding-top:10px">No error pattern yet. Once this student has answered twenty or so questions, the weak areas appear here with reteach notes and activities.</p>';
