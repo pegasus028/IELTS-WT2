@@ -34,7 +34,8 @@
     if (!pool.length) pool = all.filter(function (x) { return five.indexOf(x.id) < 0; });
     if (!pool.length) pool = all;
     var keys = C().VARIABLES.map(function (v) { return v.key; });
-    var pr = pool[(n + String(p.studentId || '').length) % pool.length];
+    var i = (n + String(p.studentId || '').length) % pool.length; if (!(i >= 0)) i = ((i % pool.length) + pool.length) % pool.length || 0;
+    var pr = pool[i];
     return { date: d, promptId: pr.id, key: keys[((n % keys.length) + keys.length) % keys.length] };
   }
   function state(host) {
