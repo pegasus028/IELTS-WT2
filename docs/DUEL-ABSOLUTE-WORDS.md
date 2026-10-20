@@ -1,0 +1,352 @@
+# Duelling Hall: absolute-word giveaways (20 Oct 2026)
+
+The second-round walkthrough found that a student could pick the right duel option by rejecting the one with an absolute word (*always, never, completely, entirely, nobody, everyone, everywhere, outright, impossible, the only, at all, whatever, the single*). Over-generalised options are a fair kind of wrong answer (the method teaches that over-generalisation caps TR at 7), so they were not removed; the pattern was broken instead:
+
+1. **Near-miss swap (content unchanged).** In every set where the key has no absolute word but the near-miss distractor `d[0]` had one, `d[0]` was swapped with the first distractor without one. The near-miss is the opponent's "spell" in the duel, so it should never be the obvious one. 148 sets in prompts.js / prompts-2.js (B2 and C1) and 144 in prompts-levels.js (A2 and B1). The options themselves did not change, so the A2/B1 answers still mirror the B2 set.
+2. **Softened wording (18 sets, hand-edited).** Where a B2/C1 set had two absolute distractors, one was reworded so that it stays wrong for a content reason (a prediction instead of a principle, a fact instead of a limit, the other side's position) but no longer carries the giveaway word. Listed below.
+3. **The two-right-answer item** (p-open-university B2 rationale): the third distractor "a country needs both a well educated workforce and universities that compete with the best abroad" was defensible as a rationale; it is now "the number of graduates a country produces matters more than how well each one is taught".
+
+After the pass: no B2/C1 set has two absolute distractors; no set at any tier has an absolute near-miss. **Still open:** 31 A2/B1 sets keep two absolute distractors (listed at the end); they were not softened because the simpler English leaves fewer ways to keep the option wrong, and T.Chris may prefer to decide these by hand. `tools/audit.js`, `tools/validate.js` and `tools/template-test.js` pass.
+
+## Changes
+- soften: citizens will never voluntarily surrender the convenience of the private vehicle → most citizens are unlikely to surrender the convenience of the private vehicle by choice
+- soften: people who drive everywhere tend to develop heart problems later in their lives → people who drive to work tend to develop heart problems later in life
+- soften: public transport always costs the daily commuter far less than running a private car → public transport usually costs the daily commuter less than running a private car
+- soften: allowing staff to ignore instructions that they would never question inside a shared office → allowing staff to ignore instructions that they would not question inside a shared office
+- soften: space exploration should be surrendered entirely to private enterprise, with the state confining itself to regulation → space exploration should be surrendered to private enterprise, with the state confining itself to regulation
+- soften: publishers should abandon print entirely and reinvest the savings in digital reporting → publishers should abandon print and reinvest the savings in digital reporting
+- soften: animal testing should continue wherever human lives are demonstrably at stake and be restricted everywhere else → animal testing should continue wherever human lives are demonstrably at stake and be restricted in other fields
+- soften: many countries have already banned the testing of cosmetic products on animals entirely → many countries have already banned the testing of cosmetic products on animals
+- soften: daily viewing ought to be capped at a single hour on school nights and left entirely to the discretion of the family at weekends and throughout the whole of the school holidays → daily viewing ought to be capped at one hour on school nights and left to the family's discretion at weekends and in the school holidays
+- soften: public transport should be run as a business and charge whatever fare covers its costs → public transport should be run as a business and charge the fare that covers its costs
+- soften: secondary schools should stop online teaching completely and go back to the classroom in full → secondary schools should stop online teaching and go back to the classroom in full
+- soften: English is the language of international business and of higher education everywhere → English is the language of international business and of higher education in most countries
+- soften: the top universities attract the strongest applicants whatever the subject → the top universities attract the strongest applicants regardless of the subject
+- soften: banks should be made to refund every loss so that young people need not worry about fraud at all → banks should be made to refund every loss so that young people need not worry about fraud
+- soften: private tutoring should be banned outright so that all students compete on equal terms → private tutoring should be banned so that all students compete on equal terms
+- soften: private tutoring should be banned completely so that all students compete on equal terms → private tutoring should be banned so that all students compete on equal terms
+- near-miss swap: p-cars-city C1 mechA
+- near-miss swap: p-cars-city C1 position
+- near-miss swap: p-cars-city C1 rationale
+- near-miss swap: p-cars-city B2 nuanceA
+- near-miss swap: p-cars-city B2 nuanceB
+- near-miss swap: p-cars-city B2 position
+- near-miss swap: p-cars-city B2 rationale
+- near-miss swap: p-science-funding B2 nuanceA
+- near-miss swap: p-science-funding B2 position
+- near-miss swap: p-prisons C1 nuanceA
+- near-miss swap: p-prisons C1 position
+- near-miss swap: p-prisons B2 nuanceA
+- near-miss swap: p-prisons B2 position
+- near-miss swap: p-remote-work C1 mechB
+- near-miss swap: p-remote-work C1 exB
+- near-miss swap: p-remote-work B2 nuanceA
+- near-miss swap: p-remote-work B2 mechB
+- near-miss swap: p-remote-work B2 exB
+- near-miss swap: p-screen-time C1 facetA
+- near-miss swap: p-screen-time C1 nuanceB
+- near-miss swap: p-screen-time B2 facetA
+- near-miss swap: p-screen-time B2 nuanceA
+- near-miss swap: p-screen-time B2 nuanceB
+- near-miss swap: p-tourism C1 position
+- near-miss swap: p-tourism B2 nuanceA
+- near-miss swap: p-tourism B2 nuanceB
+- near-miss swap: p-space C1 position
+- near-miss swap: p-space B2 rationale
+- near-miss swap: p-fast-food-tax C1 mechA
+- near-miss swap: p-fast-food-tax B2 nuanceA
+- near-miss swap: p-fast-food-tax B2 nuanceB
+- near-miss swap: p-fast-food-tax B2 rationale
+- near-miss swap: p-newspapers C1 position
+- near-miss swap: p-newspapers B2 facetA
+- near-miss swap: p-newspapers B2 position
+- near-miss swap: p-newspapers B2 rationale
+- near-miss swap: p-animal-testing C1 position
+- near-miss swap: p-animal-testing B2 nuanceA
+- near-miss swap: p-animal-testing B2 nuanceB
+- near-miss swap: p-animal-testing B2 rationale
+- near-miss swap: p-competitive-sport C1 position
+- near-miss swap: p-competitive-sport B2 nuanceA
+- near-miss swap: p-competitive-sport B2 rationale
+- near-miss swap: p-child-advertising C1 nuanceB
+- near-miss swap: p-minority-languages C1 position
+- near-miss swap: p-minority-languages B2 position
+- near-miss swap: p-history-teaching C1 facetB
+- near-miss swap: p-history-teaching C1 mechB
+- near-miss swap: p-history-teaching B2 nuanceA
+- near-miss swap: p-history-teaching B2 position
+- near-miss swap: p-history-teaching B2 rationale
+- near-miss swap: p-elderly-care C1 exB
+- near-miss swap: p-elderly-care B2 nuanceA
+- near-miss swap: p-elderly-care B2 nuanceB
+- near-miss swap: p-gm-crops C1 facetA
+- near-miss swap: p-gm-crops C1 nuanceA
+- near-miss swap: p-gm-crops C1 position
+- near-miss swap: p-libraries B2 facetA
+- near-miss swap: p-libraries B2 mechB
+- near-miss swap: p-libraries B2 nuanceB
+- near-miss swap: p-libraries B2 rationale
+- near-miss swap: p-climate-action C1 nuanceA
+- near-miss swap: p-climate-action B2 nuanceA
+- near-miss swap: p-climate-action B2 nuanceB
+- near-miss swap: p-climate-action B2 position
+- near-miss swap: p-climate-action B2 rationale
+- near-miss swap: p-architecture C1 nuanceB
+- near-miss swap: p-architecture C1 rationale
+- near-miss swap: p-architecture B2 mechB
+- near-miss swap: p-architecture B2 nuanceB
+- near-miss swap: p-architecture B2 rationale
+- near-miss swap: p-minimum-wage C1 exA
+- near-miss swap: p-minimum-wage C1 nuanceA
+- near-miss swap: p-minimum-wage C1 facetB
+- near-miss swap: p-minimum-wage B2 nuanceA
+- near-miss swap: p-minimum-wage B2 position
+- near-miss swap: p-minimum-wage B2 rationale
+- near-miss swap: p-early-languages C1 facetB
+- near-miss swap: p-early-languages C1 mechB
+- near-miss swap: p-early-languages B2 nuanceA
+- near-miss swap: p-early-languages B2 rationale
+- near-miss swap: p-children-tv C1 facetA
+- near-miss swap: p-children-tv C1 nuanceB
+- near-miss swap: p-children-tv C1 position
+- near-miss swap: p-children-tv B2 nuanceA
+- near-miss swap: p-children-tv B2 position
+- near-miss swap: p-open-university C1 nuanceA
+- near-miss swap: p-open-university B2 nuanceA
+- near-miss swap: p-open-university B2 position
+- near-miss swap: p-open-university B2 rationale
+- near-miss swap: p-tablets-textbooks C1 exA
+- near-miss swap: p-tablets-textbooks B2 exA
+- near-miss swap: p-school-snacks C1 mechB
+- near-miss swap: p-school-snacks C1 exB
+- near-miss swap: p-school-snacks C1 nuanceB
+- near-miss swap: p-school-snacks C1 position
+- near-miss swap: p-school-snacks B2 mechB
+- near-miss swap: p-school-snacks B2 exB
+- near-miss swap: p-school-snacks B2 nuanceB
+- near-miss swap: p-teen-jobs C1 rationale
+- near-miss swap: p-teen-jobs B2 nuanceA
+- near-miss swap: p-teen-jobs B2 rationale
+- near-miss swap: p-free-transport C1 nuanceA
+- near-miss swap: p-free-transport C1 mechB
+- near-miss swap: p-free-transport C1 rationale
+- near-miss swap: p-free-transport B2 nuanceA
+- near-miss swap: p-free-transport B2 mechB
+- near-miss swap: p-free-transport B2 rationale
+- near-miss swap: p-online-learning C1 position
+- near-miss swap: p-online-learning B2 position
+- near-miss swap: p-foreign-pop-culture C1 nuanceA
+- near-miss swap: p-foreign-pop-culture C1 rationale
+- near-miss swap: p-foreign-pop-culture B2 nuanceA
+- near-miss swap: p-foreign-pop-culture B2 rationale
+- near-miss swap: p-cctv-everywhere C1 nuanceA
+- near-miss swap: p-cctv-everywhere C1 rationale
+- near-miss swap: p-cctv-everywhere B2 nuanceA
+- near-miss swap: p-cctv-everywhere B2 rationale
+- near-miss swap: p-city-flooding B2 position
+- near-miss swap: p-teen-sleep C1 facetA
+- near-miss swap: p-teen-sleep C1 mechA
+- near-miss swap: p-teen-sleep C1 nuanceB
+- near-miss swap: p-teen-sleep C1 rationale
+- near-miss swap: p-teen-sleep B2 mechA
+- near-miss swap: p-teen-sleep B2 nuanceB
+- near-miss swap: p-teen-sleep B2 rationale
+- near-miss swap: p-youth-unemployment C1 nuanceB
+- near-miss swap: p-youth-unemployment C1 rationale
+- near-miss swap: p-youth-unemployment B2 nuanceB
+- near-miss swap: p-youth-unemployment B2 rationale
+- near-miss swap: p-online-scams C1 facetA
+- near-miss swap: p-online-scams C1 nuanceA
+- near-miss swap: p-online-scams C1 position
+- near-miss swap: p-online-scams B2 facetA
+- near-miss swap: p-online-scams B2 nuanceA
+- near-miss swap: p-online-scams B2 position
+- near-miss swap: p-private-tutoring C1 position
+- near-miss swap: p-private-tutoring C1 rationale
+- near-miss swap: p-private-tutoring B2 position
+- near-miss swap: p-private-tutoring B2 rationale
+- near-miss swap: p-cashless C1 nuanceA
+- near-miss swap: p-cashless C1 mechB
+- near-miss swap: p-cashless C1 rationale
+- near-miss swap: p-cashless B2 nuanceA
+- near-miss swap: p-cashless B2 mechB
+- near-miss swap: p-cashless B2 rationale
+- near-miss swap: p-rural-youth C1 nuanceB
+- near-miss swap: p-rural-youth B2 nuanceB
+- soften: foreign media teach young people nothing whatever … → nothing that a good school could not teach them better and more cheaply
+- soften: students … soon lose whatever love of learning → soon lose the love of learning they once had
+- near-miss swap: p-cars-city A2 nuanceB
+- near-miss swap: p-cars-city B1 nuanceA
+- near-miss swap: p-cars-city B1 nuanceB
+- near-miss swap: p-cars-city B1 position
+- near-miss swap: p-science-funding A2 nuanceA
+- near-miss swap: p-science-funding B1 nuanceA
+- near-miss swap: p-prisons A2 nuanceA
+- near-miss swap: p-prisons B1 nuanceA
+- near-miss swap: p-prisons B1 position
+- near-miss swap: p-remote-work A2 nuanceA
+- near-miss swap: p-remote-work A2 exB
+- near-miss swap: p-remote-work B1 nuanceA
+- near-miss swap: p-remote-work B1 mechB
+- near-miss swap: p-remote-work B1 exB
+- near-miss swap: p-screen-time A2 core
+- near-miss swap: p-screen-time A2 nuanceA
+- near-miss swap: p-screen-time A2 nuanceB
+- near-miss swap: p-screen-time A2 position
+- near-miss swap: p-screen-time B1 nuanceA
+- near-miss swap: p-screen-time B1 nuanceB
+- near-miss swap: p-screen-time B1 position
+- near-miss swap: p-tourism A2 nuanceA
+- near-miss swap: p-tourism A2 nuanceB
+- near-miss swap: p-tourism A2 rationale
+- near-miss swap: p-tourism B1 nuanceA
+- near-miss swap: p-tourism B1 nuanceB
+- near-miss swap: p-tourism B1 rationale
+- near-miss swap: p-space A2 rationale
+- near-miss swap: p-space B1 rationale
+- near-miss swap: p-fast-food-tax A2 nuanceA
+- near-miss swap: p-fast-food-tax A2 nuanceB
+- near-miss swap: p-fast-food-tax A2 rationale
+- near-miss swap: p-fast-food-tax B1 nuanceA
+- near-miss swap: p-fast-food-tax B1 nuanceB
+- near-miss swap: p-fast-food-tax B1 rationale
+- near-miss swap: p-newspapers A2 position
+- near-miss swap: p-newspapers A2 rationale
+- near-miss swap: p-newspapers B1 facetA
+- near-miss swap: p-newspapers B1 position
+- near-miss swap: p-newspapers B1 rationale
+- near-miss swap: p-animal-testing A2 nuanceA
+- near-miss swap: p-animal-testing A2 nuanceB
+- near-miss swap: p-animal-testing A2 rationale
+- near-miss swap: p-animal-testing B1 nuanceA
+- near-miss swap: p-animal-testing B1 nuanceB
+- near-miss swap: p-animal-testing B1 rationale
+- near-miss swap: p-competitive-sport A2 nuanceA
+- near-miss swap: p-competitive-sport A2 rationale
+- near-miss swap: p-competitive-sport B1 nuanceA
+- near-miss swap: p-competitive-sport B1 rationale
+- near-miss swap: p-child-advertising A2 position
+- near-miss swap: p-child-advertising B1 mechA
+- near-miss swap: p-child-advertising B1 position
+- near-miss swap: p-minority-languages A2 exB
+- near-miss swap: p-minority-languages A2 position
+- near-miss swap: p-minority-languages B1 position
+- near-miss swap: p-history-teaching A2 nuanceA
+- near-miss swap: p-history-teaching B1 nuanceA
+- near-miss swap: p-history-teaching B1 position
+- near-miss swap: p-history-teaching B1 rationale
+- near-miss swap: p-elderly-care A2 mechA
+- near-miss swap: p-elderly-care A2 nuanceA
+- near-miss swap: p-elderly-care A2 nuanceB
+- near-miss swap: p-elderly-care B1 mechA
+- near-miss swap: p-elderly-care B1 nuanceA
+- near-miss swap: p-elderly-care B1 nuanceB
+- near-miss swap: p-gm-crops A2 facetA
+- near-miss swap: p-gm-crops A2 position
+- near-miss swap: p-libraries A2 facetA
+- near-miss swap: p-libraries A2 mechB
+- near-miss swap: p-libraries B1 facetA
+- near-miss swap: p-libraries B1 mechB
+- near-miss swap: p-libraries B1 nuanceB
+- near-miss swap: p-libraries B1 rationale
+- near-miss swap: p-climate-action A2 nuanceA
+- near-miss swap: p-climate-action A2 nuanceB
+- near-miss swap: p-climate-action A2 rationale
+- near-miss swap: p-climate-action B1 nuanceA
+- near-miss swap: p-climate-action B1 nuanceB
+- near-miss swap: p-climate-action B1 position
+- near-miss swap: p-climate-action B1 rationale
+- near-miss swap: p-architecture A2 mechB
+- near-miss swap: p-architecture A2 nuanceB
+- near-miss swap: p-architecture B1 mechB
+- near-miss swap: p-architecture B1 nuanceB
+- near-miss swap: p-architecture B1 rationale
+- near-miss swap: p-minimum-wage A2 nuanceA
+- near-miss swap: p-minimum-wage A2 position
+- near-miss swap: p-minimum-wage A2 rationale
+- near-miss swap: p-minimum-wage B1 nuanceA
+- near-miss swap: p-minimum-wage B1 position
+- near-miss swap: p-minimum-wage B1 rationale
+- near-miss swap: p-early-languages A2 nuanceA
+- near-miss swap: p-early-languages A2 rationale
+- near-miss swap: p-early-languages B1 nuanceA
+- near-miss swap: p-early-languages B1 rationale
+- near-miss swap: p-children-tv A2 nuanceA
+- near-miss swap: p-children-tv A2 position
+- near-miss swap: p-children-tv B1 nuanceA
+- near-miss swap: p-children-tv B1 position
+- near-miss swap: p-open-university A2 nuanceA
+- near-miss swap: p-open-university A2 nuanceB
+- near-miss swap: p-open-university A2 position
+- near-miss swap: p-open-university B1 nuanceA
+- near-miss swap: p-open-university B1 position
+- near-miss swap: p-open-university B1 rationale
+- near-miss swap: p-tablets-textbooks A2 exA
+- near-miss swap: p-tablets-textbooks B1 exA
+- near-miss swap: p-school-snacks A2 mechA
+- near-miss swap: p-school-snacks A2 nuanceB
+- near-miss swap: p-school-snacks B1 nuanceB
+- near-miss swap: p-teen-jobs A2 nuanceA
+- near-miss swap: p-teen-jobs A2 facetB
+- near-miss swap: p-teen-jobs A2 rationale
+- near-miss swap: p-teen-jobs B1 nuanceA
+- near-miss swap: p-teen-jobs B1 rationale
+- near-miss swap: p-free-transport A2 nuanceA
+- near-miss swap: p-free-transport A2 mechB
+- near-miss swap: p-free-transport A2 rationale
+- near-miss swap: p-free-transport B1 nuanceA
+- near-miss swap: p-free-transport B1 mechB
+- near-miss swap: p-free-transport B1 rationale
+- near-miss swap: p-online-learning A2 facetA
+- near-miss swap: p-foreign-pop-culture A2 rationale
+- near-miss swap: p-foreign-pop-culture B1 rationale
+- near-miss swap: p-cctv-everywhere A2 nuanceA
+- near-miss swap: p-cctv-everywhere A2 nuanceB
+- near-miss swap: p-cctv-everywhere B1 nuanceA
+- near-miss swap: p-city-flooding A2 facetB
+- near-miss swap: p-city-flooding B1 position
+- near-miss swap: p-teen-sleep A2 facetA
+- near-miss swap: p-teen-sleep A2 mechA
+- near-miss swap: p-teen-sleep A2 nuanceB
+- near-miss swap: p-teen-sleep B1 mechA
+- near-miss swap: p-teen-sleep B1 nuanceB
+- near-miss swap: p-youth-unemployment A2 nuanceB
+- near-miss swap: p-youth-unemployment B1 nuanceB
+- near-miss swap: p-youth-unemployment B1 rationale
+- near-miss swap: p-private-tutoring A2 nuanceB
+- near-miss swap: p-private-tutoring B1 position
+- near-miss swap: p-cashless A2 nuanceA
+- near-miss swap: p-cashless A2 mechB
+- near-miss swap: p-cashless B1 nuanceA
+- near-miss swap: p-cashless B1 mechB
+- still two absolute distractors (A2/B1, not softened): p-cars-city A2 nuanceB — "driving with no limits always ruins life in every city" / "people who drive everywhere often get heart problems later"
+- still two absolute distractors (A2/B1, not softened): p-cars-city A2 rationale — "buses always cost workers much less than a car" / "people will never give up their cars by choice"
+- still two absolute distractors (A2/B1, not softened): p-cars-city B1 nuanceB — "unlimited driving always destroys the quality of life in every city" / "people who drive everywhere often develop serious heart problems later in life"
+- still two absolute distractors (A2/B1, not softened): p-cars-city B1 position — "governments should ban private cars completely and leave people to find other ways to travel" / "every country must ban private cars completely if city air is to improve"
+- still two absolute distractors (A2/B1, not softened): p-cars-city B1 rationale — "cleaner air is the single most important aim of every government" / "public transport always costs commuters far less than running a car" / "people will never give up the comfort and convenience of their own cars by choice"
+- still two absolute distractors (A2/B1, not softened): p-remote-work B1 mechB — "slowing projects down through messages that are never answered in real time" / "allowing staff to ignore instructions they would never question inside a shared office"
+- still two absolute distractors (A2/B1, not softened): p-screen-time A2 position — "parents must take screens away from childhood completely" / "children should use computers at school with help but never at home"
+- still two absolute distractors (A2/B1, not softened): p-screen-time B1 position — "parents must remove screens from childhood completely if children are to develop normally" / "children should use computers with supervision at school but never at home"
+- still two absolute distractors (A2/B1, not softened): p-tourism A2 rationale — "tourism money is the only way a poor beach town can grow" / "protecting nature must always come before making money"
+- still two absolute distractors (A2/B1, not softened): p-tourism B1 rationale — "money from tourism is the only realistic way for a poor coastal region to develop" / "protecting nature must always come before any economic gain a region might make"
+- still two absolute distractors (A2/B1, not softened): p-fast-food-tax B1 nuanceA — "a food tax never changes what people finally decide to put in their shopping basket" / "fast food is now sold almost everywhere, from big cities to small villages"
+- still two absolute distractors (A2/B1, not softened): p-newspapers A2 rationale — "the printed newspaper is the only news that readers can fully trust" / "new technology always replaces old media, so print cannot be saved"
+- still two absolute distractors (A2/B1, not softened): p-newspapers B1 position — "printed newspapers will vanish completely once the last generation of older readers has finally gone" / "readers should give up their screens and return to the printed page entirely"
+- still two absolute distractors (A2/B1, not softened): p-newspapers B1 rationale — "the printed newspaper is the only kind of news that readers can really trust completely" / "technology always replaces older media, so printed papers cannot be saved"
+- still two absolute distractors (A2/B1, not softened): p-animal-testing B1 nuanceB — "computer models will never tell scientists anything useful about a new drug" / "many countries have already banned testing cosmetics on animals completely"
+- still two absolute distractors (A2/B1, not softened): p-competitive-sport A2 rationale — "competition is the only part of school that prepares children for work" / "stress in childhood always damages a young person's mind for life"
+- still two absolute distractors (A2/B1, not softened): p-competitive-sport B1 rationale — "competition is the only part of school life that properly prepares children for adult working life" / "stress in childhood always causes lasting damage to a young person's mental health"
+- still two absolute distractors (A2/B1, not softened): p-minority-languages A2 exB — "Government offices that serve everyone in the national language only." / "Museums that show old books in languages nobody speaks now."
+- still two absolute distractors (A2/B1, not softened): p-minority-languages A2 position — "every government must pay whatever it takes to save every language" / "schools should teach only the national language so everyone understands each other"
+- still two absolute distractors (A2/B1, not softened): p-elderly-care A2 mechA — "making sure relatives never need to help care for old people" / "giving every old person exactly the same care, whatever they need"
+- still two absolute distractors (A2/B1, not softened): p-elderly-care B1 mechA — "removing the need for relatives to take any part at all in caring for older people" / "giving every older person exactly the same care whatever their needs are"
+- still two absolute distractors (A2/B1, not softened): p-gm-crops A2 position — "GM crops should be planted everywhere to end world hunger fast" / "GM crops should be banned everywhere until every risk is ruled out"
+- still two absolute distractors (A2/B1, not softened): p-libraries B1 rationale — "printed books will always be easier to read carefully than text on a screen" / "information is worth nothing at all unless a trained librarian explains it first"
+- still two absolute distractors (A2/B1, not softened): p-architecture B1 rationale — "modern design will always be cheaper and faster to build than traditional building work" / "old buildings are the only part of a city that tourists really want to see"
+- still two absolute distractors (A2/B1, not softened): p-minimum-wage A2 position — "the minimum wage should rise sharply everywhere because poverty is worse" / "the same minimum wage should apply everywhere in the country"
+- still two absolute distractors (A2/B1, not softened): p-free-transport A2 rationale — "people always care less about things that they get for free" / "cleaner air is good for everyone in a city, drivers too"
+- still two absolute distractors (A2/B1, not softened): p-free-transport B1 position — "governments should make every bus and train free so that nobody needs a private car" / "public transport should be run as a business and charge whatever covers its costs"
+- still two absolute distractors (A2/B1, not softened): p-foreign-pop-culture A2 rationale — "the English language is used in business and universities everywhere" / "young people always follow new foreign things, so fighting it is useless"
+- still two absolute distractors (A2/B1, not softened): p-foreign-pop-culture B1 rationale — "the English language is used in international business and higher education everywhere" / "young people will always follow whatever is new and foreign, so resisting is pointless"
+- still two absolute distractors (A2/B1, not softened): p-youth-unemployment B1 nuanceB — "universities will never agree to change what they teach, whatever the job market clearly needs" / "the top universities attract the strongest applicants whatever the subject"
+- still two absolute distractors (A2/B1, not softened): p-private-tutoring B1 position — "tutoring has both benefits and drawbacks, and whether it is positive depends entirely on the family" / "private tutoring should be banned completely so that all students compete on equal terms"

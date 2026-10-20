@@ -1170,7 +1170,7 @@
       passed = score >= E.PASS_CHECK;
       P.finishCheck(S.p, r.checkId, score, r.hintedAny, { ids: r.items.map(function (it) { return it.id; }), miss: missTags, testOut: r.testOut });
       head = score >= 1 ? 'A perfect gate. The examiner bows.' : passed ? 'Gate passed' : 'The gate stays shut';
-      note = passed ? 'That class is passed. Your year has been recalculated.' : 'You need 75% to pass an examiner\'s gate. The principles you lost marks on are listed below.';
+      note = passed ? 'That class is passed. Your rank on the header may have moved up.' : 'You need 75% to pass an examiner\'s gate. The principles you lost marks on are listed below.';
       var tlv = E.Bank.level(r.levelId);
       if (r.testOut && tlv) {
         if (passed) {
@@ -1237,7 +1237,7 @@
     var p = S.p, done = {};
     (p.reports || []).forEach(function (r) { done[r.promptId] = (done[r.promptId] || 0) + 1; });
     var types = ['all'].concat(Object.keys(C.TYPES)), domains = ['all'].concat(Object.keys(C.DOMAINS));
-    var html = '<div class="sect-h"><div><h2>Scriptorium</h2><p>Forty minutes, one prompt, four paragraphs. Guided mode shows the frames and the eleven keys; Skeleton shows the slot labels only; Exam is a blank page and the clock. The examiners mark in LevelUp: after you submit, send the essay to them with one tap.</p></div></div>';
+    var html = '<div class="sect-h"><div><h2>Scriptorium</h2><p>Forty minutes, one prompt, four paragraphs. Guided mode shows the frames and the eleven keys; Skeleton shows the slot labels only; Exam is a blank page and the clock. After you submit, the essay goes to T.Chris. If you want, one tap also gets an AI band estimate in LevelUp.</p></div></div>';
     html += '<div class="modechoice">' + T.FADE.map(function (f) { return '<label><input type="radio" name="uim" value="' + f.id + '"' + (S.uiMode === f.id ? ' checked' : '') + '> ' + esc(f.name) + ' — ' + esc(f.blurb) + '</label>'; }).join('') + '</div>';
     html += '<div class="filters" id="f-type">' + types.map(function (t) { return '<button data-t="' + t + '"' + (S.filters.type === t ? ' class="on"' : '') + '>' + (t === 'all' ? 'All types' : esc(typeName(t))) + '</button>'; }).join('') + '</div>';
     html += '<div class="filters" id="f-domain">' + domains.map(function (d) { return '<button data-d="' + d + '"' + (S.filters.domain === d ? ' class="on"' : '') + '>' + (d === 'all' ? 'All domains' : esc(C.DOMAINS[d])) + '</button>'; }).join('') + '</div>';

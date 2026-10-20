@@ -78,8 +78,8 @@
    "nuanceB": {
     "ok": "too much driving leads to traffic jams and dirty air",
     "d": [
-     "driving with no limits always ruins life in every city",
      "driving is already too expensive for most city families",
+     "driving with no limits always ruins life in every city",
      "people who drive everywhere often get heart problems later"
     ]
    },
@@ -136,8 +136,8 @@
    "nuanceA": {
     "ok": "a full ban causes problems for workers who have no good bus or train service",
     "d": [
-     "no city has ever reduced its pollution without banning private cars completely",
      "rising lorry traffic would cancel out the fall in pollution within ten years",
+     "no city has ever reduced its pollution without banning private cars completely",
      "exhaust fumes remain the biggest single threat to public health in cities"
     ]
    },
@@ -168,17 +168,17 @@
    "nuanceB": {
     "ok": "unlimited driving builds up into constant traffic jams and polluted air",
     "d": [
-     "unlimited driving always destroys the quality of life in every city",
      "private driving is already too expensive for most city households",
+     "unlimited driving always destroys the quality of life in every city",
      "people who drive everywhere often develop serious heart problems later in life"
     ]
    },
    "position": {
     "ok": "councils should invest in public transport while slowly removing the dirtiest vehicles",
     "d": [
-     "every country must ban private cars completely if city air is to improve",
+     "the right to drive should be total as long as drivers pay a pollution charge",
      "governments should ban private cars completely and leave people to find other ways to travel",
-     "the right to drive should be total as long as drivers pay a pollution charge"
+     "every country must ban private cars completely if city air is to improve"
     ]
    },
    "rationale": {
@@ -228,8 +228,8 @@
    "nuanceA": {
     "ok": "studying only technical skills can miss questions of right and wrong",
     "d": [
-     "science students can never think about right and wrong at all",
      "science subjects already get most money from private companies",
+     "science students can never think about right and wrong at all",
      "medicine and engineering degrees lead straight to the jobs industry needs"
     ]
    },
@@ -318,8 +318,8 @@
    "nuanceA": {
     "ok": "a narrow focus on technical skills misses the moral judgement new technology needs",
     "d": [
-     "a purely scientific course leaves graduates completely unable to think about ethics at all",
      "science subjects already attract most of the private research money",
+     "a purely scientific course leaves graduates completely unable to think about ethics at all",
      "medical and engineering degrees lead directly to the jobs industry needs"
     ]
    },
@@ -410,8 +410,8 @@
    "nuanceA": {
     "ok": "only punishing means many prisoners commit crimes again after leaving",
     "d": [
-     "punishment can never change how a criminal acts after prison",
      "keeping people in prison for years costs taxpayers a lot",
+     "punishment can never change how a criminal acts after prison",
      "prisoners in hard prisons try harder to escape"
     ]
    },
@@ -500,8 +500,8 @@
    "nuanceA": {
     "ok": "a system based only on punishment leads to many prisoners reoffending after release",
     "d": [
-     "punishment can never change the way an offender behaves after release",
      "the cost of keeping people in prison for years falls on ordinary taxpayers",
+     "punishment can never change the way an offender behaves after release",
      "offenders in very harsh prisons become more determined to escape"
     ]
    },
@@ -540,8 +540,8 @@
    "position": {
     "ok": "prisons should combine the loss of freedom with compulsory programmes that reform offenders",
     "d": [
-     "every prison must stop punishing completely and focus only on reforming offenders",
      "prison sentences should be replaced by therapy programmes that offenders must attend",
+     "every prison must stop punishing completely and focus only on reforming offenders",
      "society should focus on preventing crime, which would make prisons mostly unnecessary"
     ]
    },
@@ -592,8 +592,8 @@
    "nuanceA": {
     "ok": "with no routine, work and home mix and people get very tired",
     "d": [
-     "staff working at home with no routine will always forget their duties",
      "working at home gives staff back several hours of travel each week",
+     "staff working at home with no routine will always forget their duties",
      "most workers would rather work at home than in an office"
     ]
    },
@@ -616,8 +616,8 @@
    "exB": {
     "ok": "Projects delayed by lonely staff and messages answered hours later.",
     "d": [
-     "No new ideas at all in companies where staff never meet.",
      "New workers leaving a few months after they join.",
+     "No new ideas at all in companies where staff never meet.",
      "Staff doing housework during their paid working hours."
     ]
    },
@@ -682,8 +682,8 @@
    "nuanceA": {
     "ok": "remote work without structure blurs the line between work and home and causes burnout",
     "d": [
-     "staff working at home without structure will always neglect their duties",
      "remote work gives staff back several unpaid hours of travel every week",
+     "staff working at home without structure will always neglect their duties",
      "most employees would rather work at home than travel to an office"
     ]
    },
@@ -698,16 +698,16 @@
    "mechB": {
     "ok": "removing casual contact between colleagues and breaking up the unity of teams",
     "d": [
-     "slowing projects down through messages that are never answered in real time",
      "leaving organisations exposed when home internet connections fail",
+     "slowing projects down through messages that are never answered in real time",
      "allowing staff to ignore instructions they would never question inside a shared office"
     ]
    },
    "exB": {
     "ok": "Projects delayed by isolated staff and by messages answered hours later.",
     "d": [
-     "The complete loss of new ideas in any firm whose staff never meet in person.",
      "New staff resigning within months of joining a spread-out company.",
+     "The complete loss of new ideas in any firm whose staff never meet in person.",
      "Employees doing household jobs during their paid working hours."
     ]
    },
@@ -742,8 +742,8 @@
    "core": {
     "ok": "Control over how much time young people spend on screens.",
     "d": [
-     "The effect of technology on everyone in society.",
      "The right age for a child's first smartphone.",
+     "The effect of technology on everyone in society.",
      "How social media changes the way teenagers act with friends."
     ]
    },
@@ -774,8 +774,8 @@
    "nuanceA": {
     "ok": "strict rules can leave children bad with technology and lonely",
     "d": [
-     "children with no devices are always left out by classmates",
      "children with firm limits often read more and sleep longer",
+     "children with no devices are always left out by classmates",
      "devices with no adult watching turn study time into just watching"
     ]
    },
@@ -806,16 +806,16 @@
    "nuanceB": {
     "ok": "free use without help from adults often becomes just watching, not learning",
     "d": [
-     "devices with no adult watching always ruin a child's focus",
      "few families can buy a device for every child",
+     "devices with no adult watching always ruin a child's focus",
      "strict limits leave children unable to use the tools school needs"
     ]
    },
    "position": {
     "ok": "parents should guide what children do on screens, not just limit time",
     "d": [
-     "parents must take screens away from childhood completely",
      "screens should be banned on weekdays and free at weekends",
+     "parents must take screens away from childhood completely",
      "children should use computers at school with help but never at home"
     ]
    },
@@ -864,8 +864,8 @@
    "nuanceA": {
     "ok": "very strict limits leave children unable to use technology and cut off from friends",
     "d": [
-     "children raised without any devices are always excluded by their classmates",
      "children with firm limits usually read more and sleep longer than their school friends",
+     "children raised without any devices are always excluded by their classmates",
      "devices without supervision turn planned study time into passive entertainment"
     ]
    },
@@ -896,16 +896,16 @@
    "nuanceB": {
     "ok": "access without guidance often turns into passive watching rather than real learning",
     "d": [
-     "devices without supervision always destroy a child's ability to concentrate",
      "few families can afford a separate device for every child in the house",
+     "devices without supervision always destroy a child's ability to concentrate",
      "strict limits leave a child unable to use the digital tools that their school expects"
     ]
    },
    "position": {
     "ok": "parents should move from limiting screen time towards guiding its content and purpose",
     "d": [
-     "parents must remove screens from childhood completely if children are to develop normally",
      "screen time should be banned on weekdays and allowed freely at weekends",
+     "parents must remove screens from childhood completely if children are to develop normally",
      "children should use computers with supervision at school but never at home"
     ]
    },
@@ -956,8 +956,8 @@
    "nuanceA": {
     "ok": "most of the money goes back to foreign hotel and airline companies",
     "d": [
-     "local people never get any of the money visitors spend",
      "visitor money is now the biggest income in many places",
+     "local people never get any of the money visitors spend",
      "crowds of visitors harm coral reefs and wear away old stone buildings"
     ]
    },
@@ -988,8 +988,8 @@
    "nuanceB": {
     "ok": "visitor money often pays to protect the same parks and buildings",
     "d": [
-     "tourism always saves much more nature than it destroys",
      "many well-known places now limit how many people can visit daily",
+     "tourism always saves much more nature than it destroys",
      "most visitor money goes back to foreign hotel companies"
     ]
    },
@@ -1004,9 +1004,9 @@
    "rationale": {
     "ok": "a place that sells its special character loses what visitors come for",
     "d": [
-     "protecting nature must always come before making money",
+     "local people, not government officials, should decide how many hotels are built",
      "tourism money is the only way a poor beach town can grow",
-     "local people, not government officials, should decide how many hotels are built"
+     "protecting nature must always come before making money"
     ]
    }
   },
@@ -1046,8 +1046,8 @@
    "nuanceA": {
     "ok": "most of the profit returns to the foreign firms that own the hotels and airlines",
     "d": [
-     "local communities never see any share of the money that foreign visitors spend",
      "visitor spending has now become the largest single source of income in many regions",
+     "local communities never see any share of the money that foreign visitors spend",
      "crowds of visitors damage coral reefs and wear away ancient stone buildings"
     ]
    },
@@ -1078,8 +1078,8 @@
    "nuanceB": {
     "ok": "visitor money often pays for the very parks and buildings that need protecting",
     "d": [
-     "tourism always saves far more of the natural world than it destroys",
      "many popular sites now limit the number of people allowed in each day",
+     "tourism always saves far more of the natural world than it destroys",
      "most of the money visitors spend goes back to the foreign companies that own hotels"
     ]
    },
@@ -1094,9 +1094,9 @@
    "rationale": {
     "ok": "a place that sells its character will lose the very thing visitors come for",
     "d": [
-     "protecting nature must always come before any economic gain a region might make",
+     "local people rather than officials should decide how many hotels are built",
      "money from tourism is the only realistic way for a poor coastal region to develop",
-     "local people rather than officials should decide how many hotels are built"
+     "protecting nature must always come before any economic gain a region might make"
     ]
    }
   }
@@ -1186,8 +1186,8 @@
    "rationale": {
     "ok": "helping people now and learning for the future can go together",
     "d": [
-     "science must always come before what voters want today",
      "a country without long-term research will soon fall behind its neighbours",
+     "science must always come before what voters want today",
      "public money belongs to taxpayers, so only they should decide"
     ]
    }
@@ -1276,8 +1276,8 @@
    "rationale": {
     "ok": "helping people now and building knowledge for the future are not opposing aims",
     "d": [
-     "science must always come before the short-term wishes of ordinary voters",
      "a country that ignores long-term research will fall behind its neighbours within a generation",
+     "science must always come before the short-term wishes of ordinary voters",
      "public money belongs to taxpayers, so they alone should decide how it is used"
     ]
    }
@@ -1320,8 +1320,8 @@
    "nuanceA": {
     "ok": "these taxes take a bigger part of poor families' money",
     "d": [
-     "a food tax never changes what people put in their basket",
      "sugar taxes have already cut the sugar sold in several countries",
+     "a food tax never changes what people put in their basket",
      "fast food is now sold in almost every town and village"
     ]
    },
@@ -1352,8 +1352,8 @@
    "nuanceB": {
     "ok": "real choice needs good information, but adverts shape what children like",
     "d": [
-     "nobody who has seen food adverts can ever make a free choice",
      "many supermarkets now print large, clear labels on their food packets",
+     "nobody who has seen food adverts can ever make a free choice",
      "these taxes take a bigger part of poor families' money"
     ]
    },
@@ -1368,8 +1368,8 @@
    "rationale": {
     "ok": "choice only means something when cheap, healthy food is really nearby",
     "d": [
-     "everyone's health must always be more important than one person's wishes",
      "taxes are the fastest way for a government to change people's habits",
+     "everyone's health must always be more important than one person's wishes",
      "people cannot look after their own health without help"
     ]
    }
@@ -1410,8 +1410,8 @@
    "nuanceA": {
     "ok": "these taxes take a much bigger share of income from the poorest families",
     "d": [
-     "a food tax never changes what people finally decide to put in their shopping basket",
      "sugar taxes have already reduced the amount of sugar sold in several countries",
+     "a food tax never changes what people finally decide to put in their shopping basket",
      "fast food is now sold almost everywhere, from big cities to small villages"
     ]
    },
@@ -1442,8 +1442,8 @@
    "nuanceB": {
     "ok": "real choice needs good information, but advertising shapes children's taste from an early age",
     "d": [
-     "nobody who grew up watching food adverts can ever make a truly free choice about food",
      "many supermarkets now print large, clear nutrition labels on the front of all their food packets",
+     "nobody who grew up watching food adverts can ever make a truly free choice about food",
      "these taxes take a much bigger share of income from the poorest families than the rich"
     ]
    },
@@ -1458,8 +1458,8 @@
    "rationale": {
     "ok": "choice only means something when a cheap, healthy option is actually available nearby",
     "d": [
-     "the health of the whole population must always come before the wishes of any individual",
      "taxes are the quickest tool a government has for changing how the public behaves",
+     "the health of the whole population must always come before the wishes of any individual",
      "people cannot be trusted to look after their own health without help"
     ]
    }
@@ -1542,16 +1542,16 @@
    "position": {
     "ok": "print should survive as a local, high-quality product beside online news",
     "d": [
-     "printed papers will disappear completely once the last older readers have gone",
      "governments should pay to keep national papers printing every day",
+     "printed papers will disappear completely once the last older readers have gone",
      "readers should stop using screens and go back to paper"
     ]
    },
    "rationale": {
     "ok": "what matters is paying for good reporting, not saving the paper",
     "d": [
-     "the printed newspaper is the only news that readers can fully trust",
      "most readers prefer to get their news free on their phones",
+     "the printed newspaper is the only news that readers can fully trust",
      "new technology always replaces old media, so print cannot be saved"
     ]
    }
@@ -1568,8 +1568,8 @@
    "facetA": {
     "ok": "The replacement of the printed paper by news that is delivered online.",
     "d": [
-     "The belief that nobody under thirty will ever read a newspaper again.",
      "The move of advertising money from printed pages to websites and apps.",
+     "The belief that nobody under thirty will ever read a newspaper again.",
      "The growth of social media as the main source of political news today."
     ]
    },
@@ -1632,16 +1632,16 @@
    "position": {
     "ok": "print should survive as a local, high-quality product while online news reports daily events",
     "d": [
-     "printed newspapers will vanish completely once the last generation of older readers has finally gone",
      "governments should pay to keep the national newspapers in print each day",
+     "printed newspapers will vanish completely once the last generation of older readers has finally gone",
      "readers should give up their screens and return to the printed page entirely"
     ]
    },
    "rationale": {
     "ok": "what matters is paying for good journalism, not saving the paper it is printed on",
     "d": [
-     "the printed newspaper is the only kind of news that readers can really trust completely",
      "most readers now prefer to get their news free of charge on their phones",
+     "the printed newspaper is the only kind of news that readers can really trust completely",
      "technology always replaces older media, so printed papers cannot be saved"
     ]
    }
@@ -1684,8 +1684,8 @@
    "nuanceA": {
     "ok": "a drug that seems safe in animals can still harm people",
     "d": [
-     "tests on animals never tell doctors anything useful about people",
      "the number of animals used in tests has fallen a lot",
+     "tests on animals never tell doctors anything useful about people",
      "most laboratory animals are mice and rats, not dogs or cats"
     ]
    },
@@ -1716,8 +1716,8 @@
    "nuanceB": {
     "ok": "new methods cannot copy a whole body yet, so animal tests remain",
     "d": [
-     "computer models will never tell scientists anything useful about a drug",
      "human cell tests avoid the pain that laboratory animals still feel",
+     "computer models will never tell scientists anything useful about a drug",
      "many countries have already banned testing make-up on animals"
     ]
    },
@@ -1732,8 +1732,8 @@
    "rationale": {
     "ok": "we should accept only the pain science needs, and check it often",
     "d": [
-     "hurting an animal is never right, whatever it does for people",
      "sick patients waiting for medicine matter far more than laboratory animals",
+     "hurting an animal is never right, whatever it does for people",
      "science will end animal tests anyway, so we need no new rules"
     ]
    }
@@ -1774,8 +1774,8 @@
    "nuanceA": {
     "ok": "animals and humans are different, so drugs that seem safe in animals can still harm people",
     "d": [
-     "results from animal tests are never of any use in treating human patients",
      "the number of animals used in laboratories has fallen sharply in the last twenty years",
+     "results from animal tests are never of any use in treating human patients",
      "most animals used in laboratories are mice and rats rather than dogs or cats"
     ]
    },
@@ -1806,8 +1806,8 @@
    "nuanceB": {
     "ok": "these methods cannot yet copy how a whole body reacts, so animals are still needed",
     "d": [
-     "computer models will never tell scientists anything useful about a new drug",
      "human cell tests avoid the pain and suffering that laboratory animals still go through",
+     "computer models will never tell scientists anything useful about a new drug",
      "many countries have already banned testing cosmetics on animals completely"
     ]
    },
@@ -1822,8 +1822,8 @@
    "rationale": {
     "ok": "we should allow only the suffering that science still needs, and review that limit regularly",
     "d": [
-     "causing pain to an animal can never be justified by any benefit to people",
      "patients waiting for treatment have a much stronger claim on us than laboratory animals",
+     "causing pain to an animal can never be justified by any benefit to people",
      "science will replace animal testing in time, so no new rules are needed"
     ]
    }
@@ -1866,8 +1866,8 @@
    "nuanceA": {
     "ok": "losing only makes children stronger when adults help them learn from it",
     "d": [
-     "children who never lose give up when adults stop praising them",
      "the discipline of sport also helps children behave better in the classroom",
+     "children who never lose give up when adults stop praising them",
      "most schools no longer have enough fields to run a proper league"
     ]
    },
@@ -1914,8 +1914,8 @@
    "rationale": {
     "ok": "what matters is how adults present competition, not whether it exists",
     "d": [
-     "competition is the only part of school that prepares children for work",
      "children who enjoy sport are more likely to stay active as adults",
+     "competition is the only part of school that prepares children for work",
      "stress in childhood always damages a young person's mind for life"
     ]
    }
@@ -1956,8 +1956,8 @@
    "nuanceA": {
     "ok": "children only grow stronger from defeat when adults treat it as something to learn from",
     "d": [
-     "children who never face defeat give up as soon as an adult stops praising them",
      "the discipline learned on the sports field also improves how children behave in the classroom",
+     "children who never face defeat give up as soon as an adult stops praising them",
      "most schools no longer have enough playing fields to run a proper league"
     ]
    },
@@ -2004,8 +2004,8 @@
    "rationale": {
     "ok": "the value of children's sport depends on how adults present competition, not on whether it exists",
     "d": [
-     "competition is the only part of school life that properly prepares children for adult working life",
      "children who enjoy their sport are far more likely to stay active as adults",
+     "competition is the only part of school life that properly prepares children for adult working life",
      "stress in childhood always causes lasting damage to a young person's mental health"
     ]
    }
@@ -2088,8 +2088,8 @@
    "position": {
     "ok": "adverts should be banned for young children, then allowed with media lessons",
     "d": [
-     "all adverts for anyone under eighteen should be banned everywhere",
      "companies should advertise freely to children if what they say is true",
+     "all adverts for anyone under eighteen should be banned everywhere",
      "schools alone should decide which brands can talk to their pupils"
     ]
    },
@@ -2122,8 +2122,8 @@
    "mechA": {
     "ok": "keeping adverts away from an audience too young to realise it is being persuaded",
     "d": [
-     "protecting children from any message at all that might influence the choices they make",
      "reducing the amount of unhealthy food that supermarkets are allowed to sell",
+     "protecting children from any message at all that might influence the choices they make",
      "giving parents the power to block certain channels on the family television"
     ]
    },
@@ -2178,8 +2178,8 @@
    "position": {
     "ok": "advertising should be banned for young children and allowed later alongside media lessons",
     "d": [
-     "all advertising aimed at anyone under eighteen should be banned everywhere without exception",
      "companies should be free to advertise to children as long as their claims are true",
+     "all advertising aimed at anyone under eighteen should be banned everywhere without exception",
      "schools alone should decide which brands are allowed to speak to their pupils"
     ]
    },
@@ -2254,9 +2254,9 @@
    "exB": {
     "ok": "Schools and radio that brought Welsh and Maori back into daily use.",
     "d": [
-     "Museums that show old books in languages nobody speaks now.",
+     "Festivals that celebrate old songs in a regional language.",
      "Government offices that serve everyone in the national language only.",
-     "Festivals that celebrate old songs in a regional language."
+     "Museums that show old books in languages nobody speaks now."
     ]
    },
    "nuanceB": {
@@ -2270,8 +2270,8 @@
    "position": {
     "ok": "governments should fund languages people want to keep, and encourage speaking two",
     "d": [
-     "every government must pay whatever it takes to save every language",
      "languages should live or die by how useful their speakers find them",
+     "every government must pay whatever it takes to save every language",
      "schools should teach only the national language so everyone understands each other"
     ]
    },
@@ -2360,8 +2360,8 @@
    "position": {
     "ok": "governments should pay to revive languages where communities want this, and encourage bilingualism",
     "d": [
-     "every government must spend whatever is needed to save every single language spoken within its borders",
      "languages should be left to survive or die according to how useful their speakers find them",
+     "every government must spend whatever is needed to save every single language spoken within its borders",
      "schools should teach only the national language so that all citizens understand each other"
     ]
    },
@@ -2412,8 +2412,8 @@
    "nuanceA": {
     "ok": "a home-only course can become praise and hide wrongs done abroad",
     "d": [
-     "national history is always written by the winners, never the losers",
      "many pupils say lessons about their own country are their favourite",
+     "national history is always written by the winners, never the losers",
      "national history gives pupils a clear feeling of belonging"
     ]
    },
@@ -2502,8 +2502,8 @@
    "nuanceA": {
     "ok": "a national-only course can easily become celebration and hide what was done abroad",
     "d": [
-     "national history is always written by the winners and never by the losers",
      "many pupils say the lessons about their own country are the ones they enjoy the most",
+     "national history is always written by the winners and never by the losers",
      "national history gives pupils a clear sense of belonging to their community"
     ]
    },
@@ -2542,16 +2542,16 @@
    "position": {
     "ok": "schools should teach the national past as one example inside wider world history",
     "d": [
-     "schools should drop national history completely and teach only global themes",
      "pupils should study their own country first and turn to world history at university",
+     "schools should drop national history completely and teach only global themes",
      "each school should be free to choose whichever kind of history it prefers"
     ]
    },
    "rationale": {
     "ok": "causes in history cross borders, so a course split by country gives a false picture",
     "d": [
-     "national pride is the main reason governments pay for history teaching at all",
      "pupils remember far more when a lesson links the past to today's news",
+     "national pride is the main reason governments pay for history teaching at all",
      "world history matters much more than national history in today's connected modern economy"
     ]
    }
@@ -2578,8 +2578,8 @@
    "mechA": {
     "ok": "sharing the cost so no family is ruined by a long illness",
     "d": [
-     "making sure relatives never need to help care for old people",
      "putting the whole cost on working people through much higher taxes",
+     "making sure relatives never need to help care for old people",
      "giving every old person exactly the same care, whatever they need"
     ]
    },
@@ -2594,8 +2594,8 @@
    "nuanceA": {
     "ok": "care only from care homes keeps old people safe but lonely",
     "d": [
-     "government care can never be as good as a loving family",
      "family carers at home often have to give up their jobs",
+     "government care can never be as good as a loving family",
      "trained staff can handle medical needs that family members cannot"
     ]
    },
@@ -2626,8 +2626,8 @@
    "nuanceB": {
     "ok": "leaving care to families puts most of the work on women",
     "d": [
-     "family care always works better than any care from the government",
      "old people cared for at home by family are usually much happier",
+     "family care always works better than any care from the government",
      "the cost of paid home care has risen faster than family income"
     ]
    },
@@ -2668,8 +2668,8 @@
    "mechA": {
     "ok": "sharing the cost across society so that no family is ruined by a long illness",
     "d": [
-     "removing the need for relatives to take any part at all in caring for older people",
      "moving the whole cost of care onto working people through much higher taxes",
+     "removing the need for relatives to take any part at all in caring for older people",
      "giving every older person exactly the same care whatever their needs are"
     ]
    },
@@ -2684,8 +2684,8 @@
    "nuanceA": {
     "ok": "care given only by institutions keeps people safe but can leave them lonely",
     "d": [
-     "state care can never match the care given inside a loving family home",
      "relatives who care for a parent at home often have to give up paid work",
+     "state care can never match the care given inside a loving family home",
      "trained staff can manage medical needs that untrained relatives cannot safely handle"
     ]
    },
@@ -2716,8 +2716,8 @@
    "nuanceB": {
     "ok": "leaving care to families alone puts most of the burden on women and increases inequality",
     "d": [
-     "family care always works better than any care that the state can organise",
      "older people cared for at home by relatives usually say they are much happier",
+     "family care always works better than any care that the state can organise",
      "the cost of professional home care has risen much faster than the average family's income"
     ]
    },
@@ -2752,8 +2752,8 @@
    "facetA": {
     "ok": "The idea that GM crops are needed for a growing world population.",
     "d": [
-     "The idea that modern farming can end all hunger everywhere by 2050.",
      "The need to turn more forests and fields into farmland.",
+     "The idea that modern farming can end all hunger everywhere by 2050.",
      "The value of new machines in helping one farm grow more."
     ]
    },
@@ -2816,9 +2816,9 @@
    "position": {
     "ok": "governments should allow GM crops with independent checks while fighting poverty",
     "d": [
-     "GM crops should be banned everywhere until every risk is ruled out",
+     "farmers alone should choose their seeds with no government control",
      "GM crops should be planted everywhere to end world hunger fast",
-     "farmers alone should choose their seeds with no government control"
+     "GM crops should be banned everywhere until every risk is ruled out"
     ]
    },
    "rationale": {
@@ -2934,8 +2934,8 @@
    "facetA": {
     "ok": "The idea that library buildings are not needed now information is online.",
     "d": [
-     "The idea that nobody needs a library building for any reason.",
      "The growth of online shops that send paper books to homes.",
+     "The idea that nobody needs a library building for any reason.",
      "The falling number of trained librarians working for councils."
     ]
    },
@@ -2974,8 +2974,8 @@
    "mechB": {
     "ok": "offering free space, helpful staff and machines few people have at home",
     "d": [
-     "giving everyone a place where nothing at all must be bought",
      "selling cheap coffee and snacks to raise money for books",
+     "giving everyone a place where nothing at all must be bought",
      "giving paid jobs to local people so the council supports the neighbourhood"
     ]
    },
@@ -3024,8 +3024,8 @@
    "facetA": {
     "ok": "The idea that library buildings are no longer needed now information is online.",
     "d": [
-     "The idea that no one needs to enter a library building for any purpose at all.",
      "The growth of online shops that deliver printed books to readers at home.",
+     "The idea that no one needs to enter a library building for any purpose at all.",
      "The falling number of trained librarians employed by councils across the country."
     ]
    },
@@ -3064,8 +3064,8 @@
    "mechB": {
     "ok": "offering a free space with trained staff and equipment that few people own at home",
     "d": [
-     "giving every citizen a place to go where nothing at all needs to be bought",
      "selling coffee and snacks to visitors to raise money for new books",
+     "giving every citizen a place to go where nothing at all needs to be bought",
      "employing local people so that the council supports jobs in the surrounding neighbourhood"
     ]
    },
@@ -3080,8 +3080,8 @@
    "nuanceB": {
     "ok": "this argument defends the service itself, not the old building or its traditional layout",
     "d": [
-     "a shared public space can never be replaced by anything that a private company could offer",
      "online access only helps people who own a device and know how to search",
+     "a shared public space can never be replaced by anything that a private company could offer",
      "online information is often unreliable and needs a trained person to check it"
     ]
    },
@@ -3096,9 +3096,9 @@
    "rationale": {
     "ok": "information is not useful unless people also have the help and space to use it",
     "d": [
-     "information is worth nothing at all unless a trained librarian explains it first",
+     "councils have a duty to give local families somewhere warm and safe to spend time",
      "printed books will always be easier to read carefully than text on a screen",
-     "councils have a duty to give local families somewhere warm and safe to spend time"
+     "information is worth nothing at all unless a trained librarian explains it first"
     ]
    }
   }
@@ -3140,8 +3140,8 @@
    "nuanceA": {
     "ok": "our carbon depends mostly on transport and energy we cannot change",
     "d": [
-     "people never want to give up any comfort to help the planet",
      "shoppers in rich countries still buy cheap goods flown from far away",
+     "people never want to give up any comfort to help the planet",
      "recycling rules change so much that few know which bin to use"
     ]
    },
@@ -3172,8 +3172,8 @@
    "nuanceB": {
     "ok": "big laws cannot last without public support, which personal effort helps build",
     "d": [
-     "governments never keep the green promises they make before elections",
      "national rules on power stations cut pollution much faster than personal choices",
+     "governments never keep the green promises they make before elections",
      "most voters know very little about how the electricity system works"
     ]
    },
@@ -3188,8 +3188,8 @@
    "rationale": {
     "ok": "pollution is decided by the systems around us, not by good wishes",
     "d": [
-     "one person can never make any difference to a problem this big",
      "governments have much more money to spend than ordinary families do",
+     "one person can never make any difference to a problem this big",
      "climate change is a world problem and needs world agreements"
     ]
    }
@@ -3230,8 +3230,8 @@
    "nuanceA": {
     "ok": "personal emissions depend mostly on transport and energy systems that people cannot change",
     "d": [
-     "people are never willing to give up any comfort for the sake of the environment",
      "shoppers in wealthy countries still buy cheap goods that are flown in from distant factories",
+     "people are never willing to give up any comfort for the sake of the environment",
      "recycling schemes differ so much that very few people know which bin to use"
     ]
    },
@@ -3262,24 +3262,24 @@
    "nuanceB": {
     "ok": "laws this large cannot last without public support, which visible personal effort helps to build",
     "d": [
-     "governments never keep the environmental promises that they make during an election",
      "national rules on power stations cut emissions faster than personal choices do",
+     "governments never keep the environmental promises that they make during an election",
      "most voters know very little about how the electricity grid actually works"
     ]
    },
    "position": {
     "ok": "government rules must do most of the work, while personal action provides public support",
     "d": [
-     "government rules alone will solve the whole problem, so personal habits do not matter at all",
      "citizens should change their own habits first and then ask their governments to follow",
+     "government rules alone will solve the whole problem, so personal habits do not matter at all",
      "the market should be left to decide which clean technologies succeed in the end"
     ]
    },
    "rationale": {
     "ok": "emissions are decided by the systems around us rather than by good intentions",
     "d": [
-     "individual people can never make any real difference to a problem of this size",
      "governments have far more money to spend than private households do",
+     "individual people can never make any real difference to a problem of this size",
      "climate change is a global problem that only binding international agreements can solve"
     ]
    }
@@ -3338,8 +3338,8 @@
    "mechB": {
     "ok": "letting each generation show its own skills and values in its buildings",
     "d": [
-     "letting architects design anything at all with no control from city planners",
      "using new building methods so towers fit on very small sites",
+     "letting architects design anything at all with no control from city planners",
      "making a city famous with one amazing building on every postcard"
     ]
    },
@@ -3354,8 +3354,8 @@
    "nuanceB": {
     "ok": "bold buildings may look great alone but spoil a street together",
     "d": [
-     "local people always dislike modern buildings near their homes",
      "flat roofs and big windows suit hot places better than wet cities",
+     "local people always dislike modern buildings near their homes",
      "glass and steel towers cost a lot to heat and cool"
     ]
    },
@@ -3428,8 +3428,8 @@
    "mechB": {
     "ok": "letting each generation show its own skills and values in the buildings it leaves",
     "d": [
-     "letting architects design whatever they like without any control from local planners",
      "using new engineering methods so that towers can be built on very small sites",
+     "letting architects design whatever they like without any control from local planners",
      "drawing attention to a city through one striking building that appears on every postcard"
     ]
    },
@@ -3444,8 +3444,8 @@
    "nuanceB": {
     "ok": "buildings that ignore their setting may impress alone but harm the street together",
     "d": [
-     "modern architecture is always disliked by the ordinary people who live nearby",
      "flat roofs and large windows suit warm climates much better than wet northern cities",
+     "modern architecture is always disliked by the ordinary people who live nearby",
      "towers of steel and glass are expensive to heat and cool throughout the year"
     ]
    },
@@ -3460,9 +3460,9 @@
    "rationale": {
     "ok": "a city is valuable because people can see its different periods in its buildings",
     "d": [
-     "old buildings are the only part of a city that tourists really want to see",
+     "local people should decide what new buildings in their area look like",
      "modern design will always be cheaper and faster to build than traditional building work",
-     "local people should decide what new buildings in their area look like"
+     "old buildings are the only part of a city that tourists really want to see"
     ]
    }
   }
@@ -3504,8 +3504,8 @@
    "nuanceA": {
     "ok": "the gain lasts only while pay matches what local firms produce",
     "d": [
-     "the gain disappears completely when shop prices start to rise",
      "higher pay lets families spend more in local shops",
+     "the gain disappears completely when shop prices start to rise",
      "workers in poor areas often move to richer cities"
     ]
    },
@@ -3544,16 +3544,16 @@
    "position": {
     "ok": "the minimum wage should be set by experts who study each area",
     "d": [
-     "the minimum wage should rise sharply everywhere because poverty is worse",
      "employers should decide pay and the government should help poor families",
+     "the minimum wage should rise sharply everywhere because poverty is worse",
      "the same minimum wage should apply everywhere in the country"
     ]
    },
    "rationale": {
     "ok": "the right result depends on choosing the right level for each place",
     "d": [
-     "raising pay is always the fairest answer, wherever you live",
      "employers understand their own costs much better than the government does",
+     "raising pay is always the fairest answer, wherever you live",
      "a strong economy needs workers who earn enough to spend"
     ]
    }
@@ -3594,8 +3594,8 @@
    "nuanceA": {
     "ok": "the benefit lasts only while the rise matches what local businesses can produce",
     "d": [
-     "the benefit disappears completely as soon as prices in the shops start to rise",
      "higher pay lets families spend more in local shops and small businesses",
+     "the benefit disappears completely as soon as prices in the shops start to rise",
      "workers in poorer regions often move to richer cities to look for better pay"
     ]
    },
@@ -3634,16 +3634,16 @@
    "position": {
     "ok": "the minimum wage should be set by independent experts who study each region",
     "d": [
-     "the minimum wage should be raised sharply everywhere because poverty is the bigger danger",
      "governments should leave pay to employers and help poor families through benefits",
+     "the minimum wage should be raised sharply everywhere because poverty is the bigger danger",
      "the same minimum wage should apply in every part of the country, with no exceptions"
     ]
    },
    "rationale": {
     "ok": "the result depends on the right level for local conditions, not the policy itself",
     "d": [
-     "raising pay is always the fairest answer, whatever the local economy is like",
      "employers understand their own costs far better than any government department ever does",
+     "raising pay is always the fairest answer, whatever the local economy is like",
      "a strong economy needs workers who earn enough to spend freely in local shops"
     ]
    }
@@ -3686,8 +3686,8 @@
    "nuanceA": {
     "ok": "waiting means missing the years when children learn new sounds most easily",
     "d": [
-     "children who learn only one language never respect other cultures",
      "older pupils learn grammar faster because they understand how language works",
+     "children who learn only one language never respect other cultures",
      "many parents speak a different language at home from school"
     ]
    },
@@ -3734,8 +3734,8 @@
    "rationale": {
     "ok": "children gain most by starting early with a strong first language",
     "d": [
-     "children who learn two languages early always do better at school",
      "languages are the most important subject in primary school",
+     "children who learn two languages early always do better at school",
      "most jobs now expect young people to speak another language"
     ]
    }
@@ -3776,8 +3776,8 @@
    "nuanceA": {
     "ok": "waiting until later means missing the years when children pick up new sounds most easily",
     "d": [
-     "children who study only one language never learn to respect other cultures",
      "older pupils learn grammar rules faster because they already understand how a language works",
+     "children who study only one language never learn to respect other cultures",
      "many parents speak a language at home that is not used in the classroom"
     ]
    },
@@ -3824,8 +3824,8 @@
    "rationale": {
     "ok": "children gain most when they start early but keep a strong base in their first language",
     "d": [
-     "children who learn two languages early always do better at school than those who learn one",
      "language teaching is the most valuable subject in the primary school timetable",
+     "children who learn two languages early always do better at school than those who learn one",
      "the modern workplace expects young people to speak at least one other language"
     ]
    }
@@ -3868,8 +3868,8 @@
    "nuanceA": {
     "ok": "watching is passive and leaves less time for sport and real problems",
     "d": [
-     "children's programmes are never as correct as school books",
      "children who watch science shows often ask their teachers questions",
+     "children's programmes are never as correct as school books",
      "parents rarely watch the same programmes as their children"
     ]
    },
@@ -3908,8 +3908,8 @@
    "position": {
     "ok": "television can teach children a lot, but parents must set firm limits",
     "d": [
-     "television helps children a lot and parents never need to control it",
      "children under ten should not be allowed to watch television",
+     "television helps children a lot and parents never need to control it",
      "channels should only be allowed to show learning programmes to children"
     ]
    },
@@ -3958,8 +3958,8 @@
    "nuanceA": {
     "ok": "watching is passive and leaves less time for exercise and solving real problems",
     "d": [
-     "programmes for children are never as accurate as the textbooks used at school",
      "children who watch documentaries often ask their teachers questions about what they saw",
+     "programmes for children are never as accurate as the textbooks used at school",
      "parents rarely watch the same programmes that their own children choose"
     ]
    },
@@ -3998,8 +3998,8 @@
    "position": {
     "ok": "television can teach children a great deal, but parents must set firm limits on viewing",
     "d": [
-     "television offers children real benefits and needs no control from their parents at all",
      "children under the age of ten should not be allowed to watch television",
+     "television offers children real benefits and needs no control from their parents at all",
      "channels should be required to show only educational programmes to children"
     ]
    },
@@ -4050,8 +4050,8 @@
    "nuanceA": {
     "ok": "strict entry helps rich families, as school results depend on money",
     "d": [
-     "exam results never show what a young person can really do",
      "some very able students would rather start a job than keep studying",
+     "exam results never show what a young person can really do",
      "top universities spend more on research than on teaching"
     ]
    },
@@ -4082,16 +4082,16 @@
    "nuanceB": {
     "ok": "open entry with no limits can lower standards and overload teachers",
     "d": [
-     "big classes can never be taught as well as small ones anywhere",
      "students from poor families often work long hours while they study",
+     "big classes can never be taught as well as small ones anywhere",
      "many young people choose a subject that does not suit them"
     ]
    },
    "position": {
     "ok": "entry should be open for basic courses but strict for research degrees",
     "d": [
-     "everyone should get in because education is a right, not a prize",
      "governments should build more job-training colleges instead of more universities",
+     "everyone should get in because education is a right, not a prize",
      "universities should choose their students without any government rules"
     ]
    },
@@ -4140,8 +4140,8 @@
    "nuanceA": {
     "ok": "strict selection keeps inequality, because early results depend on family wealth",
     "d": [
-     "exam results never show what a young person is really capable of doing in later life",
      "some very able students prefer to start work rather than continue studying",
+     "exam results never show what a young person is really capable of doing in later life",
      "leading universities spend more on research than on teaching their students"
     ]
    },
@@ -4180,16 +4180,16 @@
    "position": {
     "ok": "entry should be open for basic courses but selective for advanced research degrees",
     "d": [
-     "entry should be open to everyone because education is a right rather than a prize",
      "governments should build more practical training colleges instead of sending more people to university",
+     "entry should be open to everyone because education is a right rather than a prize",
      "universities themselves should decide who to admit without any government rules"
     ]
    },
    "rationale": {
     "ok": "a fair system must lift society as a whole while still protecting excellent research",
     "d": [
-     "wider access to education always matters more than protecting academic standards",
      "young people should be free to choose whichever course interests them",
+     "wider access to education always matters more than protecting academic standards",
      "a country needs far more skilled workers than it needs university graduates"
     ]
    }
@@ -4224,8 +4224,8 @@
    "exA": {
     "ok": "Schools that went back to printed books for literature after tablets.",
     "d": [
-     "Schools that swapped all their books for tablets and never went back.",
      "Publishers that now sell a digital copy with their printed books.",
+     "Schools that swapped all their books for tablets and never went back.",
      "The heavy bags of pupils who carry five books to school daily."
     ]
    },
@@ -4314,8 +4314,8 @@
    "exA": {
     "ok": "Schools that went back to printed books for literature after trying tablet lessons.",
     "d": [
-     "Schools that replaced every printed book with a tablet in one year and never went back.",
      "Publishers that now sell a digital copy together with their printed textbooks.",
+     "Schools that replaced every printed book with a tablet in one year and never went back.",
      "The heavy bags carried by pupils who bring five textbooks to school every day."
     ]
    },
@@ -4398,8 +4398,8 @@
    "mechA": {
     "ok": "taking sweet food out of the place where daily eating habits form",
     "d": [
-     "banning anything with added sugar everywhere in school, even the staff room",
      "putting water fountains and fruit stalls in place of machines",
+     "banning anything with added sugar everywhere in school, even the staff room",
      "teaching students in science lessons how sugar affects the body"
     ]
    },
@@ -4446,8 +4446,8 @@
    "nuanceB": {
     "ok": "a rule that feels like punishment can make banned snacks more attractive",
     "d": [
-     "teenagers always hate and ignore rules that schools make",
      "food companies fight hard against any limit on their products",
+     "teenagers always hate and ignore rules that schools make",
      "students who skip breakfast often need a sweet snack in the morning"
     ]
    },
@@ -4536,8 +4536,8 @@
    "nuanceB": {
     "ok": "a rule that feels like punishment can make the banned snack even more attractive",
     "d": [
-     "rules made by schools are always disliked and ignored by teenagers",
      "the food industry fights hard against any limit on its products",
+     "rules made by schools are always disliked and ignored by teenagers",
      "students who skip breakfast at home often need a sweet snack to get through the morning"
     ]
    },
@@ -4596,16 +4596,16 @@
    "nuanceA": {
     "ok": "a hard job can leave a student too tired to study",
     "d": [
-     "students with part-time jobs always fail their final exams",
      "the pay for a sixteen-year-old only buys small things",
+     "students with part-time jobs always fail their final exams",
      "many bosses do not want workers under eighteen"
     ]
    },
    "facetB": {
     "ok": "The help that past work gives in getting a first full-time job.",
     "d": [
-     "The promise that a part-time job always leads to a full-time job.",
      "The money that student workers add to the country each year.",
+     "The promise that a part-time job always leads to a full-time job.",
      "Less pressure on parents to pay for their children's spending."
     ]
    },
@@ -4644,8 +4644,8 @@
    "rationale": {
     "ok": "jobs teach what classrooms cannot, and limited hours keep grades safe",
     "d": [
-     "teenagers who work are much more grown-up than those who never have",
      "a student who earns money learns to spend it more carefully",
+     "teenagers who work are much more grown-up than those who never have",
      "bosses care much more about past work experience than about exam results"
     ]
    }
@@ -4686,8 +4686,8 @@
    "nuanceA": {
     "ok": "a demanding job can leave a student too tired to study in the evenings",
     "d": [
-     "students who work part-time always fail their final exams",
      "the pay for a sixteen-year-old rarely covers more than small purchases",
+     "students who work part-time always fail their final exams",
      "many employers do not want to hire anyone under eighteen"
     ]
    },
@@ -4734,8 +4734,8 @@
    "rationale": {
     "ok": "work teaches skills a classroom cannot, and a weekly limit removes the risk to grades",
     "d": [
-     "teenagers who work are much more mature than those who have never had a job",
      "a student who earns money learns to spend it more carefully",
+     "teenagers who work are much more mature than those who have never had a job",
      "the job market rewards experience more than it rewards qualifications"
     ]
    }
@@ -4778,8 +4778,8 @@
    "nuanceA": {
     "ok": "for poor workers the fare really matters, and free travel helps them",
     "d": [
-     "free travel has never made one driver leave the car at home",
      "free buses mostly attract riders who have nowhere in particular to go",
+     "free travel has never made one driver leave the car at home",
      "more and more people buy cars in many poorer countries"
     ]
    },
@@ -4794,8 +4794,8 @@
    "mechB": {
     "ok": "paying for lost ticket money instead of more routes and more buses",
     "d": [
-     "making taxpayers who never take a bus pay for other people's trips",
      "bringing in many more passengers with new lines and shorter waits",
+     "making taxpayers who never take a bus pay for other people's trips",
      "covering the growing losses of bus and train companies every year"
     ]
    },
@@ -4826,8 +4826,8 @@
    "rationale": {
     "ok": "people leave cars for fast, reliable buses, not just cheap ones",
     "d": [
-     "people always care less about things that they get for free",
      "taxes are a fairer way to pay for services than tickets",
+     "people always care less about things that they get for free",
      "cleaner air is good for everyone in a city, drivers too"
     ]
    }
@@ -4868,8 +4868,8 @@
    "nuanceA": {
     "ok": "for workers on low incomes the fare is a real barrier that free travel removes",
     "d": [
-     "free travel has never persuaded a single driver anywhere to leave the car at home",
      "free buses tend to attract passengers with nowhere in particular to go",
+     "free travel has never persuaded a single driver anywhere to leave the car at home",
      "car ownership keeps rising quickly in most developing countries"
     ]
    },
@@ -4884,8 +4884,8 @@
    "mechB": {
     "ok": "spending the budget on replacing lost ticket money rather than on more routes and frequent services",
     "d": [
-     "forcing taxpayers who never use a bus or train to pay for other people's daily journeys",
      "raising passenger numbers sharply through new lines and shorter waits",
+     "forcing taxpayers who never use a bus or train to pay for other people's daily journeys",
      "covering the growing losses that transport companies report each year"
     ]
    },
@@ -4916,8 +4916,8 @@
    "rationale": {
     "ok": "commuters give up their cars when transport is fast and reliable, not just cheap",
     "d": [
-     "people always treat free services with less respect than services they have to pay for",
      "taxes are a fairer way of paying for public services than charging users",
+     "people always treat free services with less respect than services they have to pay for",
      "cleaner air benefits every resident of a city, including those who drive"
     ]
    }
@@ -4936,8 +4936,8 @@
    "facetA": {
     "ok": "The freedom to learn from any place and at any speed.",
     "d": [
-     "No more costs at all once a school needs no building.",
      "The loss of daily time with classmates and teachers.",
+     "No more costs at all once a school needs no building.",
      "The fun of learning from videos instead of books."
     ]
    },
@@ -5190,9 +5190,9 @@
    "rationale": {
     "ok": "an open culture grows, while a closed one only survives",
     "d": [
-     "young people always follow new foreign things, so fighting it is useless",
+     "traditional arts bring in tourists and money from other countries",
      "the English language is used in business and universities everywhere",
-     "traditional arts bring in tourists and money from other countries"
+     "young people always follow new foreign things, so fighting it is useless"
     ]
    }
   },
@@ -5280,9 +5280,9 @@
    "rationale": {
     "ok": "a culture that mixes with the world grows, while one protected from it only survives",
     "d": [
-     "young people will always follow whatever is new and foreign, so resisting is pointless",
+     "traditional arts attract tourists and so bring in foreign money",
      "the English language is used in international business and higher education everywhere",
-     "traditional arts attract tourists and so bring in foreign money"
+     "young people will always follow whatever is new and foreign, so resisting is pointless"
     ]
    }
   }
@@ -5324,8 +5324,8 @@
    "nuanceA": {
     "ok": "a serious criminal just moves to the next street with no camera",
     "d": [
-     "cameras have never stopped a single crime, because criminals ignore them",
      "taxpayers pay to put up and look after the cameras",
+     "cameras have never stopped a single crime, because criminals ignore them",
      "most video is deleted after a few weeks without being watched"
     ]
    },
@@ -5356,8 +5356,8 @@
    "nuanceB": {
     "ok": "strict rules on keeping and viewing videos remove much of the danger",
     "d": [
-     "data rules have never stopped governments that wanted to ignore them",
      "schools usually put in cameras because parents ask for them",
+     "data rules have never stopped governments that wanted to ignore them",
      "most people say they feel safer on a street with cameras"
     ]
    },
@@ -5414,8 +5414,8 @@
    "nuanceA": {
     "ok": "a determined offender simply moves to the nearest street without a camera",
     "d": [
-     "cameras have never prevented a single crime, because offenders ignore them",
      "the cost of putting up and maintaining cameras is paid by taxpayers",
+     "cameras have never prevented a single crime, because offenders ignore them",
      "most recorded video is deleted within a few weeks without ever being watched"
     ]
    },
@@ -5514,8 +5514,8 @@
    "facetB": {
     "ok": "Parks, ponds and surfaces that let the rain soak in.",
     "d": [
-     "Building drains and pumps big enough for any storm at all.",
      "Moving people out of the areas that flood most often.",
+     "Building drains and pumps big enough for any storm at all.",
      "Paying money to families whose homes get flooded."
     ]
    },
@@ -5636,8 +5636,8 @@
    "position": {
     "ok": "city authorities must require rain-absorbing green space in new developments and the worst-flooded districts",
     "d": [
-     "city authorities should spend whatever it takes on the biggest drains and most powerful pumps",
      "residents of flood-prone districts should be moved to higher ground",
+     "city authorities should spend whatever it takes on the biggest drains and most powerful pumps",
      "the world's governments must cut carbon emissions to slow climate change"
     ]
    },
@@ -5664,16 +5664,16 @@
    "facetA": {
     "ok": "The early school start when teenage bodies want to sleep late.",
     "d": [
-     "The way that most teenagers never put down their phones at night.",
      "The trouble tired students have in afternoon lessons.",
+     "The way that most teenagers never put down their phones at night.",
      "The noise and heat of city bedrooms in the hot season."
     ]
    },
    "mechA": {
     "ok": "moving teenage sleep later while school still starts before eight",
     "d": [
-     "keeping teenagers awake with a phone that never leaves their hand",
      "travelling for an hour across a busy city to school",
+     "keeping teenagers awake with a phone that never leaves their hand",
      "making parents leave home early for their long work days"
     ]
    },
@@ -5720,8 +5720,8 @@
    "nuanceB": {
     "ok": "a later start does little if students stay up later on phones",
     "d": [
-     "a later start is impossible because lessons could never be finished",
      "students who sleep well do better in their exams",
+     "a later start is impossible because lessons could never be finished",
      "most teachers would like to finish work earlier in the day"
     ]
    },
@@ -5762,8 +5762,8 @@
    "mechA": {
     "ok": "shifting teenagers' body clock later while lessons still begin before eight, so nights are cut short",
     "d": [
-     "keeping teenagers awake with the light and endless messages of a phone always in their hand",
      "travelling for an hour across a crowded city to reach a half-past-seven assembly",
+     "keeping teenagers awake with the light and endless messages of a phone always in their hand",
      "forcing parents to leave home early for their own long working days"
     ]
    },
@@ -5810,8 +5810,8 @@
    "nuanceB": {
     "ok": "a later start achieves little if students simply stay up later on their phones",
     "d": [
-     "a later start is simply impossible because the syllabus could never be finished in time",
      "students who sleep well tend to do better in their exams",
+     "a later start is simply impossible because the syllabus could never be finished in time",
      "most teachers would prefer to finish their working day earlier"
     ]
    },
@@ -5902,8 +5902,8 @@
    "nuanceB": {
     "ok": "guesses about future jobs are often wrong, so courses soon get old",
     "d": [
-     "universities will never change what they teach, whatever the job market says",
      "students on work practice get less pay than full-time staff",
+     "universities will never change what they teach, whatever the job market says",
      "the top universities get the best students in every subject"
     ]
    },
@@ -5992,8 +5992,8 @@
    "nuanceB": {
     "ok": "job forecasts are often wrong, and a course built for today may soon be outdated",
     "d": [
-     "universities will never agree to change what they teach, whatever the job market clearly needs",
      "students on work placements are paid less than permanent staff",
+     "universities will never agree to change what they teach, whatever the job market clearly needs",
      "the top universities attract the strongest applicants whatever the subject"
     ]
    },
@@ -6008,8 +6008,8 @@
    "rationale": {
     "ok": "a graduate whose skills match a vacancy gets hired, and general education cannot replace that match",
     "d": [
-     "a university education is completely wasted unless it leads straight to a job in that field",
      "young people without work are more likely to leave the country for good",
+     "a university education is completely wasted unless it leads straight to a job in that field",
      "employers cannot be expected to pay for training every new member of staff"
     ]
    }
@@ -6266,8 +6266,8 @@
    "nuanceB": {
     "ok": "students at weak schools may have no fair chance without tutoring",
     "d": [
-     "tutoring is completely useless for students who already do well at school",
      "the best tutors are often school teachers earning extra money",
+     "tutoring is completely useless for students who already do well at school",
      "tutoring prices have risen faster than family incomes"
     ]
    },
@@ -6364,8 +6364,8 @@
    "position": {
     "ok": "tutoring is negative, and governments should limit it by improving schools and reforming exams",
     "d": [
-     "tutoring has both benefits and drawbacks, and whether it is positive depends entirely on the family",
      "tutoring is a positive development because it helps hard-working students do better",
+     "tutoring has both benefits and drawbacks, and whether it is positive depends entirely on the family",
      "private tutoring should be banned completely so that all students compete on equal terms"
     ]
    },
@@ -6416,8 +6416,8 @@
    "nuanceA": {
     "ok": "banks and governments pushed the apps as much as shoppers did",
     "d": [
-     "nobody under thirty has touched a banknote in years or knows how",
      "a scanned payment shows at once in both accounts",
+     "nobody under thirty has touched a banknote in years or knows how",
      "small shops pay a fee on every card payment they take"
     ]
    },
@@ -6432,8 +6432,8 @@
    "mechB": {
     "ok": "needing a phone and account, which old and poor people often lack",
     "d": [
-     "making people spend too much because they never hold the money",
      "leaving old people unable to buy bus tickets from card-only machines",
+     "making people spend too much because they never hold the money",
      "recording purchases so banks can sell the data to advertisers"
     ]
    },
@@ -6506,8 +6506,8 @@
    "nuanceA": {
     "ok": "banks and governments promoting apps drove the change as much as shoppers did",
     "d": [
-     "nobody under thirty has used a banknote in years, and most would not even know how",
      "a scanned payment appears immediately in both accounts",
+     "nobody under thirty has used a banknote in years, and most would not even know how",
      "small traders pay a fee on every card payment they accept"
     ]
    },
@@ -6522,8 +6522,8 @@
    "mechB": {
     "ok": "making every purchase depend on a phone, account and signal the old and poor often lack",
     "d": [
-     "tempting people to overspend because the money never passes through their hands when they buy",
      "leaving elderly customers unable to buy a bus ticket from a card-only machine",
+     "tempting people to overspend because the money never passes through their hands when they buy",
      "recording every purchase so that banks can sell the data to advertisers"
     ]
    },
