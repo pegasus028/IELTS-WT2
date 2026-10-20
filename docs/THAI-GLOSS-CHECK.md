@@ -91,4 +91,14 @@ How it shows: on a lesson page at the A1 or A2 explanation level, a ไทย bu
 | m13s3 Module 13 · On paper and on computer | A1 | On paper, count by the line. No format checks spelling. Never write bullet points. | บนกระดาษ ให้นับคำทีละบรรทัด ไม่มีรูปแบบใดตรวจการสะกดให้ ห้ามเขียนเป็นหัวข้อย่อย | draft — native check needed |
 | m13s3 Module 13 · On paper and on computer | A2 | Paper: count words by the line. Screen: use the counter at minute 35. No spell-check. No bullet points. | กระดาษ: นับคำทีละบรรทัด หน้าจอ: ใช้ตัวนับคำเมื่อถึงนาทีที่ 35 ไม่มีการตรวจสะกด ห้ามเขียนเป็นหัวข้อย่อย | draft — native check needed |
 
-84 lines in all.
+## Story keywords in the five term-project scenes (story-content.js `projects`)
+
+| Project | Word | English gloss | Thai gloss (draft — native check needed) | OK? |
+|---|---|---|---|---|
+| 1 Two views, one verdict | fair hearing | a proper chance to be heard | การรับฟังอย่างเป็นธรรม | draft — native check needed |
+| 2 Weigh, do not list | heavier | more important, with more weight | หนักกว่า มีน้ำหนักมากกว่า | draft — native check needed |
+| 3 How far? | extent | how much, how far | ขอบเขต ระดับ | draft — native check needed |
+| 4 Cause to cure | causes | the reasons something happens | สาเหตุ | draft — native check needed |
+| 5 Two questions, two rooms | verdicts | final answers or decisions | คำตัดสิน | draft — native check needed |
+
+84 lesson lines and 5 story keywords in all.

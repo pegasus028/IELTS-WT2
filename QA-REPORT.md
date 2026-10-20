@@ -1,5 +1,27 @@
 # Position Control / Quillmoor Academy — QA report
 
+## The second half of the story, real duels, Thai glosses, optional revision — 20 October 2026 (Claude Fable 5.1)
+
+Work packages WP8 (remainder), WP10, WP6 (remainder) and WP14 from the five-student walkthrough, built on branch `up3-fable` from 07e4202. Ids, `pc.*`/`qm.*` keys, API actions and Sheet columns are unchanged; one action (`owl`), one sheet (`Owls`) and one optional field (`houses` → `challenge`) were added to Code.gs.
+
+**What changed.**
+- *Duels (WP8).* Every Duelling Hall duel has an opponent from the story (`STORY.duellists`: Mina Sato, Celeste Ashby, the Gossip Quill, Orla Finch of Bridge, chosen by prompt id). Her "spell" is the near-miss option, named under each answered question; she speaks after every step (`#bc-line`) and at the end (`#bc-endline`). A step clock (`[data-duel-clock]`, 75 s a question, `#bc-clock`) is off by default and on in the Midwinter Tournament's duel; questions still open when it runs out count as lost. Points and the pass mark are unchanged.
+- *Term projects (WP10a).* Her five are five projects (`STORY.projects`, keyed by place 1–5, so T.Chris's own five fit): a scene before the first duel on the prompt (`#proj-scene`), a newsroom page after the essay is revised or has no red rows (`#proj-news`, `#proj-keep`), a keepsake each (`proj-scales`, `proj-weight`, `proj-ruler`, `proj-arrow`, `proj-twokeys`, 60 merits), and a Map Room list (`#projects`, `[data-proj-open]`). Scene art (`story/proj-01..05.webp`) is not drawn yet; the placeholder seal shows; the `alt` lines are the art brief.
+- *Inked spellbook (WP10b).* `#lab-inked` on the Workshop's Design page: each of the 14 lines is pencil until the coach has read it, then ink; each finished cast with that design adds a gold mark.
+- *Weekly house challenge (WP10c).* Staff Room → Owl post panel (`#chal-card`, `#chal-save`) stores `{ kind:'challenge', id, cohort, title, metric, from, to }`; metrics essays · revisions · words · duels · merits · mended. Each student scores herself on `p.story.challenge`; `houses` with a `challenge` id returns house totals (never names); the Map Room card (`#challenge`) says "starts after the redeploy" until the backend answers.
+- *Owl exchange (WP10d).* `#w-owl` / `#rp-owl` send one anonymous body paragraph (sentences + the writer's own mechanism/example/nuance tags) to her house; a housemate opens it from the Map Room (`#owlx`, `[data-owl-tag]`), tags it (`#owl-tagsend`, +15 merits) and both see the two readings. Backend: action `owl` (send · list · tag), new sheet `Owls` (id, ts, cohort, house, fromId, promptId, para, taggedBy, taggedTs, json); sender and tagger ids never travel. Offline mirror in api.js.
+- *Boss items (WP10e).* The chapter 2, 4 and 7 gates end with a written question (`gate.boss` in story-content.js: `boss-ch2` thesis, `boss-ch4` body paragraph, `boss-ch7` extent thesis), marked by Writer.checkThesis / checkBody, with the examiner's line (`#boss-say`). Seven drawn questions plus the boss, boss last (`.play[data-boss]`).
+- *Daily spell (WP10f).* `#spell` on the Map Room: one variable on a fresh prompt (never her five, never one she has written), the offline shape check first, then one `lab.coach` call (or the Ward check alone when AI is off); 15 merits and a streak (`p.spell`).
+- *Thai gloss (WP6).* `lesson-thai.js`: an optional Thai line under each lesson key sentence at A1 and A2 (`#p-thai` toggle, off by default; `qm.thai`, `p.thaiGloss`). Every line is a draft for a native check: `docs/THAI-GLOSS-CHECK.md`, rebuilt by `tools/thai-list.js` (84 lesson lines + 5 story keywords).
+- *Optional revision (WP14).* With no red rows the result card says "revise for practice, or move on" (`#w-revise-card[data-revise=practice]`, `#w-moveon`); the target comes from the Wards only (red, then amber), else the shorter body paragraph; a practice revision earns its 80 merits when the row grows by a developed sentence (15+ words) with no new red row. The under-250 merit line says how many words she needs. Her five count a clean essay as done (`coreSteps().clean`).
+- *Duelling Hall sets.* No absolute-word near-miss at any tier, 18 B2/C1 double-absolute sets softened, the p-open-university B2 rationale second answer removed: `docs/DUEL-ABSOLUTE-WORDS.md`.
+
+**Tests.** validate, template-test (134), test-free (764), story-validate, gs-test (all, with 22 new WP10 checks), audit (0 flags), lab-validate, leak-check, thai-list; a Playwright pass at 390×844 against the mock backend on a scratch copy (51 checks, 0 page errors): spell, Thai toggle, duel with opponent/clock/time-out, chapter 2 boss gate, clean essay → practice revision and project newsroom, owl send and tag across two accounts, challenge totals, inked spellbook, Staff Room challenge form.
+
+**For T.Chris.** Redeploy Code.gs (version 20261020) for the challenge totals and the owl exchange; until then both say so on the page. Have a Thai speaker read `docs/THAI-GLOSS-CHECK.md` before switching the toggle on for a student. Five scene pictures are wanted for the term projects (`story/proj-01..05.webp`; the `alt` text in story-content.js is the brief).
+
+---
+
 ## Hints: one rule-only hint for every question — 18 October 2026 (Claude Opus 5.5)
 
 Requested by T.Chris: check the hint on every question; it must be the right hint for that question, must not give the answer away, and should only outline the rule or principle.

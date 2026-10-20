@@ -21,7 +21,15 @@ Object.keys(L).forEach(function (id) {
     out.push('| ' + id + ' ' + (name[id] || '') + ' | ' + lv + ' | ' + en + ' | ' + th.replace(/\|/g, '\\|') + ' | draft — native check needed |');
   });
 });
-out.push('', n + ' lines in all.');
+/* the story keywords ([[word|English gloss|Thai gloss]]) in the term-project scenes (story-content.js, WP10a) */
+require(path.join(root, 'story-content.js'));
+var KW = /\[\[([^\]]+)\]\]/g, S = window.STORY || {}, sk = 0;
+out.push('', '## Story keywords in the five term-project scenes (story-content.js `projects`)', '', '| Project | Word | English gloss | Thai gloss (draft — native check needed) | OK? |', '|---|---|---|---|---|');
+(S.projects || []).forEach(function (pj) {
+  var m; KW.lastIndex = 0;
+  while ((m = KW.exec(String(pj.scene && pj.scene.text || '')))) { var parts = m[1].split('|'); sk++; if (!parts[2] || !/[฀-๿]/.test(parts[2])) missing++; out.push('| ' + pj.n + ' ' + pj.title + ' | ' + parts[0] + ' | ' + (parts[1] || '') + ' | ' + (parts[2] || '(missing)') + ' | draft — native check needed |'); }
+});
+out.push('', n + ' lesson lines and ' + sk + ' story keywords in all.');
 fs.writeFileSync(path.join(root, 'docs/THAI-GLOSS-CHECK.md'), out.join('\n') + '\n');
-console.log('thai-list: ' + n + ' lines, ' + missing + ' missing');
+console.log('thai-list: ' + n + ' lesson lines, ' + sk + ' story keywords, ' + missing + ' missing');
 process.exit(missing ? 1 : 0);
