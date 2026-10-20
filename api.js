@@ -251,9 +251,9 @@
     }
     return String(c || '').trim().toLowerCase();
   }
-  function localHouses(cohort) {
-    var d = db(), want = String(cohort || '').trim().toLowerCase(), totals = {}, members = {};
-    HOUSE_IDS.forEach(function (h) { totals[h] = 0; members[h] = 0; });
+  function localHouses(cohort, challenge) {
+    var d = db(), want = String(cohort || '').trim().toLowerCase(), totals = {}, members = {}, ct = {}, cm = {}, chal = String(challenge || '');
+    HOUSE_IDS.forEach(function (h) { totals[h] = 0; members[h] = 0; ct[h] = 0; cm[h] = 0; });
     Object.keys(d.students).forEach(function (k) {
       var s = d.students[k], prog = s && s.progress;
       if (!prog || typeof prog !== 'object') return;
@@ -264,8 +264,40 @@
       if (!isFinite(hp) || hp < 0) hp = 0;
       members[h] += 1;
       totals[h] += Math.min(Math.round(hp), 100000);
+      if (chal && st.challenge && String(st.challenge.id) === chal) { var sc = Number(st.challenge.score); if (!isFinite(sc) || sc < 0) sc = 0; cm[h] += 1; ct[h] += Math.round(sc); }
     });
-    return { ok: true, cohort: cohort || '', totals: totals, members: members };
+    var out = { ok: true, cohort: cohort || '', totals: totals, members: members };
+    if (chal) out.challenge = { id: chal, totals: ct, members: cm };
+    return out;
+  }
+  /* ------------------------------------------------------- owl exchange (WP10d)
+     Offline mirror of the `owl` action: one anonymous paragraph per sender in flight,
+     tagged once by a housemate of the same cohort. row.fromId names the sender here
+     (the server reads the token instead). */
+  function localOwl(kind, row) {
+    var d = db(); if (!d.owls) d.owls = [];
+    row = row || {};
+    var sid = String(row.fromId || '').toLowerCase(), me = d.students[sid], prog = (me && me.progress) || {}, st = prog.story || {};
+    var house = String(row.house || st.house || '').toLowerCase(), coh = String(row.cohort || prog.cohort || '').trim().toLowerCase();
+    function sameHouse(o) { return String(o.house).toLowerCase() === house && String(o.cohort || '').toLowerCase() === coh; }
+    function mine(o) { return String(o.fromId).toLowerCase() === sid; }
+    function pub(o, isMine) { var x = { id: o.id, ts: o.ts, house: o.house, promptId: o.promptId, para: o.para, sentences: o.sentences || [], tagged: !!o.taggedBy }; if (isMine) { x.selfTags = o.selfTags || null; x.tags = o.tags || null; } return x; }
+    if (kind === 'send') {
+      if (d.owls.some(function (o) { return mine(o) && !o.taggedBy; })) return { ok: false, error: 'Your last owl is still flying.' };
+      d.owls.push({ id: row.id, ts: row.ts || new Date().toISOString(), cohort: coh, house: house, fromId: sid, promptId: row.promptId, para: row.para, sentences: (row.sentences || []).slice(0, 12), selfTags: row.selfTags || null, taggedBy: '', tags: null });
+      if (d.owls.length > 400) d.owls = d.owls.slice(-400);
+      saveDb(d); return { ok: true, id: row.id };
+    }
+    if (kind === 'tag') {
+      var o = d.owls.filter(function (x) { return x.id === row.id; })[0];
+      if (!o) return { ok: false, error: 'Not found' };
+      if (mine(o)) return { ok: false, error: 'You cannot tag your own owl.' };
+      if (!sameHouse(o)) return { ok: false, error: 'That owl is for another house.' };
+      if (o.taggedBy) return { ok: false, error: 'A housemate has already read that owl.' };
+      o.taggedBy = sid; o.taggedTs = new Date().toISOString(); o.tags = row.tags || null; saveDb(d);
+      return { ok: true, owl: pub(o, true) };
+    }
+    return { ok: true, mine: d.owls.filter(mine).slice(-5).map(function (o) { return pub(o, true); }), forMe: d.owls.filter(function (o) { return !mine(o) && !o.taggedBy && sameHouse(o); }).slice(-3).map(function (o) { return pub(o, false); }) };
   }
 
   /* ------------------------------------------------------------------ API */
@@ -372,7 +404,9 @@
     /* projector: kind = 'post' | 'list' | 'clear' */
     projector: function (kind, row) { return call('projector', { kind: kind, row: row }, function () { return localProjector(kind, row); }); },
     /* House Cup: { ok, cohort, totals:{compass,bridge,lexicon,loom}, members:{…} } — totals only, no names. */
-    houses: function (cohort) { return call('houses', { cohort: cohort || '' }, function () { return localHouses(cohort); }); },
+    houses: function (cohort, challenge) { return call('houses', { cohort: cohort || '', challenge: challenge || '' }, function () { return localHouses(cohort, challenge); }); },
+    /* owl exchange (WP10d): kind = 'send' | 'list' | 'tag' */
+    owl: function (kind, row) { return call('owl', { kind: kind, row: row }, function () { return localOwl(kind, row); }); },
 
     localCount: function () { return Object.keys(db().students).length; }
   };

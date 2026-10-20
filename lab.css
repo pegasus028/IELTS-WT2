@@ -295,3 +295,14 @@
 .lab-inuse p{margin:4px 0}
 .lab-acts .btn{min-height:40px}
 @media (max-width:560px){.lab-acts .lab-aiq{flex-basis:100%}}
+
+/* the inked spellbook (WP10b, 20 Oct 2026): pencil until coached, ink after, a gold mark per cast */
+.inked{background:var(--surface);border-top:3px solid var(--brass)}
+.ink-page{list-style:none;padding:8px 6px 4px;margin:0;display:flex;flex-direction:column;gap:7px;background:repeating-linear-gradient(to bottom,transparent 0,transparent 27px,var(--rule-soft) 27px,var(--rule-soft) 28px);border-radius:var(--r-s)}
+.ink-line{display:flex;gap:8px;align-items:flex-start;font-size:.92rem;line-height:1.5;min-height:28px}
+.ink-n{flex:0 0 1.6em;font-family:var(--f-mono);font-size:.74rem;color:var(--ink-3);padding-top:4px}
+.ink-t{flex:1;min-width:0}
+.ink-line.pencil .ink-t{color:var(--ink-3);font-style:italic;text-decoration:underline dashed var(--rule)}
+.ink-line.ink .ink-t{color:var(--ink);font-family:var(--f-display);font-size:.98rem}
+.ink-marks{flex:0 0 auto;display:flex;gap:1px;align-items:center;min-width:1.2em;padding-top:3px}
+.ink-mark{color:var(--gold,#c8a03c);font-style:normal;font-size:.85rem;line-height:1}

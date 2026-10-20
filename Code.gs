@@ -37,6 +37,15 @@
    VERSION (19 Oct 2026). ping and doGet return APP_VERSION; the Staff Room
    asks for a redeploy when it is missing or older than the front end expects.
 
+   WP10 (20 Oct 2026), additive only:
+   - `houses` takes an optional `challenge` id and adds { challenge: { id, totals, members } }:
+     the sum of story.challenge.score per house for students whose story.challenge.id matches.
+   - `owl` (send · list · tag): the owl exchange between housemates, on a new Owls sheet.
+     A student sends one anonymous body paragraph to her house; a housemate tags its
+     mechanism, example and nuance sentences; both see the result. The sender's id is
+     stored (fromId) but never returned to anyone but herself; the tagger's id (taggedBy)
+     is never returned at all.
+
    Requests are POST with Content-Type text/plain (a "simple request", so no
    CORS preflight), body {action, payload}. Every reply is JSON {ok, …}.
    =========================================================================== */
@@ -48,13 +57,14 @@ var SHEETS = {
   Reports: ['id', 'ts', 'studentId', 'name', 'cohort', 'promptId', 'type', 'tier', 'kind', 'uiMode', 'words', 'seconds', 'bad', 'warn', 'status', 'released', 'aiVisible', 'overall', 'json', 'ownShare', 'ownSentences', 'fillUsed', 'landAgree', 'revisionOf'],
   Assignments: ['id', 'ts', 'json'],
   Projector: ['ts', 'round', 'kind', 'json'],
-  Log: ['ts', 'what']
+  Log: ['ts', 'what'],
+  Owls: ['id', 'ts', 'cohort', 'house', 'fromId', 'promptId', 'para', 'taggedBy', 'taggedTs', 'json']
 };
 
 /* WP1 (19 Oct 2026): the build this file belongs to. ping and doGet report it, and the Staff Room
    shows a banner when the live deployment is older than the front end expects. Change it with every
    release that touches this file (and the Staff Room's EXPECTED_BACKEND in teacher.js). */
-var APP_VERSION = '20261019';
+var APP_VERSION = '20261020';
 
 function doGet() { return out({ ok: true, app: 'Quillmoor Academy', sheet: SpreadsheetApp.getActive().getName(), version: APP_VERSION }); }
 
@@ -95,6 +105,7 @@ function handle(action, p) {
     case 'projector': return projector(p, T);
     case 'assign': return T ? { ok: true } : denied();
     case 'houses': return houses(p);
+    case 'owl': return owl(p);
   }
   return { ok: false, error: 'Unknown action ' + action };
 }
@@ -342,9 +353,9 @@ var HOUSE_IDS = ['compass', 'bridge', 'lexicon', 'loom'];
 /* Totals of story.hp per house, and how many students are in each, for one
    cohort (all cohorts when none is given). Names and ids never leave here. */
 function houses(p) {
-  var want = String((p && p.cohort) || '').trim().toLowerCase();
-  var totals = {}, members = {};
-  HOUSE_IDS.forEach(function (h) { totals[h] = 0; members[h] = 0; });
+  var want = String((p && p.cohort) || '').trim().toLowerCase(), chal = String((p && p.challenge) || '').trim();
+  var totals = {}, members = {}, ct = {}, cm = {};
+  HOUSE_IDS.forEach(function (h) { totals[h] = 0; members[h] = 0; ct[h] = 0; cm[h] = 0; });
   rows('Students').forEach(function (s) {
     var prog = parse(s.progress, null);
     if (!prog || typeof prog !== 'object') return;
@@ -356,6 +367,63 @@ function houses(p) {
     if (!isFinite(hp) || hp < 0) hp = 0;
     members[h] += 1;
     totals[h] += Math.min(Math.round(hp), 100000);
+    /* WP10c: the weekly house challenge, scored by each student on her own progress */
+    if (chal && st.challenge && String(st.challenge.id) === chal) {
+      var sc = Number(st.challenge.score); if (!isFinite(sc) || sc < 0) sc = 0;
+      cm[h] += 1; ct[h] += Math.min(Math.round(sc), 1000000);
+    }
   });
-  return { ok: true, cohort: (p && p.cohort) || '', totals: totals, members: members };
+  var out = { ok: true, cohort: (p && p.cohort) || '', totals: totals, members: members };
+  if (chal) out.challenge = { id: chal, totals: ct, members: cm };
+  return out;
+}
+
+/* ----------------------------------------------------------- owl exchange (WP10d) */
+var OWL_MAX_SENT = 12, OWL_MAX_LEN = 600;
+function owlPublic(r, mine) {
+  var j = parse(r.json, {});
+  var o = { id: r.id, ts: r.ts, house: r.house, promptId: r.promptId, para: r.para, sentences: j.sentences || [], tagged: !!r.taggedBy, taggedTs: r.taggedTs || '' };
+  if (mine) { o.selfTags = j.selfTags || null; o.tags = j.tags || null; }
+  return o;
+}
+function owl(p) {
+  var s = student(p);
+  if (!s) return { ok: false, error: 'Not signed in.' };
+  var prog = parse(s.progress, {}) || {}, st = prog.story || {};
+  var house = String(st.house || '').toLowerCase(), coh = String(prog.cohort || s.cohort || '').trim().toLowerCase(), sid = String(s.id).toLowerCase();
+  var kind = p.kind, row = p.row || {};
+  if (HOUSE_IDS.indexOf(house) < 0) return { ok: false, error: 'Not sorted yet: the Lantern must sort you first.' };
+  var all = rows('Owls');
+  function sameHouse(r) { return String(r.house).toLowerCase() === house && String(r.cohort || '').trim().toLowerCase() === coh; }
+  function isMine(r) { return String(r.fromId).toLowerCase() === sid; }
+  if (kind === 'send') {
+    if (all.some(function (r) { return isMine(r) && !r.taggedBy; })) return { ok: false, error: 'Your last owl is still flying.' };
+    var sents = (row.sentences || []).slice(0, OWL_MAX_SENT).map(function (x) { return String(x || '').slice(0, OWL_MAX_LEN); }).filter(Boolean);
+    if (sents.length < 3) return { ok: false, error: 'A paragraph needs at least three sentences.' };
+    var self = row.selfTags && typeof row.selfTags === 'object' ? { mech: Number(row.selfTags.mech), ex: Number(row.selfTags.ex), nuance: Number(row.selfTags.nuance) } : null;
+    var id = String(row.id || ('O' + Utilities.getUuid().slice(0, 12))).slice(0, 40);
+    if (all.some(function (r) { return r.id === id; })) return { ok: true, id: id };
+    append('Owls', { id: id, ts: new Date().toISOString(), cohort: coh, house: house, fromId: sid, promptId: String(row.promptId || '').slice(0, 60), para: String(row.para || '').slice(0, 12), taggedBy: '', taggedTs: '',
+      json: JSON.stringify({ sentences: sents, selfTags: self, reportId: String(row.reportId || '').slice(0, 40) }) });
+    return { ok: true, id: id };
+  }
+  if (kind === 'tag') {
+    var tags = row.tags && typeof row.tags === 'object' ? { mech: Number(row.tags.mech), ex: Number(row.tags.ex), nuance: Number(row.tags.nuance) } : null;
+    if (!tags) return { ok: false, error: 'Tags needed.' };
+    for (var i = 0; i < all.length; i++) if (all[i].id === String(row.id || '')) {
+      var r = all[i];
+      if (isMine(r)) return { ok: false, error: 'You cannot tag your own owl.' };
+      if (!sameHouse(r)) return { ok: false, error: 'That owl is for another house.' };
+      if (r.taggedBy) return { ok: false, error: 'A housemate has already read that owl.' };
+      var j = parse(r.json, {}); j.tags = tags;
+      update('Owls', r._row, { taggedBy: sid, taggedTs: new Date().toISOString(), json: JSON.stringify(j) });
+      var back = owlPublic(r, true); back.tags = tags; back.selfTags = j.selfTags || null; back.tagged = true;
+      return { ok: true, owl: back };
+    }
+    return { ok: false, error: 'Not found' };
+  }
+  /* list */
+  var mine = all.filter(isMine).slice(-5).map(function (r) { return owlPublic(r, true); });
+  var forMe = all.filter(function (r) { return !isMine(r) && !r.taggedBy && sameHouse(r); }).slice(-3).map(function (r) { return owlPublic(r, false); });
+  return { ok: true, mine: mine, forMe: forMe };
 }

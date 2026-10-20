@@ -123,6 +123,39 @@ const nk = post('lab.coach', { studentId: 'mint', token: mintTok, kind: 'frame',
 check('no key: coach refuses cleanly', nk.ok === false && /key/i.test(nk.error), nk);
 
 check('existing actions still work (ping)', post('ping', {}).ok === true);
+
+/* ---------------------------------------------- WP10 (20 Oct 2026): challenge totals and the owl exchange */
+post('register', { id: 'nok', pw: 'pw5555', name: 'Nok' });
+const nokTok = post('login', { id: 'nok', pw: 'pw5555' }).token;
+post('register', { id: 'fon', pw: 'pw7777', name: 'Fon' });
+const fonTok = post('login', { id: 'fon', pw: 'pw7777' }).token;
+post('save', { token: tok, progress: { studentId: 'ploy', cohort: 'tutees', story: { house: 'lexicon', hp: 40, challenge: { id: 'CH1', score: 3 } } }, attempts: [] });
+post('save', { token: nokTok, progress: { studentId: 'nok', cohort: 'tutees', story: { house: 'lexicon', hp: 10, challenge: { id: 'CH1', score: 2 } } }, attempts: [] });
+post('save', { token: fonTok, progress: { studentId: 'fon', cohort: 'tutees', story: { house: 'loom', hp: 5, challenge: { id: 'CH0', score: 9 } } }, attempts: [] });
+const hc1 = post("houses", { cohort: "tutees", challenge: "CH1" });
+check('houses still returns hp totals', hc1.ok && hc1.totals.lexicon === 50 && hc1.totals.loom === 5, hc1);
+check('houses adds challenge totals for the asked id only', hc1.challenge && hc1.challenge.id === 'CH1' && hc1.challenge.totals.lexicon === 5 && hc1.challenge.totals.loom === 0 && hc1.challenge.members.lexicon === 2, hc1.challenge);
+check('houses without a challenge id has no challenge field', !('challenge' in post('houses', { cohort: 'tutees' })));
+const owlRow = { id: 'O1', promptId: 'p-cars-city', para: 'bodyA', sentences: ['Cars make the air dirty because they burn fuel.', 'For example, central London charges drivers.', 'However, workers with no bus still need cars.'], selfTags: { mech: 0, ex: 1, nuance: 2 } };
+check('owl send refused without a token', post('owl', { kind: 'send', row: owlRow }).ok === false);
+check('owl send refused for an unsorted student', post('owl', { kind: 'send', token: mintTok, row: owlRow }).ok === false);
+check('owl send (own paragraph, sorted)', post('owl', { kind: 'send', token: tok, row: owlRow }).ok === true);
+check('a second owl while the first is flying is refused', post('owl', { kind: 'send', token: tok, row: { id: 'O2', promptId: 'x', para: 'bodyB', sentences: ['a b c.', 'd e f.', 'g h i.'] } }).ok === false);
+check('Owls sheet has the appended columns in order', book.sheets.Owls.rows[0].join(',') === 'id,ts,cohort,house,fromId,promptId,para,taggedBy,taggedTs,json');
+const lNok = post('owl', { kind: 'list', token: nokTok });
+check('housemate sees the owl, without the sender id or her self-tags', lNok.ok && lNok.forMe.length === 1 && lNok.forMe[0].id === 'O1' && !('fromId' in lNok.forMe[0]) && !('selfTags' in lNok.forMe[0]), lNok);
+check('another house does not see it', post('owl', { kind: 'list', token: fonTok }).forMe.length === 0);
+check('the sender does not see her own owl as waiting', post('owl', { kind: 'list', token: tok }).forMe.length === 0);
+check('the sender cannot tag her own owl', post('owl', { kind: 'tag', token: tok, row: { id: 'O1', tags: { mech: 0, ex: 1, nuance: 2 } } }).ok === false);
+check('another house cannot tag it', post('owl', { kind: 'tag', token: fonTok, row: { id: 'O1', tags: { mech: 0, ex: 1, nuance: 2 } } }).ok === false);
+const tg = post('owl', { kind: 'tag', token: nokTok, row: { id: 'O1', tags: { mech: 0, ex: 2, nuance: 1 } } });
+check('housemate tags it and sees both readings', tg.ok && tg.owl.tags.ex === 2 && tg.owl.selfTags.ex === 1, tg);
+check('a tagged owl cannot be tagged twice', post('owl', { kind: 'tag', token: nokTok, row: { id: 'O1', tags: { mech: 0, ex: 1, nuance: 2 } } }).ok === false);
+const lPloy = post('owl', { kind: 'list', token: tok });
+check('the sender sees the tags on her owl, no tagger id', lPloy.mine.length === 1 && lPloy.mine[0].tags && lPloy.mine[0].tags.ex === 2 && !('taggedBy' in lPloy.mine[0]), lPloy);
+check('after tagging, a new owl may fly', post('owl', { kind: 'send', token: tok, row: { id: 'O2', promptId: 'x', para: 'bodyB', sentences: ['a b c.', 'd e f.', 'g h i.'] } }).ok === true);
+check('ping reports version 20261020', post('ping', {}).version === '20261020');
+
 check('delete own attempt', post('lab.deleteAttempt', { studentId: 'ploy', token: tok, id: 'A1' }).ok && book.sheets.LabAttempts.rows.length === 1);
 
 

@@ -308,3 +308,49 @@ button.wchip:hover{background:var(--gold-soft)}
 }
 .miss .miss-next-h{font-weight:700}
 .wr-boxh .linky{min-height:40px;padding:0 4px}
+
+/* ---------------------------------------------------------- WP8 / WP10 (20 Oct 2026) */
+/* the Duelling Hall opponent, her spell lines and the step clock */
+.bc-opp{display:flex;flex-direction:column;gap:3px;padding:10px 14px;margin-bottom:12px;border-left:4px solid var(--house,var(--brass))}
+.bc-opp-n{font-family:var(--f-display);font-size:1.02rem}
+.bc-spell{display:block;margin-top:6px;font-size:.84rem;color:var(--ink-2);font-style:italic}
+.bc-line{margin:4px 0 2px;padding:9px 12px;border-radius:var(--r-s);font-family:var(--f-display);font-size:1rem;line-height:1.45;background:var(--surface-2);border-left:3px solid var(--brass)}
+.bc-line.won{border-left-color:var(--ok)}
+.bc-line.lost{border-left-color:var(--no)}
+.bc-clock{color:var(--ink);font-weight:700}
+.bc-clock.low{color:var(--no)}
+/* the examiner's reaction to a written gate question */
+.boss-say{display:block;margin-top:6px;font-family:var(--f-display);font-style:italic;font-size:.98rem;color:var(--ink)}
+.play[data-boss] .qcard{border-top:3px solid var(--brass)}
+/* the Thai gloss on a lesson key sentence (A1–A2, off by default) */
+.thai-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:-4px 0 8px}
+.thai-btn{min-height:36px;padding:4px 12px}
+.key-thai{margin:-2px 0 12px;font-size:1.02rem;line-height:1.7;color:var(--ink-2);border-left:3px solid var(--brass);padding-left:10px}
+/* term projects */
+.proj-scene,.proj-news{margin-bottom:14px}
+.proj-scene .story-art,.proj-news .story-art{max-width:420px}
+.projects{padding:14px 16px;margin-bottom:18px}
+.projects .ck-box{font-family:var(--f-mono);font-size:.8rem}
+.proj-modal .story-page{margin:0}
+.proj-modal .story-text p{font-size:.98rem}
+/* the weekly house challenge */
+.challenge{padding:14px 16px;margin-bottom:18px;border-top:3px solid var(--brass)}
+.challenge h3{font-size:1.25rem;margin:2px 0 4px}
+.chal-mine{margin:6px 0 8px;font-size:1rem}
+.chal-wait{font-style:italic}
+/* the owl exchange */
+.owlx{padding:14px 16px;margin-bottom:18px}
+.owlx .ckrow{margin-bottom:8px}
+.owl-sents{padding-left:1.4em;display:flex;flex-direction:column;gap:8px;margin:10px 0}
+.owl-sents li{display:flex;flex-direction:column;gap:4px;font-size:.93rem;line-height:1.5}
+.owl-role{align-self:flex-start;min-height:36px;padding:4px 8px;border-radius:var(--r-s);border:1px solid var(--rule);background:var(--surface);font:inherit;font-size:.86rem}
+.owl-mine{margin-top:10px;padding:10px 12px;border-radius:var(--r-s);background:var(--surface-2);font-size:.9rem}
+.owl-mine.done{border-left:3px solid var(--ok)}
+/* the daily spell */
+.spell{padding:14px 16px;margin-bottom:18px;border-top:3px solid var(--brass)}
+.spell h3{font-size:1.15rem;margin:2px 0}
+.spell-prompt{margin:6px 0;font-style:italic}
+.spell-ask{margin:6px 0;font-size:.95rem;line-height:1.5}
+.spell-ex i{color:var(--ink-2)}
+.spell-done{margin:8px 0 4px;font-size:1rem}
+.spell .ftext{width:100%;margin-top:6px}

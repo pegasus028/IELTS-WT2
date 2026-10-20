@@ -30,7 +30,7 @@
   var $ = function (s) { return document.querySelector(s); };
   var esc = E.esc;
   /* WP1: the Code.gs build this front end needs (Code.gs APP_VERSION). One constant: change both together. */
-  var EXPECTED_BACKEND = '20261019';
+  var EXPECTED_BACKEND = '20261020';
   /* Your five: the same default and teaching order as student.js (Discuss → Advantages → Opinion → Problem → Two-part). */
   var CORE_TYPES = ['DISCUSS', 'ADVANTAGE', 'OPINION', 'PROBLEM', 'TWOPART'];
   var CORE_DEFAULT = { DISCUSS: 'p-fast-food-tax', ADVANTAGE: 'p-cctv-everywhere', OPINION: 'p-free-transport', PROBLEM: 'p-youth-unemployment', TWOPART: 'p-rural-youth' };
@@ -74,9 +74,14 @@
     if (!h) return '<span class="hchip none">unsorted</span>';
     return '<span class="hchip" style="background:' + esc(h.main) + ';border-color:' + esc(h.accent) + '">' + esc(h.name) + '</span>';
   }
-  function isOrder(a) { return !!a && (a.kind === 'unlock' || a.kind === 'resort' || a.kind === 'coreset'); }
+  function isOrder(a) { return !!a && (a.kind === 'unlock' || a.kind === 'resort' || a.kind === 'coreset' || a.kind === 'challenge'); }
+  /* WP10c (20 Oct 2026): the weekly house challenge, set here as a { kind:'challenge' } row. */
+  var METRICS = [['essays', 'Essays sent'], ['revisions', 'Revisions sent'], ['words', 'Words written in essays'], ['duels', 'Duels won'], ['merits', 'Merits earned'], ['mended', 'Faults mended']];
+  function metricName(k) { var m = METRICS.filter(function (x) { return x[0] === k; })[0]; return m ? m[1] : k; }
+  function bkkDate(offsetDays) { return new Date(Date.now() + 7 * 3600000 + (offsetDays || 0) * 86400000).toISOString().slice(0, 10); }
   function orderLabel(a) {
     var who = a.studentId ? 'for ' + a.studentId : a.cohort && a.cohort !== 'all' ? 'for the whole ' + a.cohort + ' cohort' : 'for everyone';
+    if (a.kind === 'challenge') return 'House challenge · ' + who + ' · ' + (a.title || metricName(a.metric)) + ' (' + metricName(a.metric) + ') · ' + (a.from || '') + ' to ' + (a.to || '');
     if (a.kind === 'coreset') return 'Five prompts · ' + who + ' · ' + (a.prompts || []).map(function (id) { return (PR.get(id) || {}).title || id; }).join(', ');
     if (a.kind === 'resort') return 'Re-sort · ' + who + ' · she meets the Sorting Lantern again on her next visit';
     var n = Number(a.chapter) || 0;
@@ -290,12 +295,23 @@
         order.map(function (h) {
           return '<div class="cup-row"><span class="cup-n">' + houseChip(h.id) + '</span><span class="cup-bar"><i style="width:' + Math.round(cup.totals[h.id] / max * 100) + '%;background:' + esc(h.main) + '"></i></span><span class="cup-pts">' + cup.totals[h.id] + ' pts</span><span class="cup-m">' + cup.members[h.id] + ' member' + (cup.members[h.id] === 1 ? '' : 's') + '</span></div>';
         }).join('') + '</div>';
-    }).join('') + '<p class="tiny" style="margin-top:6px">House points are worked out from each student\'s progress: 5 per lesson passed, 20 per examiner\'s gate, 2 per fault mended (max 100), 15 per essay sent to the examiners, 25 per essay marked at or above her target, 10 per tournament task. Students see only these totals, never names.</p>';
+    }).join('') + challengeCupHtml() + '<p class="tiny" style="margin-top:6px">House points are worked out from each student\'s progress: 5 per lesson passed, 20 per examiner\'s gate, 2 per fault mended (max 100), 15 per essay sent to the examiners, 25 per essay marked at or above her target, 10 per tournament task. Students see only these totals, never names.</p>';
     host.querySelectorAll('[data-unlockall]').forEach(function (b) { b.addEventListener('click', function () {
       var c = b.dataset.unlockall;
       if (!confirm('Unlock all ' + NCH + ' chapters for every student in ' + c + '? The story can then be read in any order.')) return;
       sendOrder({ id: uidO(), ts: new Date().toISOString(), kind: 'unlock', cohort: c, chapter: NCH }, 'All chapters unlocked for ' + c + '.');
     }); });
+  }
+  /* the live house challenge, summed from the roster's story.challenge (same sums as `houses` with a challenge id) */
+  function challengeCupHtml() {
+    var today = bkkDate(0), rows = T.assignments.filter(function (a) { return a.kind === 'challenge' && (!a.to || a.to >= today) && (!a.from || a.from <= today); });
+    if (!rows.length) return '';
+    return rows.map(function (a) {
+      var tot = {}, mem = {}; houses().forEach(function (h) { tot[h.id] = 0; mem[h.id] = 0; });
+      T.roster.forEach(function (s) { var st = storyOf(s.progress), c = st.challenge; if (!c || c.id !== a.id || !st.house || tot[st.house] == null) return; tot[st.house] += Math.max(0, Math.round(Number(c.score) || 0)); mem[st.house] += 1; });
+      return '<div class="cup" style="margin-top:10px"><div class="cup-h"><b>Challenge: ' + esc(a.title || metricName(a.metric)) + '</b><span class="tiny">' + esc(metricName(a.metric)) + ' · ' + esc(a.from || '') + ' to ' + esc(a.to || '') + ' · ' + (a.cohort === 'all' || !a.cohort ? 'everyone' : esc(a.cohort)) + '</span></div>' +
+        houses().map(function (h) { return '<div class="cup-row"><span class="cup-n">' + houseChip(h.id) + '</span><span class="cup-pts">' + tot[h.id] + '</span><span class="cup-m">' + mem[h.id] + ' counted</span></div>'; }).join('') + '</div>';
+    }).join('');
   }
   var COLS = [{ k: 'name', t: 'Student' }, { k: 'rank', t: 'Classes' }, { k: 'ready', t: 'TR · CC · LR · GRA' }, { k: 'chapter', t: 'Chapter' }, { k: 'house', t: 'House' }, { k: 'band', t: 'Last band' }, { k: 'reps', t: 'Reports' }, { k: 'five', t: 'Her five' }, { k: 'frame', t: 'Mostly frame' }, { k: 'land', t: 'Landing agree' }, { k: 'revs', t: 'Revisions' }, { k: 'faults', t: 'Faults' }, { k: 'streak', t: 'Candles' }, { k: 'seen2', t: 'Last seen' }, { k: null, t: '' }];
   function paintRoster() {
@@ -671,14 +687,28 @@
         return '<div class="assignrow"><div class="grow"><b>' + esc(a.title || pr.title || a.id) + '</b><div class="tiny">' + esc((a.studentId ? 'for ' + a.studentId : a.cohort === 'all' ? 'everyone' : a.cohort) + ' · ' + (pr.title || '') + ' · ' + (a.uiMode || 'guided') + ' · ' + (a.timed === false ? 'untimed' : (a.minutes || 40) + ' min') + (a.due ? ' · due ' + a.due : '') + ' · ' + done + ' submitted') + '</div></div><button class="btn sm" data-rm="' + esc(a.id) + '">Remove</button></div>';
       }).join('') : '<p class="tiny">None yet.</p>') + '</div>' +
       '<div class="panel-h" style="margin-top:16px"><h2>Story orders</h2><span class="tiny">chapter unlocks and re-sorts · applied quietly, never shown as owl post</span></div><div id="o-list">' + (orders.length ? orders.slice().reverse().map(function (a) {
-        return '<div class="assignrow order"><div class="grow"><b>' + (a.kind === 'resort' ? 'Re-sort' : a.kind === 'coreset' ? 'Five prompts' : 'Chapter unlock') + '</b><div class="tiny">' + esc(orderLabel(a)) + ' · set ' + esc(String(a.ts || '').slice(0, 10)) + '</div></div><button class="btn sm" data-orm="' + esc(a.id) + '">Remove</button></div>';
+        return '<div class="assignrow order"><div class="grow"><b>' + (a.kind === 'resort' ? 'Re-sort' : a.kind === 'coreset' ? 'Five prompts' : a.kind === 'challenge' ? 'House challenge' : 'Chapter unlock') + '</b><div class="tiny">' + esc(orderLabel(a)) + ' · set ' + esc(String(a.ts || '').slice(0, 10)) + '</div></div><button class="btn sm" data-orm="' + esc(a.id) + '">Remove</button></div>';
       }).join('') : '<p class="tiny">None. Use the Quillmoor story panel of a student, or "Unlock all chapters" in the House Cup.</p>') + '</div></div></div>';
     /* Your five for a whole class (E4). A student's own five (her panel) wins over the class five. */
     h += '<div class="card panel form" id="c5-card" style="margin-top:16px"><div class="panel-h"><h2>Five prompts for a class</h2><span class="tiny">one per question type, worked in this order · the other prompts stay open as extra practice</span></div>' +
       '<div class="row"><div><label>Class</label><select id="c5-cohort"><option value="all">Everyone</option>' + Object.keys(cohorts).sort().map(function (c) { return '<option value="' + esc(c) + '">' + esc(c) + '</option>'; }).join('') + '</select></div></div>' +
       '<div class="c5-form">' + fiveSelects('data-c5', defaultCore()) + '</div>' +
       '<div><button class="btn primary" id="c5-save">Set these five</button> <span class="tiny">Students see them on their next visit. A five you set in a student\'s own panel stays hers.</span></div></div>';
+    /* the weekly house challenge (WP10c): totals only on the students' side */
+    var today = bkkDate(0), live = T.assignments.filter(function (a) { return a.kind === 'challenge' && (!a.to || a.to >= today); });
+    h += '<div class="card panel form" id="chal-card" style="margin-top:16px"><div class="panel-h"><h2>Weekly house challenge</h2><span class="tiny">students see house totals only, never names · totals need the redeployed class server (version ' + EXPECTED_BACKEND + ')</span></div>' +
+      '<div class="row"><div><label>Class</label><select id="chal-cohort"><option value="all">Everyone</option>' + Object.keys(cohorts).sort().map(function (c) { return '<option value="' + esc(c) + '">' + esc(c) + '</option>'; }).join('') + '</select></div>' +
+      '<div><label>What counts</label><select id="chal-metric">' + METRICS.map(function (m) { return '<option value="' + m[0] + '">' + esc(m[1]) + '</option>'; }).join('') + '</select></div>' +
+      '<div><label>From</label><input type="date" id="chal-from" value="' + today + '"></div><div><label>To</label><input type="date" id="chal-to" value="' + bkkDate(6) + '"></div></div>' +
+      '<div><label>Title (what the students see)</label><input type="text" id="chal-title" placeholder="e.g. Most essays sent this week" style="width:100%"></div>' +
+      '<div><button class="btn primary" id="chal-save">Set the challenge</button> <span class="tiny">Each student scores her own part from her progress; the server adds the parts up by house.</span></div>' +
+      (live.length ? '<div class="tiny" style="margin-top:8px"><b>Live now:</b> ' + live.map(function (a) { return esc(orderLabel(a)); }).join(' · ') + '</div>' : '') + '</div>';
     $('#view-assign').innerHTML = h;
+    $('#chal-save').addEventListener('click', function () {
+      var from = $('#chal-from').value, to = $('#chal-to').value, metric = $('#chal-metric').value, coh = $('#chal-cohort').value;
+      if (!from || !to || to < from) { toast('Choose the week: from and to.'); return; }
+      sendOrder({ id: uidO(), ts: new Date().toISOString(), kind: 'challenge', cohort: coh, title: $('#chal-title').value.trim() || metricName(metric), metric: metric, from: from, to: to }, 'House challenge set for ' + (coh === 'all' ? 'everyone' : coh) + '.');
+    });
     $('#c5-save').addEventListener('click', function () {
       var five = readFive($('#c5-card'), 'data-c5'), coh = $('#c5-cohort').value;
       if (five.length !== CORE_TYPES.length) { toast('Choose one prompt for each type.'); return; }

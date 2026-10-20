@@ -826,6 +826,25 @@
   function tplDone(t) { return L.COMPONENTS.filter(function (c) { var ln = t.lines[c.id]; return ln && ln.text && ln.last; }).length; }
   function completeTemplates() { return st.data.templates.filter(function (t) { return t.status === 'complete'; }).sort(function (a, b) { return String(b.updatedAt).localeCompare(String(a.updatedAt)); }); }
 
+  /* ------------------------------------------- the inked spellbook (WP10b, 20 Oct 2026)
+     A drawn page of the design the Scriptorium uses (else her newest design): each of the 14 lines
+     is pencil until the coach has read it (ln.last), then ink; every finished cast with that
+     design adds a gold mark to the line. Pure front end, from what the Workshop already stores. */
+  function inkedHtml(list) {
+    var usedId = inUseId(), t = list.filter(function (x) { return x.id === usedId; })[0] || list[0];
+    if (!t) return '';
+    var casts = st.data.attempts.filter(function (a) { return a.status === 'complete' && a.templateId === t.id; }).length;
+    var inked = 0, lines = L.COMPONENTS.map(function (c) {
+      var ln = t.lines[c.id] || {}, done = !!(ln.text && ln.last), txt = ln.text ? toLabels(ln.text) : (ln.draft ? toLabels(ln.draft) : '');
+      if (done) inked++;
+      var marks = ''; if (done && casts) { for (var i = 0; i < Math.min(casts, 6); i++) marks += '<i class="ink-mark" aria-hidden="true">★</i>'; if (casts > 6) marks += '<span class="tiny">+' + (casts - 6) + '</span>'; }
+      return '<li class="ink-line ' + (done ? 'ink' : 'pencil') + '" data-ink="' + c.id + '"><span class="ink-n">' + c.n + '</span><span class="ink-t">' + (txt ? esc(txt) : '<span class="tiny">' + esc(c.name) + ' — not written yet</span>') + '</span><span class="ink-marks" title="' + casts + ' cast' + (casts === 1 ? '' : 's') + '">' + marks + '</span></li>';
+    }).join('');
+    return '<div class="card lab-pad inked" id="lab-inked"><p class="kicker">Your inked spellbook · ' + esc(t.name) + ' v' + (t.version || 1) + '</p>' +
+      '<p class="tiny">A line is pencil until the coach has read it, then ink. Every cast of this spellbook on a prompt adds a gold mark to its lines. ' + inked + ' of ' + L.COMPONENTS.length + ' lines in ink · ' + casts + ' cast' + (casts === 1 ? '' : 's') + '.</p>' +
+      '<ol class="ink-page">' + lines + '</ol></div>';
+  }
+
   function paintStudio(el) {
     var list = st.data.templates.slice().sort(function (a, b) { return String(b.updatedAt).localeCompare(String(a.updatedAt)); });
     var html = '<div class="lab-hero card"><div><p class="kicker">Design</p><h3>Your spellbook, in your words</h3>' +
@@ -833,6 +852,7 @@
       '<button class="btn primary" id="lab-new">New spellbook design →</button></div>';
     var usedId = inUseId();
     if (list.length) html += '<div class="card lab-pad lab-inuse"><p class="kicker">The spellbook in the Scriptorium</p><p id="lab-inuse-t"><b>' + esc(inUseText()) + '</b></p><p class="tiny">My Spellbook holds what the Scriptorium uses (four frames). A design here (14 lines) reaches the Scriptorium only when you press <b>Use in the Scriptorium</b>: that replaces the four frames with the design\'s 14 lines. What it replaces is kept in My Spellbook as your earlier spellbook, and you can bring it back.</p></div>';
+    if (list.length) html += inkedHtml(list);
     if (!list.length) html += '<p class="tiny lab-empty">No spellbook designs yet. Your first one takes about 30–40 minutes: fourteen short lines. The coach reads line 1 for you, and any other line when you ask.</p>';
     else html += '<div class="lab-grid">' + list.map(function (t) {
       var lv = levelInfo(t.level), done = tplDone(t), score = tplScore(t);
@@ -1942,8 +1962,21 @@
     return { vars: out, at: when(pick), status: pick.status || '', id: pick.id || '', templateName: pick.templateName || '' };
   }
 
+  /* WP10f (20 Oct 2026): one coached variable for the daily spell (spell.js). One lab.coach call,
+     counted like any other; rejects with 'offline' when the coach is off, so the caller runs the
+     offline shape check instead. */
+  function spellCoach(sid, payload) {
+    if (st.sid !== sid) { st.sid = sid; st.data = loadLocal(); st.synced = false; st.ai = null; st.build = null; st.run = null; st.review = null; st.view = 'home'; st.tab = 'studio'; }
+    var ready = st.ai == null ? checkStatus() : Promise.resolve();
+    return ready.then(function () {
+      if (st.ai === false) throw new Error('offline');
+      return aiCall('lab.coach', payload, TIMEOUT_COACH).then(function (res) { return res.coach; });
+    });
+  }
+  function aiState() { return st.ai; }
+
   global.Lab = {
-    mount: mount, leave: leave, castVars: castVars,
+    mount: mount, leave: leave, castVars: castVars, spellCoach: spellCoach, aiState: aiState, levelInfo: levelInfo,
     busy: function () { return !!(st.run && !st.run.done && st.run.busy); },
     /* for tests and the teacher console */
     _state: st, _quickFrame: quickFrame, _quickVar: quickVar, _assemble: assemble, _overallBand: overallBand, _toTokens: toTokens, _compBudget: compBudget,

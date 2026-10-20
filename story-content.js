@@ -159,6 +159,13 @@
         ],
         gate: {
           checks: ['m02l1'], checkIds: ['m02ck'], extra: [],
+          /* WP10e (20 Oct 2026): the last question of this gate is written, not chosen. Writer.checkThesis marks it. */
+          boss: { check: 'm02l1', pass: "Penhallow writes it on the slate, word for word. 'That I can quote. A marker, a claim, a reason. Good.'", fail: "'Lovely,' says Penhallow. 'And what do you think?' The slate stays blank. Say it so that she can quote it.",
+            item: { id: 'boss-ch2', type: 'thesis', level: 'B2', tag: 'tr-no-position', minWords: 15, maxWords: 30, need: 'reason',
+              stem: "Penhallow's last question is written, not chosen. The question: <em>Should schools replace printed textbooks with tablets?</em> Write your position in one sentence of 15 to 30 words: a marker, a claim and a reason.",
+              hint: 'Start with a marker ("I believe that …"), say what should happen, then give one reason with "because".',
+              why: 'A position the examiner can quote: one sentence, a stance word, a reason. That is what paragraph one must carry.',
+              must: [['tablet', 'textbook', 'book', 'screen', 'printed', 'paper']], mustNotes: ['Name the question: tablets, textbooks or printed books.'] } },
           intro: "'One gate,' says Penhallow. 'Show me that you know what a position is, where it goes, and how to write one in a minute. Then the ribbon is yours.'",
           pass: "Penhallow ties a navy ribbon to your sleeve. 'Stated in paragraph one. Held to the end. You may disagree with the whole school, as long as you do it clearly.'"
         },
@@ -281,6 +288,12 @@
             { id: 'lab-design', label: 'A saved spellbook design', note: 'One spellbook saved in the Spellbook Workshop.' },
             { id: 'essay-sent', label: 'One essay sent to the examiners', note: 'One full essay sent from the Scriptorium.' }
           ],
+          boss: { check: 'm06l1', pass: "Brigg reads it twice. 'A how, a where, and a limit that keeps the position. That is a paragraph I can trust.'", fail: "Brigg taps the bench. 'A claim is not a paragraph. Where is the how? Where can Felix point his camera? And where is the limit?'",
+            item: { id: 'boss-ch4', type: 'bodypara', level: 'B2', tag: 'tr-generalised', minWords: 60, maxWords: 130,
+              stem: "Brigg's last question is written, not chosen. The question: <em>Some cities have banned private cars from their centres. Do the advantages outweigh the disadvantages?</em> Write one body paragraph (60 to 130 words) on the main advantage: the facet, how it works, one concrete example, and a limit that keeps your position.",
+              hint: 'Four moves in order: the idea, how it works ("because … which …"), a place or policy you can point at ("for example …"), then a limit ("However, …").',
+              why: 'Facet, mechanism, example, nuance: the shape of a paragraph that fits Band 7 and above. A claim with no how and no where stays general.',
+              keyNouns: ['car', 'cars', 'vehicle', 'vehicles', 'traffic', 'driver', 'drivers', 'driving', 'pollution', 'air', 'street', 'streets'] } },
           intro: "'Four things,' says Brigg. 'Two gates, one saved spellbook, and one essay already flying. A template nobody has used is only a drawing.'",
           pass: "Brigg fits a brass clasp to your book. 'Your lines. Your slots. The examiners will read your words, not somebody else's.'"
         },
@@ -463,6 +476,12 @@
             { id: 'essay-sent', label: 'Three mock examinations sent to the examiners', note: 'Three mock examinations from the Scriptorium, each sent to the examiners. Practice essays do not count.', min: 3, kind: 'mock' },
             { id: 'best-band', optional: true, label: 'An essay marked at 7.5 or above', note: 'This is the standard of the real test, and it can take months of mock examinations after the classes end. You can finish the course without it. Keep sending essays: your best band is kept.', min: 7.5, field: 'bestBand' }
           ],
+          boss: { check: 'm13l1', pass: "Penhallow does not look up. 'Stated in paragraph one, with how far. The examiner can quote that. Begin.'", fail: "'If I cannot quote it,' says Penhallow, 'you have not got one. Say how far you agree, and why.'",
+            item: { id: 'boss-ch7', type: 'thesis', level: 'B2', tag: 'tr-no-position', minWords: 15, maxWords: 30, need: 'reason',
+              stem: "The examination gate ends with a written question. The prompt: <em>Some people think that young people should be required to do unpaid work in their community. To what extent do you agree or disagree?</em> Write your position in one sentence of 15 to 30 words. Say how far you agree, and give one reason.",
+              hint: 'An extent word ("largely", "partly", "strongly") plus a reason. If you partly agree, name the part you accept and the part you reject.',
+              why: 'A "to what extent" prompt needs an extent word in the position, and the reason that holds it. Both go in paragraph one.',
+              must: [['unpaid', 'community', 'volunteer', 'voluntary', 'work', 'service', 'young']], mustNotes: ['Name the question: unpaid community work for young people.'] } },
           intro: "Penhallow stands alone before the table. 'Two gates and three mock examinations, and then you have walked every corridor of this Academy. The 7.5 standard is the goal of the real test. Keep writing towards it, however long it takes.'",
           pass: "Three mock papers come back by owl. Penhallow reads each one and presses the Quillmoor seal into warm wax. 'You have finished the course. Clear, flexible, precise, controlled: that is the 7.5 standard, and now you know the way there. Your own words. Verba vincunt.'"
         },
@@ -472,6 +491,85 @@
           text: "The Hall of Lanterns is lit in all four colours tonight. Your house cheers when your name is read. Juno hugs you so hard your badge bends. Celeste shakes your hand, and then, after a moment, hugs you too. Felix takes one photo, with permission. Outside, the black lake is still. The real test has the same four criteria and the same forty minutes. The difference is that now you are [[flexible|able to change and adapt easily|ยืดหยุ่น]] enough to meet any prompt, and you know where you stand."
         },
         newsroom: 'The Quill makes one last attempt, writing clichés in the exam margins; the students cross them out and it fades for good.'
+      }
+    ],
+
+    /* -------------------------------------------------- the duellists (WP8)
+       Every Duelling Hall duel has an opponent. Her "spell" is the near-miss option on each question.
+       `win` is what she says when she takes a step, `lose` when the student does; `end` closes the duel.
+       Spoken lines use spoken connectors. Not narrated. */
+    duellists: [
+      {
+        id: 'mina', name: 'Mina Sato', house: 'compass',
+        open: "Mina Sato takes the other stand. 'I have the other side ready,' she says. 'I always do.'",
+        win: ["'Not that one,' says Mina. 'That was my spell. It sounds right, and it is the wrong key.'", "Mina smiles. 'You felt the pull to the other side. I saw it.'", "'Close,' says Mina. 'Close is how I win.'"],
+        lose: ["Mina lowers her hand. 'Same key, held to the end. Fine.'", "'You kept it,' says Mina. 'That is annoying.'", "Mina nods once. 'That step is yours.'"],
+        end: { win: "Mina shakes your hand. 'Next time I bring a bigger other side.'", lose: "Mina shrugs. 'The other side won today. Duel me again tomorrow.'" }
+      },
+      {
+        id: 'celeste', name: 'Celeste Ashby', house: 'lexicon',
+        open: "Celeste Ashby stands opposite you. Her voice is beautiful. 'I know every phrase,' she says. 'Do you?'",
+        win: ["'It sounded lovely, didn't it?' says Celeste. 'That is my spell.'", "Celeste smiles. 'The pretty phrase caught you. It catches everyone once.'", "'Music,' says Celeste. 'Not meaning. But it worked.'"],
+        lose: ["Celeste frowns. 'You chose the plain one. The examiner would too.'", "'Your words, not mine,' says Celeste. 'Hm.'", "Celeste turns a page. 'That key is yours.'"],
+        end: { win: "Celeste closes her book. 'Plain and clear. I am starting to see it.'", lose: "Celeste smiles. 'Pretty phrases won today. Come back when you can tell them apart.'" }
+      },
+      {
+        id: 'quill', name: 'The Gossip Quill', house: '',
+        open: "A violet-black quill floats at the other stand. It writes by itself: 'Some say… others say…' There is no name.",
+        win: ["The Quill scratches: 'Research shows the new girl is wrong.' Which research? It does not say.", "Grey ink spreads across the stand. 'Everyone knows this.' The fog caught you.", "The Quill writes: 'In conclusion, time will tell.' You chose the fog."],
+        lose: ["The Quill stops. Your key had a how and a where. It has nothing to feed on.", "The grey ink fades a little. You pointed at a place.", "'Firstly… Moreover…' The Quill runs out of words. The step is yours."],
+        end: { win: "The Quill drops to the floor, pale and dry. Felix lifts his camera. 'There's the example.'", lose: "The Quill is still writing. Fog wins when nobody points at a place. Duel it again." }
+      },
+      {
+        id: 'orla', name: 'Orla Finch', house: 'bridge',
+        open: "Orla Finch of Bridge, a seventh-year, takes the stand. 'Speed is a spell too,' she says. 'Keep up.'",
+        win: ["'Too quick,' says Orla. 'The first answer that sounds right is my spell.'", "Orla taps the stand. 'You jumped. The near one is never the right one.'", "'Mine,' says Orla, already on the next step."],
+        lose: ["Orla raises an eyebrow. 'Fast and right. Rare.'", "'Good,' says Orla. 'You read it twice.'", "Orla nods. 'That step is yours. Keep up.'"],
+        end: { win: "Orla shakes your hand. 'Quick and clear. Bridge would take you.'", lose: "Orla is already leaving. 'Read the stem twice. Then be quick.'" }
+      }
+    ],
+
+    /* ------------------------------------------------ term projects (WP10a)
+       Her five prompts (one per question type, S.p.coreSet) are five term projects. The project
+       is keyed by its place in the five (1–5 = the teaching order Discuss, Advantages, Opinion,
+       Problem, Two-part), never by prompt id, because T.Chris may set other five. {title} is the
+       prompt's title. The scene opens before her first duel on the prompt; the newsroom page and
+       the keepsake come after her revision of that essay (or a clean essay with no red rows). */
+    projects: [
+      {
+        n: 1, type: 'DISCUSS', title: 'Two views, one verdict',
+        keepsake: { id: 'proj-scales', name: 'Brass scales', desc: 'Two views weighed in full, and one verdict given.' },
+        scene: { img: 'story/proj-01.webp', alt: 'A notice on the Debating Chamber door: TERM PROJECT ONE; Juno reads it with the heroine.',
+          text: "A notice goes up on the Debating Chamber door: 'Term project one: {title}.' It is a Discuss question. Juno reads it twice. 'Two views,' she says. 'Each one gets a whole paragraph. Then you choose.' Penhallow passes behind you. 'Give the other side its [[fair hearing|a proper chance to be heard|การรับฟังอย่างเป็นธรรม]],' she says. 'Then say what you think, in paragraph one and again at the end.' You take the prompt to the Duelling Hall first." },
+        newsroom: { text: "The Lantern, page two:\n\n'FIRST-YEAR WEIGHS BOTH SIDES. In the term project on {title}, a first-year gave each view a full paragraph, a mechanism and an example, and still chose. Her verdict was in paragraph one and again, in fresh words, at the end.'\n\nPriya hands you a small pair of brass scales. 'For weighing,' she says. 'Keep them.'" }
+      },
+      {
+        n: 2, type: 'ADVANTAGE', title: 'Weigh, do not list',
+        keepsake: { id: 'proj-weight', name: 'Weighing stone', desc: 'A verdict on which side is heavier, not a list of both.' },
+        scene: { img: 'story/proj-02.webp', alt: 'Dr Hale holds a smooth stone over the living map; two rooms glow, one brighter than the other.',
+          text: "Term project two is about {title}. Dr Hale puts a smooth grey stone on the map. 'An advantages question is a weighing,' he says. 'Not a list. One room for the main advantage, one for the main disadvantage. Then you tell me which is [[heavier|more important, with more weight|หนักกว่า มีน้ำหนักมากกว่า]].' Juno whispers, 'And say it in paragraph one. Even if the prompt does not say outweigh.' The stone rolls towards the brighter room." },
+        newsroom: { text: "The Lantern, the weighing column:\n\n'A VERDICT, NOT A LIST. On {title}, a first-year named the main advantage and the main disadvantage, and then said which outweighed which. Her limit sentence admitted the cost; nevertheless, the verdict stood.'\n\nHale gives you the grey stone. 'It always rolls to the heavier side,' he says. 'So must you.'" }
+      },
+      {
+        n: 3, type: 'OPINION', title: 'How far?',
+        keepsake: { id: 'proj-ruler', name: "Examiner's ruler", desc: 'Marked largely, partly, not at all: an extent word for every opinion.' },
+        scene: { img: 'story/proj-03.webp', alt: 'Penhallow holds a brass ruler marked with words instead of numbers; the heroine reads it.',
+          text: "Term project three asks for your opinion on {title}. Penhallow holds up a brass ruler. There are no numbers on it. It says 'not at all', 'partly', 'largely', 'completely'. 'To what [[extent|how much, how far|ขอบเขต ระดับ]]?' she says. 'Every opinion essay needs a word from this ruler. And partly means you name both parts: what you accept, and what you reject.' Celeste, two seats away, writes the four words down." },
+        newsroom: { text: "The Lantern, letters page:\n\n'HOW FAR, EXACTLY. A first-year's essay on {title} did what most opinion essays forget: it said how far. Her position named the part she accepted and the part she rejected; therefore, the examiner never had to guess.'\n\nPenhallow leaves the brass ruler on your desk. 'Measure every opinion,' she says." }
+      },
+      {
+        n: 4, type: 'PROBLEM', title: 'Cause to cure',
+        keepsake: { id: 'proj-arrow', name: 'Copper arrow', desc: 'Every solution points back at a cause you named.' },
+        scene: { img: 'story/proj-04.webp', alt: 'Brigg draws copper arrows on a slate from two causes to two measures while the heroine watches.',
+          text: "Term project four is a problem question: {title}. Brigg draws on the slate. Two [[causes|the reasons something happens|สาเหตุ]] on the left. Two measures on the right. Then an arrow from each cause to its measure. 'Plural means two,' he says. 'And a solution that answers no cause is a wish, not a solution.' He hands you a copper arrow. 'Draw one for every measure you write. If the arrow points at nothing, cut the measure.'" },
+        newsroom: { text: "The Lantern, page three:\n\n'ARROWS THAT LAND. In the project on {title}, a first-year named two causes and two measures, and every measure answered a cause. Hence, the examiner could follow the argument from problem to cure without a map.'\n\nBrigg nods at the copper arrow in your hand. 'Keep it sharp.'" }
+      },
+      {
+        n: 5, type: 'TWOPART', title: 'Two questions, two rooms',
+        keepsake: { id: 'proj-twokeys', name: 'Twin keys', desc: 'Each question answered in its own paragraph, with equal weight.' },
+        scene: { img: 'story/proj-05.webp', alt: 'Two brass keys on one ring on the map table; two rooms of equal size appear on the map.',
+          text: "The last term project has two questions in one prompt: {title}. Hale puts two keys on one ring. 'Two questions, two rooms, the same size,' he says. 'Answer the first in Body A and the second in Body B. A student who answers one question twice has not answered the other.' Juno counts the question marks in the prompt. 'Two,' she says. 'So two [[verdicts|final answers or decisions|คำตัดสิน]], one for each.' You pick up both keys." },
+        newsroom: { text: "The Lantern, front page, below the fold:\n\n'TWO QUESTIONS, BOTH ANSWERED. In the fifth term project, on {title}, a first-year gave each question its own paragraph and answered the second one directly. With that, the five projects are complete.'\n\nHale hands you the twin keys. 'Five projects. Five keys. The Academy has nothing left to hide from you.'" }
       }
     ],
 

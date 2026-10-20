@@ -144,6 +144,40 @@ if (STORY) {
     if (tasks.length !== 3) err('tournament needs 3 tasks');
     tasks.forEach(function (t) { if (!VIEWS[t.view]) err('tournament task ' + t.id + ': unknown view ' + t.view); if (!t.id || !t.label) err('tournament task needs id and label'); });
   }
+  /* WP8 / WP10 (20 Oct 2026): duellists, term projects and the written boss items at three gates */
+  var ds = STORY.duellists || [];
+  if (ds.length < 3) err('STORY.duellists: expected at least 3 opponents, found ' + ds.length);
+  ds.forEach(function (d, i) {
+    var w = 'duellist ' + (d.id || i + 1);
+    ['id', 'name', 'open'].forEach(function (k) { if (!d[k]) err(w + ': missing ' + k); });
+    if (!Array.isArray(d.win) || !d.win.length) err(w + ': needs win lines'); if (!Array.isArray(d.lose) || !d.lose.length) err(w + ': needs lose lines');
+    if (!d.end || !d.end.win || !d.end.lose) err(w + ': needs end.win and end.lose');
+    if (d.house && !(STORY.houses || []).some(function (h) { return h.id === d.house; })) err(w + ': unknown house ' + d.house);
+  });
+  var pj = STORY.projects || [], ptypes = {};
+  if (pj.length !== 5) err('STORY.projects: expected 5 term projects, found ' + pj.length);
+  pj.forEach(function (x, i) {
+    var w = 'project ' + (x.n || i + 1);
+    if (x.n !== i + 1) err(w + ': n should be ' + (i + 1));
+    if (!C.TYPES || !C.TYPES[x.type]) err(w + ': unknown type ' + x.type); if (ptypes[x.type]) err(w + ': duplicate type ' + x.type); ptypes[x.type] = 1;
+    if (!x.title) err(w + ': no title');
+    if (!x.keepsake || !x.keepsake.id || !x.keepsake.name) err(w + ': keepsake needs id and name'); else { if (keepIds[x.keepsake.id]) err(w + ': keepsake id clashes with a chapter keepsake'); keepIds[x.keepsake.id] = 1; }
+    if (!x.scene || !x.scene.text) err(w + ': scene needs text'); else { checkKeywords(x.scene.text, w + ' scene'); if (x.scene.text.indexOf('{title}') < 0) warn(w + ' scene: does not name the prompt ({title})'); var ss = sentenceStats(x.scene.text.replace(/\{title\}/g, 'the question')); if (ss.avg > 15) warn(w + ' scene: average ' + ss.avg.toFixed(1) + ' words per sentence'); }
+    if (!x.newsroom || !x.newsroom.text) err(w + ': newsroom needs text'); else checkKeywords(x.newsroom.text, w + ' newsroom');
+  });
+  var bosses = 0;
+  chs.forEach(function (ch) {
+    var b = ch.gate && ch.gate.boss; if (!b) return; bosses++;
+    var w = 'chapter ' + ch.n + ' boss';
+    if (!LEVELS[b.check] || (ch.gate.checks || []).indexOf(b.check) < 0) err(w + ': check must be one of the chapter\'s gates');
+    if (!b.pass || !b.fail) err(w + ': needs pass and fail lines');
+    var it = b.item || {};
+    if (!/^boss-/.test(it.id || '')) err(w + ': item id should start with boss-');
+    if (it.type !== 'thesis' && it.type !== 'bodypara') err(w + ': item type must be thesis or bodypara (Writer.checkThesis / checkBody)');
+    if (!C.REMEDIATION || !C.REMEDIATION[it.tag]) err(w + ': unknown tag ' + it.tag);
+    ['stem', 'hint', 'why', 'level'].forEach(function (k) { if (!it[k]) err(w + ': item missing ' + k); });
+  });
+  if (bosses !== 3) err('expected written boss items at 3 chapter gates, found ' + bosses);
   if (!STORY.mapIntro) warn('no mapIntro');
   if (!STORY.finale || !STORY.finale.text) err('no finale.text');
 }
@@ -182,7 +216,7 @@ if (haveSorting) {
 
 /* ------------------------------------------------------- banned words */
 var BANNED = ['Hogwarts', 'Gryffindor', 'Hufflepuff', 'Ravenclaw', 'Slytherin', 'Quidditch', 'Muggle', 'Horcrux', 'Patronus', 'Dumbledore', 'Snape', 'Expelliarmus', 'Lumos', 'Accio', 'Wingardium', 'Sorting Hat', 'Platform 9', 'Hogsmeade', 'Diagon'];
-var SCAN = ['story-content.js', sortingPath, 'index.html', 'student.js', 'story.js'];
+var SCAN = ['story-content.js', sortingPath, 'index.html', 'student.js', 'story.js', 'bootcamp.js', 'spell.js'];
 SCAN.forEach(function (f) {
   var full = path.isAbsolute(f) ? f : path.join(root, f);
   if (!fs.existsSync(full)) return;

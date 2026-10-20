@@ -50,6 +50,7 @@
     if (!s.visited) s.visited = {};
     if (!s.words) s.words = {};
     if (s.hp == null) s.hp = 0;
+    if (!s.projects) s.projects = {};
     return s;
   }
   function chapters() { return STORY().chapters || []; }
@@ -351,6 +352,138 @@
     return '<div class="story-ph" aria-hidden="true"><div class="story-ph-ring">' + sealSvg(ch ? String(ch.n) : 'Q') + '</div><div class="story-ph-t">' + esc(label || (ch ? ch.place : 'Quillmoor')) + '</div></div>';
   }
 
+  /* ============================================ TERM PROJECTS (WP10a)
+     Her five (host.coreSet(), one prompt per type in teaching order) are five projects
+     (STORY.projects, keyed by place 1–5). State on p.story.projects[keepsakeId] =
+     { scene: iso | '', claimed: iso | '' }. A project is ready for its newsroom page when
+     the prompt's essay step is done and it was revised, or it had no red rows (WP14). */
+  function projects() { return STORY().projects || []; }
+  function coreList() { return host && host.coreSet ? host.coreSet() : []; }
+  function projectAt(i) { return projects()[i] || null; }
+  function projectFor(promptId) { var i = coreList().indexOf(promptId); return i >= 0 ? projectAt(i) : null; }
+  function projState(pr, pj) { var s = ensure(pr); return s.projects[pj.keepsake.id] || (s.projects[pj.keepsake.id] = { scene: '', claimed: '' }); }
+  function promptTitle(promptId) { var q = global.Prompts && global.Prompts.get(promptId); return q ? q.title : promptId; }
+  function fillTitle(text, promptId) { return String(text || '').replace(/\{title\}/g, promptTitle(promptId)); }
+  function projectReady(pr, promptId) {
+    var st = host && host.coreSteps ? host.coreSteps(promptId) : null;
+    return !!(st && st.essay && (st.revised || st.clean));
+  }
+  /* the scene page: shown once in the Duelling Hall before her first duel on the prompt, and from the Map Room */
+  function projectSceneHtml(promptId, opts) {
+    var pj = projectFor(promptId); if (!pj) return '';
+    var pr = p(), ps = projState(pr, pj);
+    if (!ps.scene) { ps.scene = nowIso(); if (host.syncSoon) host.syncSoon(); }
+    opts = opts || {};
+    return '<div class="card story-page proj-scene" id="proj-scene" data-project="' + pj.n + '"><p class="kicker">Term project ' + pj.n + ' of ' + projects().length + ' · ' + esc(pj.title) + '</p>' +
+      artHtml(null, pj.scene, 'Term project ' + pj.n) + '<div class="story-text">' + renderText(fillTitle(pj.scene.text, promptId)) + '</div>' +
+      (opts.close ? '<div class="story-nav end"><button class="btn primary" id="proj-close">' + esc(opts.close) + '</button></div>' : '') + '</div>';
+  }
+  function projectNewsroomHtml(promptId) {
+    var pj = projectFor(promptId); if (!pj) return '';
+    var pr = p(), got = hasKeepsake(pr, pj.keepsake.id), ready = projectReady(pr, promptId);
+    if (!ready) return '';
+    return '<div class="card story-page proj-news" id="proj-news" data-project="' + pj.n + '"><p class="kicker">The newsroom · term project ' + pj.n + '</p><div class="story-text">' + renderText(fillTitle(pj.newsroom.text, promptId)) + '</div>' +
+      '<div class="story-nav end"><button class="btn primary" id="proj-keep" data-project-keep="' + esc(promptId) + '">' + (got ? 'Keepsake kept: ' + esc(pj.keepsake.name) : 'Take the keepsake: ' + esc(pj.keepsake.name) + ' →') + '</button></div></div>';
+  }
+  function wireProject(el, after) {
+    var b = el.querySelector('[data-project-keep]'); if (!b) return;
+    b.addEventListener('click', function () {
+      var pj = projectFor(b.dataset.projectKeep); if (!pj) return;
+      var pr = p();
+      if (hasKeepsake(pr, pj.keepsake.id)) { if (after) after(); return; }
+      projState(pr, pj).claimed = nowIso();
+      award(pj.keepsake, PROJECT_XP, after);
+    });
+  }
+  var PROJECT_XP = 60;
+  function projectsHtml(pr) {
+    var ids = coreList(), list = projects(); if (!ids.length || !list.length) return '';
+    var rows = ids.map(function (id, i) {
+      var pj = list[i]; if (!pj) return '';
+      var got = hasKeepsake(pr, pj.keepsake.id), ready = projectReady(pr, id), ps = projState(pr, pj);
+      var state = got ? 'keepsake taken' : ready ? 'newsroom page ready' : ps.scene ? 'in progress' : 'not started';
+      return '<button class="ckrow proj-row' + (got ? ' done' : '') + '" data-proj-open="' + esc(id) + '"><span class="ck-box">' + (got ? '✓' : pj.n) + '</span><span class="ck-txt"><span class="ck-name">' + esc(pj.title) + ': ' + esc(promptTitle(id)) + '</span><span class="ck-sub">' + esc(state) + (host.coreStepsHtml ? '' : '') + '</span></span><span class="ck-go">' + (got ? 'read' : ready ? 'newsroom' : 'scene') + ' →</span></button>';
+    }).join('');
+    return '<div class="card projects" id="projects"><div class="sect-h" style="margin-bottom:6px"><div><h3>Term projects</h3><p class="tiny">Your five prompts are five projects. Each one opens with a scene before the duel and ends with a page in The Lantern and a keepsake, once the essay is revised (or has no red rows).</p></div></div><div class="ckstack">' + rows + '</div></div>';
+  }
+  function openProject(promptId) {
+    var pr = p(); if (!pr) return;
+    var pj = projectFor(promptId); if (!pj) return;
+    var ready = projectReady(pr, promptId);
+    var html = '<div class="proj-modal">' + (ready ? projectNewsroomHtml(promptId) : projectSceneHtml(promptId, { close: 'Close' })) + (ready ? '<p style="margin-top:8px"><button class="btn sm ghost" data-proj-scene="' + esc(promptId) + '">Read the scene again</button></p>' : '') + '</div>';
+    host.modal(html);
+    var slot = document.getElementById('modal-slot'); if (!slot) return;
+    wireWords(slot); wireArt(slot);
+    var c = slot.querySelector('#proj-close'); if (c) c.addEventListener('click', function () { slot.innerHTML = ''; });
+    var sc = slot.querySelector('[data-proj-scene]'); if (sc) sc.addEventListener('click', function () { host.modal('<div class="proj-modal">' + projectSceneHtml(promptId, { close: 'Close' }) + '</div>'); var s2 = document.getElementById('modal-slot'); wireWords(s2); wireArt(s2); var c2 = s2.querySelector('#proj-close'); if (c2) c2.addEventListener('click', function () { s2.innerHTML = ''; }); });
+    wireProject(slot, function () { slot.innerHTML = ''; if (host.show) host.show('plan'); });
+  }
+
+  /* ========================================== BOSS ITEMS AT GATES (WP10e)
+     A chapter gate may carry `boss`: { check: levelId, item, pass, fail }. The console draws
+     seven questions from the pool and appends the boss item last; Writer.checkThesis /
+     checkBody mark it, and the examiner reacts in the story's voice. */
+  function bossFor(levelId) {
+    var out = null;
+    chapters().forEach(function (ch) { var b = ch.gate && ch.gate.boss; if (b && b.check === levelId && b.item) out = { chapter: ch, item: b.item, pass: b.pass || '', fail: b.fail || '' }; });
+    return out;
+  }
+
+  /* ===================================== THE WEEKLY HOUSE CHALLENGE (WP10c)
+     T.Chris sets it in the Staff Room as an assignment row { kind:'challenge', id, ts, cohort, title,
+     metric, from, to }. Each student works out her own score from her progress and keeps it on
+     p.story.challenge = { id, score, base, at }; the class server adds the scores up by house
+     (`houses` with a challenge id). Totals only, never names. */
+  var METRICS = {
+    essays: { name: 'Essays sent', unit: 'essays' }, revisions: { name: 'Revisions sent', unit: 'revisions' }, words: { name: 'Words written in essays', unit: 'words' },
+    duels: { name: 'Duels won', unit: 'duels' }, merits: { name: 'Merits earned', unit: 'merits' }, mended: { name: 'Faults mended', unit: 'faults' }
+  };
+  function todayIso() { return E().today ? E().today() : new Date().toISOString().slice(0, 10); }
+  function challengeRow(pr, rows) {
+    var coh = String(pr.cohort || '').toLowerCase(), best = null, today = todayIso();
+    (rows || []).forEach(function (a) {
+      if (!a || a.kind !== 'challenge' || !a.id) return;
+      if (a.studentId && String(a.studentId).toLowerCase() !== String(pr.studentId || '').toLowerCase()) return;
+      if (!a.studentId && a.cohort && a.cohort !== 'all' && String(a.cohort).toLowerCase() !== coh) return;
+      if (a.to && String(a.to) < today) return;
+      if (a.from && String(a.from) > today) return;
+      if (!best || String(a.ts || '') >= String(best.ts || '')) best = a;
+    });
+    return best;
+  }
+  function inWindow(iso, row) { var d = String(iso || '').slice(0, 10); return d && (!row.from || d >= row.from) && (!row.to || d <= row.to); }
+  function challengeScore(pr, row) {
+    var s = ensure(pr), c = s.challenge;
+    if (!c || c.id !== row.id) { c = s.challenge = { id: row.id, score: 0, base: { xp: pr.xp || 0, reclaimed: pr.reclaimed || 0 }, at: nowIso() }; }
+    var reps = (pr.reports || []).filter(function (r) { return r.kind !== 'mock' && inWindow(r.ts, row); }), v = 0;
+    switch (row.metric) {
+      case 'essays': v = reps.filter(function (r) { return !r.revisionOf; }).length; break;
+      case 'revisions': v = reps.filter(function (r) { return !!r.revisionOf; }).length; break;
+      case 'words': reps.forEach(function (r) { v += Number(r.words) || 0; }); break;
+      case 'duels': var bm = (pr.bootcamp || {}).missions || {}; v = Object.keys(bm).filter(function (k) { return bm[k].passed && inWindow(bm[k].at, row); }).length; break;
+      case 'merits': v = Math.max(0, (pr.xp || 0) - (c.base.xp || 0)); break;
+      case 'mended': v = Math.max(0, (pr.reclaimed || 0) - (c.base.reclaimed || 0)); break;
+      default: v = 0;
+    }
+    if (c.score !== v) { c.score = v; if (host && host.syncSoon) host.syncSoon(); }
+    return v;
+  }
+  function challengeHtml(pr, row, cup) {
+    var m = METRICS[row.metric] || { name: row.metric, unit: '' }, mine = challengeScore(pr, row), hs = STORY().houses || [], my = ensure(pr).house;
+    var html = '<div class="card challenge" id="challenge" data-challenge="' + esc(row.id) + '"><p class="kicker">This week\'s house challenge' + (row.to ? ' · until ' + esc(row.to) : '') + '</p><h3>' + esc(row.title || m.name) + '</h3><p class="tiny">' + esc(m.name) + '. Every student adds to her house; the Cup shows house totals only, never names.</p>' +
+      '<p class="chal-mine">Your part so far: <b>' + mine + '</b> ' + esc(m.unit) + '</p>';
+    var ch = cup && cup.challenge && cup.challenge.id === row.id ? cup.challenge : null;
+    if (!ch) html += '<p class="tiny chal-wait">House totals for the challenge start after the class server is redeployed. Your own count is kept meanwhile.</p>';
+    else {
+      var max = 1; hs.forEach(function (h) { max = Math.max(max, Number(ch.totals[h.id]) || 0); });
+      html += '<div class="cup">' + hs.slice().sort(function (a, b) { return (ch.totals[b.id] || 0) - (ch.totals[a.id] || 0); }).map(function (h) {
+        var v = Number(ch.totals[h.id]) || 0;
+        return '<div class="cup-row' + (h.id === my ? ' mine' : '') + '"><span class="cup-n">' + crestSvg(h.id, 18) + esc(h.name) + '</span><span class="cup-bar"><i style="width:' + Math.round(100 * v / max) + '%;background:' + h.main + '"></i></span><b>' + v + '</b></div>';
+      }).join('') + '</div>';
+    }
+    return html + '</div>';
+  }
+
   /* -------------------------------------------------------- the map */
   function mapSvg(pr) {
     var list = chapters(), cur = chapter(pr), to = reachedTo(pr);
@@ -403,14 +536,15 @@
       return '<div class="cup-row' + (h.id === mine ? ' mine' : '') + '"><span class="cup-n">' + crestSvg(h.id, 18) + esc(h.name) + '</span><span class="cup-bar"><i style="width:' + Math.round(100 * v / max) + '%;background:' + h.main + '"></i></span><b>' + v + '</b><span class="tiny">' + (n ? n + (n === 1 ? ' student' : ' students') : '') + '</span></div>';
     }).join('') + '</div>';
   }
-  function fetchCup(pr) {
+  function fetchCup(pr, challengeId) {
     var api = global.API;
     if (!api || typeof api.houses !== 'function') return;
     var cohort = pr.cohort || '';
-    api.houses(cohort).then(function (r) {
+    api.houses(cohort, challengeId || '').then(function (r) {
       if (!r || !r.ok) return;
-      st.cup = r; st.cupFor = cohort;
+      st.cup = r; st.cupFor = cohort; st.cupChal = challengeId || '';
       var slot = $('#cup-slot'); if (slot) slot.innerHTML = cupHtml(pr, r);
+      var row = st.chalRow, cs = $('#challenge-slot'); if (cs && row) cs.innerHTML = challengeHtml(pr, row, r);
     }).catch(function () {});
   }
 
@@ -430,6 +564,12 @@
 
     html += '<div class="map-head"><h2>The Map Room</h2>' + sayBtn(STORY().mapIntro) + '<p>' + esc(STORY().mapIntro || '') + '</p></div>';
     html += '<div class="map-wrap card">' + mapSvg(pr) + '</div>';
+
+    /* the weekly house challenge (WP10c), when T.Chris has set one for her cohort */
+    var chal = challengeRow(pr, opts.orders || []); st.chalRow = chal || null;
+    if (chal) html += '<div id="challenge-slot">' + challengeHtml(pr, chal, st.cupFor === (pr.cohort || '') && st.cupChal === chal.id ? st.cup : null) + '</div>';
+    /* the daily spell (WP10f) and the owl exchange (WP10d): the console fills these slots */
+    html += '<div id="spell-slot"></div><div id="owl-slot"></div>';
 
     /* owl post */
     var owl = opts.assignments || [];
@@ -479,6 +619,9 @@
       html += '<div class="card evcard"><div><p class="kicker">Optional event · Examination Hall</p><h3>' + esc(STORY().events.tournament.title) + '</h3><p class="tiny">' + (td === 3 ? 'All three tasks done. The token is in your trunk.' : td + ' of 3 tasks done. One full duel, one prompt cast at two minutes per key, one forty-minute essay.') + '</p></div><button class="btn sm" data-open-ev="tournament">' + (s.tournament.started ? 'Open' : 'Enter') + ' →</button></div>';
     }
 
+    /* term projects (WP10a), once the Duelling Hall is on her map */
+    if (reached(pr, 3)) html += projectsHtml(pr);
+
     /* keepsakes */
     html += '<div class="keepsakes"><h3>Keepsakes</h3>' + keepsakesHtml(pr) + '</div>';
 
@@ -506,11 +649,13 @@
     $$('[data-view-go]', el).forEach(function (b) { b.addEventListener('click', function () { host.show(b.dataset.viewGo); }); });
     var res = $('#resume', el);
     if (res && opts.onResume) res.addEventListener('click', function () { opts.onResume(opts.next); });
-    if (!st.cup || st.cupFor !== (pr.cohort || '')) fetchCup(pr);
+    $$('[data-proj-open]', el).forEach(function (b) { b.addEventListener('click', function () { openProject(b.dataset.projOpen); }); });
+    if (!st.cup || st.cupFor !== (pr.cohort || '') || (chal && st.cupChal !== chal.id)) fetchCup(pr, chal ? chal.id : '');
   }
   function keepsakesHtml(pr) {
     var s = ensure(pr), list = chapters().map(function (c) { return c.keepsake; });
     if (STORY().events && STORY().events.tournament) list = list.concat([{ id: 'token', name: 'Tournament token', desc: 'Proof that your own words come under a clock.' }]);
+    list = list.concat(projects().map(function (pj) { return pj.keepsake; }));
     return '<div class="keep-grid">' + list.map(function (k) {
       var got = s.keepsakes.indexOf(k.id) >= 0;
       return '<div class="keep' + (got ? ' got' : '') + '"><span class="keep-i">' + sealSvg(got ? '✓' : '·') + '</span><span><b>' + esc(k.name) + '</b><span class="tiny">' + esc(got ? k.desc : 'Not yet earned.') + '</span></span></div>';
@@ -697,6 +842,7 @@
     if (sy) sy.addEventListener('click', function () { speakWord(sy.dataset.wsay); });
   }
   function artHtml(ch, pg, label) {
+    pg = pg || {};
     return '<figure class="story-art">' + (pg.img ? '<img src="' + esc(pg.img) + '" alt="' + esc(pg.alt || '') + '" loading="lazy" decoding="async">' : '') + placeholderHtml(ch, label) + '</figure>';
   }
   function wireArt(el) {
@@ -999,6 +1145,9 @@
     markVisited: markVisited, applyHouseAttr: applyHouseAttr,
     paintMap: paintMap, estimateMinutes: estimateMinutes, keepsakesHtml: keepsakesHtml, crestSvg: crestSvg, sealSvg: sealSvg,
     open: open, resume: resume, openSorting: openSorting, openEvent: openEvent, labDesigned: labDesigned,
-    reset: function () { st.screen = null; st.cup = null; st.cupFor = ''; }
+    /* WP10 (20 Oct 2026) */
+    projectFor: projectFor, projectSceneHtml: projectSceneHtml, projectNewsroomHtml: projectNewsroomHtml, wireProject: wireProject, openProject: openProject, projectReady: projectReady,
+    bossFor: bossFor, challengeRow: challengeRow, challengeScore: challengeScore, METRICS: METRICS, wireWords: wireWords, wireArt: wireArt, award: award,
+    reset: function () { st.screen = null; st.cup = null; st.cupFor = ''; st.cupChal = ''; }
   };
 })(window);

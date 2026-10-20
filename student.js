@@ -80,7 +80,12 @@
     coreSet: function () { return S.p ? coreIds() : []; },
     coreSteps: function (id) { return S.p ? coreSteps(S.p, id) : null; },
     coreSplit: function (list) { var ids = S.p ? coreIds() : [], core = []; ids.forEach(function (id) { (list || []).forEach(function (pr) { if (pr.id === id) core.push(pr); }); }); return { core: core, extra: (list || []).filter(function (pr) { return ids.indexOf(pr.id) < 0 && !pr.mockOnly; }) }; },
-    coreStepsHtml: function (id) { return S.p ? coreStepsHtml(coreSteps(S.p, id)) : ''; }
+    coreStepsHtml: function (id) { return S.p ? coreStepsHtml(coreSteps(S.p, id)) : ''; },
+    /* WP10 (20 Oct 2026): the teacher's rows (challenge rows live here too) and the essay opener for the daily spell */
+    orders: function () { return S.assignments || []; },
+    practicePrompts: function () { return practicePrompts(); },
+    explainLevel: function () { return explainLevel(); },
+    startWrite: function (cfg) { startWrite(cfg); }
   };
   setInterval(function () {
     if (!S.p) return;
@@ -308,7 +313,7 @@
     var done = {}; (S.p.reports || []).forEach(function (r) { if (r.assignmentId) done[r.assignmentId] = 1; });
     return (S.assignments || []).filter(function (a) {
       if (ST && ST.isUnlockRow(a)) return false;
-      if (a.kind === 'coreset') return false;
+      if (a.kind === 'coreset' || a.kind === 'challenge') return false;
       if (a.studentId && a.studentId !== S.p.studentId) return false;
       if (a.cohort && a.cohort !== 'all' && !a.studentId && a.cohort !== mine) return false;
       return !done[a.id];
@@ -473,30 +478,34 @@
     var reps = p.reports || [], bm = ((p.bootcamp || {}).missions || {})[id];
     /* an essay counts once one on this prompt is not mostly frame (a good revision of a frame-only essay counts too) */
     var good = reps.filter(function (r) { return r.promptId === id && r.kind !== 'mock' && !frameOnly(r); });
-    return { duel: !!(bm && bm.passed), essay: good.length > 0, revised: reps.some(function (r) { return r.promptId === id && !!r.revisionOf; }),
+    /* WP14 (20 Oct 2026): an essay with no red rows needs no revision; the step is "clean" and the five move on */
+    var clean = good.some(function (r) { return !r.revisionOf && Number(r.bad) === 0; });
+    return { duel: !!(bm && bm.passed), essay: good.length > 0, revised: reps.some(function (r) { return r.promptId === id && !!r.revisionOf; }), clean: clean,
       cast: !!castMap(p)[id], last: good.length ? good[good.length - 1].id : '' };
   }
   function coreProgress(p) {
     var ids = coreIds(), steps = ids.map(function (id) { return coreSteps(p, id); }), cur = -1, done = 0;
-    steps.forEach(function (s, i) { if (s.essay && s.revised) done++; else if (cur < 0) cur = i; });
+    steps.forEach(function (s, i) { if (s.essay && (s.revised || s.clean)) done++; else if (cur < 0) cur = i; });
     return { ids: ids, steps: steps, done: done, current: cur, by: (p.coreSet && p.coreSet.by) || 'app' };
   }
   function coreStepsHtml(st) {
     return '<span class="core-steps">' + [['duel', 'duel'], ['essay', 'essay'], ['revised', 'revised'], ['cast', 'cast']].map(function (k) {
-      return '<span class="core-step' + (st[k[0]] ? ' on' : '') + '">' + k[1] + (st[k[0]] ? ' ✓' : '') + '</span>';
+      var on = !!st[k[0]], lbl = k[1];
+      if (k[0] === 'revised' && !st.revised && st.clean) { on = true; lbl = 'no red rows'; }
+      return '<span class="core-step' + (on ? ' on' : '') + '">' + lbl + (on ? ' ✓' : '') + '</span>';
     }).join('<span class="core-dot" aria-hidden="true">·</span>') + '</span>';
   }
   /* A prompt card for the five: number, steps, and "Next" on the one to work on now (soft: all stay open). */
   function coreCard(pr, i, cp, attr, extraPill) {
-    var st = cp.steps[i], now = cp.current === i, full = st.essay && st.revised;
+    var st = cp.steps[i], now = cp.current === i, full = st.essay && (st.revised || st.clean);
     return '<button class="pcard core-card' + (full ? ' done' : '') + (now ? ' core-now' : '') + '" ' + attr + '><span class="pcard-t"><span class="core-n">' + (i + 1) + '</span>' + esc(pr.title) + '</span>' +
       '<span class="pcard-m"><span class="pill gold">' + esc(typeName(pr.type)) + '</span><span class="pill">' + esc(PR.domainName(pr.domain)) + '</span>' + (now ? '<span class="pill on">next</span>' : '') + (extraPill || '') + '</span>' +
       coreStepsHtml(st) + '<span class="pcard-r">' + esc(pr.text) + '</span></button>';
   }
   function coreHead(cp, room) {
     var who = cp.by === 'teacher' ? 'T.Chris chose these five for you.' : 'One prompt of each question type, simplest first.';
-    var nxt = cp.current >= 0 ? ' Next: number ' + (cp.current + 1) + '.' : ' All five are written and revised.';
-    return '<div class="sect-h core-h" id="' + room + '-core"><div><h2>Your five</h2><p>' + who + ' For each one: duel it, write it, then revise your weakest row.' + nxt + '</p></div><span class="pill on">' + cp.done + ' of ' + cp.ids.length + ' done</span></div>';
+    var nxt = cp.current >= 0 ? ' Next: number ' + (cp.current + 1) + '.' : ' All five are written.';
+    return '<div class="sect-h core-h" id="' + room + '-core"><div><h2>Your five</h2><p>' + who + ' For each one: duel it, write it, then revise your weakest row (an essay with no red rows can move on).' + nxt + '</p></div><span class="pill on">' + cp.done + ' of ' + cp.ids.length + ' done</span></div>';
   }
   function extraHead(room, n) {
     return '<div class="sect-h core-h" id="' + room + '-extra" style="margin-top:22px"><div><h2>Extra practice</h2><p>' + n + ' more prompts, all open. Write any of them whenever you like; your five come first.</p></div></div>';
@@ -507,7 +516,7 @@
     var i = cp.current, id = cp.ids[i], pr = PR.get(id) || {}, st = cp.steps[i];
     var lbl = 'Your five · ' + (i + 1) + ' of ' + cp.ids.length + ': ' + (pr.title || typeName(pr.type));
     if (!st.essay && !st.duel && !writeOnly && visibleViews().indexOf('bootcamp') >= 0) return { kind: 'coreduel', promptId: id, kicker: 'Your five', label: lbl, sub: typeName(pr.type) + '. Duel it in the Duelling Hall first: the duel plans the essay with you.', go: 'Duel →' };
-    if (!st.essay) return { kind: 'core', promptId: id, kicker: 'Your five', label: lbl, sub: typeName(pr.type) + '. Write it in the Scriptorium with your spellbook, then revise your weakest row.', go: 'Write →' };
+    if (!st.essay) return { kind: 'core', promptId: id, kicker: 'Your five', label: lbl, sub: typeName(pr.type) + '. Write it in the Scriptorium with your spellbook, then revise your weakest row (no red rows: move on).', go: 'Write →' };
     return { kind: 'corerevise', promptId: id, reportId: st.last, kicker: 'Your five', label: lbl, sub: 'Revise your weakest row: rewrite one paragraph of this essay so it is stronger. Then number ' + (i + 2 <= cp.ids.length ? i + 2 : i + 1) + ' opens as your next step.', go: 'Revise →' };
   }
   /* Small styles for the five (index.html is shared; these live with the code that uses them). */
@@ -559,27 +568,40 @@
     });
     return out;
   }
+  /* WP14 (20 Oct 2026): the target comes from the Wards only (red rows first, then amber). When no Ward row
+     points at a paragraph, the revision is for practice: the shorter body paragraph, one developed sentence more. */
   function weakestRow(res) {
-    var sc = paraScores(res), best = null;
-    ['bodyA', 'bodyB', 'intro', 'conclusion'].forEach(function (k) {
-      if (!best || sc[k].score > sc[best].score || (sc[k].score === sc[best].score && (sc[k].frame || 0) > (sc[best].frame || 0) + 0.001)) best = k;
+    var sc = paraScores(res), best = null, pre = res.preflight || {};
+    var wardKeys = ['bodyA', 'bodyB', 'intro', 'conclusion'].filter(function (k) { return !!sc[k].why; });
+    wardKeys.forEach(function (k) {
+      if (!best || sc[k].whyW > sc[best].whyW || (sc[k].whyW === sc[best].whyW && sc[k].score > sc[best].score)) best = k;
     });
-    var s = sc[best], why = s.why ? s.why.label : s.own === 0 ? 'every sentence is still the frame' : s.frame != null && s.frame > 0.05 ? Math.round(s.frame * 100) + '% of it is still frame words' : 'add one more developed sentence with your own reason or example';
-    return { key: best, why: why, ward: s.why ? s.why.id : '', base: { key: best, score: s.score, frame: s.frame, own: s.own } };
+    var practice = !best;
+    if (practice) { var bw = pre.bodyWords || []; best = bw.length > 1 && bw[1] < bw[0] ? 'bodyB' : 'bodyA'; }
+    var s = sc[best], why = s.why ? s.why.label : 'no Ward points at it: add one more developed sentence with your own reason or example';
+    return { key: best, why: why, ward: s.why ? s.why.id : '', practice: practice, red: Number(pre.bad) > 0, base: { key: best, score: s.score, frame: s.frame, own: s.own, words: 0 } };
   }
+  function paraWords(text, key) { var ps = W.paragraphs(text || ''); return W.words(ps[PARA_KEYS.indexOf(key)] || ''); }
   /* reviseRow is the weak paragraph's worst Ward row id (writer.js finds the paragraph from it; '' = any paragraph);
      reviseBox is the paragraph (box key) this console judges the improvement on. */
   function reviseCfg(rep, res, kind) {
     var wk = weakestRow(res), text = String(res.text || rep.text || '');
+    wk.base.words = paraWords(text, wk.key);
     return { promptId: rep.promptId, uiMode: rep.uiMode || S.uiMode, minutes: 40, kind: 'practice', revisionOf: rep.id, reviseRow: wk.ward,
-      reviseText: text, reviseVars: (res.plan && res.plan.vars) || null, reviseBox: wk.key, reviseWhy: wk.why, reviseBase: wk.base, reviseFrom: kind || 'result' };
+      reviseText: text, reviseVars: (res.plan && res.plan.vars) || null, reviseBox: wk.key, reviseWhy: wk.why, reviseBase: wk.base, reviseFrom: kind || 'result', revisePractice: !!wk.practice, reviseRed: !!wk.red };
   }
-  /* The weak row improved: fewer Ward points against that paragraph, or its frame share fell by 10 points. */
+  /* The weak row improved: fewer Ward points against that paragraph, or its frame share fell by 10 points.
+     WP14: a practice revision (no Ward pointed at the row) improves when the row grows by 15 words or more
+     with no new red row against it. */
   function reviseImproved(cfg, res) {
     var b = cfg.reviseBase; if (!b || !b.key) return false;
     var now = paraScores(res)[b.key]; if (!now) return false;
     if (now.score < b.score) return true;
-    return b.frame != null && now.frame != null && b.frame - now.frame >= 0.1 - 1e-9;
+    if (b.frame != null && now.frame != null && b.frame - now.frame >= 0.1 - 1e-9) return true;
+    if (cfg.revisePractice && now.score <= b.score) {
+      return paraWords(res.text, b.key) - (b.words || 0) >= 15;
+    }
+    return false;
   }
   function meritNote(sum, rep) {
     var M = P.MERITS || { essay: 150, short: 60, improve: 50, revise: 80 }, why = sum && sum.meritWhy, xp = (sum && sum.merits) || 0;
@@ -590,7 +612,8 @@
     if (why === 'revise-same') return 'No merits yet for this revision: by the Wards, your ' + row + ' is not stronger yet. A revision earns merits when its weak row gets stronger, or when the examiners give it a better band.';
     if (why === 'revise-again') return 'No merits: this essay has already earned its revision merits. Revise a new essay to earn more.';
     if (why === 'own-up') return '+' + xp + ' merits: ' + (rep.words >= 250 ? M.essay : M.short) + ' for the essay and ' + M.improve + ' because more of it is in your own words than last time.';
-    return '+' + xp + ' merits' + (rep.words >= 250 ? '.' : ' for a short essay (250 words earns ' + M.essay + ').') + ' A better band than your best ' + typeName(rep.type) + ' essay adds ' + M.improve + ' more.';
+    var need = Math.max(0, 250 - (rep.words || 0));
+    return '+' + xp + ' merits' + (rep.words >= 250 ? '.' : ' for a short essay (250 words earns ' + M.essay + '). You need ' + need + ' more word' + (need === 1 ? '' : 's') + ': ' + (need > 60 ? 'two' : 'one') + ' more developed sentence' + (need > 60 ? 's' : '') + ' in each body paragraph, with a reason or an example.') + ' A better band than your best ' + typeName(rep.type) + ' essay adds ' + M.improve + ' more.';
   }
   /* Open one of her saved essays on the Report Card (used by the Map Room's "Revise" pointer). */
   function openReportById(id) {
@@ -647,8 +670,10 @@
   function paintPlan() {
     var p = S.p, next = nextStep(p);
     if (ST && window.STORY) {
-      ST.paintMap($('#view-plan'), { next: next, assignments: openAssignments(), ladderHtml: ladderCard(p), electivesHtml: partnersCard(), onResume: goNext });
+      ST.paintMap($('#view-plan'), { next: next, assignments: openAssignments(), orders: S.assignments || [], ladderHtml: ladderCard(p), electivesHtml: partnersCard(), onResume: goNext });
       wireMedia($('#view-plan'));
+      if (window.DailySpell) window.DailySpell.paint($('#spell-slot'), window.PCHost);
+      paintOwlSlot($('#owl-slot'));
       return;
     }
     /* No story content loaded: a plain list of the fourteen classes. */
@@ -920,6 +945,16 @@
     return '<div class="lvl-bar" role="group" aria-label="Choose the level of this explanation"><span class="lvl-lbl">Read it at my level:</span>' +
       LVLS.map(function (l) { return '<button type="button" class="lvl-btn' + (l === cur ? ' on' : '') + '" data-lvl="' + l + '" aria-pressed="' + (l === cur) + '"' + (l === 'C1' ? ' title="The full explanation"' : '') + '>' + l + '</button>'; }).join('') + '</div>';
   }
+  /* WP6 remainder (20 Oct 2026): an optional Thai gloss under the key sentence at A1 and A2 (lesson-thai.js;
+     every line is a draft until a Thai speaker has checked docs/THAI-GLOSS-CHECK.md). Off by default. */
+  function thaiOn() { var v = S.p && S.p.thaiGloss; if (v == null) { try { v = localStorage.getItem('qm.thai') === '1'; } catch (e) { v = false; } } return !!v; }
+  function setThai(on) { if (S.p) S.p.thaiGloss = !!on; try { localStorage.setItem('qm.thai', on ? '1' : '0'); } catch (e) {} syncSoon(); }
+  function thaiLine(subId, lvl) { var T_ = window.QM_LESSON_THAI || {}; return (lvl === 'A1' || lvl === 'A2') && T_[subId] ? T_[subId][lvl] || '' : ''; }
+  function thaiBar(subId, lvl) {
+    var th = thaiLine(subId, lvl); if (!th) return '';
+    var on = thaiOn();
+    return '<div class="thai-bar"><button type="button" class="lvl-btn thai-btn' + (on ? ' on' : '') + '" id="p-thai" aria-pressed="' + on + '" title="Show the key sentence in Thai">ไทย</button><span class="tiny">' + (on ? 'Thai gloss on (key sentence only).' : 'Tap for the key sentence in Thai.') + '</span></div>' + (on ? '<p class="key-thai" id="p-key-thai" lang="th">' + esc(th) + '</p>' : '');
+  }
   function lessonSpeech(s, lvl) { var t = lessonText(s, lvl); return [plainSpeech(s.name) + '.', plainSpeech(t.key)].concat(t.body.map(plainSpeech)).join('\n'); }
   function lsaySlow() { try { return localStorage.getItem('qm.lsay.slow') === '1'; } catch (e) { return false; } }
   function lsayStop() {
@@ -961,7 +996,7 @@
     var s = E.Bank.sub(subId), t = E.Bank.topic(s.topicId);
     var lvl = explainLevel(), tx = lessonText(s, lvl);
     var html = '<div class="play"><div class="play-top"><button class="btn ghost sm" id="p-back">← ' + homeLabel() + '</button><span style="flex:1"></span><span class="qcount">' + esc(t.code) + '</span></div>' +
-      '<div class="card theory">' + E.artBand(t.art) + '<p class="kicker">' + esc(s.cefr) + ' · ' + esc(t.name) + '</p><h3>' + esc(s.name) + '</h3>' + lvlBar(tx.lvl) + lsayBar() + '<p class="key">' + tx.key + '</p>' +
+      '<div class="card theory">' + E.artBand(t.art) + '<p class="kicker">' + esc(s.cefr) + ' · ' + esc(t.name) + '</p><h3>' + esc(s.name) + '</h3>' + lvlBar(tx.lvl) + lsayBar() + '<p class="key">' + tx.key + '</p>' + thaiBar(subId, tx.lvl) +
       '<div class="prose" data-explain-level="' + tx.lvl + '">' + tx.body.map(function (x) { return '<p>' + x + '</p>'; }).join('') + '</div>';
     if (s.theory.examples && s.theory.examples.length) html += '<div class="exlist">' + s.theory.examples.map(function (x, i) { return '<div><div class="s">' + x.s + '</div><div class="g">' + esc(tx.gloss[i] || x.g) + '</div></div>'; }).join('') + '</div>';
     var srec = S.p.subs[subId];
@@ -975,6 +1010,7 @@
       var nb = $('#view-play [data-lvl="' + b.dataset.lvl + '"]'); if (nb) nb.focus();
     }); });
     $('#p-start').addEventListener('click', function () { lsayStop(); startRun('module', s.items, { subId: subId, title: s.name }); });
+    var tb = $('#p-thai'); if (tb) tb.addEventListener('click', function () { var y = window.scrollY; setThai(!thaiOn()); openSub(subId); try { window.scrollTo(0, y); } catch (e) {} });
     $('#p-say').addEventListener('click', function () { lsayPlay($('#p-say'), lessonSpeech(s, explainLevel())); });
     $('#p-say-slow').addEventListener('click', function () {
       var on = !lsaySlow(); try { localStorage.setItem('qm.lsay.slow', on ? '1' : '0'); } catch (e) {}
@@ -989,7 +1025,11 @@
   function startRun(kind, items, meta) {
     S.run = { kind: kind, items: items.slice(), i: 0, results: [], subId: meta.subId, checkId: meta.checkId, levelId: meta.levelId || '', title: meta.title, hintedAny: false, t0: 0, fxTopic: meta.fxTopic || '',
       testOut: !!meta.testOut, base: meta.base || null, reviewBefore: meta.reviewBefore || null };
-    if (kind === 'check') S.run.items = E.shuffle(S.run.items);
+    if (kind === 'check') {
+      /* WP10e: the chapter's written boss item stays last; the drawn questions are shuffled */
+      var last = S.run.items.length && S.run.items[S.run.items.length - 1].boss ? S.run.items.pop() : null;
+      S.run.items = E.shuffle(S.run.items); if (last) S.run.items.push(last);
+    }
     /* B11: an examiner's gate keeps its key until the gate is passed. */
     if (kind === 'check') S.run.keyHidden = !gatePassed(meta.checkId);
     show('play'); renderQ();
@@ -1012,6 +1052,14 @@
   function startCheck(levelId, opts) {
     var lv = E.Bank.level(levelId); if (!lv) return;
     var items = E.Bank.drawGate ? E.Bank.drawGate(S.p, levelId) : lv.check.items;
+    /* WP10e (20 Oct 2026): three chapter gates end with a written question (story-content.js gate.boss):
+       seven drawn questions, then the boss item, marked by Writer.checkThesis / checkBody. */
+    var boss = ST && ST.bossFor ? ST.bossFor(levelId) : null;
+    if (boss && boss.item) {
+      var bi = {}; Object.keys(boss.item).forEach(function (k) { bi[k] = boss.item[k]; });
+      bi.boss = { pass: boss.pass, fail: boss.fail, chapter: boss.chapter.n };
+      items = items.slice(0, Math.max(1, (E.GATE_DRAW || 8) - 1)).concat([bi]);
+    }
     var testOut = !!(opts && opts.testOut) && !P.checkUnlocked(S.p, lv) && !gatePassed(lv.check.id);
     var before = null;
     if (testOut) { before = {}; items.forEach(function (it) { if (S.p.review[it.id]) before[it.id] = 1; }); }
@@ -1039,7 +1087,7 @@
     var canHint = r.kind === 'module' || r.kind === 'faults';
     var timed = !!TIMED_TYPES[item.type] && !item.prompt;
     var combo = r.combo || 0;
-    $('#view-play').innerHTML = '<div class="play"><div class="play-top"><button class="btn ghost sm" id="p-quit">✕</button><div class="bar-line thin"><span style="width:' + prog + '%"></span></div>' +
+    $('#view-play').innerHTML = '<div class="play"' + (item.boss ? ' data-boss="' + esc(item.id) + '"' : '') + '><div class="play-top"><button class="btn ghost sm" id="p-quit">✕</button><div class="bar-line thin"><span style="width:' + prog + '%"></span></div>' +
       (combo >= 3 ? '<span class="combo">▲ ' + combo + ' in a row</span>' : '') + '<span class="qcount">' + (r.base ? 'Retry · ' : r.testOut ? 'Trying it first · ' : '') + (r.i + 1) + ' / ' + r.items.length + '</span>' +
       (timed ? '<div class="timer" id="timer" title="Answer inside 7 seconds for a time bonus"><svg width="38" height="38" viewBox="0 0 38 38"><circle class="track" cx="19" cy="19" r="15" fill="none" stroke-width="4"></circle><circle class="run" id="timer-run" cx="19" cy="19" r="15" fill="none" stroke-width="4" stroke-linecap="round" stroke-dasharray="94.2" stroke-dashoffset="0"></circle></svg><b id="timer-n">7</b></div>' : '') +
       '</div>' + (r.i === 0 && r.base ? '<p class="tiny retry-note" id="p-retrynote">' + esc(retryNote(r)) + '</p>' : '') + '<div class="card qcard"><div class="qtype"><span>' + esc(E.TYPE_LABEL[item.type] || 'Question') + '</span><span class="lv">' + esc(item.level) + '</span></div><div id="qhost"></div><div id="feedback" role="status" aria-live="polite"></div>' +
@@ -1085,7 +1133,8 @@
       var keyless = hideKey && !out.correct && !free;
       r.results.push({ item: item, correct: out.correct, given: out.givenText, expected: out.expectedText, hidden: keyless });
       $('#feedback').innerHTML = '<div class="verdict ' + (out.correct ? 'ok' : 'no') + '"><div class="verdict-h">' + (out.correct ? '✓ ' + (free ? 'Passes every rule' : 'Correct') : '✕ ' + (free ? 'Not yet' : 'Not quite')) + (fast ? '<span class="bonus-note">time bonus +' + E.XP_SPEED + '</span>' : '') + '</div>' +
-        (keyless ? ruleOnlyHtml(item) : (out.correct || free ? '' : '<div class="verdict-exp">You chose: ' + esc(out.givenText) + '<br>Answer: ' + esc(out.expectedText) + '</div>') + '<div class="verdict-w">' + item.why + '</div>') + '</div>';
+        (keyless ? ruleOnlyHtml(item) : (out.correct || free ? '' : '<div class="verdict-exp">You chose: ' + esc(out.givenText) + '<br>Answer: ' + esc(out.expectedText) + '</div>') + '<div class="verdict-w">' + item.why + '</div>') +
+        (item.boss ? '<div class="verdict-w boss-say" id="boss-say">' + esc(out.correct ? item.boss.pass : item.boss.fail) + '</div>' : '') + '</div>';
       if (out.correct && S.p.lastGain) { var f = E.el('span', 'xpfloat' + (fast ? '' : ' plain'), '+' + S.p.lastGain); $('.qfoot').appendChild(f); setTimeout(function () { if (f.parentNode) f.parentNode.removeChild(f); }, 1200); }
       var btn = $('#p-check'); btn.textContent = r.i + 1 >= r.items.length ? 'See your result' : 'Next →'; btn.disabled = false;
       paintHeader(); syncSoon();
@@ -1151,7 +1200,7 @@
     if (misses.length) html += '<div class="misslist">' + misses.map(function (m) {
       var rem = C.REMEDIATION[m.item.tag] || {};
       if (!reviewOpen(m)) return '<div class="miss"><b>' + esc(rem.name || m.item.tag) + '</b>' + esc(m.item.hint || rem.principle || '') + '</div>';
-      return '<div class="miss"><b>' + esc(rem.name || m.item.tag) + '</b>' + m.item.why + (r.kind === 'check' && !FREE_TYPES[m.item.type] ? '<br><span class="tiny">Answer: ' + esc(m.expected) + '</span>' : '') + '</div>';
+      return '<div class="miss"><b>' + esc(rem.name || m.item.tag) + '</b>' + m.item.why + (r.kind === 'check' && !FREE_TYPES[m.item.type] ? '<br><span class="tiny">Answer: ' + esc(m.expected) + '</span>' : '') + (m.item.boss ? '<br><span class="boss-say">' + esc(m.item.boss.fail) + '</span>' : '') + '</div>';
     }).join('') + '</div>';
     if (toLessons.length) html += '<div class="testout-lessons" id="r-lessons"><p class="kicker">Go to the lesson' + (toLessons.length > 1 ? 's' : '') + '</p>' + toLessons.map(function (sb) { return '<button class="btn wide" data-to-sub="' + sb.id + '">' + esc(sb.name) + ' →</button>'; }).join('') + '</div>';
     if (r.kind === 'faults') html += '<p class="tiny">' + (moreDue ? moreDue + ' more due' + (r.fxTopic && E.Bank.topic(r.fxTopic) ? ' in ' + esc(E.Bank.topic(r.fxTopic).name) : '') + ' · ' + fxMinutes(Math.min(moreDue, FX_SITTING)) + '.' : 'Nothing more is due' + (r.fxTopic ? ' in this class' : '') + '. Well mended.') + '</p>';
@@ -1278,16 +1327,27 @@
     api.submitReport(rep).then(function (r) { if (!r || !r.ok) toast('Saved on this device; it will reach the class sheet when the connection is back.'); });
     var earned = P.checkBadges(p);
     paintHeader(); sync();
-    /* Revision (19 Oct 2026): every essay but a mock can be revised on its weakest row. */
+    /* Revision (19 Oct 2026): every essay but a mock can be revised on its weakest row.
+       WP14 (20 Oct 2026): with no red rows the revision is optional ("revise for practice, or move on"). */
     var revCfg = cfg.kind === 'mock' ? null : reviseCfg(rep, res, 'result');
+    var mustRevise = !!(revCfg && revCfg.reviseRed);
+    var projNews = (ST && cfg.kind !== 'mock' && coreIds().indexOf(cfg.promptId) >= 0) ? ST.projectNewsroomHtml(cfg.promptId) : '';
     var html = '<div class="play"><div class="card result"><div class="score-ring" style="--p:' + (res.preflight.bad ? 40 : res.preflight.warn ? 75 : 100) + '"><i>' + res.words + '<small style="font-size:.9rem">w</small></i></div>' +
       '<h3>' + (res.timedOut ? 'Time. The owl has taken the essay' : 'The owl has taken the essay') + '</h3><p>' + esc(res.preflight.summary) + ' Written in ' + mmss(res.seconds) + '. ' + (cfg.kind === 'mock' ? 'T.Chris will mark this one.' : 'It has gone to T.Chris: he already has your essay, so you do not need to send it again. If you want, you can also get an AI band estimate and an upgraded version in LevelUp.') + '</p>' +
       '<div class="misslist">' + res.preflight.rows.filter(function (r) { return r.status !== 'ok'; }).map(function (r) { var ns = W.nextStep ? W.nextStep(r, res.preflight, explainLevel()) : null; return '<div class="miss"><b>' + esc(r.label) + '</b>' + esc(r.note) + (ns ? '<span class="miss-next"><span class="miss-next-h">Next time:</span> ' + esc(ns.text) + (ns.sub ? ' <button class="linky" data-miss-sub="' + esc(ns.sub) + '">' + esc(ns.link) + ' →</button>' : '') + '</span>' : '') + '</div>'; }).join('') + '</div>' +
       '<p class="merit-note' + (rep.merits ? '' : ' none') + '" id="w-merits">' + esc(meritNote(sum, rep)) + '</p>' +
-      (revCfg ? '<div class="card" id="w-revise-card" style="padding:12px 14px;margin:0 auto 12px;max-width:34rem;text-align:left"><p class="kicker">Next: make it stronger</p><p style="margin:0 0 8px">Your weakest row is <b>' + esc(PARA_NAME[revCfg.reviseBox] || revCfg.reviseBox) + '</b>: ' + esc(revCfg.reviseWhy) + '. Rewrite that paragraph in your own words; the rest of your essay stays as it is.</p><button class="btn primary" id="w-revise">Revise your weakest row</button></div>' : '') +
+      (revCfg ? '<div class="card" id="w-revise-card" data-revise="' + (mustRevise ? 'weak' : 'practice') + '" style="padding:12px 14px;margin:0 auto 12px;max-width:34rem;text-align:left"><p class="kicker">' + (mustRevise ? 'Next: make it stronger' : 'No red rows') + '</p><p style="margin:0 0 8px">' + (mustRevise
+        ? 'Your weakest row is <b>' + esc(PARA_NAME[revCfg.reviseBox] || revCfg.reviseBox) + '</b>: ' + esc(revCfg.reviseWhy) + '. Rewrite that paragraph in your own words; the rest of your essay stays as it is.'
+        : 'Your essay has no red rows: revise for practice, or move on. For practice, <b>' + esc(PARA_NAME[revCfg.reviseBox] || revCfg.reviseBox) + '</b> is the shorter body paragraph: one more developed sentence there earns the revision merits.') +
+        '</p><button class="btn' + (mustRevise ? ' primary' : '') + '" id="w-revise">' + (mustRevise ? 'Revise your weakest row' : 'Revise for practice') + '</button>' + (mustRevise ? '' : ' <button class="btn primary" id="w-moveon">Move on</button>') + '</div>' : '') +
+      (cfg.kind !== 'mock' && res.text ? '<p style="margin:0 auto 12px;max-width:34rem"><button class="btn sm" id="w-owl">Send a body paragraph by owl to a housemate</button> <span class="tiny">She tags its mechanism, example and nuance. No names.</span></p>' : '') +
+      projNews +
       '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn' + (revCfg ? '' : ' primary') + '" id="w-levelup">Get an AI band estimate (LevelUp)</button><button class="btn" id="w-copy">Copy essay</button><button class="btn" id="w-record">See my report card</button><button class="btn ghost" id="w-another">Write another</button></div></div></div>';
     $('#view-write').innerHTML = html;
     if (revCfg) $('#w-revise').addEventListener('click', function () { startWrite(revCfg); });
+    var mo = $('#w-moveon'); if (mo) mo.addEventListener('click', function () { S.returnTo = 'plan'; show('plan'); });
+    var ow = $('#w-owl'); if (ow) ow.addEventListener('click', function () { owlSendModal(rep, res.text); });
+    if (projNews && ST) { ST.wireWords($('#view-write')); ST.wireArt($('#view-write')); ST.wireProject($('#view-write'), function () { S.returnTo = 'plan'; show('plan'); }); }
     $('#w-levelup').addEventListener('click', function () { handoff(pr, res.text, rep); });
     $('#view-write').querySelectorAll('[data-miss-sub]').forEach(function (b) { b.addEventListener('click', function () { S.returnTo = 'write'; openSub(b.dataset.missSub); }); });
     $('#w-copy').addEventListener('click', function () { try { navigator.clipboard.writeText(res.text); toast('Essay copied.'); } catch (e) { prompt('Copy your essay', res.text); } });
@@ -1563,15 +1623,127 @@
     } else {
       html += '<div class="card preflight"><div class="pf-h"><b>The Ten Wards at submission</b><span class="pill ' + (rp.preflight && rp.preflight.bad ? 'bad' : 'good') + '">' + (rp.preflight ? rp.preflight.bad + ' red · ' + rp.preflight.warn + ' amber' : '') + '</span></div>' + ((rp.preflight && rp.preflight.rows) || []).filter(function (r) { return r.status !== 'ok'; }).map(function (r) { return '<div class="pf-row ' + r.status + '"><span class="pf-dot"></span><div><b>' + esc(r.label) + '</b></div></div>'; }).join('') + '<p class="tiny" style="margin-top:8px">T.Chris has not released a mark for this essay yet.</p></div>';
     }
-    var canRev = rp.kind !== 'mock' && rp.text;
-    html += '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">' + (canRev ? '<button class="btn primary" id="rp-revise">Revise your weakest row</button>' : '') + '<button class="btn' + (canRev ? '' : ' primary') + '" id="rp-levelup">Send to the examiners →</button><button class="btn" id="rp-copy">Copy essay</button></div></div>';
+    var canRev = rp.kind !== 'mock' && rp.text, redRows = !!(rp.preflight && Number(rp.preflight.bad) > 0);
+    html += (canRev && !redRows ? '<p class="tiny" id="rp-norev">This essay has no red rows: revise it for practice, or move on.</p>' : '') +
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">' + (canRev ? '<button class="btn' + (redRows ? ' primary' : '') + '" id="rp-revise">' + (redRows ? 'Revise your weakest row' : 'Revise for practice') + '</button>' : '') + '<button class="btn' + (canRev && redRows ? '' : ' primary') + '" id="rp-levelup">Send to the examiners →</button><button class="btn" id="rp-copy">Copy essay</button>' + (canRev ? '<button class="btn" id="rp-owl">Send a paragraph by owl</button>' : '') + '</div></div>';
     $('#view-record').innerHTML = html;
     $('#view-record').querySelectorAll('[data-rlink]').forEach(function (b) { b.addEventListener('click', function () { openReport(b.dataset.rlink); }); });
     if (canRev) $('#rp-revise').addEventListener('click', function () { startWrite(reviseCfg(rp, rp, 'record')); });
+    var rpo = $('#rp-owl'); if (rpo) rpo.addEventListener('click', function () { owlSendModal(rp, rp.text); });
     $('#rp-back').addEventListener('click', paintRecord);
     $('#rp-levelup').addEventListener('click', function () { handoff(pr, rp.text, rp); });
     $('#rp-copy').addEventListener('click', function () { try { navigator.clipboard.writeText(rp.text); toast('Essay copied.'); } catch (e) { prompt('Copy your essay', rp.text); } });
     window.scrollTo({ top: 0 });
+  }
+
+  /* =====================================================================
+     THE OWL EXCHANGE (WP10d, 20 Oct 2026). A student sends one anonymous body paragraph by owl to her
+     house (same cohort). A housemate who opens it tags its mechanism, example and nuance sentence; the
+     sender has tagged her own first, and both see where the two readings agree. No names travel either
+     way. Backend: action `owl` (send · list · tag) on the Owls sheet; offline: localStorage (api.js).
+     ===================================================================== */
+  var OWL = { at: 0, data: null, sid: '' };
+  var OWL_ROLES = [['mech', 'Mechanism'], ['ex', 'Example'], ['nuance', 'Nuance']];
+  function owlBodies(text) {
+    var ps = W.paragraphs(text || ''); if (ps.length >= 4) return [['bodyA', ps[1]], ['bodyB', ps[2]]];
+    if (ps.length === 3) return [['bodyA', ps[1]]];
+    return ps.length ? [['bodyA', ps[0]]] : [];
+  }
+  function owlSentences(para) { return W.sentences(para).filter(function (x) { return W.words(x) >= 3; }); }
+  function owlTagForm(sentences, prefix) {
+    return '<ol class="owl-sents">' + sentences.map(function (x, i) {
+      return '<li><span class="owl-s">' + esc(x) + '</span><select class="owl-role" data-owl-i="' + i + '" id="' + prefix + '-' + i + '"><option value="">—</option>' + OWL_ROLES.map(function (r) { return '<option value="' + r[0] + '">' + r[1] + '</option>'; }).join('') + '</select></li>';
+    }).join('') + '</ol>';
+  }
+  function owlReadTags(root) {
+    var tags = {}, dup = false;
+    root.querySelectorAll('.owl-role').forEach(function (sel) { if (!sel.value) return; if (tags[sel.value] != null) dup = true; tags[sel.value] = Number(sel.dataset.owlI); });
+    var missing = OWL_ROLES.filter(function (r) { return tags[r[0]] == null; }).map(function (r) { return r[1]; });
+    return { tags: tags, dup: dup, missing: missing };
+  }
+  function owlCompareHtml(sentences, self, tags) {
+    return '<ul class="ftnotes"><li>' + OWL_ROLES.map(function (r) {
+      var a = self ? self[r[0]] : null, b = tags ? tags[r[0]] : null, same = a != null && b != null && a === b;
+      return '<b>' + r[1] + ':</b> ' + (same ? 'you both chose sentence ' + (a + 1) + ' ✓' : 'the writer chose sentence ' + (a == null ? '—' : a + 1) + ', the reader chose sentence ' + (b == null ? '—' : b + 1) + '.');
+    }).join('</li><li>') + '</li></ul><p class="tiny">Where the two readings differ, the sentence may be doing two jobs, or its job is not clear yet. The Wards look for exactly these three.</p>';
+  }
+  function owlSendModal(rep, text) {
+    var ss = ST ? ST.ensure(S.p) : null, house = ss && ss.house;
+    if (!house) { toast('The owl exchange opens once the Lantern has sorted you.'); return; }
+    var bodies = owlBodies(text); if (!bodies.length) { toast('No body paragraph to send yet.'); return; }
+    var pick = 0;
+    function paint() {
+      var para = bodies[pick][1], sents = owlSentences(para);
+      modal('<p class="kicker">Owl exchange</p><h3 style="font-size:1.25rem">Send a body paragraph to a housemate</h3><p class="tiny">A housemate in ' + esc(ST.house(S.p).name) + ' will tag its mechanism, example and nuance. No names travel with the owl. Mark your own three sentences first, so you can both see where you agree.</p>' +
+        (bodies.length > 1 ? '<div class="filters" id="owl-pick">' + bodies.map(function (b, i) { return '<button data-owl-pick="' + i + '"' + (i === pick ? ' class="on"' : '') + '>' + (b[0] === 'bodyA' ? 'Body A' : 'Body B') + '</button>'; }).join('') + '</div>' : '') +
+        owlTagForm(sents, 'owl-self') + '<div id="owl-msg" class="tiny"></div><div class="wcard-acts"><button class="btn primary" id="owl-send">Send by owl</button><button class="btn ghost" data-close>Not now</button></div>');
+      var slot = $('#modal-slot');
+      slot.querySelectorAll('[data-owl-pick]').forEach(function (b) { b.addEventListener('click', function () { pick = Number(b.dataset.owlPick); paint(); }); });
+      $('#owl-send').addEventListener('click', function () {
+        var r = owlReadTags(slot), msg = $('#owl-msg');
+        if (r.dup) { msg.textContent = 'Each role goes on one sentence only.'; return; }
+        if (r.missing.length) { msg.textContent = 'Mark your ' + r.missing.join(', ').toLowerCase() + ' first.'; return; }
+        $('#owl-send').disabled = true; msg.textContent = 'Nutmeg is taking off…';
+        var row = { id: uid('O'), ts: new Date().toISOString(), fromId: S.p.studentId, cohort: S.p.cohort || '', house: house, promptId: rep.promptId, reportId: rep.id, para: bodies[pick][0], sentences: sents.slice(0, 12), selfTags: r.tags };
+        api.owl('send', row).then(function (res) {
+          if (!res || !res.ok) { $('#owl-send').disabled = false; msg.textContent = owlError(res); return; }
+          OWL.at = 0; $('#modal-slot').innerHTML = ''; toast('Your owl is on its way to a housemate. The answer comes to the Map Room.', 3600);
+        });
+      });
+    }
+    paint();
+  }
+  function owlError(res) {
+    var e = res && res.error ? String(res.error) : '';
+    if (/flying/i.test(e)) return 'Your last owl is still flying: wait until a housemate has read it.';
+    if (/Unknown action/i.test(e) || !e) return 'The owl exchange starts after the class server is redeployed.';
+    return e;
+  }
+  function owlTagModal(o) {
+    var sents = o.sentences || [];
+    modal('<p class="kicker">An owl from a housemate · ' + esc((PR.get(o.promptId) || {}).title || '') + '</p><h3 style="font-size:1.25rem">Tag the mechanism, the example and the nuance</h3><p class="tiny">Read the paragraph and mark which sentence does each job. The writer marked hers already; you both see the result. No names.</p>' +
+      owlTagForm(sents, 'owl-tag') + '<div id="owl-msg" class="tiny"></div><div class="wcard-acts"><button class="btn primary" id="owl-tagsend">Send my tags</button><button class="btn ghost" data-close>Later</button></div>');
+    var slot = $('#modal-slot');
+    $('#owl-tagsend').addEventListener('click', function () {
+      var r = owlReadTags(slot), msg = $('#owl-msg');
+      if (r.dup) { msg.textContent = 'Each role goes on one sentence only.'; return; }
+      if (r.missing.length) { msg.textContent = 'Mark the ' + r.missing.join(', ').toLowerCase() + ' too.'; return; }
+      $('#owl-tagsend').disabled = true;
+      api.owl('tag', { id: o.id, fromId: S.p.studentId, tags: r.tags }).then(function (res) {
+        if (!res || !res.ok) { $('#owl-tagsend').disabled = false; msg.textContent = owlError(res); return; }
+        var got = res.owl || o;
+        S.p.xp = (S.p.xp || 0) + 15; paintHeader(); syncSoon(); OWL.at = 0;
+        modal('<p class="kicker">Owl exchange · the result</p><h3 style="font-size:1.2rem">Two readings of one paragraph</h3>' + owlCompareHtml(got.sentences || sents, got.selfTags, r.tags) + '<p class="tiny">+15 merits for reading a housemate\'s paragraph.</p><button class="btn primary wide" data-close>Done</button>');
+        var b = $('#modal-slot [data-close]'); if (b) b.addEventListener('click', function () { paintOwlSlot($('#owl-slot')); });
+      });
+    });
+  }
+  function paintOwlSlot(el) {
+    if (!el || !ST || !S.p) return;
+    var ss = ST.ensure(S.p);
+    if (!ss.house || !(ST.reached(S.p, 4) || (S.p.reports || []).length)) { el.innerHTML = ''; return; }
+    var sid = S.p.studentId;
+    function render(d, note) {
+      var html = '<div class="card owlx" id="owlx"><div class="sect-h" style="margin-bottom:6px"><div><h3>Owl exchange · ' + esc(ST.house(S.p).name) + '</h3><p class="tiny">Send one body paragraph to your house, and tag a housemate\'s. No names either way.</p></div></div>';
+      if (note) html += '<p class="tiny">' + esc(note) + '</p>';
+      else {
+        var forMe = d.forMe || [], mine = d.mine || [];
+        if (forMe.length) html += forMe.map(function (o) { return '<button class="ckrow" data-owl-tag="' + esc(o.id) + '"><span class="ck-box">✉</span><span class="ck-txt"><span class="ck-name">An owl from a housemate: ' + esc((PR.get(o.promptId) || {}).title || 'a body paragraph') + '</span><span class="ck-sub">Tag its mechanism, example and nuance. About three minutes.</span></span><span class="ck-go">open →</span></button>'; }).join('');
+        else html += '<p class="tiny">No owl is waiting for you right now.</p>';
+        if (mine.length) html += mine.slice(-2).map(function (o) {
+          return '<div class="owl-mine' + (o.tags ? ' done' : '') + '"><b>Your owl · ' + esc((PR.get(o.promptId) || {}).title || '') + '</b> <span class="tiny">' + (o.tags ? 'read by a housemate' : 'still flying: no housemate has read it yet') + '</span>' + (o.tags ? owlCompareHtml(o.sentences || [], o.selfTags, o.tags) : '') + '</div>';
+        }).join('');
+        html += '<p class="tiny">To send one: open an essay on your Report Card, or the result screen after you submit, and tap "Send a paragraph by owl".</p>';
+      }
+      el.innerHTML = html + '</div>';
+      el.querySelectorAll('[data-owl-tag]').forEach(function (b) { b.addEventListener('click', function () { var o = (d.forMe || []).filter(function (x) { return x.id === b.dataset.owlTag; })[0]; if (o) owlTagModal(o); }); });
+    }
+    if (OWL.sid === sid && OWL.data && Date.now() - OWL.at < 60000) { render(OWL.data); return; }
+    el.innerHTML = '<div class="card owlx" id="owlx"><p class="tiny">Looking for owls…</p></div>';
+    api.owl('list', { fromId: sid, house: ss.house, cohort: S.p.cohort || '' }).then(function (r) {
+      if (!r || !r.ok) { render({}, owlError(r)); return; }
+      OWL.sid = sid; OWL.at = Date.now(); OWL.data = r; render(r);
+    }).catch(function () { render({}, 'The owl exchange starts after the class server is redeployed.'); });
   }
 
   /* =====================================================================
@@ -1590,6 +1762,8 @@
     var nDuelled = BC.duelled(bs);
     if (nDuelled < BC.SHORT_AFTER) html += '<p class="tiny" id="bc-mode-note" style="margin:-6px 0 14px">Your first ' + BC.SHORT_AFTER + ' duels ask every step (' + nDuelled + ' of ' + BC.SHORT_AFTER + ' fought). After that, a duel starts at the Core Topic and takes about ten minutes.</p>';
     else html += '<div class="lvl-bar" role="group" aria-label="Choose short or full duels"><span class="lvl-lbl">Duel length:</span><button type="button" class="lvl-btn' + (bs.full ? '' : ' on') + '" data-duel-mode="short" aria-pressed="' + !bs.full + '">Short duel</button><button type="button" class="lvl-btn' + (bs.full ? ' on' : '') + '" id="bc-full" data-duel-mode="full" aria-pressed="' + !!bs.full + '">Full duel</button><span class="tiny" style="flex-basis:100%">' + (bs.full ? 'Full duel: every step, from the time and the decode to the Ten Wards.' : 'Short duel: from the Core Topic to the frames. Choose Full duel for every step.') + '</span></div>';
+    /* WP8 (20 Oct 2026): a per-step clock, off by default; the Midwinter Tournament turns it on for its duel. */
+    html += '<div class="lvl-bar" role="group" aria-label="Step clock"><span class="lvl-lbl">Step clock:</span><button type="button" class="lvl-btn' + (bs.clock ? '' : ' on') + '" data-duel-clock="off" aria-pressed="' + !bs.clock + '">Off</button><button type="button" class="lvl-btn' + (bs.clock ? ' on' : '') + '" data-duel-clock="on" aria-pressed="' + !!bs.clock + '">On</button><span class="tiny" style="flex-basis:100%">' + (bs.clock ? BC.CLOCK_PER_Q + ' seconds a question on every step. When the clock runs out, the open questions on that step go to your opponent.' : 'No clock. The tournament duel runs its own clock (' + BC.CLOCK_PER_Q + ' seconds a question).') + '</span></div>';
     html += '<div class="gates" style="grid-template-columns:repeat(2,1fr)"><div class="gate"><span>Duelling rank</span><b>' + esc(rank.name) + '</b><small>' + bs.points + ' points' + (nxt ? ' · ' + (nxt.min - bs.points) + ' to ' + esc(nxt.name) : ' · top rank') + '</small><div class="bar-line gold"><span style="width:' + (nxt ? Math.round(100 * (bs.points - rank.min) / (nxt.min - rank.min)) : 100) + '%"></span></div></div><div class="gate"><span>Your five won</span><b>' + fiveWon + ' of ' + cp.ids.length + '</b><small>' + cleared + ' duel' + (cleared === 1 ? '' : 's') + ' won in all · win at ' + Math.round(BC.POINTS.pass * 100) + '%</small></div></div>';
     html += '<div class="card" style="padding:14px 16px;margin-bottom:16px"><p class="kicker">The Ten Wards</p><ol class="bc-list">' + BC.CHECKLIST.map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') + '</ol></div>';
     /* E4: her five first, in order; the rest as extra practice */
@@ -1605,6 +1779,12 @@
     $('#view-bootcamp').querySelectorAll('[data-bc]').forEach(function (b) { b.addEventListener('click', function () { startBootcamp(b.dataset.bc); }); });
     $('#view-bootcamp').querySelectorAll('[data-duel-lvl]').forEach(function (b) { b.addEventListener('click', function () { S.p.duelTier = b.dataset.duelLvl; syncSoon(); paintBootcamp(); toast('Duel answers at ' + b.dataset.duelLvl + '.'); }); });
     $('#view-bootcamp').querySelectorAll('[data-duel-mode]').forEach(function (b) { b.addEventListener('click', function () { bs.full = b.dataset.duelMode === 'full'; syncSoon(); paintBootcamp(); toast(bs.full ? 'Full duels: every step.' : 'Short duels: from the Core Topic.'); }); });
+    $('#view-bootcamp').querySelectorAll('[data-duel-clock]').forEach(function (b) { b.addEventListener('click', function () { bs.clock = b.dataset.duelClock === 'on'; syncSoon(); paintBootcamp(); toast(bs.clock ? 'Step clock on.' : 'Step clock off.'); }); });
+  }
+  /* The tournament's duel task is open: she has entered the Hall and not yet done a duel since. */
+  function inTournamentDuel() {
+    var ss = ST && S.p ? ST.ensure(S.p) : null, t = ss && ss.tournament;
+    return !!(t && t.started && !(t.done || {})['tour-duel']);
   }
   /* B10 (Oct 2026): a duel adds rank points and merits only for the improvement on this prompt's best
      points (m.bestPts), so a prompt cannot be farmed. Older records have only the best percentage of a
@@ -1620,7 +1800,13 @@
     var dlv = duelTier(), bs0 = bootState(), pr0 = PR.get(promptId);
     var short = !forceFull && BC.isShortDuel(bs0);
     var prevBest = duelBestPts(bs0.missions[promptId], pr0, dlv), liveXp = 0;
-    S.boot = BC.mount($('#view-bootrun'), { prompt: promptId, tier: dlv, short: short,
+    /* WP10a: the term-project scene above her first duel on one of her five (readable again from the Map Room);
+       WP8: the clock from the Hall switch, or the tournament's duel. The duel itself mounts in #bc-host. */
+    var m0 = bs0.missions[promptId], scene = (ST && ST.projectSceneHtml && !(m0 && m0.attempts > 0)) ? ST.projectSceneHtml(promptId) : '';
+    var clock = !!bs0.clock || inTournamentDuel();
+    $('#view-bootrun').innerHTML = (scene ? '<div id="proj-scene-wrap">' + scene + '</div>' : '') + '<div id="bc-host"></div>';
+    if (scene && ST) { ST.wireWords($('#proj-scene-wrap')); ST.wireArt($('#proj-scene-wrap')); }
+    S.boot = BC.mount($('#bc-host'), { prompt: promptId, tier: dlv, short: short, clock: clock,
       onQuit: function () { S.boot = null; show('bootcamp'); },
       onFullDuel: function () { S.boot = null; startBootcamp(promptId, true); },
       onAnswer: function (a) {
@@ -1651,7 +1837,10 @@
         paintHeader(); sync();
         var pr = PR.get(res.promptId) || {};
         var gainLine = m.attempts > 1 ? (gainPts > 0 ? ' +' + gainPts + ' rank points: a new best on this prompt.' : ' No new rank points: your best here is ' + m.bestPts + ' points. Beat it to earn more.') : ' +' + gainPts + ' rank points.';
-        $('#view-bootrun').innerHTML = '<div class="play"><div class="card result"><div class="score-ring" style="--p:' + pctScore + '"><i>' + pctScore + '%</i></div><h3>' + (res.passed ? 'Duel won' : 'Duel lost: fight it again') + '</h3><p>' + res.points + ' of ' + res.total + ' points on ' + esc(pr.title) + (res.short ? ' (short duel)' : '') + '.' + esc(gainLine) + (firstWin ? ' +60 merits for your first win here.' : '') + ' ' + (after.name !== before ? 'You are now ' + esc(after.name) + '!' : 'Duelling rank: ' + esc(after.name) + ' (' + bs.points + ' points).') + '</p>' +
+        var op = res.opponent || null;
+        $('#view-bootrun').innerHTML = '<div class="play"><div class="card result"><div class="score-ring" style="--p:' + pctScore + '"><i>' + pctScore + '%</i></div><h3>' + (res.passed ? 'Duel won' : 'Duel lost: fight it again') + '</h3>' +
+          (op ? '<p class="bc-line ' + (res.passed ? 'won' : 'lost') + '" id="bc-endline">' + esc(op.line || '') + ' <span class="tiny">(' + esc(op.name) + ' took ' + (op.steps - op.stepsWon) + ' of ' + op.steps + ' steps)</span></p>' : '') +
+          '<p>' + res.points + ' of ' + res.total + ' points on ' + esc(pr.title) + (res.short ? ' (short duel)' : '') + (res.clock ? ', with the step clock' : '') + '.' + esc(gainLine) + (firstWin ? ' +60 merits for your first win here.' : '') + ' ' + (after.name !== before ? 'You are now ' + esc(after.name) + '!' : 'Duelling rank: ' + esc(after.name) + ' (' + bs.points + ' points).') + '</p>' +
           (function () { var seen = {}, miss = res.log.filter(function (l) { if (l.correct || seen[l.tag]) return false; seen[l.tag] = 1; return true; }); return miss.length ? '<div class="misslist">' + miss.map(function (l) { var rem = C.REMEDIATION[l.tag] || {}; return '<div class="miss"><b>' + esc(rem.name || l.tag) + '</b>' + esc(rem.principle || '') + '</div>'; }).join('') + '</div>' : ''; })() +
           '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn primary" id="bc-back">Back to the Duelling Hall</button><button class="btn" id="bc-again">Duel again</button><button class="btn" id="bc-write">Write this essay in the Scriptorium</button></div></div></div>';
         $('#bc-back').addEventListener('click', function () { show('bootcamp'); });
