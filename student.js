@@ -1338,7 +1338,9 @@
       '<p class="merit-note' + (rep.merits ? '' : ' none') + '" id="w-merits">' + esc(meritNote(sum, rep)) + '</p>' +
       (revCfg ? '<div class="card" id="w-revise-card" data-revise="' + (mustRevise ? 'weak' : 'practice') + '" style="padding:12px 14px;margin:0 auto 12px;max-width:34rem;text-align:left"><p class="kicker">' + (mustRevise ? 'Next: make it stronger' : 'No red rows') + '</p><p style="margin:0 0 8px">' + (mustRevise
         ? 'Your weakest row is <b>' + esc(PARA_NAME[revCfg.reviseBox] || revCfg.reviseBox) + '</b>: ' + esc(revCfg.reviseWhy) + '. Rewrite that paragraph in your own words; the rest of your essay stays as it is.'
-        : 'Your essay has no red rows: revise for practice, or move on. For practice, <b>' + esc(PARA_NAME[revCfg.reviseBox] || revCfg.reviseBox) + '</b> is the shorter body paragraph: one more developed sentence there earns the revision merits.') +
+        : 'Your essay has no red rows: revise for practice, or move on. ' + (revCfg.revisePractice
+          ? 'For practice, <b>' + esc(PARA_NAME[revCfg.reviseBox] || revCfg.reviseBox) + '</b> is the shorter body paragraph: one more developed sentence there earns the revision merits.'
+          : 'For practice, the Wards point at <b>' + esc(PARA_NAME[revCfg.reviseBox] || revCfg.reviseBox) + '</b> (amber): ' + esc(revCfg.reviseWhy) + '. Make that paragraph stronger and the revision earns its merits.')) +
         '</p><button class="btn' + (mustRevise ? ' primary' : '') + '" id="w-revise">' + (mustRevise ? 'Revise your weakest row' : 'Revise for practice') + '</button>' + (mustRevise ? '' : ' <button class="btn primary" id="w-moveon">Move on</button>') + '</div>' : '') +
       (cfg.kind !== 'mock' && res.text ? '<p style="margin:0 auto 12px;max-width:34rem"><button class="btn sm" id="w-owl">Send a body paragraph by owl to a housemate</button> <span class="tiny">She tags its mechanism, example and nuance. No names.</span></p>' : '') +
       projNews +

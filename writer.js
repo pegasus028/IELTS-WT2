@@ -964,6 +964,8 @@
       old.row = (old.pre.rows || []).filter(function (r) { return r.id === cfg.reviseRow; })[0] || null;
       old.step = old.row ? nextStep(old.row, old.pre, level) : null;
       var ti = reviseTarget(cfg.reviseRow, old.row, old.pre, old.paras);
+      /* WP14 (20 Oct 2026): a practice revision (no Ward row) targets the box the console chose: the shorter body paragraph */
+      if (ti < 0 && cfg.reviseBox) { var bi = ['intro', 'bodyA', 'bodyB', 'conclusion'].indexOf(cfg.reviseBox); if (bi >= 0 && old.paras.length >= 3) ti = bi === 3 ? old.paras.length - 1 : Math.min(bi, old.paras.length - 2); }
       /* an essay paragraph → its box (a five-paragraph essay puts body 2 and 3 into the second body box) */
       old.target = ti < 0 || exam ? ti : old.paras.length <= paras.length ? ti : ti === 0 ? 0 : ti === old.paras.length - 1 ? 3 : ti === 1 ? 1 : 2;
     }
@@ -972,8 +974,8 @@
     function reviseNoteHtml() { return '<b>Revise this paragraph.</b> ' + esc(reviseStep()); }
     function reviseBanner() {
       var lb = old.row ? old.row.label : String(cfg.reviseRow || ''), where = old.target < 0 ? 'any paragraph' : exam ? 'paragraph ' + (old.target + 1) : 'the highlighted paragraph (' + boxName(old.target) + ')';
-      return '<div class="card wr-revise-banner" id="wr-revise-banner"><p class="kicker">Revision · your first essay is in the boxes</p>' +
-        (lb ? '<p><b>Your weakest row:</b> ' + esc(lb) + '</p>' : '') +
+      return '<div class="card wr-revise-banner" id="wr-revise-banner"><p class="kicker">' + (cfg.revisePractice ? 'Revision for practice' : 'Revision') + ' · your first essay is in the boxes</p>' +
+        (lb ? '<p><b>' + (cfg.reviseRed ? 'Your weakest row' : 'The Wards point at') + ':</b> ' + esc(lb) + '</p>' : cfg.revisePractice ? '<p><b>No red rows.</b> This revision is for practice: make the shorter body paragraph stronger with one more developed sentence of your own.</p>' : '') +
         (old.target < 0 || exam ? '<p class="wr-revise-step"><span class="pf-next-h">Next step:</span> ' + esc(reviseStep()) + '</p>' : '') +
         '<p class="tiny">Change ' + esc(where) + '. Submit opens when it has one new sentence of your own: write a new one, or rewrite an old one. Nothing else is locked.</p>' +
         '<p class="wr-revise-status" id="wr-revise-status" role="status" aria-live="polite"></p></div>';

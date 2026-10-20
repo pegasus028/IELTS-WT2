@@ -471,7 +471,7 @@
   function challengeHtml(pr, row, cup) {
     var m = METRICS[row.metric] || { name: row.metric, unit: '' }, mine = challengeScore(pr, row), hs = STORY().houses || [], my = ensure(pr).house;
     var html = '<div class="card challenge" id="challenge" data-challenge="' + esc(row.id) + '"><p class="kicker">This week\'s house challenge' + (row.to ? ' · until ' + esc(row.to) : '') + '</p><h3>' + esc(row.title || m.name) + '</h3><p class="tiny">' + esc(m.name) + '. Every student adds to her house; the Cup shows house totals only, never names.</p>' +
-      '<p class="chal-mine">Your part so far: <b>' + mine + '</b> ' + esc(m.unit) + '</p>';
+      '<p class="chal-mine">Your part so far: <b>' + mine + '</b> ' + esc(mine === 1 && /s$/.test(m.unit) ? m.unit.slice(0, -1) : m.unit) + '</p>';
     var ch = cup && cup.challenge && cup.challenge.id === row.id ? cup.challenge : null;
     if (!ch) html += '<p class="tiny chal-wait">House totals for the challenge start after the class server is redeployed. Your own count is kept meanwhile.</p>';
     else {

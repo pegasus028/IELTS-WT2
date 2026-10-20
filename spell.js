@@ -46,16 +46,22 @@
   }
   function labelFor(key, type) { var T = global.Template, lab = T && T.labels ? T.labels(type) : {}; var v = C().VARIABLES.filter(function (x) { return x.key === key; })[0] || {}; return { name: lab[key] || v.name || key, hint: v.hint || '' }; }
   function guide(key) { var L = global.LabContent; return (L && L.VAR_GUIDE && L.VAR_GUIDE[key]) || {}; }
+  /* the job of this slot in this question type, from the Type Switch Card (lab-content.js) */
+  function roleFor(key, type) {
+    var L = global.LabContent, row = (L && L.TYPE_SWITCH || []).filter(function (r) { return r.id === type; })[0];
+    var f = { facetA: 'a', nuanceA: 'na', facetB: 'b', nuanceB: 'nb', position: 'pos' }[key];
+    return row && f && row[f] ? row[f] : '';
+  }
 
   function paint(el, host) {
     if (!el || !host || !host.p || !global.Prompts) return;
     var p = host.p, s = state(host), pr = global.Prompts.get(s.promptId);
     if (!pr) { el.innerHTML = ''; return; }
-    var lab = labelFor(s.key, pr.type), g = guide(s.key), lv = level(host);
+    var lab = labelFor(s.key, pr.type), g = guide(s.key), lv = level(host), role = roleFor(s.key, pr.type);
     var ex = W() && W().shapeExamples ? W().shapeExamples(s.key, lv, pr)[0] : null;
     var html = '<div class="card spell" id="spell" data-spell="' + esc(s.key) + '" data-spell-prompt="' + esc(pr.id) + '"><div class="sect-h" style="margin-bottom:6px"><div><p class="kicker">Today\'s spell · five minutes</p><h3>' + esc(lab.name) + ' for "' + esc(pr.title) + '"</h3></div><span class="pill' + (s.done ? ' good' : ' on') + '" id="spell-streak">' + (s.streak || 0) + ' day' + (s.streak === 1 ? '' : 's') + '</span></div>' +
       '<p class="tiny spell-prompt">' + esc(pr.text) + '</p>' +
-      '<p class="spell-ask"><b>' + esc(lab.name) + ':</b> ' + esc(g.does || lab.hint) + (g.tip ? ' ' + esc(g.tip) : '') + '</p>' +
+      '<p class="spell-ask"><b>' + esc(lab.name) + ':</b> ' + (role ? 'in a ' + esc(String((C().TYPES[pr.type] || {}).name || pr.type).replace(/ question$/, '')).toLowerCase() + ' essay, ' + esc(role.charAt(0).toLowerCase() + role.slice(1)) + '. ' : '') + esc(g.does || lab.hint) + (g.tip ? ' ' + esc(g.tip) : '') + '</p>' +
       (ex ? '<p class="tiny spell-ex">The shape, from another prompt: <i>' + esc(ex.text) + '</i> (' + esc(ex.from) + ')</p>' : '');
     if (s.done) {
       html += '<p class="spell-done">✓ Cast today: <i>' + esc(s.text) + '</i></p>' + (s.verdict ? '<p class="tiny">' + esc(s.verdict) + '</p>' : '') + '<p class="tiny">One variable a day keeps the candles lit. Tomorrow brings a new prompt and a new key.</p>';
