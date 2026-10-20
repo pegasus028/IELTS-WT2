@@ -105,7 +105,8 @@
     var payload = { kind: 'variable', level: li.id, band: li.band, pct: li.pct || 40,
       prompt: { text: pr.text, type: (C().TYPES[pr.type] || {}).name || pr.type, demand: (C().TYPES[pr.type] || {}).demand || '' },
       variable: { key: s.key, label: lab.name, does: g.does || lab.hint, form: g.form || '' },
-      value: text, value2: null, words: words(text), budget: { lo: b[0], hi: b[1] }, inContext: [], filled: [] };
+      value: text, value2: null, words: words(text), budget: { lo: b[0], hi: b[1] },
+      inContext: ['(The daily spell: this variable stands alone today, with no template line around it. Judge the words themselves; for fit, return ok true unless the form is wrong.)'], filled: [] };
     var offline = function () {
       var v = sc.soft ? 'Shape: fine. ' + sc.tip : 'Shape: right for ' + lab.name.toLowerCase() + '. The coach is off today, so this is the Ward check only.';
       out.innerHTML = '<ul class="ftnotes ok"><li>' + esc(v) + '</li></ul>';

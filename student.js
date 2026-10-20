@@ -609,7 +609,9 @@
     if (why === 'mock') return '+' + xp + ' merits for a mock examination.';
     if (why === 'frame') return 'No merits for this essay. Write more in your own words to earn merits: ' + (own != null ? own + '% of it is yours, and merits start at ' + Math.round(OWN_MIN * 100) + '%.' : 'most of it is still the frame.');
     if (why === 'revise-up') return '+' + xp + ' merits: your ' + row + ' is stronger than before. A better band from the examiners adds ' + M.improve + ' more.';
-    if (why === 'revise-same') return 'No merits yet for this revision: by the Wards, your ' + row + ' is not stronger yet. A revision earns merits when its weak row gets stronger, or when the examiners give it a better band.';
+    if (why === 'revise-same') return rep.revisePractice
+      ? 'No merits yet for this practice revision: your ' + row + ' needs one more developed sentence (15 words or more) with no new red row. A better band from the examiners also earns them.'
+      : 'No merits yet for this revision: by the Wards, your ' + row + ' is not stronger yet. A revision earns merits when its weak row gets stronger, or when the examiners give it a better band.';
     if (why === 'revise-again') return 'No merits: this essay has already earned its revision merits. Revise a new essay to earn more.';
     if (why === 'own-up') return '+' + xp + ' merits: ' + (rep.words >= 250 ? M.essay : M.short) + ' for the essay and ' + M.improve + ' because more of it is in your own words than last time.';
     var need = Math.max(0, 250 - (rep.words || 0));
@@ -1321,7 +1323,7 @@
     /* Writer.lastMeta() (res.meta): ownShare, ownSentences, fillUsed, landTaps, landAgree, revisionOf, reviseRow */
     var meta = writerMeta(cfg, res);
     Object.keys(meta).forEach(function (k) { rep[k] = meta[k]; });
-    if (rep.revisionOf) rep.reviseImproved = reviseImproved(cfg, res);
+    if (rep.revisionOf) { rep.reviseImproved = reviseImproved(cfg, res); rep.revisePractice = !!cfg.revisePractice; }
     var sum = P.recordReport(p, rep);
     rep.merits = sum ? sum.merits : 0; rep.meritWhy = sum ? sum.meritWhy : '';
     api.submitReport(rep).then(function (r) { if (!r || !r.ok) toast('Saved on this device; it will reach the class sheet when the connection is back.'); });
