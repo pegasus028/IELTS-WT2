@@ -154,7 +154,7 @@ check('a tagged owl cannot be tagged twice', post('owl', { kind: 'tag', token: n
 const lPloy = post('owl', { kind: 'list', token: tok });
 check('the sender sees the tags on her owl, no tagger id', lPloy.mine.length === 1 && lPloy.mine[0].tags && lPloy.mine[0].tags.ex === 2 && !('taggedBy' in lPloy.mine[0]), lPloy);
 check('after tagging, a new owl may fly', post('owl', { kind: 'send', token: tok, row: { id: 'O2', promptId: 'x', para: 'bodyB', sentences: ['a b c.', 'd e f.', 'g h i.'] } }).ok === true);
-check('ping reports version 20261020', post('ping', {}).version === '20261020');
+check('ping reports version 20261031', post('ping', {}).version === '20261031');
 
 check('delete own attempt', post('lab.deleteAttempt', { studentId: 'ploy', token: tok, id: 'A1' }).ok && book.sheets.LabAttempts.rows.length === 1);
 
@@ -205,6 +205,27 @@ for (let i = 0; i < 5; i++) post('login', { id: 'mint', pw: 'bad' + i });
 check('five wrong passwords lock the account', /Too many/.test(post('login', { id: 'mint', pw: 'pw9999' }).error || ''));
 check('teacher can unlock it', post('unlock', { tt: tl.tt, id: 'mint' }).ok && post('login', { id: 'mint', pw: 'pw9999' }).ok);
 check('a student cannot unlock', post('unlock', { token: tok, id: 'mint' }).ok === false);
+/* Password reset (31 Oct 2026) */
+check('a student cannot reset a password', post('resetPw', { token: tok, id: 'mint' }).ok === false);
+check('reset refuses an unknown student', post('resetPw', { tt: tl.tt, id: 'ghost' }).ok === false);
+check('reset refuses a 3-character password', post('resetPw', { tt: tl.tt, id: 'mint', pw: 'abc' }).ok === false);
+const mintOldTok = post('login', { id: 'mint', pw: 'pw9999' }).token;
+for (let i = 0; i < 5; i++) post('login', { id: 'mint', pw: 'bad' + i });
+const rs1 = post('resetPw', { tt: tl.tt, id: 'Mint', pw: 'temp4321' });
+check('teacher sets a new password', rs1.ok && rs1.mode === 'set', rs1);
+check('old password no longer works', post('login', { id: 'mint', pw: 'pw9999' }).ok === false);
+const mintNew = post('login', { id: 'mint', pw: 'temp4321' });
+check('new password works and the lock is cleared', mintNew.ok && mintNew.progress && mintNew.progress.studentId === 'mint', mintNew);
+check('reset signs out old devices (token replaced)', mintNew.token !== mintOldTok && post('save', { token: mintOldTok, progress: { studentId: 'mint' } }).ok === false);
+const rs2 = post('resetPw', { tt: tl.tt, id: 'mint' });
+check('teacher clears the password so she chooses', rs2.ok && rs2.mode === 'choose' && book.sheets.Students.rows.find((r) => r[0] === 'mint')[2] === '', rs2);
+check('a cleared password still needs 4+ characters', post('login', { id: 'mint', pw: 'abc' }).ok === false);
+const chose = post('login', { id: 'mint', pw: 'mine2026' });
+check('her next sign-in sets her own password', chose.ok && chose.newPw === true && /^v2\$/.test(book.sheets.Students.rows.find((r) => r[0] === 'mint')[2]), chose);
+check('then only that password works', post('login', { id: 'mint', pw: 'other99' }).ok === false && post('login', { id: 'mint', pw: 'mine2026' }).ok === true && !post('login', { id: 'mint', pw: 'mine2026' }).newPw);
+check('progress survives a reset', post('login', { id: 'mint', pw: 'mine2026' }).progress.displayName === 'Mint');
+check('register cannot take over a reset account', post('resetPw', { tt: tl.tt, id: 'mint' }).ok && post('register', { id: 'mint', pw: 'hijack1', name: 'X' }).ok === false);
+post('login', { id: 'mint', pw: 'pw9999' });
 check('student projector list needs a round', post('projector', { kind: 'list', token: tok, row: {} }).ok === false);
 const pr2 = post('projector', { kind: 'post', token: tok, row: { kind: 'post', studentId: 'ploy', round: 'r2', text: 'x'.repeat(2000), win: true } });
 check('student posts are trimmed and whitelisted', pr2.ok && pr2.posts.slice(-1)[0].text.length === 900 && pr2.posts.slice(-1)[0].win === undefined);

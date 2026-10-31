@@ -129,7 +129,7 @@
     $('#btn-go').textContent = m === 'in' ? 'Log in' : m === 'new' ? 'Create my account' : 'Go';
     $('#f-pw').setAttribute('autocomplete', m === 'in' ? 'current-password' : 'new-password');
     $('#login-tip').textContent = m === 'fast'
-      ? 'Pick your name, then set a password the first time. After that it is the password you sign in with. Your teacher never sees it.'
+      ? 'Pick your name, then set a password the first time. After that it is the password you sign in with. Your teacher never sees it. Forgotten it? Ask T.Chris to reset it.'
       : 'Your ID and password are yours to choose. Your teacher can see your progress, never your password.';
     say('');
   }
@@ -155,7 +155,7 @@
     $('#btn-go').disabled = true;
     say(mode === 'new' ? 'Creating your account…' : 'Checking…');
     var slow = setTimeout(function () { say('Still working — the class server is waking up. This can take a few seconds.'); }, 4000);
-    function done(r) { clearTimeout(slow); $('#btn-go').disabled = false; var pr = r.progress || P.blank(id, name || id); if (fastGroup && !pr.cohort) pr.cohort = fastGroup.cohort; start(pr); }
+    function done(r) { clearTimeout(slow); $('#btn-go').disabled = false; var pr = r.progress || P.blank(id, name || id); if (fastGroup && !pr.cohort) pr.cohort = fastGroup.cohort; start(pr); if (r.newPw) setTimeout(function () { toast('New password saved. Use it every time you sign in from now on.'); }, 700); }
     function failed(msg) { clearTimeout(slow); $('#btn-go').disabled = false; say(msg || 'Something went wrong. Try again.', true); }
     function crashed(e) { clearTimeout(slow); $('#btn-go').disabled = false; say('Could not reach the server: ' + e.message, true); }
     if (fast) {

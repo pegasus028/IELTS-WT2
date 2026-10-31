@@ -30,7 +30,7 @@
   var $ = function (s) { return document.querySelector(s); };
   var esc = E.esc;
   /* WP1: the Code.gs build this front end needs (Code.gs APP_VERSION). One constant: change both together. */
-  var EXPECTED_BACKEND = '20261020';
+  var EXPECTED_BACKEND = '20261031';
   /* Your five: the same default and teaching order as student.js (Discuss → Advantages → Opinion → Problem → Two-part). */
   var CORE_TYPES = ['DISCUSS', 'ADVANTAGE', 'OPINION', 'PROBLEM', 'TWOPART'];
   var CORE_DEFAULT = { DISCUSS: 'p-fast-food-tax', ADVANTAGE: 'p-cctv-everywhere', OPINION: 'p-free-transport', PROBLEM: 'p-youth-unemployment', TWOPART: 'p-rural-youth' };
@@ -447,6 +447,11 @@
       var reps = reportsOf(id);
       var h = '<div class="panel-h"><div><h2>' + esc(p.displayName || id) + '</h2><span class="kicker">' + esc(id) + ' · ' + esc(P.rank(p).name) + ' · ' + P.checksCleared(p) + '/' + C.TOPICS.length + ' classes · ' + esc(p.cohort || cohortOf({ id: id })) + ' · lessons read at ' + esc(p.explainLevel || 'C1') + ' · duels at ' + esc(p.duelTier || p.tier || 'B2') + '</span></div><span class="pill' + (P.accuracy(p) >= 80 ? ' good' : P.accuracy(p) >= 60 ? '' : ' bad') + '">' + P.accuracy(p) + '% accurate</span></div>';
       h += '<div class="gates">' + ['TR', 'CC', 'LR', 'GRA'].map(function (k) { return '<div class="gate"><span>' + k + '</span><b>' + g[k] + '%</b></div>'; }).join('') + '</div>';
+      /* Sign-in (31 Oct 2026): reset a forgotten password. Her progress is untouched. */
+      h += '<details class="disc" id="d-signin"><summary>Sign-in<span class="count">reset a forgotten password</span></summary><div class="disc-body" style="padding-top:10px">' +
+        '<div class="story-acts"><input id="d-pw" type="text" placeholder="New password (optional)" autocomplete="off" autocapitalize="off" spellcheck="false" style="flex:1 1 220px;min-width:0">' +
+        '<button class="btn sm primary" id="d-pw-reset">Reset password</button></div>' +
+        '<p class="tiny" id="d-pw-msg" style="margin-top:8px">Leave the box empty and she chooses a new password herself: she picks her name, types a new password and that becomes her password. Or type one here and tell her. Either way her progress, essays and house points are kept, the 5-minute lock is cleared, and any device she is signed in on is signed out.</p></div></details>';
       /* Quillmoor story: house, chapter, keepsakes, and the teacher's story orders */
       var sto = storyOf(p), chN = Number(sto.chapter) || 0, unl = Number(sto.unlockedTo) || 0, srt = sto.sort || {};
       var myOrders = T.assignments.filter(function (a) { return isOrder(a) && a.studentId && String(a.studentId).toLowerCase() === String(id).toLowerCase(); });
@@ -530,6 +535,21 @@
         mineRows.forEach(function (a) { api.assignments('remove', { id: a.id }).then(function (r) { T.assignments = (r && r.assignments) || T.assignments.filter(function (x) { return x.id !== a.id; }); if (--n === 0) { toast('Her own five removed.'); paintRoster(); openStudent(id); } }); });
       });
       var nameOf = p.displayName || id;
+      $('#d-pw-reset').addEventListener('click', function () {
+        var btn = $('#d-pw-reset'), pw = $('#d-pw').value.trim(), msg = $('#d-pw-msg');
+        if (pw && pw.length < 4) { toast('A new password needs at least 4 characters, or leave the box empty.'); return; }
+        if (!confirm(pw ? 'Set ' + nameOf + '\'s password to "' + pw + '"? Her old password stops working.' : 'Reset ' + nameOf + '\'s password? Her old password stops working, and the next password she types when she signs in becomes her new one.')) return;
+        btn.disabled = true;
+        api.resetPw(id, pw).then(function (r) {
+          btn.disabled = false;
+          if (!r || !r.ok) { toast(r && /Unknown action/.test(r.error || '') ? 'The class server needs redeploying (version ' + EXPECTED_BACKEND + ') before passwords can be reset.' : (r && r.error) || 'Could not reset the password.'); return; }
+          $('#d-pw').value = '';
+          msg.innerHTML = r.mode === 'set'
+            ? '<b>Done.</b> ' + esc(nameOf) + '\'s password is now <b>' + esc(pw) + '</b>. Tell her, and suggest she keeps it somewhere safe.'
+            : '<b>Done.</b> Tell ' + esc(nameOf) + ' to pick her name on the sign-in screen and type a new password (4+ characters). Whatever she types first becomes her password.';
+          toast('Password reset for ' + nameOf + '.');
+        }, function (e) { btn.disabled = false; toast('Could not reach the class server: ' + (e && e.message || e)); });
+      });
       $('#d-unl-n').addEventListener('change', function () { $('#d-unl').textContent = 'Unlock up to chapter ' + $('#d-unl-n').value; });
       $('#d-unl').addEventListener('click', function () {
         var n = parseInt($('#d-unl-n').value, 10) || 1;

@@ -131,7 +131,8 @@
     var d = db();
     var s = d.students[id];
     if (!s) return { ok: false, error: 'No account with that ID. Create one first.' };
-    if (s.pw !== hash(pw)) return { ok: false, error: 'Wrong password.' };
+    if (s.pw === '') { s.pw = hash(pw); saveDb(d); return { ok: true, progress: s.progress, newPw: true }; }
+    if (s.pw !== hash(pw)) return { ok: false, error: 'Wrong password. Forgotten it? Ask T.Chris to reset it.' };
     return { ok: true, progress: s.progress };
   }
   function localSave(progress, attempts) {
@@ -393,6 +394,19 @@
     },
     roster: function () { return call('roster', {}, localRoster); },
     detail: function (id) { return call('detail', { id: id }, function () { return localDetail(id); }); },
+    /* 31 Oct 2026: teacher password reset. An empty pw lets her choose a new one at her next sign-in.
+       If the class server cannot be reached the reset is NOT done there, so say so rather than reset this browser's copy. */
+    resetPw: function (id, pw) {
+      var wasCloud = state.mode === 'cloud';
+      return call('resetPw', { id: id, pw: pw || '' }, function () {
+        if (wasCloud) return { ok: false, error: 'Could not reach the class server, so the password was not reset. Try again in a moment.' };
+        var d = db(), s = d.students[id];
+        if (!s) return { ok: false, error: 'No student with that ID.' };
+        if (pw && String(pw).length < 4) return { ok: false, error: 'A new password needs at least 4 characters.' };
+        s.pw = pw ? hash(String(pw)) : ''; saveDb(d);
+        return { ok: true, id: id, mode: pw ? 'set' : 'choose' };
+      });
+    },
     assign: function (id, paper) { return call('assign', { id: id, paper: paper }, function () { return localAssign(id, paper); }); },
 
     /* reports */

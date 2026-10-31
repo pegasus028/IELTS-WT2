@@ -34,6 +34,14 @@
    cohort travel the same way, as {kind:'coreset', studentId | cohort,
    prompts:[5 ids]} rows.
 
+   PASSWORD RESET (31 Oct 2026). `resetPw` (teacher only) takes {id, pw?}.
+   With a pw (4+ characters) it becomes her new password. Without one the
+   password cell is emptied, and the next `login` for that id accepts whatever
+   she types and saves it as her new password (reply carries newPw: true), so
+   T.Chris never needs to know it. Either way her progress is kept, the
+   wrong-password lock is cleared and her token is replaced, which signs out
+   every device she was signed in on.
+
    VERSION (19 Oct 2026). ping and doGet return APP_VERSION; the Staff Room
    asks for a redeploy when it is missing or older than the front end expects.
 
@@ -64,7 +72,7 @@ var SHEETS = {
 /* WP1 (19 Oct 2026): the build this file belongs to. ping and doGet report it, and the Staff Room
    shows a banner when the live deployment is older than the front end expects. Change it with every
    release that touches this file (and the Staff Room's EXPECTED_BACKEND in teacher.js). */
-var APP_VERSION = '20261020';
+var APP_VERSION = '20261031';
 
 function doGet() { return out({ ok: true, app: 'Quillmoor Academy', sheet: SpreadsheetApp.getActive().getName(), version: APP_VERSION }); }
 
@@ -96,6 +104,7 @@ function handle(action, p) {
     case 'teacherLogin': return teacherLogin(p);
     case 'logout': return logout(p);
     case 'unlock': return T ? unlock(p.id) : denied();
+    case 'resetPw': return T ? resetPw(p) : denied();
     case 'roster': return T ? roster() : denied();
     case 'detail': return T ? detail(p.id) : denied();
     case 'submitReport': return submitReport(p);
@@ -226,7 +235,16 @@ function login(p) {
   if (!s) return { ok: false, error: 'No account with that ID. Create one first.' };
   var key = 'lock:pw:' + lid;
   if (locked(key)) return { ok: false, error: 'Too many wrong passwords. Wait 5 minutes, then try again, or ask T.Chris to unlock you.' };
-  if (!checkPw(s, p.pw)) { failed(key); return { ok: false, error: 'Wrong password.' }; }
+  /* A password T.Chris has reset (empty cell): what she types now becomes her new password. */
+  if (String(s.pw || '') === '') {
+    if (String(p.pw || '').length < 4) return { ok: false, error: 'Your password was reset. Choose a new one of at least 4 characters.' };
+    cache().remove(key);
+    var nt = token();
+    update('Students', s._row, { pw: hashPw(p.pw), token: nt });
+    log('newPw ' + s.id);
+    return { ok: true, token: nt, progress: parse(s.progress, {}), newPw: true };
+  }
+  if (!checkPw(s, p.pw)) { failed(key); return { ok: false, error: 'Wrong password. Forgotten it? Ask T.Chris to reset it.' }; }
   cache().remove(key);
   /* One token per student, kept across logins, so an iPad and a phone can both stay signed in. */
   var t = s.token || token(), upd = { token: t };
@@ -242,6 +260,17 @@ function logout(p) {
   return { ok: true };
 }
 function unlock(id) { cache().remove('lock:pw:' + String(id || '').toLowerCase().trim()); return { ok: true }; }
+/* Teacher password reset: see PASSWORD RESET in the header. */
+function resetPw(p) {
+  var s = findStudent(p.id);
+  if (!s) return { ok: false, error: 'No student with that ID.' };
+  var pw = String(p.pw == null ? '' : p.pw);
+  if (pw && pw.length < 4) return { ok: false, error: 'A new password needs at least 4 characters (or leave it empty and she chooses one).' };
+  update('Students', s._row, { pw: pw ? hashPw(pw) : '', token: token() });
+  cache().remove('lock:pw:' + String(s.id).toLowerCase());
+  log('resetPw ' + s.id + (pw ? ' (set by teacher)' : ' (she chooses)'));
+  return { ok: true, id: s.id, mode: pw ? 'set' : 'choose' };
+}
 function save(p) {
   var s = auth(p);
   if (!s) return { ok: false, error: 'Not signed in.' };
