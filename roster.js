@@ -25,7 +25,8 @@ var ROSTER_GROUPS = [
     { id: 'tut-mikii', name: 'Mikii' },
     { id: 'tut-donut', name: 'Donut' },
     { id: 'tut-jingjing', name: 'JingJing' },
-    { id: 'tut-pear', name: 'Pear' }
+    { id: 'tut-pear', name: 'Pear' },
+    { id: 'tut-soda', name: 'Soda' }
   ] }
 ];
 
