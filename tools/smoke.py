@@ -71,7 +71,7 @@ with sync_playwright() as p:
 
     step('bootcamp: run a mission to the end')
     page.click('.nav button[data-view=bootcamp]'); page.wait_for_timeout(300); shot(page, '05-bootcamp')
-    page.click('[data-bc=p-cars-city]'); page.wait_for_timeout(300)
+    page.evaluate("document.getElementById('bc-extra-fold').open = true"); page.click('[data-bc=p-cars-city]'); page.wait_for_timeout(300)
     for s in range(8):
         qids = [q.get_attribute('data-q') for q in page.query_selector_all('.bc-q')]
         for qid in qids:
@@ -93,7 +93,7 @@ with sync_playwright() as p:
 
     step('writer: guided essay with the matrix, fill frames, pre-flight, submit')
     page.click('.nav button[data-view=writer]'); page.wait_for_timeout(300); shot(page, '08-writer-home')
-    page.click('[data-p=p-tourism]'); page.wait_for_timeout(400)
+    page.evaluate("document.getElementById('w-extra-fold').open = true"); page.click('[data-p=p-tourism]'); page.wait_for_timeout(400)
     vars_ = page.evaluate("(function(){var p=window.Prompts.get('p-tourism'),o={};Object.keys(p.vars.B2).forEach(function(k){o[k]=p.vars.B2[k].ok});return o;})()")
     for k, v in vars_.items(): page.fill('#wr-v-' + k, v)
     page.once('dialog', lambda d: d.accept())
@@ -152,7 +152,7 @@ with sync_playwright() as p:
     m.on('pageerror', lambda e: errors.append('mobile ' + str(e)))
     m.goto(BASE + 'index.html#writer'); m.wait_for_timeout(500)
     m.click('#tab-in'); m.fill('#f-id', 'smoke-01'); m.fill('#f-pw', 'test1234'); m.click('#btn-go'); m.wait_for_selector('#screen-app:not(.hidden)', timeout=8000); m.wait_for_timeout(300)
-    m.click('.nav button[data-view=writer]'); m.wait_for_timeout(300); m.click('[data-p=p-teen-jobs]'); m.wait_for_timeout(400); shot(m, '16-mobile-writer')
+    m.click('.nav button[data-view=writer]'); m.wait_for_timeout(300); m.evaluate("document.getElementById('w-extra-fold').open = true"); m.click('[data-p=p-teen-jobs]'); m.wait_for_timeout(400); shot(m, '16-mobile-writer')
     sw = m.evaluate("document.documentElement.scrollWidth"); assert sw <= 380, 'horizontal overflow: %d' % sw
     m.close()
 

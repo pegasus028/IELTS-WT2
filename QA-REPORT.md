@@ -1,5 +1,39 @@
 # Position Control / Quillmoor Academy — QA report
 
+## Streamlining rooms 3 onwards — 10 November 2026 (Claude Fable 5.2)
+
+Requested by T.Chris: audit the app and streamline the process, without changing the first and second rooms (Map Room, Classes). Only `student.js` (room painters for the Duelling Hall, Scriptorium, My Spellbook and Report Card), its `?v=` in index.html and `tools/smoke.py` changed. `paintPlan`, `paintMap`, `goNext`, story.js, the lesson player, all content files, ids, `pc.*`/`qm.*` keys, API actions and Code.gs are untouched; no redeploy is needed.
+
+**What the audit measured (phone, 390 px, every room unlocked).**
+
+| Room | Page height before | After | What made it long |
+| --- | --- | --- | --- |
+| Duelling Hall | 9,211 px (11 screens) | 2,392 px | three setting bars, the Ten Wards list and 32 extra-practice cards above and below her five |
+| Scriptorium | 9,240 px | 2,853 px | two filter rows and 32 extra-practice cards between her five and the mocks |
+| My Spellbook | 6,988 px | 4,066 px | the eleven-keys list and four structural-swap blocks around the four frames she edits |
+| Report Card | 4,505 px | 844 px | 14 class tiles and 38 keepsake tiles under the essay list |
+
+Other findings: neither writing room said what to do next (the pointer lived only in the Map Room); after a won duel the first button led back to the Hall, not to the essay; after a clean essay the only way to the next prompt was Map Room → pointer; the Report Card essay page kept Revise under the whole essay; the section head and the card grid shared one id (`bc-extra`, `w-extra`).
+
+**What changed.**
+- *One next step in the room* (`#hall-next`, `#scr-next`, `[data-room-next]`): owl post first, then the next of her five (Duel → / Write → / Revise →), using the same `coreNext` and `goNext` as the Map Room pointer, so the two can never disagree.
+- *Folds* (`details.room-fold`, state kept for the session in `S.fold`): Duel settings (`#bc-settings`, the heading shows the current level, length and clock), the Ten Wards (`#bc-wards`), Extra practice in the Hall (`#bc-extra-fold`) and in the Scriptorium with its filters (`#w-extra-fold`), the eleven keys and the structural swaps in My Spellbook (`#tpl-keys`, `#tpl-swaps`), and Classes and both keepsake lists on the Report Card (`#rec-classes`, `#rec-story`, `#rec-badges`, with counts in the heading). Every card is still in the page, so `[data-bc]`, `[data-p]`, `[data-duel-lvl]`, `[data-duel-clock]` work as before; a test that clicks an extra prompt by mouse opens the fold first (smoke.py does).
+- *Duel result:* the first button is the next step. Won and not yet written: "Write this essay now →" (in the mode she last chose in the Scriptorium, guided by default); lost: "Duel again"; otherwise back to the Hall. Button ids unchanged.
+- *Essay result:* with no red rows, "Next of your five: … (duel/write) →" (`#w-next`) sits beside Move on. With red rows nothing is added: Revise stays the one primary step.
+- *Report Card essay page:* when the essay has red rows, "Revise your weakest row →" also sits above the essay (`#rp-revise-top`).
+- Removed the duplicate ids and the unused `extraHead`.
+
+**Audited and left alone.** Spellbook Workshop (one screen, already led by her five), Exemplar Archive, Castle Wireless, Mending Room, Assembly, Your Trunk: short pages with one clear action each.
+
+**Tests.** validate, template-test, test-free, story-validate, gs-test, audit, lab-validate, leak-check, lab-examples-check, date-test; smoke.py on a scratch copy with the server address blanked (0 console errors); a Playwright pass at 390×844 on the same copy (24 checks: strips, folds and their memory, filters, counts, 5 + 32 cards in each room, mocks, no sideways scroll).
+
+**For T.Chris (judgement calls).**
+1. The room pointer "Revise →" opens the essay on the Report Card (one more tap), because the essay text is fetched there; the Map Room pointer does the same and was left as it is.
+2. The top bar still has 13 rooms on a wide screen (it scrolls sideways). Grouping them would change the bar the Map Room and Classes sit in, so it was not done; say if you want Memory Basin and Castle Wireless merged into one media room.
+3. The Map Room is 6,508 px on a phone and Classes 4,473 px. Both are out of scope here; the same folds would shorten them.
+
+---
+
 ## The second half of the story, real duels, Thai glosses, optional revision — 20 October 2026 (Claude Fable 5.1)
 
 Work packages WP8 (remainder), WP10, WP6 (remainder) and WP14 from the five-student walkthrough, built on branch `up3-fable` from 07e4202. Ids, `pc.*`/`qm.*` keys, API actions and Sheet columns are unchanged; one action (`owl`), one sheet (`Owls`) and one optional field (`houses` → `challenge`) were added to Code.gs.

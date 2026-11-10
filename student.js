@@ -507,8 +507,26 @@
     var nxt = cp.current >= 0 ? ' Next: number ' + (cp.current + 1) + '.' : ' All five are written.';
     return '<div class="sect-h core-h" id="' + room + '-core"><div><h2>Your five</h2><p>' + who + ' For each one: duel it, write it, then revise your weakest row (an essay with no red rows can move on).' + nxt + '</p></div><span class="pill on">' + cp.done + ' of ' + cp.ids.length + ' done</span></div>';
   }
-  function extraHead(room, n) {
-    return '<div class="sect-h core-h" id="' + room + '-extra" style="margin-top:22px"><div><h2>Extra practice</h2><p>' + n + ' more prompts, all open. Write any of them whenever you like; your five come first.</p></div></div>';
+  /* Streamlining (10 Nov 2026): long reference blocks in rooms 3+ fold away; the fold remembers whether she opened it. */
+  function fold(id, summary, inner, cls) {
+    var open = !!(S.fold && S.fold[id]);
+    return '<details class="room-fold' + (cls ? ' ' + cls : '') + '" id="' + id + '"' + (open ? ' open' : '') + '><summary>' + summary + '</summary>' + inner + '</details>';
+  }
+  function wireFolds(root) {
+    root.querySelectorAll('details.room-fold').forEach(function (d) { d.addEventListener('toggle', function () { if (!S.fold) S.fold = {}; S.fold[d.id] = d.open; }); });
+  }
+  /* One next step at the top of a writing room: owl post first, then the next of her five (duel, write, revise). */
+  function roomNextStep() {
+    var open = openAssignments();
+    if (open.length) return { kind: 'assign', id: open[0].id, kicker: 'Owl post', label: open[0].title || 'From T.Chris', sub: open[0].note || 'Set by T.Chris. It opens in the Scriptorium.', go: 'Open →' };
+    return coreNext(S.p);
+  }
+  function roomNext(room) {
+    var n = roomNextStep(); if (!n) return '';
+    return '<div class="card room-next" id="' + room + '-next"><div><p class="kicker">Your next step · ' + esc(n.kicker) + '</p><b>' + esc(n.label) + '</b><p class="tiny">' + esc(n.sub) + '</p></div><button class="btn primary" data-room-next>' + esc(n.go) + '</button></div>';
+  }
+  function wireRoomNext(root) {
+    var b = root.querySelector('[data-room-next]'); if (b) b.addEventListener('click', function () { goNext(roomNextStep()); });
   }
   /* The next of her five for the Map Room pointer: duel (when the Hall is open), write, then revise. */
   function coreNext(p, writeOnly) {
@@ -527,7 +545,9 @@
       '.core-n{display:inline-flex;align-items:center;justify-content:center;width:1.5em;height:1.5em;border-radius:50%;background:var(--accent-soft,rgba(200,160,60,.18));font-size:.85rem;margin-right:8px}' +
       '.pcard.core-now{border-color:var(--gold,#c8a03c);box-shadow:0 0 0 2px rgba(200,160,60,.25)}' +
       '.merit-note{margin:8px auto 12px;max-width:34rem;font-size:.93rem}.merit-note.none{color:var(--no,#ae3a22)}' +
-      '.rev-link{display:inline-block;margin:4px 6px 0 0}';
+      '.rev-link{display:inline-block;margin:4px 6px 0 0}' +
+      '.room-next{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;justify-content:space-between;padding:12px 16px;margin-bottom:16px;border-color:var(--gold,#c8a03c)}.room-next>div{flex:1 1 15rem;min-width:0}.room-next b{display:block;margin:2px 0}.room-next .tiny{margin:0}.room-next .kicker{margin:0}' +
+      'details.room-fold{border:1px solid var(--line,rgba(120,100,60,.3));border-radius:12px;padding:0 14px;margin-bottom:14px;background:var(--card,transparent)}details.room-fold>summary{cursor:pointer;padding:12px 0;min-height:44px;font-weight:700;list-style-position:inside}details.room-fold[open]{padding-bottom:12px}details.room-fold>summary .tiny{font-weight:400;margin-left:6px}';
     document.head.appendChild(st);
   })();
 
@@ -1240,19 +1260,20 @@
     (p.reports || []).forEach(function (r) { done[r.promptId] = (done[r.promptId] || 0) + 1; });
     var types = ['all'].concat(Object.keys(C.TYPES)), domains = ['all'].concat(Object.keys(C.DOMAINS));
     var html = '<div class="sect-h"><div><h2>Scriptorium</h2><p>Forty minutes, one prompt, four paragraphs. Guided mode shows the frames and the eleven keys; Skeleton shows the slot labels only; Exam is a blank page and the clock. After you submit, the essay goes to T.Chris. If you want, one tap also gets an AI band estimate in LevelUp.</p></div></div>';
+    html += roomNext('scr');
     html += '<div class="modechoice">' + T.FADE.map(function (f) { return '<label><input type="radio" name="uim" value="' + f.id + '"' + (S.uiMode === f.id ? ' checked' : '') + '> ' + esc(f.name) + ' — ' + esc(f.blurb) + '</label>'; }).join('') + '</div>';
-    html += '<div class="filters" id="f-type">' + types.map(function (t) { return '<button data-t="' + t + '"' + (S.filters.type === t ? ' class="on"' : '') + '>' + (t === 'all' ? 'All types' : esc(typeName(t))) + '</button>'; }).join('') + '</div>';
-    html += '<div class="filters" id="f-domain">' + domains.map(function (d) { return '<button data-d="' + d + '"' + (S.filters.domain === d ? ' class="on"' : '') + '>' + (d === 'all' ? 'All domains' : esc(C.DOMAINS[d])) + '</button>'; }).join('') + '</div>';
+    var filt = '<div class="filters" id="f-type">' + types.map(function (t) { return '<button data-t="' + t + '"' + (S.filters.type === t ? ' class="on"' : '') + '>' + (t === 'all' ? 'All types' : esc(typeName(t))) + '</button>'; }).join('') + '</div>';
+    filt += '<div class="filters" id="f-domain">' + domains.map(function (d) { return '<button data-d="' + d + '"' + (S.filters.domain === d ? ' class="on"' : '') + '>' + (d === 'all' ? 'All domains' : esc(C.DOMAINS[d])) + '</button>'; }).join('') + '</div>';
     /* E4: her five first (always shown, in order), then every other prompt as extra practice (the filters apply there) */
     var cp = coreProgress(p), coreIdx = {}; cp.ids.forEach(function (id, i) { coreIdx[id] = i; });
     var fiveHtml = coreHead(cp, 'w') + '<div class="promptgrid" id="w-five">' + cp.ids.map(function (id, i) {
       var pr = PR.get(id); return pr ? coreCard(pr, i, cp, 'data-p="' + pr.id + '"', done[pr.id] ? '<span class="pill good">written ' + done[pr.id] + '×</span>' : '') : '';
-    }).join('') + '</div>' + extraHead('w', practicePrompts().length - cp.ids.length);
-    html = html.replace('<div class="filters" id="f-type">', function (m) { return fiveHtml + m; });
-    var list = practicePrompts().filter(function (pr) { return coreIdx[pr.id] == null && (S.filters.type === 'all' || pr.type === S.filters.type) && (S.filters.domain === 'all' || pr.domain === S.filters.domain); });
-    html += '<div class="promptgrid" id="w-extra">' + list.map(function (pr) {
-      return '<button class="pcard' + (done[pr.id] ? ' done' : '') + '" data-p="' + pr.id + '"><span class="pcard-t">' + esc(pr.title) + '</span><span class="pcard-m"><span class="pill gold">' + esc(typeName(pr.type)) + '</span><span class="pill">' + esc(PR.domainName(pr.domain)) + '</span>' + (done[pr.id] ? '<span class="pill good">written ' + done[pr.id] + '×</span>' : '') + '</span><span class="pcard-r">' + esc(pr.text) + '</span></button>';
     }).join('') + '</div>';
+    html += fiveHtml;
+    var list = practicePrompts().filter(function (pr) { return coreIdx[pr.id] == null && (S.filters.type === 'all' || pr.type === S.filters.type) && (S.filters.domain === 'all' || pr.domain === S.filters.domain); });
+    html += fold('w-extra-fold', 'Extra practice <span class="tiny">' + (practicePrompts().length - cp.ids.length) + ' more prompts, all open; your five come first</span>', filt + '<div class="promptgrid" id="w-extra">' + list.map(function (pr) {
+      return '<button class="pcard' + (done[pr.id] ? ' done' : '') + '" data-p="' + pr.id + '"><span class="pcard-t">' + esc(pr.title) + '</span><span class="pcard-m"><span class="pill gold">' + esc(typeName(pr.type)) + '</span><span class="pill">' + esc(PR.domainName(pr.domain)) + '</span>' + (done[pr.id] ? '<span class="pill good">written ' + done[pr.id] + '×</span>' : '') + '</span><span class="pcard-r">' + esc(pr.text) + '</span></button>';
+    }).join('') + '</div>');
     html += '<p style="margin:14px 0"><button class="btn sm" id="w-live">Join the Assembly (class game) →</button></p>';
     html += '<div class="sect-h" style="margin-top:26px"><div><h2>Mock examinations</h2><p>Exam mode, forty minutes, marked by your teacher. Sit one when every class you need is passed.</p></div></div>';
     html += '<div class="promptgrid">' + C.MOCKS.map(function (m) {
@@ -1260,6 +1281,7 @@
       return '<button class="pcard' + (rec ? ' done' : '') + '" data-mock="' + m.id + '"><span class="pcard-t">' + esc(m.name) + '</span><span class="pcard-m"><span class="pill">' + (pr ? esc(typeName(pr.type)) : '') + '</span><span class="pill gold">' + m.minutes + ' min</span><span class="pill">' + m.level + '</span>' + (rec ? '<span class="pill good">sat</span>' : '') + '</span><span class="pcard-r">' + esc(m.blurb) + '</span></button>';
     }).join('') + '</div>';
     $('#view-writer').innerHTML = html;
+    wireFolds($('#view-writer')); wireRoomNext($('#view-writer'));
     $('#w-live').addEventListener('click', function () { show('live'); });
     $('#view-writer').querySelectorAll('input[name=uim]').forEach(function (r) { r.addEventListener('change', function () { S.uiMode = r.value; }); });
     $('#f-type').querySelectorAll('button').forEach(function (b) { b.addEventListener('click', function () { S.filters.type = b.dataset.t; paintWriter(); }); });
@@ -1333,6 +1355,10 @@
        WP14 (20 Oct 2026): with no red rows the revision is optional ("revise for practice, or move on"). */
     var revCfg = cfg.kind === 'mock' ? null : reviseCfg(rep, res, 'result');
     var mustRevise = !!(revCfg && revCfg.reviseRed);
+    /* Streamlining (10 Nov 2026): with no red rows, one tap goes straight to the next of her five. */
+    var nx5 = mustRevise || cfg.kind === 'mock' ? null : coreNext(p), nextFiveBtn = '';
+    if (nx5 && nx5.promptId !== cfg.promptId && (nx5.kind === 'coreduel' || nx5.kind === 'core')) nextFiveBtn = ' <button class="btn" id="w-next">Next of your five: ' + esc((PR.get(nx5.promptId) || {}).title || '') + ' (' + (nx5.kind === 'coreduel' ? 'duel' : 'write') + ') →</button>';
+    else nx5 = null;
     var projNews = (ST && cfg.kind !== 'mock' && coreIds().indexOf(cfg.promptId) >= 0) ? ST.projectNewsroomHtml(cfg.promptId) : '';
     var html = '<div class="play"><div class="card result"><div class="score-ring" style="--p:' + (res.preflight.bad ? 40 : res.preflight.warn ? 75 : 100) + '"><i>' + res.words + '<small style="font-size:.9rem">w</small></i></div>' +
       '<h3>' + (res.timedOut ? 'Time. The owl has taken the essay' : 'The owl has taken the essay') + '</h3><p>' + esc(res.preflight.summary) + ' Written in ' + mmss(res.seconds) + '. ' + (cfg.kind === 'mock' ? 'T.Chris will mark this one.' : 'It has gone to T.Chris: he already has your essay, so you do not need to send it again. If you want, you can also get an AI band estimate and an upgraded version in LevelUp.') + '</p>' +
@@ -1343,13 +1369,14 @@
         : 'Your essay has no red rows: revise for practice, or move on. ' + (revCfg.revisePractice
           ? 'For practice, <b>' + esc(PARA_NAME[revCfg.reviseBox] || revCfg.reviseBox) + '</b> is the shorter body paragraph: one more developed sentence there earns the revision merits.'
           : 'For practice, the Wards point at <b>' + esc(PARA_NAME[revCfg.reviseBox] || revCfg.reviseBox) + '</b> (amber): ' + esc(revCfg.reviseWhy) + '. Make that paragraph stronger and the revision earns its merits.')) +
-        '</p><button class="btn' + (mustRevise ? ' primary' : '') + '" id="w-revise">' + (mustRevise ? 'Revise your weakest row' : 'Revise for practice') + '</button>' + (mustRevise ? '' : ' <button class="btn primary" id="w-moveon">Move on</button>') + '</div>' : '') +
+        '</p><button class="btn' + (mustRevise ? ' primary' : '') + '" id="w-revise">' + (mustRevise ? 'Revise your weakest row' : 'Revise for practice') + '</button>' + (mustRevise ? '' : ' <button class="btn primary" id="w-moveon">Move on</button>' + nextFiveBtn) + '</div>' : '') +
       (cfg.kind !== 'mock' && res.text ? '<p style="margin:0 auto 12px;max-width:34rem"><button class="btn sm" id="w-owl">Send a body paragraph by owl to a housemate</button> <span class="tiny">She tags its mechanism, example and nuance. No names.</span></p>' : '') +
       projNews +
       '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn' + (revCfg ? '' : ' primary') + '" id="w-levelup">Get an AI band estimate (LevelUp)</button><button class="btn" id="w-copy">Copy essay</button><button class="btn" id="w-record">See my report card</button><button class="btn ghost" id="w-another">Write another</button></div></div></div>';
     $('#view-write').innerHTML = html;
     if (revCfg) $('#w-revise').addEventListener('click', function () { startWrite(revCfg); });
     var mo = $('#w-moveon'); if (mo) mo.addEventListener('click', function () { S.returnTo = 'plan'; show('plan'); });
+    var wn = $('#w-next'); if (wn) wn.addEventListener('click', function () { goNext(nx5); });
     var ow = $('#w-owl'); if (ow) ow.addEventListener('click', function () { owlSendModal(rep, res.text); });
     if (projNews && ST) { ST.wireWords($('#view-write')); ST.wireArt($('#view-write')); ST.wireProject($('#view-write'), function () { S.returnTo = 'plan'; show('plan'); }); }
     $('#w-levelup').addEventListener('click', function () { handoff(pr, res.text, rep); });
@@ -1370,7 +1397,7 @@
     html += '<div class="filters">' + Object.keys(C.TYPES).map(function (k) { return '<button data-tt="' + k + '"' + (S.tplType === k ? ' class="on"' : '') + '>' + esc(C.TYPES[k].name) + '</button>'; }).join('') + '</div>';
     html += spellbookInUseCard(my);
     html += T.switchCard(S.tplType);
-    html += '<div class="card" style="padding:14px 16px;margin-bottom:14px"><p class="kicker">The eleven keys · ' + esc(typeName(S.tplType)) + '</p><ol class="bc-list">' + C.VARIABLES.map(function (v) { return '<li><b>' + esc(labels[v.key]) + '</b> — ' + esc(v.hint) + '</li>'; }).join('') + '</ol></div>';
+    html += fold('tpl-keys', 'The eleven keys · ' + esc(typeName(S.tplType)) + ' <span class="tiny">what goes in each slot</span>', '<ol class="bc-list">' + C.VARIABLES.map(function (v) { return '<li><b>' + esc(labels[v.key]) + '</b> — ' + esc(v.hint) + '</li>'; }).join('') + '</ol>');
     paras.forEach(function (pg) {
       var chosen = my.choice[pg.key] || pg.frames[0].id, fr = pg.frames.filter(function (f) { return f.id === chosen; })[0] || pg.frames[0];
       html += '<div class="card" style="padding:14px 16px;margin-bottom:12px"><div class="wr-boxh"><b>' + esc(pg.name) + '</b><span class="tiny">~' + pg.target + ' words</span><select class="wr-frame-pick" data-tpick="' + pg.key + '">' + pg.frames.map(function (f) { return '<option value="' + f.id + '"' + (f.id === fr.id ? ' selected' : '') + '>' + esc(f.name) + '</option>'; }).join('') + '</select></div>' +
@@ -1378,9 +1405,10 @@
         '<textarea class="wr-frame" data-tframe="' + pg.key + '" rows="4" spellcheck="false" placeholder="Your own version of this frame, keeping the {slots}">' + esc(my.custom[pg.key] || '') + '</textarea>' +
         '<p class="tiny">Keep the slot names in braces: ' + T.tokens(fr.text).map(function (k) { return '{' + k + '}'; }).join(' ') + '. Leave the box empty to use the frame as written.</p></div>';
     });
-    html += '<div class="card" style="padding:14px 16px;margin-bottom:12px"><p class="kicker">Structural swaps · one per body paragraph at most</p>' + T.SWAPS.map(function (s) { return '<div class="swap"><b>' + esc(s.name) + '</b> <span class="tiny">(' + esc(s.move) + ' sentence)</span><div class="diffpara"><b>Base</b>' + T.fill(s.base, {}, { html: true, labels: labels }) + '</div>' + s.variants.map(function (v) { return '<div class="diffpara" style="background:var(--ok-soft)"><b>Swap</b>' + T.fill(v, {}, { html: true, labels: labels }) + '</div>'; }).join('') + '<p class="tiny">' + esc(s.note) + '</p></div>'; }).join('') + '</div>';
+    html += fold('tpl-swaps', 'Structural swaps <span class="tiny">' + T.SWAPS.length + ' optional sentence upgrades; one per body paragraph at most</span>', T.SWAPS.map(function (s) { return '<div class="swap"><b>' + esc(s.name) + '</b> <span class="tiny">(' + esc(s.move) + ' sentence)</span><div class="diffpara"><b>Base</b>' + T.fill(s.base, {}, { html: true, labels: labels }) + '</div>' + s.variants.map(function (v) { return '<div class="diffpara" style="background:var(--ok-soft)"><b>Swap</b>' + T.fill(v, {}, { html: true, labels: labels }) + '</div>'; }).join('') + '<p class="tiny">' + esc(s.note) + '</p></div>'; }).join(''));
     html += '<div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" id="tpl-reset">Reset my spellbook</button><span class="tiny" style="align-self:center">The track is set in Your Trunk.</span></div>';
     $('#view-template').innerHTML = html;
+    wireFolds($('#view-template'));
     $('#view-template').querySelectorAll('[data-tt]').forEach(function (b) { b.addEventListener('click', function () { S.tplType = b.dataset.tt; paintTemplate(); }); });
     $('#view-template').querySelectorAll('[data-tpick]').forEach(function (sel) { sel.addEventListener('change', function () { my.choice[sel.dataset.tpick] = sel.value; delete my.custom[sel.dataset.tpick]; if (my.fromLab) my.edited = true; T.save(S.p.studentId, my); paintTemplate(); }); });
     $('#view-template').querySelectorAll('[data-tframe]').forEach(function (ta) { ta.addEventListener('input', function () { if (ta.value.trim()) my.custom[ta.dataset.tframe] = ta.value; else delete my.custom[ta.dataset.tframe]; if (my.fromLab) my.edited = true; T.save(S.p.studentId, my); }); });
@@ -1583,10 +1611,14 @@
     var p = S.p;
     var html = '<div class="sect-h"><div><h2>Report Card</h2><p>Your essays, the bands the examiners gave them, every class, and every keepsake.</p></div></div>';
     html += '<div class="card" style="padding:var(--pad);margin-bottom:14px"><h3 style="margin-bottom:8px">Essays</h3><div id="rec-list" class="replist"><p class="tiny">Loading…</p></div></div>';
-    html += '<div class="card" style="padding:var(--pad);margin-bottom:14px"><h3 style="margin-bottom:10px">Classes</h3><div class="sysgrid">' + C.TOPICS.map(function (t) { var lv = t.levels[0], ck = p.checks[lv.check.id], green = ck && ck.best >= E.PASS_CHECK; return '<div class="systile' + (green ? ' done' : '') + '"><b>' + esc(t.name) + '</b><span>' + esc(t.code) + ' · ' + P.topicPct(p, t) + '%</span></div>'; }).join('') + '</div></div>';
-    html += (ST && window.STORY ? '<div class="card" style="padding:var(--pad);margin-bottom:14px"><h3 style="margin-bottom:10px">Keepsakes from the story</h3>' + ST.keepsakesHtml(p) + '</div>' : '');
-    html += '<div class="card" style="padding:var(--pad)"><h3 style="margin-bottom:10px">Keepsakes</h3><div class="awards">' + C.BADGES.map(function (b) { var got = p.badges.indexOf(b.id) >= 0; return '<div class="award ' + (got ? 'got' : 'locked') + '"><span class="award-i">' + (got ? '★' : '·') + '</span><span><span class="award-n">' + esc(b.name) + '</span><span class="award-p">' + esc(b.perk) + '</span><span class="award-h">' + esc(b.how) + '</span></span></div>'; }).join('') + '</div></div>';
+    /* Streamlining (10 Nov 2026): the essays stay open; classes and keepsakes fold, with the count in the heading. */
+    var gatesDone = C.TOPICS.filter(function (t) { var ck = p.checks[t.levels[0].check.id]; return ck && ck.best >= E.PASS_CHECK; }).length;
+    var gotBadges = C.BADGES.filter(function (b) { return p.badges.indexOf(b.id) >= 0; }).length;
+    html += fold('rec-classes', 'Classes <span class="tiny">' + gatesDone + ' of ' + C.TOPICS.length + ' gates passed</span>', '<div class="sysgrid">' + C.TOPICS.map(function (t) { var lv = t.levels[0], ck = p.checks[lv.check.id], green = ck && ck.best >= E.PASS_CHECK; return '<div class="systile' + (green ? ' done' : '') + '"><b>' + esc(t.name) + '</b><span>' + esc(t.code) + ' · ' + P.topicPct(p, t) + '%</span></div>'; }).join('') + '</div>');
+    html += (ST && window.STORY ? fold('rec-story', 'Keepsakes from the story', ST.keepsakesHtml(p)) : '');
+    html += fold('rec-badges', 'Keepsakes <span class="tiny">' + gotBadges + ' of ' + C.BADGES.length + ' earned</span>', '<div class="awards">' + C.BADGES.map(function (b) { var got = p.badges.indexOf(b.id) >= 0; return '<div class="award ' + (got ? 'got' : 'locked') + '"><span class="award-i">' + (got ? '★' : '·') + '</span><span><span class="award-n">' + esc(b.name) + '</span><span class="award-p">' + esc(b.perk) + '</span><span class="award-h">' + esc(b.how) + '</span></span></div>'; }).join('') + '</div>');
     $('#view-record').innerHTML = html;
+    wireFolds($('#view-record'));
     api.reports(p.studentId).then(function (r) {
       var reps = ((r && r.reports) || []).slice().sort(function (a, b) { return a.ts < b.ts ? 1 : -1; });
       S.reports = reps;
@@ -1617,6 +1649,7 @@
     var links = (rp.revisionOf ? '<p class="tiny" id="rp-revof">A revision of ' + (orig ? '<button class="linky rev-link" data-rlink="' + esc(orig.id) + '">your essay of ' + esc(String(orig.ts).slice(0, 10)) + ' →</button>' : 'an earlier essay') + (rp.reviseBox ? ' · the paragraph you revised: ' + esc(PARA_NAME[rp.reviseBox] || rp.reviseBox) : '') + '</p>' : '') +
       (later.length ? '<p class="tiny" id="rp-revised">Revised: ' + later.map(function (x) { return '<button class="linky rev-link" data-rlink="' + esc(x.id) + '">' + esc(String(x.ts).slice(0, 10)) + (x.reviseBox ? ' (' + esc(PARA_NAME[x.reviseBox] || x.reviseBox) + ')' : '') + ' →</button>'; }).join(' ') + '</p>' : '');
     var html = '<div class="play"><div class="play-top"><button class="btn ghost sm" id="rp-back">← Report Card</button><span style="flex:1"></span><span class="qcount">' + esc(String(rp.ts).slice(0, 10)) + '</span></div>' + links + PR.card(pr, { compact: true }) +
+      (rp.kind !== 'mock' && rp.text && rp.preflight && Number(rp.preflight.bad) > 0 ? '<p style="margin:10px 0"><button class="btn primary" id="rp-revise-top">Revise your weakest row →</button> <span class="tiny">' + rp.preflight.bad + ' red row' + (Number(rp.preflight.bad) === 1 ? '' : 's') + ' on this essay.</span></p>' : '') +
       '<div class="model">' + W.paragraphs(rp.text).map(function (t) { return '<div class="mpara">' + esc(t) + '</div>'; }).join('') + '</div>';
     if (mark) {
       var b = mark.bands;
@@ -1633,6 +1666,7 @@
     $('#view-record').innerHTML = html;
     $('#view-record').querySelectorAll('[data-rlink]').forEach(function (b) { b.addEventListener('click', function () { openReport(b.dataset.rlink); }); });
     if (canRev) $('#rp-revise').addEventListener('click', function () { startWrite(reviseCfg(rp, rp, 'record')); });
+    var rvt = $('#rp-revise-top'); if (rvt) rvt.addEventListener('click', function () { startWrite(reviseCfg(rp, rp, 'record')); });
     var rpo = $('#rp-owl'); if (rpo) rpo.addEventListener('click', function () { owlSendModal(rp, rp.text); });
     $('#rp-back').addEventListener('click', paintRecord);
     $('#rp-levelup').addEventListener('click', function () { handoff(pr, rp.text, rp); });
@@ -1761,25 +1795,29 @@
     var cp = coreProgress(S.p), fiveWon = cp.steps.filter(function (x) { return x.duel; }).length;
     var html = '<div class="sect-h"><div><h2>Duelling Hall</h2><p>One prompt, the whole plan, one decision at a time: time, decode, the Core Topic, side A, side B, the position, the frames and the Ten Wards. Every question is a drop-down. Hints cost ' + BC.POINTS.hint + ' points; a correct second choice earns ' + BC.POINTS.second + '. Win a duel at ' + Math.round(BC.POINTS.pass * 100) + '%. Fighting a prompt again adds points only when you beat your best on it.</p></div></div>';
     var dt = duelTier();
-    html += '<div class="lvl-bar" role="group" aria-label="Choose the level of the answer options"><span class="lvl-lbl">Answer options at my level:</span>' + DUEL_LVLS.map(function (l) { return '<button type="button" class="lvl-btn' + (l === dt ? ' on' : '') + '" data-duel-lvl="' + l + '" aria-pressed="' + (l === dt) + '">' + l + '</button>'; }).join('') + '<span class="tiny" style="flex-basis:100%">The prompts stay in exam English. This changes the English of the eleven-key choices.</span></div>';
+    html += roomNext('hall');
+    var setHtml = '';
+    setHtml += '<div class="lvl-bar" role="group" aria-label="Choose the level of the answer options"><span class="lvl-lbl">Answer options at my level:</span>' + DUEL_LVLS.map(function (l) { return '<button type="button" class="lvl-btn' + (l === dt ? ' on' : '') + '" data-duel-lvl="' + l + '" aria-pressed="' + (l === dt) + '">' + l + '</button>'; }).join('') + '<span class="tiny" style="flex-basis:100%">The prompts stay in exam English. This changes the English of the eleven-key choices.</span></div>';
     /* Short duels (Oct 2026): the fixed steps only in the first three duels, then a "Full duel" switch. */
     var nDuelled = BC.duelled(bs);
-    if (nDuelled < BC.SHORT_AFTER) html += '<p class="tiny" id="bc-mode-note" style="margin:-6px 0 14px">Your first ' + BC.SHORT_AFTER + ' duels ask every step (' + nDuelled + ' of ' + BC.SHORT_AFTER + ' fought). After that, a duel starts at the Core Topic and takes about ten minutes.</p>';
-    else html += '<div class="lvl-bar" role="group" aria-label="Choose short or full duels"><span class="lvl-lbl">Duel length:</span><button type="button" class="lvl-btn' + (bs.full ? '' : ' on') + '" data-duel-mode="short" aria-pressed="' + !bs.full + '">Short duel</button><button type="button" class="lvl-btn' + (bs.full ? ' on' : '') + '" id="bc-full" data-duel-mode="full" aria-pressed="' + !!bs.full + '">Full duel</button><span class="tiny" style="flex-basis:100%">' + (bs.full ? 'Full duel: every step, from the time and the decode to the Ten Wards.' : 'Short duel: from the Core Topic to the frames. Choose Full duel for every step.') + '</span></div>';
+    if (nDuelled < BC.SHORT_AFTER) setHtml += '<p class="tiny" id="bc-mode-note" style="margin:-6px 0 14px">Your first ' + BC.SHORT_AFTER + ' duels ask every step (' + nDuelled + ' of ' + BC.SHORT_AFTER + ' fought). After that, a duel starts at the Core Topic and takes about ten minutes.</p>';
+    else setHtml += '<div class="lvl-bar" role="group" aria-label="Choose short or full duels"><span class="lvl-lbl">Duel length:</span><button type="button" class="lvl-btn' + (bs.full ? '' : ' on') + '" data-duel-mode="short" aria-pressed="' + !bs.full + '">Short duel</button><button type="button" class="lvl-btn' + (bs.full ? ' on' : '') + '" id="bc-full" data-duel-mode="full" aria-pressed="' + !!bs.full + '">Full duel</button><span class="tiny" style="flex-basis:100%">' + (bs.full ? 'Full duel: every step, from the time and the decode to the Ten Wards.' : 'Short duel: from the Core Topic to the frames. Choose Full duel for every step.') + '</span></div>';
     /* WP8 (20 Oct 2026): a per-step clock, off by default; the Midwinter Tournament turns it on for its duel. */
-    html += '<div class="lvl-bar" role="group" aria-label="Step clock"><span class="lvl-lbl">Step clock:</span><button type="button" class="lvl-btn' + (bs.clock ? '' : ' on') + '" data-duel-clock="off" aria-pressed="' + !bs.clock + '">Off</button><button type="button" class="lvl-btn' + (bs.clock ? ' on' : '') + '" data-duel-clock="on" aria-pressed="' + !!bs.clock + '">On</button><span class="tiny" style="flex-basis:100%">' + (bs.clock ? BC.CLOCK_PER_Q + ' seconds a question on every step. When the clock runs out, the open questions on that step go to your opponent.' : 'No clock. The tournament duel runs its own clock (' + BC.CLOCK_PER_Q + ' seconds a question).') + '</span></div>';
+    setHtml += '<div class="lvl-bar" role="group" aria-label="Step clock"><span class="lvl-lbl">Step clock:</span><button type="button" class="lvl-btn' + (bs.clock ? '' : ' on') + '" data-duel-clock="off" aria-pressed="' + !bs.clock + '">Off</button><button type="button" class="lvl-btn' + (bs.clock ? ' on' : '') + '" data-duel-clock="on" aria-pressed="' + !!bs.clock + '">On</button><span class="tiny" style="flex-basis:100%">' + (bs.clock ? BC.CLOCK_PER_Q + ' seconds a question on every step. When the clock runs out, the open questions on that step go to your opponent.' : 'No clock. The tournament duel runs its own clock (' + BC.CLOCK_PER_Q + ' seconds a question).') + '</span></div>';
+    html += fold('bc-settings', 'Duel settings <span class="tiny">' + dt + ' answers · ' + (nDuelled < BC.SHORT_AFTER ? 'every step' : bs.full ? 'full duel' : 'short duel') + ' · clock ' + (bs.clock ? 'on' : 'off') + '</span>', setHtml);
     html += '<div class="gates" style="grid-template-columns:repeat(2,1fr)"><div class="gate"><span>Duelling rank</span><b>' + esc(rank.name) + '</b><small>' + bs.points + ' points' + (nxt ? ' · ' + (nxt.min - bs.points) + ' to ' + esc(nxt.name) : ' · top rank') + '</small><div class="bar-line gold"><span style="width:' + (nxt ? Math.round(100 * (bs.points - rank.min) / (nxt.min - rank.min)) : 100) + '%"></span></div></div><div class="gate"><span>Your five won</span><b>' + fiveWon + ' of ' + cp.ids.length + '</b><small>' + cleared + ' duel' + (cleared === 1 ? '' : 's') + ' won in all · win at ' + Math.round(BC.POINTS.pass * 100) + '%</small></div></div>';
-    html += '<div class="card" style="padding:14px 16px;margin-bottom:16px"><p class="kicker">The Ten Wards</p><ol class="bc-list">' + BC.CHECKLIST.map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') + '</ol></div>';
+    html += fold('bc-wards', 'The Ten Wards <span class="tiny">the checklist every full duel ends with</span>', '<ol class="bc-list">' + BC.CHECKLIST.map(function (c) { return '<li>' + esc(c) + '</li>'; }).join('') + '</ol>');
     /* E4: her five first, in order; the rest as extra practice */
     html += coreHead(cp, 'bc') + '<div class="promptgrid" id="bc-five">' + cp.ids.map(function (id, i) {
       var pr = PR.get(id), m = bs.missions[id]; return pr ? coreCard(pr, i, cp, 'data-bc="' + pr.id + '"', m ? '<span class="pill' + (m.passed ? ' good' : ' bad') + '">best ' + m.best + '%</span>' : '') : '';
     }).join('') + '</div>';
     var order = practicePrompts().filter(function (pr) { return cp.ids.indexOf(pr.id) < 0; }).sort(function (a, b) { return Object.keys(C.TYPES).indexOf(a.type) - Object.keys(C.TYPES).indexOf(b.type) || a.title.localeCompare(b.title); });
-    html += extraHead('bc', order.length) + '<div class="promptgrid" id="bc-extra">' + order.map(function (pr) {
+    html += fold('bc-extra-fold', 'Extra practice <span class="tiny">' + order.length + ' more prompts, all open; your five come first</span>', '<div class="promptgrid" id="bc-extra">' + order.map(function (pr) {
       var m = bs.missions[pr.id];
       return '<button class="pcard' + (m && m.passed ? ' done' : '') + '" data-bc="' + pr.id + '"><span class="pcard-t">' + esc(pr.title) + '</span><span class="pcard-m"><span class="pill gold">' + esc(typeName(pr.type)) + '</span><span class="pill">' + esc(PR.domainName(pr.domain)) + '</span>' + (m ? '<span class="pill' + (m.passed ? ' good' : ' bad') + '">best ' + m.best + '%</span>' : '') + '</span><span class="pcard-r">' + esc(pr.text) + '</span></button>';
-    }).join('') + '</div>';
+    }).join('') + '</div>');
     $('#view-bootcamp').innerHTML = html;
+    wireFolds($('#view-bootcamp')); wireRoomNext($('#view-bootcamp'));
     $('#view-bootcamp').querySelectorAll('[data-bc]').forEach(function (b) { b.addEventListener('click', function () { startBootcamp(b.dataset.bc); }); });
     $('#view-bootcamp').querySelectorAll('[data-duel-lvl]').forEach(function (b) { b.addEventListener('click', function () { S.p.duelTier = b.dataset.duelLvl; syncSoon(); paintBootcamp(); toast('Duel answers at ' + b.dataset.duelLvl + '.'); }); });
     $('#view-bootcamp').querySelectorAll('[data-duel-mode]').forEach(function (b) { b.addEventListener('click', function () { bs.full = b.dataset.duelMode === 'full'; syncSoon(); paintBootcamp(); toast(bs.full ? 'Full duels: every step.' : 'Short duels: from the Core Topic.'); }); });
@@ -1846,10 +1884,17 @@
           (op ? '<p class="bc-line ' + (res.passed ? 'won' : 'lost') + '" id="bc-endline">' + esc(op.line || '') + ' <span class="tiny">(' + esc(op.name) + ' took ' + (op.steps - op.stepsWon) + ' of ' + op.steps + ' steps)</span></p>' : '') +
           '<p>' + res.points + ' of ' + res.total + ' points on ' + esc(pr.title) + (res.short ? ' (short duel)' : '') + (res.clock ? ', with the step clock' : '') + '.' + esc(gainLine) + (firstWin ? ' +60 merits for your first win here.' : '') + ' ' + (after.name !== before ? 'You are now ' + esc(after.name) + '!' : 'Duelling rank: ' + esc(after.name) + ' (' + bs.points + ' points).') + '</p>' +
           (function () { var seen = {}, miss = res.log.filter(function (l) { if (l.correct || seen[l.tag]) return false; seen[l.tag] = 1; return true; }); return miss.length ? '<div class="misslist">' + miss.map(function (l) { var rem = C.REMEDIATION[l.tag] || {}; return '<div class="miss"><b>' + esc(rem.name || l.tag) + '</b>' + esc(rem.principle || '') + '</div>'; }).join('') + '</div>' : ''; })() +
-          '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn primary" id="bc-back">Back to the Duelling Hall</button><button class="btn" id="bc-again">Duel again</button><button class="btn" id="bc-write">Write this essay in the Scriptorium</button></div></div></div>';
+          (function () {
+            /* Streamlining (10 Nov 2026): the first button is the next step. Won and not yet written: write it now; lost: duel again. */
+            var toWrite = res.passed && !coreSteps(S.p, res.promptId).essay, again = !res.passed;
+            var bBack = '<button class="btn' + (!toWrite && !again ? ' primary' : '') + '" id="bc-back">Back to the Duelling Hall</button>';
+            var bAgain = '<button class="btn' + (again ? ' primary' : '') + '" id="bc-again">Duel again</button>';
+            var bWrite = '<button class="btn' + (toWrite ? ' primary' : '') + '" id="bc-write">' + (toWrite ? 'Write this essay now →' : 'Write this essay in the Scriptorium') + '</button>';
+            return '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">' + (toWrite ? bWrite + bAgain + bBack : again ? bAgain + bBack + bWrite : bBack + bAgain + bWrite) + '</div></div></div>';
+          })();
         $('#bc-back').addEventListener('click', function () { show('bootcamp'); });
         $('#bc-again').addEventListener('click', function () { startBootcamp(res.promptId, forceFull); });
-        $('#bc-write').addEventListener('click', function () { startWrite({ promptId: res.promptId, uiMode: 'guided', minutes: 40, kind: 'practice' }); });
+        $('#bc-write').addEventListener('click', function () { startWrite({ promptId: res.promptId, uiMode: S.uiMode || 'guided', minutes: 40, kind: 'practice' }); });
         if (earned.length) S.celebrateTimer = setTimeout(function () { celebrate(earned[0], earned.slice(1)); }, 600);
       } });
   }
