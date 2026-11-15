@@ -1,0 +1,1197 @@
+[
+[
+"t-type",
+"discuss both views",
+"accept"
+],
+[
+"t-type",
+"Discussion",
+"accept"
+],
+[
+"t-type",
+"to what extent do you agree",
+"revise"
+],
+[
+"t-type",
+"advantages and disadvantages",
+"revise"
+],
+[
+"t-type",
+"problem and solution",
+"revise"
+],
+[
+"t-trap",
+"delaying my opinion until the conclusion",
+"accept"
+],
+[
+"t-trap",
+"discussing only one view",
+"accept"
+],
+[
+"t-trap",
+"forgetting a solution",
+"revise"
+],
+[
+"t-trap",
+"not saying which outweighs",
+"revise"
+],
+[
+"t-trap",
+"making grammar mistakes",
+"not-accept"
+],
+[
+"t-budget",
+"50, 95, 95, 45",
+"accept"
+],
+[
+"t-budget",
+"about 285 words in all",
+"accept"
+],
+[
+"t-budget",
+"100, 60, 60, 100",
+"revise"
+],
+[
+"t-budget",
+"70 each",
+"revise"
+],
+[
+"t-budget",
+"short ones",
+"not-accept"
+],
+[
+"t-paras",
+"four paragraphs, position in the introduction",
+"accept"
+],
+[
+"t-paras",
+"introduction with my position, Body A, Body B, conclusion",
+"accept"
+],
+[
+"t-paras",
+"intro, body, body, conclusion with my opinion only in the conclusion",
+"revise"
+],
+[
+"t-paras",
+"five paragraphs",
+"revise"
+],
+[
+"t-paras",
+"one body paragraph",
+"revise"
+],
+[
+"i-open",
+"The ongoing discourse surrounding",
+"accept"
+],
+[
+"i-open",
+"the ongoing debate over",
+"accept"
+],
+[
+"i-open",
+"In this day and age, the discourse surrounding",
+"revise"
+],
+[
+"i-open",
+"the ongoing chat surrounding",
+"revise"
+],
+[
+"i-open",
+"the ongoing discourse surrounded",
+"revise"
+],
+[
+"i-matters",
+"frequently highlights its multifaceted implications",
+"accept"
+],
+[
+"i-matters",
+"often highlights its complex implications",
+"accept"
+],
+[
+"i-matters",
+"frequently highlight its multifaceted implications",
+"revise"
+],
+[
+"i-matters",
+"invariably highlights its multifaceted implications",
+"revise"
+],
+[
+"i-matters",
+"frequently sheds light to its implications",
+"revise"
+],
+[
+"i-lead",
+"This essay contends that",
+"accept"
+],
+[
+"i-lead",
+"this essay argues that",
+"accept"
+],
+[
+"i-lead",
+"this essay will explore whether",
+"revise"
+],
+[
+"i-lead",
+"this essay contends whether",
+"revise"
+],
+[
+"i-lead",
+"this essay contents that",
+"revise"
+],
+[
+"a-mlead",
+"The argument rests on",
+"accept"
+],
+[
+"a-mlead",
+"the argument rests upon",
+"accept"
+],
+[
+"a-mlead",
+"the argument rests in",
+"revise"
+],
+[
+"a-mlead",
+"the argument is rested on",
+"revise"
+],
+[
+"a-mlead",
+"in other words, the argument rests on",
+"revise"
+],
+[
+"a-elead",
+"the point is illustrated by",
+"accept"
+],
+[
+"a-elead",
+"this is illustrated by",
+"accept"
+],
+[
+"a-elead",
+"the point can be seen in",
+"accept"
+],
+[
+"a-elead",
+"the point illustrates by",
+"revise"
+],
+[
+"a-elead",
+"research illustrates the point through",
+"revise"
+],
+[
+"a-elead",
+"the point is illustrated from",
+"revise"
+],
+[
+"a-nlead",
+"However",
+"accept"
+],
+[
+"a-nlead",
+"nevertheless",
+"accept"
+],
+[
+"a-nlead",
+"hence",
+"revise"
+],
+[
+"a-nlead",
+"furthermore",
+"revise"
+],
+[
+"a-nlead",
+"likewise",
+"revise"
+],
+[
+"a-nlead",
+"but",
+"revise"
+],
+[
+"a-lim",
+"this approach fails to account for",
+"accept"
+],
+[
+"a-lim",
+"this approach overlooks",
+"accept"
+],
+[
+"a-lim",
+"this approach fails to account of",
+"revise"
+],
+[
+"a-lim",
+"this approach fails accounting for",
+"revise"
+],
+[
+"a-lim",
+"this approach is wholly discredited by",
+"revise"
+],
+[
+"b-mlead",
+"This dimension functions through",
+"accept"
+],
+[
+"b-mlead",
+"this dimension operates through",
+"accept"
+],
+[
+"b-mlead",
+"this dimension functions throughout",
+"revise"
+],
+[
+"b-mlead",
+"this dimension is functioning through",
+"revise"
+],
+[
+"b-mlead",
+"consequently, this dimension functions through",
+"revise"
+],
+[
+"b-elead",
+"as evidenced by",
+"accept"
+],
+[
+"b-elead",
+"as seen in",
+"accept"
+],
+[
+"b-elead",
+"as evidenced from",
+"revise"
+],
+[
+"b-elead",
+"as evident by",
+"revise"
+],
+[
+"b-elead",
+"as proven by",
+"revise"
+],
+[
+"b-nlead",
+"Nevertheless",
+"accept"
+],
+[
+"b-nlead",
+"however",
+"accept"
+],
+[
+"b-nlead",
+"accordingly",
+"revise"
+],
+[
+"b-nlead",
+"notably",
+"revise"
+],
+[
+"b-nlead",
+"similarly",
+"revise"
+],
+[
+"b-worth",
+"a consideration that tempers any uncritical endorsement of this view",
+"accept"
+],
+[
+"b-worth",
+"a consideration which tempers any uncritical endorsement of this view",
+"accept"
+],
+[
+"b-worth",
+"a consideration that tampers any uncritical endorsement of this view",
+"revise"
+],
+[
+"b-worth",
+"a consideration that demolishes any endorsement of this view",
+"revise"
+],
+[
+"b-worth",
+"a consideration that tempers any uncritical endorsement to this view",
+"revise"
+],
+[
+"c-open",
+"Ultimately",
+"accept"
+],
+[
+"c-open",
+"in conclusion",
+"accept"
+],
+[
+"c-open",
+"at the end of the day",
+"revise"
+],
+[
+"c-open",
+"lastly",
+"revise"
+],
+[
+"c-open",
+"eventually",
+"revise"
+],
+[
+"c-view",
+"exclusively through a singular lens represents a dangerously narrow perspective",
+"accept"
+],
+[
+"c-view",
+"exclusively through a single lens represents a dangerously narrow perspective",
+"accept"
+],
+[
+"c-view",
+"exclusively through a singular lens represent a dangerously narrow perspective",
+"revise"
+],
+[
+"c-view",
+"exclusively through a singular lens represents a dangerous narrow perspective",
+"revise"
+],
+[
+"c-view",
+"exclusively through a singular lens represents a dangerously narrow-minded perspective",
+"revise"
+],
+[
+"c-lead",
+"The evidence considered here supports the view that",
+"accept"
+],
+[
+"c-lead",
+"the evidence discussed here supports the view that",
+"accept"
+],
+[
+"c-lead",
+"the evidence considered here proves beyond doubt that",
+"revise"
+],
+[
+"c-lead",
+"the evidence considering here supports the view that",
+"revise"
+],
+[
+"c-lead",
+"the evidence considered here supports the view whether",
+"revise"
+],
+[
+"t-parts",
+"three: both views and my opinion",
+"accept"
+],
+[
+"t-parts",
+"3, two views and my opinion",
+"accept"
+],
+[
+"t-parts",
+"two views",
+"revise"
+],
+[
+"t-parts",
+"one, my opinion",
+"revise"
+],
+[
+"t-parts",
+"four with a plan for a new mission",
+"revise"
+],
+[
+"t-core",
+"the value of government spending on space research",
+"accept"
+],
+[
+"t-core",
+"the justification of public expenditure on space exploration",
+"accept"
+],
+[
+"t-core",
+"space spending is wasteful",
+"revise"
+],
+[
+"t-core",
+"the justification of all publicly funded research in an age of austerity",
+"revise"
+],
+[
+"t-core",
+"the commercial viability of private spaceflight",
+"revise"
+],
+[
+"t-core",
+"the scientific value of a human presence in low Earth orbit",
+"revise"
+],
+[
+"t-core",
+"rockets",
+"not-accept"
+],
+[
+"t-facetA",
+"moving space funding to urgent problems on Earth",
+"accept"
+],
+[
+"t-facetA",
+"the redirection of space budgets to poverty and disease",
+"accept"
+],
+[
+"t-facetA",
+"the reallocation of every category of state expenditure to social welfare",
+"revise"
+],
+[
+"t-facetA",
+"the permanent closure of every space agency",
+"revise"
+],
+[
+"t-facetA",
+"the cost overruns of orbital programmes",
+"revise"
+],
+[
+"t-facetB",
+"the useful technology that space research produces",
+"accept"
+],
+[
+"t-facetB",
+"the technological dividend of sustained space research",
+"accept"
+],
+[
+"t-facetB",
+"the benefits any large state research programme brings to industry in general",
+"revise"
+],
+[
+"t-facetB",
+"the strategic advantage of an independent launch capability",
+"revise"
+],
+[
+"t-facetB",
+"international collaboration in orbital laboratories",
+"revise"
+],
+[
+"t-facetB",
+"space is exciting",
+"not-accept"
+],
+[
+"t-position",
+"governments should keep a small, focused space programme and spend most money on social needs",
+"accept"
+],
+[
+"t-position",
+"the state should fund a modest space programme while the bulk of public funds addresses poverty",
+"accept"
+],
+[
+"t-position",
+"space exploration should be surrendered to private enterprise",
+"revise"
+],
+[
+"t-position",
+"governments should fund every space programme whatever the cost",
+"revise"
+],
+[
+"t-position",
+"governments should end all space spending",
+"revise"
+],
+[
+"t-position",
+"both sides have good points",
+"revise"
+],
+[
+"t-position",
+"space is interesting",
+"not-accept"
+],
+[
+"t-limits",
+"cutting a small budget solves little, and research aimed directly at a problem could cost less",
+"accept"
+],
+[
+"t-limits",
+"space budgets are a tiny fraction, and terrestrial research might be cheaper",
+"accept"
+],
+[
+"t-limits",
+"space is inherently wasteful and research never helps",
+"revise"
+],
+[
+"t-limits",
+"launches are noisy and missions fail",
+"revise"
+],
+[
+"t-limits",
+"space money could relieve poverty and space research yields technology",
+"revise"
+],
+[
+"t-example",
+"a technology people use or a hospital",
+"accept"
+],
+[
+"t-example",
+"a clearly hypothetical case",
+"accept"
+],
+[
+"t-example",
+"the exact cost of a mission to Mars",
+"revise"
+],
+[
+"t-example",
+"a quotation from an astronaut",
+"revise"
+],
+[
+"t-example",
+"a full history of space exploration",
+"revise"
+],
+[
+"i-core",
+"the justification of public expenditure on space exploration",
+"accept"
+],
+[
+"i-core",
+"the justification of public spending on space exploration",
+"accept"
+],
+[
+"i-core",
+"the value of public spending on space research",
+"accept"
+],
+[
+"i-core",
+"the justifying of public expenditure on space exploration",
+"revise"
+],
+[
+"i-core",
+"the justification of public expenditure on space exploitation",
+"revise"
+],
+[
+"i-core",
+"the justification of private expenditure on space exploration",
+"revise"
+],
+[
+"i-core",
+"governments should stop spending on space",
+"revise"
+],
+[
+"i-sideA",
+"While considerable attention is paid to competing needs on Earth",
+"accept"
+],
+[
+"i-sideA",
+"while considerable attention is paid to urgent problems on Earth",
+"accept"
+],
+[
+"i-sideA",
+"while considerable attention is paid to competing needs in the Earth",
+"revise"
+],
+[
+"i-sideA",
+"while considerable attention is paid to competitive needs on Earth",
+"revise"
+],
+[
+"i-sideA",
+"while considerable attention is paid to the claim that space spending is pure waste",
+"revise"
+],
+[
+"i-sideA",
+"while considerable attention is paid to competing needs on earth",
+"revise"
+],
+[
+"i-sideA",
+"while space is costly",
+"not-accept"
+],
+[
+"i-sideB",
+"the significance of the inventions that orbital research yields is equally difficult to ignore",
+"accept"
+],
+[
+"i-sideB",
+"the significance of the technology that space research produces is equally difficult to ignore",
+"accept"
+],
+[
+"i-sideB",
+"the significance of the inventions that orbital research yields are equally difficult to ignore",
+"revise"
+],
+[
+"i-sideB",
+"the significance of the prestige that orbital research yields is equally difficult to ignore",
+"revise"
+],
+[
+"i-sideB",
+"the significance of the inventions that orbital research yields is equally difficult to ignoring",
+"revise"
+],
+[
+"i-pos",
+"governments should sustain a modest, outcome-driven space programme while the bulk of public funds addresses immediate social need",
+"accept"
+],
+[
+"i-pos",
+"governments should keep a small, focused space programme while most public money meets social needs",
+"accept"
+],
+[
+"i-pos",
+"governments should sustain a modest, outcome-driving space programme while the bulk of public funds addresses immediate social need",
+"revise"
+],
+[
+"i-pos",
+"governments should sustain a lavish, outcome-driven space programme while the bulk of public funds addresses immediate social need",
+"revise"
+],
+[
+"i-pos",
+"governments should sustain a modest, outcome-driven space programme while the bulk of public funds redresses immediate social need",
+"revise"
+],
+[
+"i-pos",
+"governments should end all space programmes",
+"revise"
+],
+[
+"a-facet",
+"The primary justification often cited within this context is the redirection of aerospace budgets to humanitarian priorities",
+"accept"
+],
+[
+"a-facet",
+"the primary justification often cited within this context is moving space budgets to urgent human needs",
+"accept"
+],
+[
+"a-facet",
+"the primary justification often cited within this context are the redirection of aerospace budgets to humanitarian priorities",
+"revise"
+],
+[
+"a-facet",
+"the primary justification often cited within this context is the redirection of aerospace budgets to humanistic priorities",
+"revise"
+],
+[
+"a-facet",
+"the primary justification often cited within this context is the misdirection of aerospace budgets to humanitarian priorities",
+"revise"
+],
+[
+"a-mech",
+"the reallocation of finite public capital to immediate crises such as poverty and disease",
+"accept"
+],
+[
+"a-mech",
+"moving limited public money to urgent problems such as poverty and disease",
+"accept"
+],
+[
+"a-mech",
+"governments diverting mission budgets into housing and disease eradication",
+"revise"
+],
+[
+"a-mech",
+"the transfer of engineering expertise into infrastructure",
+"revise"
+],
+[
+"a-mech",
+"the reallocation of all public capital to immediate crises",
+"revise"
+],
+[
+"a-mech",
+"rockets are expensive",
+"not-accept"
+],
+[
+"a-ex",
+"governments diverting mission budgets into housing and disease eradication",
+"accept"
+],
+[
+"a-ex",
+"governments moving space funding into housing and the fight against disease",
+"accept"
+],
+[
+"a-ex",
+"wealthy states redirecting every scientific research budget into welfare",
+"revise"
+],
+[
+"a-ex",
+"charitable foundations financing vaccination campaigns",
+"revise"
+],
+[
+"a-ex",
+"parliaments capping the budgets of space agencies",
+"revise"
+],
+[
+"a-nu",
+"the fact that space budgets represent a small fraction of national expenditure, so abolishing them would resolve little",
+"accept"
+],
+[
+"a-nu",
+"space budgets are a very small part of spending, so cutting them would change little",
+"accept"
+],
+[
+"a-nu",
+"the fact that a single year of orbital funding would vaccinate several low-income nations",
+"revise"
+],
+[
+"a-nu",
+"the fact that comparable technologies might have been developed more cheaply on Earth",
+"revise"
+],
+[
+"a-nu",
+"the fact that space budgets are so trivial that cutting them would achieve absolutely nothing",
+"revise"
+],
+[
+"a-ref",
+"Such a shift",
+"accept"
+],
+[
+"a-ref",
+"a change of this kind",
+"accept"
+],
+[
+"a-ref",
+"such shift",
+"revise"
+],
+[
+"a-ref",
+"it",
+"revise"
+],
+[
+"a-ref",
+"such a shifting",
+"revise"
+],
+[
+"a-case",
+"might fund a few clinics but hardly end poverty",
+"accept"
+],
+[
+"a-case",
+"could pay for some new clinics but would not end poverty",
+"accept"
+],
+[
+"a-case",
+"might fund a few clinics but hardly ends poverty",
+"revise"
+],
+[
+"a-case",
+"would fund enough clinics to end poverty altogether",
+"revise"
+],
+[
+"a-case",
+"might fund a little clinics but hardly end poverty",
+"revise"
+],
+[
+"b-facet",
+"Equally significant is the phenomenon's relationship to the technological dividend yielded by sustained space research",
+"accept"
+],
+[
+"b-facet",
+"equally significant is the phenomenon's relationship to the useful technology that long-term space research produces",
+"accept"
+],
+[
+"b-facet",
+"equally significant are the phenomenon's relationship to the technological dividend yielded by sustained space research",
+"revise"
+],
+[
+"b-facet",
+"equally significant is the phenomenon's relationship to the technological deficit yielded by sustained space research",
+"revise"
+],
+[
+"b-facet",
+"equally significant is the phenomenon's relationship to the technological dividend yielding by sustained space research",
+"revise"
+],
+[
+"b-mech",
+"forcing innovation under extreme constraints, yielding technologies that migrate into civilian use",
+"accept"
+],
+[
+"b-mech",
+"forcing new inventions under hard conditions, which later move into everyday use",
+"accept"
+],
+[
+"b-mech",
+"supplying the navigation and imaging systems that civilian life depends upon",
+"revise"
+],
+[
+"b-mech",
+"attracting graduates into disciplines the economy cannot use",
+"revise"
+],
+[
+"b-mech",
+"forcing innovation under extreme constraints, yielding technologies that emigrate into civilian use",
+"revise"
+],
+[
+"b-mech",
+"force innovation under extreme constraints so technologies reach civilian use",
+"revise"
+],
+[
+"b-ex",
+"satellite navigation, water purification and medical imaging derived from orbital research",
+"accept"
+],
+[
+"b-ex",
+"satellite navigation, water cleaning systems and medical scanners that began as space research",
+"accept"
+],
+[
+"b-ex",
+"military aviation research yielding lightweight materials",
+"revise"
+],
+[
+"b-ex",
+"materials science advanced through experiments in microgravity",
+"revise"
+],
+[
+"b-ex",
+"telecommunications networks maintained by commercially operated satellites",
+"revise"
+],
+[
+"b-dev",
+"A taxi driver navigating by phone relies on satellites",
+"accept"
+],
+[
+"b-dev",
+"a delivery rider using a map app depends on satellites",
+"accept"
+],
+[
+"b-dev",
+"a taxi driver navigating by phone relies to satellites",
+"revise"
+],
+[
+"b-dev",
+"every taxi driver in the world relies on satellites",
+"revise"
+],
+[
+"b-dev",
+"a taxi driver relies on satellites, so space research justifies any budget",
+"revise"
+],
+[
+"b-nu",
+"comparable innovations might plausibly have been achieved through targeted terrestrial research at far lower cost",
+"accept"
+],
+[
+"b-nu",
+"the same inventions might have been made more cheaply by research aimed directly at them",
+"accept"
+],
+[
+"b-nu",
+"every significant technology of the past century originated in a space programme",
+"revise"
+],
+[
+"b-nu",
+"orbital research has produced navigation technologies now embedded in ordinary life",
+"revise"
+],
+[
+"b-nu",
+"space budgets form so small a fraction that abolishing them would resolve little",
+"revise"
+],
+[
+"b-lab",
+"A hospital laboratory",
+"accept"
+],
+[
+"b-lab",
+"a university laboratory",
+"accept"
+],
+[
+"b-lab",
+"an hospital laboratory",
+"revise"
+],
+[
+"b-lab",
+"hospital laboratory",
+"revise"
+],
+[
+"b-lab",
+"research shows that a hospital laboratory",
+"revise"
+],
+[
+"b-built",
+"could have built a similar scanner for less",
+"accept"
+],
+[
+"b-built",
+"might have developed a comparable scanner more cheaply",
+"accept"
+],
+[
+"b-built",
+"could have build a similar scanner for less",
+"revise"
+],
+[
+"b-built",
+"would certainly have built a similar scanner for less",
+"revise"
+],
+[
+"b-built",
+"could have built a similar scanner for fewer",
+"revise"
+],
+[
+"c-core",
+"viewing space exploration",
+"accept"
+],
+[
+"c-core",
+"viewing space research",
+"accept"
+],
+[
+"c-core",
+"viewed space exploration",
+"revise"
+],
+[
+"c-core",
+"viewing the Moon landings",
+"revise"
+],
+[
+"c-core",
+"viewing public spending in general",
+"revise"
+],
+[
+"c-pos",
+"governments should keep a lean programme while most public money meets social need",
+"accept"
+],
+[
+"c-pos",
+"the state should run a small, targeted space programme and spend most funds on people in need",
+"accept"
+],
+[
+"c-pos",
+"governments should sustain a modest, outcome-driven space programme while the bulk of public funds addresses immediate social need",
+"revise"
+],
+[
+"c-pos",
+"governments should end all spending on space until poverty is eliminated",
+"revise"
+],
+[
+"c-pos",
+"governments should expand space budgets whatever the social cost",
+"revise"
+],
+[
+"c-rat",
+"long-term scientific capacity and immediate human need are complementary rather than competing claims",
+"accept"
+],
+[
+"c-rat",
+"helping people now and building knowledge for the future are not opposing aims",
+"accept"
+],
+[
+"c-rat",
+"public investment in research of every kind repays itself many times over",
+"revise"
+],
+[
+"c-rat",
+"a state that neglects fundamental research forfeits its future prosperity",
+"revise"
+],
+[
+"c-rat",
+"no government can justify spending beyond the atmosphere while poverty persists at home",
+"revise"
+]
+]

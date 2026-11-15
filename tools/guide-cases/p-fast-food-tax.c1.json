@@ -1,0 +1,1202 @@
+[
+[
+"t-type",
+"discuss both views",
+"accept"
+],
+[
+"t-type",
+"Discussion",
+"accept"
+],
+[
+"t-type",
+"to what extent do you agree",
+"revise"
+],
+[
+"t-type",
+"advantages and disadvantages",
+"revise"
+],
+[
+"t-type",
+"problem and solution",
+"revise"
+],
+[
+"t-trap",
+"delaying my opinion until the conclusion",
+"accept"
+],
+[
+"t-trap",
+"discussing only one view",
+"accept"
+],
+[
+"t-trap",
+"forgetting a solution",
+"revise"
+],
+[
+"t-trap",
+"not saying which outweighs",
+"revise"
+],
+[
+"t-trap",
+"making grammar mistakes",
+"not-accept"
+],
+[
+"t-budget",
+"50, 95, 95, 45",
+"accept"
+],
+[
+"t-budget",
+"about 285 words in all",
+"accept"
+],
+[
+"t-budget",
+"100, 60, 60, 100",
+"revise"
+],
+[
+"t-budget",
+"70 each",
+"revise"
+],
+[
+"t-budget",
+"short ones",
+"not-accept"
+],
+[
+"t-paras",
+"four paragraphs, position in the introduction",
+"accept"
+],
+[
+"t-paras",
+"introduction with my position, Body A, Body B, conclusion",
+"accept"
+],
+[
+"t-paras",
+"intro, body, body, conclusion with my opinion only in the conclusion",
+"revise"
+],
+[
+"t-paras",
+"five paragraphs",
+"revise"
+],
+[
+"t-paras",
+"one body paragraph",
+"revise"
+],
+[
+"i-open",
+"The ongoing discourse surrounding",
+"accept"
+],
+[
+"i-open",
+"the ongoing debate over",
+"accept"
+],
+[
+"i-open",
+"In this day and age, the discourse surrounding",
+"revise"
+],
+[
+"i-open",
+"the ongoing chat surrounding",
+"revise"
+],
+[
+"i-open",
+"the ongoing discourse surrounded",
+"revise"
+],
+[
+"i-matters",
+"frequently highlights its multifaceted implications",
+"accept"
+],
+[
+"i-matters",
+"often highlights its complex implications",
+"accept"
+],
+[
+"i-matters",
+"frequently highlight its multifaceted implications",
+"revise"
+],
+[
+"i-matters",
+"invariably highlights its multifaceted implications",
+"revise"
+],
+[
+"i-matters",
+"frequently sheds light to its implications",
+"revise"
+],
+[
+"i-lead",
+"This essay contends that",
+"accept"
+],
+[
+"i-lead",
+"this essay argues that",
+"accept"
+],
+[
+"i-lead",
+"this essay will explore whether",
+"revise"
+],
+[
+"i-lead",
+"this essay contends whether",
+"revise"
+],
+[
+"i-lead",
+"this essay contents that",
+"revise"
+],
+[
+"a-mlead",
+"The argument rests on",
+"accept"
+],
+[
+"a-mlead",
+"the argument rests upon",
+"accept"
+],
+[
+"a-mlead",
+"the argument rests in",
+"revise"
+],
+[
+"a-mlead",
+"the argument is rested on",
+"revise"
+],
+[
+"a-mlead",
+"in other words, the argument rests on",
+"revise"
+],
+[
+"a-nlead",
+"However",
+"accept"
+],
+[
+"a-nlead",
+"nevertheless",
+"accept"
+],
+[
+"a-nlead",
+"hence",
+"revise"
+],
+[
+"a-nlead",
+"furthermore",
+"revise"
+],
+[
+"a-nlead",
+"likewise",
+"revise"
+],
+[
+"a-nlead",
+"but",
+"revise"
+],
+[
+"a-lim",
+"this approach fails to account for",
+"accept"
+],
+[
+"a-lim",
+"this approach overlooks",
+"accept"
+],
+[
+"a-lim",
+"this approach fails to account of",
+"revise"
+],
+[
+"a-lim",
+"this approach fails accounting for",
+"revise"
+],
+[
+"a-lim",
+"this approach is wholly discredited by",
+"revise"
+],
+[
+"b-mlead",
+"This dimension functions through",
+"accept"
+],
+[
+"b-mlead",
+"this dimension operates through",
+"accept"
+],
+[
+"b-mlead",
+"this dimension functions throughout",
+"revise"
+],
+[
+"b-mlead",
+"this dimension is functioning through",
+"revise"
+],
+[
+"b-mlead",
+"consequently, this dimension functions through",
+"revise"
+],
+[
+"b-elead",
+"as evidenced by",
+"accept"
+],
+[
+"b-elead",
+"as seen in",
+"accept"
+],
+[
+"b-elead",
+"as evidenced from",
+"revise"
+],
+[
+"b-elead",
+"as evident by",
+"revise"
+],
+[
+"b-elead",
+"as proven by",
+"revise"
+],
+[
+"b-nlead",
+"Nevertheless",
+"accept"
+],
+[
+"b-nlead",
+"however",
+"accept"
+],
+[
+"b-nlead",
+"accordingly",
+"revise"
+],
+[
+"b-nlead",
+"notably",
+"revise"
+],
+[
+"b-nlead",
+"similarly",
+"revise"
+],
+[
+"b-worth",
+"a consideration that tempers any uncritical endorsement of this view",
+"accept"
+],
+[
+"b-worth",
+"a consideration which tempers any uncritical endorsement of this view",
+"accept"
+],
+[
+"b-worth",
+"a consideration that tampers any uncritical endorsement of this view",
+"revise"
+],
+[
+"b-worth",
+"a consideration that demolishes any endorsement of this view",
+"revise"
+],
+[
+"b-worth",
+"a consideration that tempers any uncritical endorsement to this view",
+"revise"
+],
+[
+"c-open",
+"Ultimately",
+"accept"
+],
+[
+"c-open",
+"in conclusion",
+"accept"
+],
+[
+"c-open",
+"at the end of the day",
+"revise"
+],
+[
+"c-open",
+"lastly",
+"revise"
+],
+[
+"c-open",
+"eventually",
+"revise"
+],
+[
+"c-view",
+"exclusively through a singular lens represents a dangerously narrow perspective",
+"accept"
+],
+[
+"c-view",
+"exclusively through a single lens represents a dangerously narrow perspective",
+"accept"
+],
+[
+"c-view",
+"exclusively through a singular lens represent a dangerously narrow perspective",
+"revise"
+],
+[
+"c-view",
+"exclusively through a singular lens represents a dangerous narrow perspective",
+"revise"
+],
+[
+"c-view",
+"exclusively through a singular lens represents a dangerously narrow-minded perspective",
+"revise"
+],
+[
+"c-lead",
+"The evidence considered here supports the view that",
+"accept"
+],
+[
+"c-lead",
+"the evidence discussed here supports the view that",
+"accept"
+],
+[
+"c-lead",
+"the evidence considered here proves beyond doubt that",
+"revise"
+],
+[
+"c-lead",
+"the evidence considering here supports the view that",
+"revise"
+],
+[
+"c-lead",
+"the evidence considered here supports the view whether",
+"revise"
+],
+[
+"t-parts",
+"three: both views and my opinion",
+"accept"
+],
+[
+"t-parts",
+"3, two views and my opinion",
+"accept"
+],
+[
+"t-parts",
+"two views",
+"revise"
+],
+[
+"t-parts",
+"one, my opinion",
+"revise"
+],
+[
+"t-parts",
+"four with a list of healthy recipes",
+"revise"
+],
+[
+"t-core",
+"the right of the state to tax what people eat",
+"accept"
+],
+[
+"t-core",
+"whether the state may use fiscal tools on diet choices",
+"accept"
+],
+[
+"t-core",
+"fast food should be taxed",
+"revise"
+],
+[
+"t-core",
+"the taxation of alcohol and tobacco",
+"revise"
+],
+[
+"t-core",
+"the rising prevalence of chronic disease",
+"revise"
+],
+[
+"t-core",
+"the regulation of food advertising",
+"revise"
+],
+[
+"t-core",
+"burgers",
+"not-accept"
+],
+[
+"t-facetA",
+"heavy taxes on fast food to improve public health",
+"accept"
+],
+[
+"t-facetA",
+"punitive duties that protect population health",
+"accept"
+],
+[
+"t-facetA",
+"raising retail prices until purchasing habits alter",
+"revise"
+],
+[
+"t-facetA",
+"the recovery of healthcare costs from the industry",
+"revise"
+],
+[
+"t-facetA",
+"keeping fast-food outlets away from schools",
+"revise"
+],
+[
+"t-facetB",
+"people's freedom to choose what they eat",
+"accept"
+],
+[
+"t-facetB",
+"the preservation of personal autonomy over consumption",
+"accept"
+],
+[
+"t-facetB",
+"the absolute right of every adult to eat without any interference",
+"revise"
+],
+[
+"t-facetB",
+"the burden such duties place on the poor",
+"revise"
+],
+[
+"t-facetB",
+"the commercial freedom of the food industry",
+"revise"
+],
+[
+"t-facetB",
+"food is nice",
+"not-accept"
+],
+[
+"t-absolute",
+"it is an extreme word, so my position can take a qualified middle course",
+"accept"
+],
+[
+"t-absolute",
+"it makes the view absolute, so I can accept part of it",
+"accept"
+],
+[
+"t-absolute",
+"it settles the matter, so I must give complete freedom",
+"revise"
+],
+[
+"t-absolute",
+"it is merely a stylistic intensifier",
+"revise"
+],
+[
+"t-absolute",
+"I must reject both views",
+"revise"
+],
+[
+"t-position",
+"governments should tax only the worst ingredients and make healthy food cheaper",
+"accept"
+],
+[
+"t-position",
+"the state should levy sugar and subsidise nutritious alternatives",
+"accept"
+],
+[
+"t-position",
+"governments should tax all processed food without exception",
+"revise"
+],
+[
+"t-position",
+"the state should regulate composition rather than tax",
+"revise"
+],
+[
+"t-position",
+"consumers should be informed, with taxes as a last resort",
+"revise"
+],
+[
+"t-position",
+"both sides have good points",
+"revise"
+],
+[
+"t-position",
+"food is important",
+"not-accept"
+],
+[
+"t-limits",
+"poor families pay most of a food tax, and advertising shapes what children want to eat",
+"accept"
+],
+[
+"t-limits",
+"a food tax is regressive, and free choice is conditioned by marketing from childhood",
+"accept"
+],
+[
+"t-limits",
+"a tax is inherently unjust and choice is invariably rational",
+"revise"
+],
+[
+"t-limits",
+"fast food is inexpensive and vegetables take time to prepare",
+"revise"
+],
+[
+"t-limits",
+"a tax improves national health and free choice respects every adult",
+"revise"
+],
+[
+"t-example",
+"a sugary drink with a levy or a food label",
+"accept"
+],
+[
+"t-example",
+"a clearly hypothetical case",
+"accept"
+],
+[
+"t-example",
+"a statistic on obesity rates",
+"revise"
+],
+[
+"t-example",
+"a quotation from a celebrity chef",
+"revise"
+],
+[
+"t-example",
+"an anecdote about my favourite burger restaurant",
+"revise"
+],
+[
+"i-core",
+"the legitimacy of state fiscal intervention in individual dietary choice",
+"accept"
+],
+[
+"i-core",
+"the legitimacy of taxing individual dietary choices",
+"accept"
+],
+[
+"i-core",
+"the right of the state to tax what people eat",
+"accept"
+],
+[
+"i-core",
+"the legitimacy of state physical intervention in individual dietary choice",
+"revise"
+],
+[
+"i-core",
+"the legitimacy of state fiscal intervention on individual dietary choice",
+"revise"
+],
+[
+"i-core",
+"the legality of state fiscal intervention in individual dietary choice",
+"revise"
+],
+[
+"i-core",
+"the state should tax food",
+"revise"
+],
+[
+"i-sideA",
+"While considerable attention is paid to taxation for public health",
+"accept"
+],
+[
+"i-sideA",
+"while considerable attention is paid to heavy taxes that protect public health",
+"accept"
+],
+[
+"i-sideA",
+"while considerable attention is paid to the taxation for public health",
+"revise"
+],
+[
+"i-sideA",
+"while considerable attention is paid to taxation as a cure for all ill health",
+"revise"
+],
+[
+"i-sideA",
+"while considerable attention is paid on taxation for public health",
+"revise"
+],
+[
+"i-sideA",
+"while burgers are bad",
+"not-accept"
+],
+[
+"i-sideB",
+"the significance of personal freedom over diet is equally difficult to ignore",
+"accept"
+],
+[
+"i-sideB",
+"the significance of the freedom to choose what to eat is equally difficult to ignore",
+"accept"
+],
+[
+"i-sideB",
+"the significance of personal freedom from diet is equally difficult to ignore",
+"revise"
+],
+[
+"i-sideB",
+"the significance of commercial freedom for the food industry is equally difficult to ignore",
+"revise"
+],
+[
+"i-sideB",
+"the significance of personal freedom over diet are equally difficult to ignore",
+"revise"
+],
+[
+"i-pos",
+"states should tax the most demonstrably harmful ingredients while subsidising nutritious alternatives",
+"accept"
+],
+[
+"i-pos",
+"governments should tax only the most harmful ingredients and subsidise healthy food",
+"accept"
+],
+[
+"i-pos",
+"states should tax the most demonstrably harmful ingredients while subsidise nutritious alternatives",
+"revise"
+],
+[
+"i-pos",
+"states should tax the most demonstrably harmful ingredients while subsidising nutritional alternatives",
+"revise"
+],
+[
+"i-pos",
+"states should tax the most demonstrable harmful ingredients while subsidising nutritious alternatives",
+"revise"
+],
+[
+"i-pos",
+"states should tax all processed food",
+"revise"
+],
+[
+"a-facet",
+"The primary justification often cited within this context is the imposition of punitive duties in order to improve population health",
+"accept"
+],
+[
+"a-facet",
+"the primary justification often cited within this context is heavy taxes on fast food in order to improve public health",
+"accept"
+],
+[
+"a-facet",
+"the primary justification often cited within this context are the imposition of punitive duties in order to improve population health",
+"revise"
+],
+[
+"a-facet",
+"the primary justification often cited within this context is the imposition of punitive duties in order to improving population health",
+"revise"
+],
+[
+"a-facet",
+"the primary justification often cited within this context is the infliction of punitive duties in order to improve population health",
+"revise"
+],
+[
+"a-mlead",
+"the argument rests on",
+"accept"
+],
+[
+"a-mech",
+"raising the marginal cost of nutritionally deficient products until consumption measurably shifts",
+"accept"
+],
+[
+"a-mech",
+"making unhealthy products cost more until people buy noticeably less of them",
+"accept"
+],
+[
+"a-mech",
+"generating revenue for the treatment of diet-related illness",
+"revise"
+],
+[
+"a-mech",
+"pricing processed food beyond the reach of every consumer",
+"revise"
+],
+[
+"a-mech",
+"signalling official disapproval of harmful products",
+"revise"
+],
+[
+"a-mech",
+"raise the cost of junk food until consumption shifts",
+"revise"
+],
+[
+"a-ref",
+"Doing so",
+"accept"
+],
+[
+"a-ref",
+"such a tax",
+"accept"
+],
+[
+"a-ref",
+"by doing so",
+"revise"
+],
+[
+"a-ref",
+"do so",
+"revise"
+],
+[
+"a-ref",
+"doing such",
+"revise"
+],
+[
+"a-treat",
+"can turn a fast-food meal from a daily habit into an occasional indulgence",
+"accept"
+],
+[
+"a-treat",
+"can make a burger a weekend treat instead of a daily meal",
+"accept"
+],
+[
+"a-treat",
+"can turn a fast-food meal from a daily habit into an occasional indulgent",
+"revise"
+],
+[
+"a-treat",
+"will abolish fast-food meals from every diet",
+"revise"
+],
+[
+"a-treat",
+"can turn a fast-food meal from a daily habit into a daily indulgence",
+"revise"
+],
+[
+"a-elead",
+"The point is illustrated by",
+"accept"
+],
+[
+"a-elead",
+"this is illustrated by",
+"accept"
+],
+[
+"a-elead",
+"the point can be seen in",
+"accept"
+],
+[
+"a-elead",
+"the point illustrates by",
+"revise"
+],
+[
+"a-elead",
+"research illustrates the point through",
+"revise"
+],
+[
+"a-elead",
+"the point is illustrated from",
+"revise"
+],
+[
+"a-ex",
+"sugar levies on fizzy drinks that have prompted manufacturers to reformulate their recipes",
+"accept"
+],
+[
+"a-ex",
+"sugar taxes on soft drinks that have made producers change their recipes",
+"accept"
+],
+[
+"a-ex",
+"punitive duties on cigarettes that have driven a fall in smoking",
+"revise"
+],
+[
+"a-ex",
+"sugar levies on fizzy drinks that have eliminated obesity entirely",
+"revise"
+],
+[
+"a-ex",
+"subsidies withdrawn from sugar producers",
+"revise"
+],
+[
+"a-nu",
+"the fact that such levies are regressive, extracting a disproportionate share of income from the poorest households",
+"accept"
+],
+[
+"a-nu",
+"these taxes take a much larger share of income from the poorest families",
+"accept"
+],
+[
+"a-nu",
+"the fact that each rise in the price of sugary drinks is followed by a measurable fall in purchases",
+"revise"
+],
+[
+"a-nu",
+"the fact that no fiscal measure has ever altered what people consume",
+"revise"
+],
+[
+"a-nu",
+"the fact that such levies are progressive, extracting a disproportionate share of income from the poorest households",
+"revise"
+],
+[
+"b-facet",
+"Equally significant is the phenomenon's relationship to the preservation of individual autonomy over personal consumption",
+"accept"
+],
+[
+"b-facet",
+"equally significant is the phenomenon's relationship to the freedom of individuals to decide what they eat",
+"accept"
+],
+[
+"b-facet",
+"equally significant are the phenomenon's relationship to the preservation of individual autonomy over personal consumption",
+"revise"
+],
+[
+"b-facet",
+"equally significant is the phenomenon's relationship to the preservation of individual anarchy over personal consumption",
+"revise"
+],
+[
+"b-facet",
+"equally significant is the phenomenon's relationship to the preservation of individual autonomy over personal consummation",
+"revise"
+],
+[
+"b-mech",
+"leaving the state to inform rather than compel, so that authority over the body remains with the individual",
+"accept"
+],
+[
+"b-mech",
+"letting the state inform people rather than force them, so each person stays in control",
+"accept"
+],
+[
+"b-mech",
+"leaving all commercial activity free of fiscal interference so that markets may allocate",
+"revise"
+],
+[
+"b-mech",
+"trusting consumers to weigh published nutritional information against their own preferences and circumstances",
+"revise"
+],
+[
+"b-mech",
+"confining public policy to school meals and nutritional education",
+"revise"
+],
+[
+"b-mech",
+"leave the state to inform rather than compel people",
+"revise"
+],
+[
+"b-elead",
+"as shown by",
+"accept"
+],
+[
+"b-ex",
+"transparent nutritional labelling and public campaigns that inform choice",
+"accept"
+],
+[
+"b-ex",
+"clear labels on packets and health campaigns that help shoppers choose",
+"accept"
+],
+[
+"b-ex",
+"nutrition education in the compulsory school curriculum",
+"revise"
+],
+[
+"b-ex",
+"sugar levies that have obliged manufacturers to reformulate",
+"revise"
+],
+[
+"b-ex",
+"restaurants required by law to remove the largest portions",
+"revise"
+],
+[
+"b-nu",
+"genuine autonomy presupposes an informed chooser, yet preference is conditioned from childhood by marketing",
+"accept"
+],
+[
+"b-nu",
+"real choice depends on good information, yet advertising shapes taste from early childhood",
+"accept"
+],
+[
+"b-nu",
+"no competent adult requires the guidance of officials",
+"revise"
+],
+[
+"b-nu",
+"few consumers have the time or the means to prepare fresh food after a long working day",
+"revise"
+],
+[
+"b-nu",
+"such levies fall hardest on the poorest households",
+"revise"
+],
+[
+"b-child",
+"A child shown burger advertisements weekly",
+"accept"
+],
+[
+"b-child",
+"a child who sees burger adverts every week",
+"accept"
+],
+[
+"b-child",
+"a child showing burger advertisements weekly",
+"revise"
+],
+[
+"b-child",
+"a child shown burger advertisement weekly",
+"revise"
+],
+[
+"b-child",
+"every child shown burger advertisements weekly",
+"revise"
+],
+[
+"b-habit",
+"may later choose burgers out of habit rather than judgement",
+"accept"
+],
+[
+"b-habit",
+"may grow up choosing burgers from habit rather than choice",
+"accept"
+],
+[
+"b-habit",
+"may later choose burgers out of habit rather than judgemental",
+"revise"
+],
+[
+"b-habit",
+"will inevitably choose burgers out of habit for life",
+"revise"
+],
+[
+"b-habit",
+"may later choose burgers out of habit rather than judgement, so all advertising must be banned",
+"revise"
+],
+[
+"c-core",
+"viewing taxes on fast food",
+"accept"
+],
+[
+"c-core",
+"viewing the taxation of fast food",
+"accept"
+],
+[
+"c-core",
+"viewed taxes on fast food",
+"revise"
+],
+[
+"c-core",
+"viewing taxes on tobacco",
+"revise"
+],
+[
+"c-core",
+"viewing taxation in general",
+"revise"
+],
+[
+"c-pos",
+"the state should target only the worst ingredients and subsidise healthy food",
+"accept"
+],
+[
+"c-pos",
+"governments should tax only the most harmful ingredients and make healthy meals cheaper",
+"accept"
+],
+[
+"c-pos",
+"states should tax the most demonstrably harmful ingredients while subsidising nutritious alternatives",
+"revise"
+],
+[
+"c-pos",
+"the state should tax all processed food without exception",
+"revise"
+],
+[
+"c-pos",
+"the state should leave diet entirely to individual choice",
+"revise"
+],
+[
+"c-rat",
+"freedom of choice is meaningful only where an affordable alternative exists",
+"accept"
+],
+[
+"c-rat",
+"choice only means something when a cheap and healthy option is actually available",
+"accept"
+],
+[
+"c-rat",
+"taxation is justified wherever private behaviour imposes a cost on the public purse",
+"revise"
+],
+[
+"c-rat",
+"the state has no legitimate authority over what an adult eats",
+"revise"
+],
+[
+"c-rat",
+"diet-related illness consumes a share of public spending",
+"revise"
+]
+]
