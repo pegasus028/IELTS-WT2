@@ -54,3 +54,6 @@ Things noticed while building the High / Medium guidance on `p-cars-city`. None 
 - The B1 sets for p-online-scams and p-youth-unemployment carry many long words (compulsory, recognition, placements, vacancies) for Band 4–5.
 - p-prisons B1 `core`: "The basic purpose that the modern prison system should serve." ("should" inside a noun phrase trips the usual sentence reject; narrowed in the script).
 - The B1 sets for p-remote-work and p-science-funding are close to B2 in vocabulary.
+- template.js `c1-a3`: "The argument rests on {mechA}; The point is illustrated by {exA}." (capital "The" after a semicolon).
+- C1 Standard template lines carry many long words (29 of 101 words have 9+ letters: discourse, multifaceted, considerable, significance …), so C1 essays sit at 22–27% long words.
+- p-child-advertising C1 `rationale` stacks a second reason ("since …") inside the c1-c1 "because" clause; p-animal-testing C1 `rationale` "minimises suffering to the least quantity current science requires" is awkward; p-newspapers C1 "a digitised information ecology", "imposing editorial finitude" are over-ornate; p-animal-testing C1 `exB` "animal batteries" is test jargon.
