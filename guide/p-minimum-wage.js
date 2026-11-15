@@ -143,7 +143,7 @@
             wrong: [
               ['An exact figure for the minimum wage in one country', 'A figure you cannot check reads as invented, and it may be out of date. The examiner does not need numbers.'],
               ['A prediction about the whole economy in ten years', 'A prediction is a guess that nobody can check. An example shows the idea working now.'],
-              ['The name of a famous economist and a theory', 'A famous name is not an example of the idea working, and the examiner cannot check it.']
+              ["A famous economist's name and theory", 'A famous name is not an example of the idea working, and the examiner cannot check it.']
             ],
             shape: 'the kind of example', expect: 'A worker, a shop or a rule a reader can picture (also accepted: something real and concrete; a clearly hypothetical case)',
             accept: [['worker|shop|rule|person|cleaner|business|real|concrete|picture|hypothetical|specific|restaurant']],

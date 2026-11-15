@@ -52,7 +52,7 @@
             ok: 'Keeping my opinion for the conclusion instead of giving it in paragraph one',
             wrong: [
               ['Forgetting to suggest a solution for each problem', 'That is the trap of a problem / solution prompt, and this prompt does not ask for solutions.'],
-              ['Not saying which side is heavier than the other', 'That is the trap of an advantages / disadvantages prompt, which asks for a verdict on outweighing.'],
+              ['Not saying which side outweighs the other', 'That is the trap of an advantages / disadvantages prompt, which asks for a verdict on outweighing.'],
               ['Answering only one of the two direct questions', 'That is the trap of a two-part prompt. This prompt has no direct questions.']
             ],
             shape: 'one sentence: the mistake', expect: 'Keeping my opinion for the conclusion instead of giving it in paragraph one (also accepted: writing about only one view; "this essay will discuss both views" with no position)',
@@ -253,7 +253,7 @@
             wrong: [
               ['and the second are the library as a shared space', 'One second point: check the verb.'],
               ['and the second is that every library must stay open forever', 'This is an absolute rule, not the second view in a few words.'],
-              ['and the second is the speed of the internet', 'Speed is not the second view. What role do libraries play in it?']
+              ['and the second is the speed of the internet', 'Speed is not the second view. What role does the second view give libraries?']
             ],
             shape: 'and the second is + Facet B in a few words', expect: 'and the second is the library as a shared space (also accepted: and the second is the library as a community space)',
             accept: [['^and the second is\\b'], ['space|place|centre|center|hub|community']],
@@ -594,7 +594,7 @@
             reject: [{ re: 'same helps', hint: '"Help" here takes no -s.' },
               { re: '^same\\b', hint: '"Same" needs an article.' },
               { re: 'the similar', hint: 'Use the fixed phrase with an article.' }],
-            hint: 'Point back at the help that the library gives, without repeating the list.', hint2: 'Point back at the help the library staff give, without describing it again.' },
+            hint: 'Point back at the help that the library gives, without repeating the list.', hint2: 'An article, the word for "not different", and the noun for what the staff give.' },
           { id: 'b-room', label: 'Development', tag: 'gra-passive', post: '.',
             ask: 'Now finish the sentence. Which ending is right?',
             askFree: 'Finish the sentence with a passive: where else could that help be given?',
@@ -698,7 +698,7 @@
             wrong: [
               ['unless', 'This linker gives a condition. The last part gives a reason.'],
               ['so', 'This shows a result. The last part is the reason, not the result.'],
-              ['despite', 'This shows a contrast and needs a noun after it, but a reason in a full clause follows.']
+              ['despite', 'This shows a contrast, and it needs a noun after it. The last part gives a reason, in a full clause.']
             ],
             shape: 'one linker of reason', expect: 'because (also accepted: since, as)',
             accept: [['^(because|since|as)$']],

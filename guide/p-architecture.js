@@ -129,13 +129,13 @@
             wrong: [
               ['Copying is always wrong, and modern design is always right', 'These are not limits: they choose one side completely.'],
               ['Old buildings are cold, and glass towers are expensive', 'These are facts about buildings, not limits of the two views in the prompt.'],
-              ['Fitting in keeps a street whole, and modern design shows its own age', 'These are the strengths of the two views, not their limits.']
+              ['Fitting in keeps a street whole, and modern design shows its own time', 'These are the strengths of the two views, not their limits.']
             ],
             shape: 'two limits, one for each view', expect: 'Close copying makes fake streets, and modern buildings that ignore the street can harm it (also accepted: imitation looks false; bold buildings can clash with their setting)',
             accept: [['copy|copying|imitat|fake|pastiche|false'], ['modern|new|bold|glass|tower'], ['ignore|clash|harm|spoil|crowd|out of place|setting|street']],
             reject: [{ re: '\\balways\\b', hint: 'A limit makes a view smaller, not always wrong.' },
               { re: '\\bcold\\b|expensive|\\bcost', hint: 'Find the limit of each of the two views in the prompt, not a fact about buildings.' },
-              { re: 'keeps? a street whole|shows its (own )?age|strength', hint: 'Those are strengths. Where does each view stop working?' }],
+              { re: 'keeps? a street whole|shows its (own )?(age|time)|strength', hint: 'Those are strengths. Where does each view stop working?' }],
             hint: 'A limit is where a view stops working: what copying does, and what a building that ignores its street does.', hint2: 'Think of a new office that pretends to be old, and of glass towers in a quiet square.', ai: true },
           { id: 't-example', label: 'Kind of example', tag: 'tr-no-example',
             ask: 'What kind of example belongs in your body paragraphs?',
@@ -535,7 +535,7 @@
               { re: 'look like|market halls|copy', hint: 'Those copy an old style: they belong to the other side.' }],
             hint: 'An example shows a bold new building standing among old ones.', hint2: 'Think of a new museum or library in an old town centre.', ai: true },
           { id: 'b-ref', label: 'Reference', tag: 'cc-reference',
-            ask: 'One more sentence points back at placing such buildings, without repeating it. Which start is right?',
+            ask: 'The next sentence points back at this idea without repeating it. Which start is right?',
             askFree: 'Start the next sentence with two words that point back at the action just described.',
             ok: 'Doing so',
             wrong: [

@@ -283,7 +283,7 @@
             wrong: [
               ['government rules must doing most of the work, while personal action provides public support', 'After "must" the verb has no -ing.'],
               ['government rules must do most of the work, while personal action provide public support', 'Check the last verb: its subject is "personal action", one thing.'],
-              ['government rules must do the most of work, while personal action provides public support', 'Check the words after "do": the phrase for "the largest part of the job" is wrong here.']
+              ['government rules must do the most of work, while personal action provides public support', 'Check the words after "do": in this phrase for "the largest part of the job", the article is in the wrong place.']
             ],
             shape: 'your position (one clause)', expect: 'government rules must do most of the work, while personal action provides public support (also accepted: governments should lead with laws while individuals keep public support strong)',
             accept: [['\\b(must|should|need to|ought to)\\b'], ['government|laws?|rules?|state|national'], ['personal|individual|lifestyle|people|citizens'], ['support|backing|help|mandate']],
@@ -396,7 +396,7 @@
             askFree: 'Variable 5. Write Nuance A: one clause that shows what personal choices cannot reach.',
             ok: 'personal emissions depend mostly on transport and energy systems people cannot change',
             wrong: [
-              ['shoppers in wealthy countries still buy cheap goods flown in from distant manufacturing centres', 'This only blames shoppers\' choices again, so it stays inside Facet A. A limit shows what those choices cannot reach.'],
+              ['shoppers in wealthy countries still buy cheap goods flown in from factories far away', 'This only blames shoppers\' choices again, so it stays inside Facet A. A limit shows what those choices cannot reach.'],
               ['people are never willing to give up any comfort for the sake of the environment', 'Too absolute ("never", "any"): it gives up Facet A completely.'],
               ['recycling schemes differ so much that very few people know which bin they should use', 'Bins are about rubbish, not about what decides a person\'s carbon emissions.']
             ],
