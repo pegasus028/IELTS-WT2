@@ -3,7 +3,7 @@
 Position Control (this repo, IELTS Academic Writing Task 2 self-study app) is being fully re-themed as
 **Quillmoor Academy**, an original wizarding school *inspired by* Harry Potter. Audience: T.Chris's **5 private
 IELTS tutees** (Thai girls aged 13–17, CEFR B1/B2, target Band 7.5). Cohort name in the app: `Tutoring`.
-The 5 tutees: **Aeh, Mikii, Donut, JingJing, Pear** (roster ids `tut-aeh`, `tut-mikii`, `tut-donut`, `tut-jingjing`, `tut-pear`).
+The 5 tutees: **Aeh, Mikii, Doughnut, JingJing, Pear** (roster ids `tut-aeh`, `tut-mikii`, `tut-donut`, `tut-jingjing`, `tut-pear`).
 First tester: Aeh, Monday 12 Oct 2026. M4.1 no longer uses this app (they moved to Task 1): remove the M4.1 fast-access group.
 
 Full design doc (human-facing): "Quillmoor Academy — Build Spec" (Claude Docs project 5de01623-d9c0-40f5-8215-c99f9da26bd5).

@@ -1,6 +1,6 @@
 # The Reading Room — Harry Potter scenes for Quillmoor Academy (teacher only)
 
-**Who this is for:** T.Chris, for the five Tutoring tutees (Aeh, Mikii, Donut, JingJing, Pear; B1/B2, target Band 7.5).
+**Who this is for:** T.Chris, for the five Tutoring tutees (Aeh, Mikii, Doughnut, JingJing, Pear; B1/B2, target Band 7.5).
 **IP level: C.** Quillmoor Academy (the app) is an original world and never names Harry Potter, Hogwarts, the houses, spells or characters. The real scenes live only here, in class discussion and in what you say aloud. Nothing on this page goes into the app, the GitHub Pages site or a public slide.
 
 **How to read this page.** Each chapter of the app has one canon scene that mirrors its skill. The scene is the warm-up and the talking point; the IELTS prompt is always real-world. Book numbers and chapter titles are the UK Bloomsbury editions; the Thai Nanmeebooks editions keep the same chapter order. Where the film differs from the book, the book wins and the difference is noted. Summaries are in my own words; at most one short line is quoted per scene.

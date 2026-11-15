@@ -23,7 +23,7 @@ var ROSTER_GROUPS = [
   { key: 'tut', label: 'Quillmoor tutees', cohort: 'Tutoring', students: [
     { id: 'tut-aeh', name: 'Aeh' },
     { id: 'tut-mikii', name: 'Mikii' },
-    { id: 'tut-donut', name: 'Donut' },
+    { id: 'tut-donut', name: 'Doughnut' },
     { id: 'tut-jingjing', name: 'JingJing' },
     { id: 'tut-pear', name: 'Pear' },
     { id: 'tut-soda', name: 'Soda' }

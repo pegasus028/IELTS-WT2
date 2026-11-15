@@ -53,7 +53,7 @@ Live LevelUp: `https://pegasus028.github.io/LevelUp/` (set in `window.PC_LEVELUP
 | `models.js` | Exemplar Archive: 9 model essays (Band 7 at B2, Band 8 at C1) with the variables behind them, dissect labels and 3 Band 6 contrast versions |
 | `mocks.js` | Three exam-mode mocks |
 | `partners.js` | Elective classes: T.Chris's grammar and vocabulary apps, linked from the Mending Room and the band ladder |
-| `roster.js` | Fast-access class list: the five Quillmoor tutees (Aeh, Mikii, Donut, JingJing, Pear; cohort `Tutoring`). M4.1 moved to the Task 1 app in Oct 2026 |
+| `roster.js` | Fast-access class list: the five Quillmoor tutees (Aeh, Mikii, Doughnut, JingJing, Pear; cohort `Tutoring`). M4.1 moved to the Task 1 app in Oct 2026 |
 | `Code.gs` | Apps Script backend: Students, Attempts, Sessions, Reports, Assignments, Projector sheets, plus the House Cup totals (`houses`). No AI calls — marking is LevelUp's job |
 | `CONTENT-SCHEMA.md` | How to write more modules, prompts and models |
 | `docs/01-IELTS-Task2-Research-and-Method.md` | The research report and the method the app teaches |

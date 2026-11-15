@@ -182,6 +182,9 @@
     });
     if (!S.p.tier) S.p.tier = 'B2';
     if (!S.p.media) S.p.media = {};
+    /* 15 Nov 2026: a student on the sign-in roster takes her roster nickname, so a rename in roster.js reaches her account and the Staff Room. */
+    var rName = (typeof ROSTER !== 'undefined' ? ROSTER : []).filter(function (x) { return String(x.id).toLowerCase() === String(S.p.studentId || '').toLowerCase(); })[0];
+    if (rName && rName.name && S.p.displayName !== rName.name) S.p.displayName = rName.name;
     if (ST) { ST.ensure(S.p); ST.init(window.PCHost); }
     takeCoreSet(false);
     var newDay = P.touchDay(S.p);
