@@ -151,7 +151,7 @@
             reject: [{ re: '\\balways\\b', hint: 'A limit makes a view smaller, not always wrong.' },
               { re: 'expensive|guards|cost', hint: 'Find the limit of each of the two views in the prompt.' },
               { re: 'protects victims|changes offenders', hint: 'Those are strengths. Where does each view stop working?' }],
-            hint: 'A limit is where a view stops working: what happens after a purely punished prisoner is released, and how a victim feels about reform alone.', hint2: 'Think of a prisoner on the day of release, and of a victim in the courtroom.', ai: true },
+            hint: 'A limit is where a view stops working: what a prisoner who was only punished does after release, and how a victim feels about reform alone.', hint2: 'Think of a prisoner on the day of release, and of a victim in the courtroom.', ai: true },
           { id: 't-example', label: 'Kind of example', tag: 'tr-no-example',
             ask: 'What kind of example belongs in your body paragraphs?',
             askFree: 'What kind of example belongs in your body paragraphs? Write it in a few words.',
@@ -348,7 +348,7 @@
             askFree: 'Variable 3. Write Mechanism A: how prison punishes, starting with an -ing verb.',
             ok: 'taking away an offender\'s freedom as the direct result of their own actions',
             wrong: [
-              ['handing fixed prison sentences to those who commit serious or repeated crimes', 'Fixed sentences are your example, which comes next. Here, say what prison takes from the offender.'],
+              ['handing down fixed prison sentences to those who commit serious or repeated crimes', 'Fixed sentences are your example, which comes next. Here, say what prison takes from the offender.'],
               ['making inmates do unpaid work to repay the debt they owe to society', 'Unpaid work is a second idea, not how prison itself punishes.'],
               ['publishing every conviction widely so that possible offenders are shamed into obeying', 'Shame in public is not prison, and "every conviction" is too wide.']
             ],
@@ -613,18 +613,18 @@
           { id: 'b-when', label: 'Time clause', tag: 'gra-word-form', post: ',',
             ask: 'One short sentence shows the limit in action. Which first half is right?',
             askFree: 'Start a short sentence with "When": what happens if a serious crime ends only in classes?',
-            ok: 'When a violent attack ends in classes alone',
+            ok: 'When a violent attack leads only to classes',
             wrong: [
-              ['When a violent attack will end in classes alone', 'After "when" in a sentence like this, do not use "will".'],
-              ['When a violent attack end in classes alone', 'The subject is one attack: check the verb.'],
-              ['When a violence attack ends in classes alone', '"Violence" is a noun. Before "attack" you need the adjective.']
+              ['When a violent attack will lead only to classes', 'After "when" in a sentence like this, do not use "will".'],
+              ['When a violent attack lead only to classes', 'The subject is one attack: check the verb.'],
+              ['When a violence attack leads only to classes', '"Violence" is a noun. Before "attack" you need the adjective.']
             ],
-            shape: 'When + a crime + verb + in classes alone', expect: 'When a violent attack ends in classes alone (also accepted: when a serious crime leads only to classes)',
+            shape: 'When + a crime + verb + only to classes', expect: 'When a violent attack leads only to classes (also accepted: when a serious crime ends in classes alone)',
             accept: [['^(when|if) (a|one) (violent|serious) (attack|crime|assault) (ends|results) in (classes|lessons|courses|therapy)( alone| only)?$|^(when|if) (a|one) (violent|serious) (attack|crime|assault) leads only to (classes|lessons|courses|therapy)$']],
             reject: [{ re: '\\bwill (end|lead|result)\\b', hint: 'No "will" after "when" here.' },
               { re: '\\b(attack|crime|assault) (end|lead|result)\\b', hint: 'One attack: check the verb.' },
               { re: '\\bviolence attack', hint: 'Use the adjective before "attack".' }],
-            hint: 'A time clause: what happens when a serious crime is answered with classes and nothing more.', hint2: '"When" + a serious crime + a present simple verb + what it ends in.' },
+            hint: 'A time clause: what happens when a serious crime is answered with classes and nothing more.', hint2: '"When" + a serious crime + a present simple verb + what it leads to.' },
           { id: 'b-res', label: 'Result', tag: 'lr-spelling', post: '.',
             ask: 'Now the second half of that sentence. Which one is right?',
             askFree: 'Finish the sentence: what may victims feel about the courts?',

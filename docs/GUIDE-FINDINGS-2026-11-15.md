@@ -52,3 +52,5 @@ Things noticed while building the High / Medium guidance on `p-cars-city`. None 
 - p-online-scams B1 `position` near-miss 1: "spend far more officers and money" (wrong collocation that is not the planned error; the script uses "put … into").
 - p-youth-unemployment B1 `exA`: a "too many …" phrase cannot follow "We can see this clearly in"; the script rewords it.
 - The B1 sets for p-online-scams and p-youth-unemployment carry many long words (compulsory, recognition, placements, vacancies) for Band 4–5.
+- p-prisons B1 `core`: "The basic purpose that the modern prison system should serve." ("should" inside a noun phrase trips the usual sentence reject; narrowed in the script).
+- The B1 sets for p-remote-work and p-science-funding are close to B2 in vocabulary.

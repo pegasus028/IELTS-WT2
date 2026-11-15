@@ -112,7 +112,7 @@
               ['every country must ban the private motor car outright if urban air quality is to improve', 'Too absolute ("every country", "outright"), and it forgets the freedom side completely.'],
               ['the right to drive should be absolute as long as motorists pay a pollution charge', 'An absolute right forgets the traffic jams and the dirty air that you admit in Body B.']
             ],
-            shape: 'one clause: who should do what', expect: 'councils should invest in public transport while phasing out the dirtiest vehicles (also accepted: cities should improve buses and trains while removing the most polluting cars; must must not change side)',
+            shape: 'one clause: who should do what', expect: 'councils should invest in public transport while phasing out the dirtiest vehicles (also accepted: cities should improve buses and trains while removing the most polluting cars; must not change side)',
             accept: [['\\b(should|must|need to|ought to)\\b'], ['public transport|buses|trains|transit|metro'], ['phas|remov|limit|restrict|reduc|ban(ning)? (the )?(most|dirtiest)|dirtiest|most polluting|polluting']],
             reject: [{ re: '\\b(every|all) (countr|cars?|private)|outright|completely|totally', hint: 'Too absolute: a total ban drops the workers who have no bus or train.' },
               { re: '\\babsolute\\b|wherever they (wish|want|like)', hint: 'An absolute right forgets the traffic jams and dirty air.' },
@@ -121,13 +121,13 @@
           { id: 't-limits', label: 'The two limits', tag: 'tr-no-nuance',
             ask: 'Your position must cover a limit of each view. Which pair of limits is right?',
             askFree: 'Write the two limits your position must cover: one for a ban, one for free driving.',
-            ok: 'A full ban hurts some workers, and unlimited driving fills the roads and the air',
+            ok: 'A full ban hurts some workers, and unlimited driving fills the roads and dirties the air',
             wrong: [
               ['A ban is always wrong, and free driving is always right', 'These are not limits: they choose one side completely.'],
               ['Buses are slow, and petrol is expensive', 'Neither of these is a limit of the two views in the prompt.'],
               ['A ban cleans the air, and free driving protects freedom', 'These are the strengths of the two views, not their limits.']
             ],
-            shape: 'two limits, one for each view', expect: 'A full ban hurts some workers, and unlimited driving fills the roads and the air (also accepted: a ban leaves people with no bus or train stranded; too much driving causes traffic jams and pollution)',
+            shape: 'two limits, one for each view', expect: 'A full ban hurts some workers, and unlimited driving fills the roads and dirties the air (also accepted: a ban leaves people with no bus or train stranded; too much driving causes traffic jams and pollution)',
             accept: [['ban'], ['workers?|people|commuters?|stranded|no (bus|train|public transport)|hurt|unfair'], ['driving|cars|traffic'], ['jams?|congestion|crowded|roads|pollution|dirty|air|fumes']],
             reject: [{ re: '\\balways\\b', hint: 'A limit makes a view smaller, not always wrong.' },
               { re: 'expensive|petrol|slow', hint: 'Find the limit of each of the two views in the prompt.' },
@@ -328,7 +328,7 @@
             ok: 'cutting the exhaust fumes that people breathe in crowded city districts',
             wrong: [
               ['banning all petrol and diesel engines inside the marked city districts', 'That is a policy, and you need it later as your example. How does the air get cleaner?'],
-              ['making car ownership a criminal offence for anyone living in a centre', 'That is a second, extreme claim, not how cleaner air comes about.'],
+              ['making car ownership a criminal offence for anyone living in the city centre', 'That is a second, extreme claim, not how cleaner air comes about.'],
               ['forcing every commuter to walk or cycle to their place of work', 'Absolute ("every commuter"), and it is a rule, not how the idea works.']
             ],
             shape: 'an -ing phrase', expect: 'cutting the exhaust fumes that people breathe in crowded city districts (also accepted: reducing the fumes people breathe in busy streets)',

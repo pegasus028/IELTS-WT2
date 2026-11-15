@@ -410,7 +410,7 @@
             ok: 'remote work without structure removes the line between work and home and causes burnout',
             wrong: [
               ['remote arrangements give the employee back several unpaid hours of travel each week', 'This supports Facet A. A limit shows where the idea stops working.'],
-              ['employees left to work at home without structure will always neglect the duties they have', 'Too absolute: "always" claims more than you can show, and it blames every worker.'],
+              ['employees left to work at home without structure will always neglect their duties', 'Too absolute: "always" claims more than you can show, and it blames every worker.'],
               ['home working suits only those jobs that can be carried out on a computer screen', 'This limits which jobs can move home. It does not show what goes wrong for the people who do, so it does not lead to your position.']
             ],
             shape: 'one clause (subject + verb)', expect: 'remote work without structure removes the line between work and home and causes burnout (also accepted: without clear hours, home workers never stop working and burn out)',

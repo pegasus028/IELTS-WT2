@@ -597,7 +597,7 @@
             ok: 'funding the arts without limit can produce graduates the economy does not need',
             wrong: [
               ['no humanities graduate can expect to find work in the field they studied', 'Too absolute ("no graduate"), and it gives up Facet B completely.'],
-              ['humanities departments are far cheaper to run than the scientific ones are', 'This is a fact about cost that helps the arts. A limit shows where the idea stops working.'],
+              ['humanities departments are far cheaper to run than science departments', 'This is a fact about cost that helps the arts. A limit shows where the idea stops working.'],
               ['the reading of serious literature has fallen sharply since the arrival of the internet', 'A claim you cannot check, and it is not a limit of public money for the arts.']
             ],
             shape: 'one clause (subject + verb)', expect: 'funding the arts without limit can produce graduates the economy does not need (also accepted: paying for every arts course may create more graduates than there are jobs)',
