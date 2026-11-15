@@ -1,0 +1,1262 @@
+[
+[
+"t-type",
+"discuss both views and give my own opinion",
+"accept"
+],
+[
+"t-type",
+"discussion",
+"accept"
+],
+[
+"t-type",
+"to what extent do you agree",
+"revise"
+],
+[
+"t-type",
+"advantages outweigh disadvantages",
+"revise"
+],
+[
+"t-type",
+"a two-part question",
+"revise"
+],
+[
+"t-trap",
+"giving my opinion only in the conclusion",
+"accept"
+],
+[
+"t-trap",
+"discussing only one view",
+"accept"
+],
+[
+"t-trap",
+"forgetting to propose a solution",
+"revise"
+],
+[
+"t-trap",
+"not saying which side carries more weight",
+"revise"
+],
+[
+"t-trap",
+"running out of time",
+"not-accept"
+],
+[
+"t-budget",
+"about 50, 95, 95 and 45 words",
+"accept"
+],
+[
+"t-budget",
+"50 / 95 / 95 / 45",
+"accept"
+],
+[
+"t-budget",
+"about 285 words in all",
+"accept"
+],
+[
+"t-budget",
+"100, 60, 60, 100",
+"revise"
+],
+[
+"t-budget",
+"70 each",
+"revise"
+],
+[
+"t-paras",
+"four paragraphs, position in the introduction",
+"accept"
+],
+[
+"t-paras",
+"intro with my position, body A, body B, conclusion",
+"accept"
+],
+[
+"t-paras",
+"introduction, two bodies, my opinion only in the conclusion",
+"revise"
+],
+[
+"t-paras",
+"five paragraphs",
+"revise"
+],
+[
+"t-paras",
+"introduction, one body, conclusion",
+"revise"
+],
+[
+"i-open",
+"the ongoing debate surrounding",
+"accept"
+],
+[
+"i-open",
+"the current discourse surrounding",
+"accept"
+],
+[
+"i-open",
+"the ongoing discourse surrounding about",
+"revise"
+],
+[
+"i-open",
+"the ongoing discourse surrounds",
+"revise"
+],
+[
+"i-open",
+"the never-ending discourse surrounding",
+"revise"
+],
+[
+"i-implic",
+"often highlights its multifaceted implications",
+"accept"
+],
+[
+"i-implic",
+"frequently highlight its multifaceted implications",
+"revise"
+],
+[
+"i-implic",
+"frequently highlights its multifaced implications",
+"revise"
+],
+[
+"i-implic",
+"frequently highlights its many-sided multifaceted implications",
+"revise"
+],
+[
+"i-while",
+"although considerable attention is paid to",
+"accept"
+],
+[
+"i-while",
+"while much attention is given to",
+"accept"
+],
+[
+"i-while",
+"while considerable attention is made to",
+"revise"
+],
+[
+"i-while",
+"despite considerable attention is paid to",
+"revise"
+],
+[
+"i-while",
+"while considerable attention is payed to",
+"revise"
+],
+[
+"i-ignore",
+"is equally hard to ignore",
+"accept"
+],
+[
+"i-ignore",
+"are equally difficult to ignore",
+"revise"
+],
+[
+"i-ignore",
+"is equally difficult to be ignored",
+"revise"
+],
+[
+"i-ignore",
+"is equally difficult for ignoring",
+"revise"
+],
+[
+"i-lead",
+"this essay argues that",
+"accept"
+],
+[
+"i-lead",
+"this essay maintains that",
+"accept"
+],
+[
+"i-lead",
+"this essay contends with that",
+"revise"
+],
+[
+"i-lead",
+"this essay contents that",
+"revise"
+],
+[
+"i-lead",
+"this essay will consider whether",
+"revise"
+],
+[
+"b-open",
+"equally important is the phenomenon's relationship to",
+"accept"
+],
+[
+"b-open",
+"equally significant are the phenomenon's relationship to",
+"revise"
+],
+[
+"b-open",
+"equally significantly is the phenomenon's relationship to",
+"revise"
+],
+[
+"b-open",
+"equally significant is the phenomenons' relationship to",
+"revise"
+],
+[
+"b-mlead",
+"this dimension operates through",
+"accept"
+],
+[
+"b-mlead",
+"this works through",
+"accept"
+],
+[
+"b-mlead",
+"this dimension functions though",
+"revise"
+],
+[
+"b-mlead",
+"this dimension function through",
+"revise"
+],
+[
+"b-mlead",
+"this dimension functions via of",
+"revise"
+],
+[
+"b-elead",
+"as shown by",
+"accept"
+],
+[
+"b-elead",
+"as illustrated by",
+"accept"
+],
+[
+"b-elead",
+"as evident by",
+"revise"
+],
+[
+"b-elead",
+"as evidenced from",
+"revise"
+],
+[
+"b-elead",
+"as evidencing by",
+"revise"
+],
+[
+"b-nlead",
+"however",
+"accept"
+],
+[
+"b-nlead",
+"even so",
+"accept"
+],
+[
+"b-nlead",
+"accordingly",
+"revise"
+],
+[
+"b-nlead",
+"similarly",
+"revise"
+],
+[
+"b-nlead",
+"in other words",
+"revise"
+],
+[
+"b-temper",
+"a consideration that qualifies any uncritical endorsement of this view",
+"accept"
+],
+[
+"b-temper",
+"a consideration who tempers any uncritical endorsement of this view",
+"revise"
+],
+[
+"b-temper",
+"a consideration that tempers any uncritical endorsement to this view",
+"revise"
+],
+[
+"b-temper",
+"a consideration that tempers any uncritical endorsement of this view and refutes it entirely",
+"revise"
+],
+[
+"a-open",
+"the main justification often cited within this context is",
+"accept"
+],
+[
+"a-open",
+"the primary justification often sited within this context is",
+"revise"
+],
+[
+"a-open",
+"the primary justification often cited within this context are",
+"revise"
+],
+[
+"a-open",
+"the primarily justification often cited within this context is",
+"revise"
+],
+[
+"a-mlead",
+"the argument relies on",
+"accept"
+],
+[
+"a-mlead",
+"this argument rests upon",
+"accept"
+],
+[
+"a-mlead",
+"the argument rests in",
+"revise"
+],
+[
+"a-mlead",
+"the argument rest on",
+"revise"
+],
+[
+"a-mlead",
+"the argument is resting on",
+"revise"
+],
+[
+"a-elead",
+"this is illustrated by",
+"accept"
+],
+[
+"a-elead",
+"the point is exemplified by",
+"accept"
+],
+[
+"a-elead",
+"the point is illustrating by",
+"revise"
+],
+[
+"a-elead",
+"the point is illustrated from",
+"revise"
+],
+[
+"a-elead",
+"the point illustrated by",
+"revise"
+],
+[
+"a-nlead",
+"nevertheless",
+"accept"
+],
+[
+"a-nlead",
+"yet",
+"accept"
+],
+[
+"a-nlead",
+"therefore",
+"revise"
+],
+[
+"a-nlead",
+"in addition",
+"revise"
+],
+[
+"a-nlead",
+"for instance",
+"revise"
+],
+[
+"a-fail",
+"this approach does not account for",
+"accept"
+],
+[
+"a-fail",
+"this view fails to account for",
+"accept"
+],
+[
+"a-fail",
+"this approach fails accounting for",
+"revise"
+],
+[
+"a-fail",
+"this approach fails to account to",
+"revise"
+],
+[
+"a-fail",
+"this approach completely fails to account for",
+"revise"
+],
+[
+"t-parts",
+"three: both views and my opinion",
+"accept"
+],
+[
+"t-parts",
+"3, the two views and my own opinion",
+"accept"
+],
+[
+"t-parts",
+"two views, opinion implied",
+"revise"
+],
+[
+"t-parts",
+"one: my opinion",
+"revise"
+],
+[
+"t-parts",
+"both views and the exact wage I would set",
+"revise"
+],
+[
+"t-core",
+"the effects of raising the legal minimum wage",
+"accept"
+],
+[
+"t-core",
+"the impact of higher minimum wages on the economy",
+"accept"
+],
+[
+"t-core",
+"raising the minimum wage cuts poverty",
+"revise"
+],
+[
+"t-core",
+"reducing inequality across the economy",
+"revise"
+],
+[
+"t-core",
+"the distribution of income between employers and employees",
+"revise"
+],
+[
+"t-core",
+"money",
+"not-accept"
+],
+[
+"t-facetA",
+"the reduction of poverty and the boost to spending that higher pay brings",
+"accept"
+],
+[
+"t-facetA",
+"the easing of poverty and growth in demand from higher wages",
+"accept"
+],
+[
+"t-facetA",
+"the elimination of poverty through a single statutory measure",
+"revise"
+],
+[
+"t-facetA",
+"lower public expenditure on benefits paid to workers",
+"revise"
+],
+[
+"t-facetA",
+"better morale and retention in firms that pay more",
+"revise"
+],
+[
+"t-facetB",
+"the rise in prices and the loss of jobs that forced pay increases cause",
+"accept"
+],
+[
+"t-facetB",
+"inflation and lost employment caused by a mandated minimum wage",
+"accept"
+],
+[
+"t-facetB",
+"the vulnerability of small firms on narrow margins",
+"revise"
+],
+[
+"t-facetB",
+"the inevitability of redundancies wherever any wage floor is imposed",
+"revise"
+],
+[
+"t-facetB",
+"the acceleration of automation in low-paid occupations",
+"revise"
+],
+[
+"t-position",
+"independent experts should set the legal minimum region by region, in line with what local firms produce",
+"accept"
+],
+[
+"t-position",
+"the floor should be set by independent assessment of regional productivity",
+"accept"
+],
+[
+"t-position",
+"the wage floor should be raised continuously until poverty is eliminated altogether",
+"revise"
+],
+[
+"t-position",
+"a single statutory minimum should apply in every region",
+"revise"
+],
+[
+"t-position",
+"the state should use tax credits rather than legislate the wage",
+"revise"
+],
+[
+"t-position",
+"wages are complicated",
+"not-accept"
+],
+[
+"t-limits",
+"a rise helps only if local firms can afford it, and where few employers compete modest rises need not cut jobs",
+"accept"
+],
+[
+"t-limits",
+"the gain needs productivity behind it, and moderate rises need not cost jobs in concentrated markets",
+"accept"
+],
+[
+"t-limits",
+"higher pay never reduces poverty and every rise destroys jobs",
+"revise"
+],
+[
+"t-limits",
+"prices rise for many reasons and workers change jobs",
+"revise"
+],
+[
+"t-limits",
+"extra pay is spent locally and labour costs push firms to automate",
+"revise"
+],
+[
+"t-example",
+"a concrete, recognisable case",
+"accept"
+],
+[
+"t-example",
+"a clearly hypothetical worker",
+"accept"
+],
+[
+"t-example",
+"a national unemployment figure",
+"revise"
+],
+[
+"t-example",
+"a famous economist's remark",
+"revise"
+],
+[
+"t-example",
+"my own part-time job",
+"revise"
+],
+[
+"i-core",
+"the economic effects of raising the legal minimum wage",
+"accept"
+],
+[
+"i-core",
+"the economical consequences of statutory increases to the wage floor",
+"revise"
+],
+[
+"i-core",
+"the economic consequences of statutory increases to the wage flour",
+"revise"
+],
+[
+"i-core",
+"the economic consequences of statutory increases to the wages floor",
+"revise"
+],
+[
+"i-core",
+"wages",
+"not-accept"
+],
+[
+"i-sideA",
+"the prospect of less poverty and more spending",
+"accept"
+],
+[
+"i-sideA",
+"the promise of lower poverty and higher incomes",
+"accept"
+],
+[
+"i-sideA",
+"the promise of reduced poverty and stronger demands",
+"revise"
+],
+[
+"i-sideA",
+"the certainty of reduced poverty and stronger demand",
+"revise"
+],
+[
+"i-sideA",
+"the promise of reducing poverty and stronger demand",
+"revise"
+],
+[
+"i-sideA",
+"higher prices",
+"not-accept"
+],
+[
+"i-sideB",
+"the significance of higher prices and job losses",
+"accept"
+],
+[
+"i-sideB",
+"the significance of inflation and lost employment",
+"accept"
+],
+[
+"i-sideB",
+"the significance of soaring prices and mass unemployment",
+"revise"
+],
+[
+"i-sideB",
+"the significance of rising prices and lost jobs in every business",
+"revise"
+],
+[
+"i-sideB",
+"the significance of rising prices and lost employments",
+"revise"
+],
+[
+"i-pos",
+"independent experts should set the legal minimum region by region, in line with what local firms produce",
+"accept"
+],
+[
+"i-pos",
+"the floor should be sat by independent assessment of regional productivity",
+"revise"
+],
+[
+"i-pos",
+"the floor should be set by independent assessment for regional productivity",
+"revise"
+],
+[
+"i-pos",
+"the floor should definitely always be set by independent assessment of regional productivity",
+"revise"
+],
+[
+"i-pos",
+"the minimum wage is important",
+"not-accept"
+],
+[
+"a-facet",
+"the reduction of poverty and the boost to spending that higher pay brings",
+"accept"
+],
+[
+"a-facet",
+"the alleviation of poverty and stimulation of demand through higher wages",
+"accept"
+],
+[
+"a-facet",
+"the elevation of poverty and the stimulation of demand through higher pay",
+"revise"
+],
+[
+"a-facet",
+"the elimination of poverty and the stimulation of demand through higher pay",
+"revise"
+],
+[
+"a-facet",
+"the alleviation of poverty and the stimulation of demand through higher paid",
+"revise"
+],
+[
+"a-mech",
+"moving income to households that spend it locally and depend less on state benefits",
+"accept"
+],
+[
+"a-mech",
+"channelling money to low-paid families who spend it in local shops",
+"accept"
+],
+[
+"a-mech",
+"reducing the public expenditure on benefits for low earners",
+"revise"
+],
+[
+"a-mech",
+"compelling profitable employers to share more revenue",
+"revise"
+],
+[
+"a-mech",
+"narrowing the gap between the lowest and the median earnings",
+"revise"
+],
+[
+"a-mech",
+"transfer income to households that spend it locally",
+"revise"
+],
+[
+"a-ex",
+"regions where step-by-step rises lifted household incomes without any clear loss of jobs",
+"accept"
+],
+[
+"a-ex",
+"places where gradual increases raised pay without measurable job loss",
+"accept"
+],
+[
+"a-ex",
+"cities reporting reduced staff turnover after a living wage",
+"revise"
+],
+[
+"a-ex",
+"countries that abolished poverty entirely",
+"revise"
+],
+[
+"a-ex",
+"firms that raised pay voluntarily",
+"revise"
+],
+[
+"a-who",
+"a cleaner earning a little more",
+"accept"
+],
+[
+"a-who",
+"a care worker with a little more pay",
+"accept"
+],
+[
+"a-who",
+"a cleaner with slight higher pay",
+"revise"
+],
+[
+"a-who",
+"a cleaner with slightly higher pays",
+"revise"
+],
+[
+"a-who",
+"every cleaner with slightly higher pay",
+"revise"
+],
+[
+"a-case",
+"is likely to spend the extra in a local shop",
+"accept"
+],
+[
+"a-case",
+"may spends the difference in a corner shop",
+"revise"
+],
+[
+"a-case",
+"may spend the different in a corner shop",
+"revise"
+],
+[
+"a-case",
+"will spend every extra penny in a corner shop",
+"revise"
+],
+[
+"a-cond",
+"an important condition",
+"accept"
+],
+[
+"a-cond",
+"a key condition",
+"accept"
+],
+[
+"a-cond",
+"a crucial conditions",
+"revise"
+],
+[
+"a-cond",
+"a crucially condition",
+"revise"
+],
+[
+"a-cond",
+"an irrelevant condition",
+"revise"
+],
+[
+"a-nu",
+"the benefit lasts only while the rise stays in line with what local firms produce",
+"accept"
+],
+[
+"a-nu",
+"the gain holds only as long as the increase is proportionate to local productivity",
+"accept"
+],
+[
+"a-nu",
+"additional earnings are spent locally, sustaining local businesses",
+"revise"
+],
+[
+"a-nu",
+"a statutory rise has never cost a single job in any economy",
+"revise"
+],
+[
+"a-nu",
+"workers in poorer regions move to wealthier cities",
+"revise"
+],
+[
+"b-facet",
+"the rise in prices and the loss of jobs that forced pay increases cause",
+"accept"
+],
+[
+"b-facet",
+"the inflationary and job-destroying effect of a mandated minimum wage",
+"accept"
+],
+[
+"b-facet",
+"the inflammatory and employment-suppressing effect of mandated pay",
+"revise"
+],
+[
+"b-facet",
+"the inflationary and employment-suppressed effect of mandated pay",
+"revise"
+],
+[
+"b-facet",
+"the inflationary and employment-suppressing affect of mandated pay",
+"revise"
+],
+[
+"b-mech",
+"pushing the cost of labour above the value it produces, so that hours are cut",
+"accept"
+],
+[
+"b-mech",
+"raising labour costs above what workers produce, so firms cut shifts",
+"accept"
+],
+[
+"b-mech",
+"confronting small firms on narrow margins with an unaffordable bill",
+"revise"
+],
+[
+"b-mech",
+"making self-service equipment cheaper than the retention of staff",
+"revise"
+],
+[
+"b-mech",
+"discouraging firms from recruiting inexperienced workers",
+"revise"
+],
+[
+"b-mech",
+"raise the cost of labour above its value",
+"revise"
+],
+[
+"b-ex",
+"restaurants and shops cutting staff hours and installing self-service machines",
+"accept"
+],
+[
+"b-ex",
+"supermarkets that have reduced shifts and added self-service kiosks",
+"accept"
+],
+[
+"b-ex",
+"cafes raising menu prices after ingredient costs jump",
+"revise"
+],
+[
+"b-ex",
+"online retailers replacing high-street shops",
+"revise"
+],
+[
+"b-ex",
+"every small cafe in the country closing within a year",
+"revise"
+],
+[
+"b-for",
+"for a small business with thin profits",
+"accept"
+],
+[
+"b-for",
+"for a family shop operating on tight margins",
+"accept"
+],
+[
+"b-for",
+"for a small business operate on thin margins",
+"revise"
+],
+[
+"b-for",
+"for a small business operating in thin margins",
+"revise"
+],
+[
+"b-for",
+"for a small businesses operating on thin margins",
+"revise"
+],
+[
+"b-ref",
+"this policy",
+"accept"
+],
+[
+"b-ref",
+"such a rise",
+"accept"
+],
+[
+"b-ref",
+"such policy",
+"revise"
+],
+[
+"b-ref",
+"a such policy",
+"revise"
+],
+[
+"b-ref",
+"such a policies",
+"revise"
+],
+[
+"b-cost",
+"may cost a job",
+"accept"
+],
+[
+"b-cost",
+"could cost one post",
+"accept"
+],
+[
+"b-cost",
+"can costs a job",
+"revise"
+],
+[
+"b-cost",
+"can be cost a job",
+"revise"
+],
+[
+"b-cost",
+"can cost a job and will bankrupt every firm",
+"revise"
+],
+[
+"b-nu",
+"where few employers compete, they set the pay, so modest rises need not cost jobs",
+"accept"
+],
+[
+"b-nu",
+"dominant employers set wages, so moderate rises do not displace workers",
+"accept"
+],
+[
+"b-nu",
+"no employer anywhere has ever absorbed an increase without reducing hours",
+"revise"
+],
+[
+"b-nu",
+"labour-intensive firms answer a higher wage bill by reducing the hours they roster",
+"revise"
+],
+[
+"b-nu",
+"young workers with no experience are hard to train",
+"revise"
+],
+[
+"c-open",
+"to conclude",
+"accept"
+],
+[
+"c-open",
+"in summary",
+"accept"
+],
+[
+"c-open",
+"as a conclusion",
+"revise"
+],
+[
+"c-open",
+"in conclude",
+"revise"
+],
+[
+"c-open",
+"to conclusion",
+"revise"
+],
+[
+"c-reduce",
+"reducing a rise in the minimum wage",
+"accept"
+],
+[
+"c-reduce",
+"reducing higher pay floors",
+"accept"
+],
+[
+"c-reduce",
+"reducing of a higher wage floor",
+"revise"
+],
+[
+"c-reduce",
+"reduce a higher wage floor",
+"revise"
+],
+[
+"c-reduce",
+"reducing every economic policy",
+"revise"
+],
+[
+"c-single",
+"to a single effect fails to capture its full complexity",
+"accept"
+],
+[
+"c-single",
+"to a single consequence fail to capture its full complexity",
+"revise"
+],
+[
+"c-single",
+"to a single consequence fails capturing its full complexity",
+"revise"
+],
+[
+"c-single",
+"to a single consequence fails to capture it's full complexity",
+"revise"
+],
+[
+"c-lead",
+"a more reasonable position is that",
+"accept"
+],
+[
+"c-lead",
+"a more defensive position is that",
+"revise"
+],
+[
+"c-lead",
+"a more defensible position are that",
+"revise"
+],
+[
+"c-lead",
+"the only possible position is that",
+"revise"
+],
+[
+"c-pos",
+"an independent commission should set the minimum region by region according to local productivity",
+"accept"
+],
+[
+"c-pos",
+"independent experts should fix the minimum for each area in line with what local firms produce",
+"accept"
+],
+[
+"c-pos",
+"the floor should be set by independent assessment of regional productivity",
+"revise"
+],
+[
+"c-pos",
+"the government should raise the minimum wage as high as possible everywhere",
+"revise"
+],
+[
+"c-pos",
+"independent bodies might perhaps review some rates occasionally",
+"revise"
+],
+[
+"c-because",
+"since",
+"accept"
+],
+[
+"c-because",
+"as",
+"accept"
+],
+[
+"c-because",
+"unless",
+"revise"
+],
+[
+"c-because",
+"whereas",
+"revise"
+],
+[
+"c-because",
+"so that",
+"revise"
+],
+[
+"c-rat",
+"the result depends on setting the right level for local conditions, not on the policy",
+"accept"
+],
+[
+"c-rat",
+"the outcome hinges on matching the rate to local conditions rather than on the policy itself",
+"accept"
+],
+[
+"c-rat",
+"the state should determine the pay of every worker",
+"revise"
+],
+[
+"c-rat",
+"poverty cannot be relieved by higher wages alone",
+"revise"
+],
+[
+"c-rat",
+"higher pay is always the fairest response",
+"revise"
+]
+]

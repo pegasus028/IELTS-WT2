@@ -1,0 +1,1227 @@
+[
+[
+"t-type",
+"discuss both views and give my own opinion",
+"accept"
+],
+[
+"t-type",
+"discussion",
+"accept"
+],
+[
+"t-type",
+"to what extent do you agree",
+"revise"
+],
+[
+"t-type",
+"advantages outweigh disadvantages",
+"revise"
+],
+[
+"t-type",
+"a two-part question",
+"revise"
+],
+[
+"t-trap",
+"giving my opinion only in the conclusion",
+"accept"
+],
+[
+"t-trap",
+"discussing only one view",
+"accept"
+],
+[
+"t-trap",
+"forgetting to propose a solution",
+"revise"
+],
+[
+"t-trap",
+"not saying which side carries more weight",
+"revise"
+],
+[
+"t-trap",
+"running out of time",
+"not-accept"
+],
+[
+"t-budget",
+"about 50, 95, 95 and 45 words",
+"accept"
+],
+[
+"t-budget",
+"50 / 95 / 95 / 45",
+"accept"
+],
+[
+"t-budget",
+"about 285 words in all",
+"accept"
+],
+[
+"t-budget",
+"100, 60, 60, 100",
+"revise"
+],
+[
+"t-budget",
+"70 each",
+"revise"
+],
+[
+"t-paras",
+"four paragraphs, position in the introduction",
+"accept"
+],
+[
+"t-paras",
+"intro with my position, body A, body B, conclusion",
+"accept"
+],
+[
+"t-paras",
+"introduction, two bodies, my opinion only in the conclusion",
+"revise"
+],
+[
+"t-paras",
+"five paragraphs",
+"revise"
+],
+[
+"t-paras",
+"introduction, one body, conclusion",
+"revise"
+],
+[
+"i-open",
+"the ongoing debate surrounding",
+"accept"
+],
+[
+"i-open",
+"the current discourse surrounding",
+"accept"
+],
+[
+"i-open",
+"the ongoing discourse surrounding about",
+"revise"
+],
+[
+"i-open",
+"the ongoing discourse surrounds",
+"revise"
+],
+[
+"i-open",
+"the never-ending discourse surrounding",
+"revise"
+],
+[
+"i-implic",
+"often highlights its multifaceted implications",
+"accept"
+],
+[
+"i-implic",
+"frequently highlight its multifaceted implications",
+"revise"
+],
+[
+"i-implic",
+"frequently highlights its multifaced implications",
+"revise"
+],
+[
+"i-implic",
+"frequently highlights its many-sided multifaceted implications",
+"revise"
+],
+[
+"i-while",
+"although considerable attention is paid to",
+"accept"
+],
+[
+"i-while",
+"while much attention is given to",
+"accept"
+],
+[
+"i-while",
+"while considerable attention is made to",
+"revise"
+],
+[
+"i-while",
+"despite considerable attention is paid to",
+"revise"
+],
+[
+"i-while",
+"while considerable attention is payed to",
+"revise"
+],
+[
+"i-ignore",
+"is equally hard to ignore",
+"accept"
+],
+[
+"i-ignore",
+"are equally difficult to ignore",
+"revise"
+],
+[
+"i-ignore",
+"is equally difficult to be ignored",
+"revise"
+],
+[
+"i-ignore",
+"is equally difficult for ignoring",
+"revise"
+],
+[
+"i-lead",
+"this essay argues that",
+"accept"
+],
+[
+"i-lead",
+"this essay maintains that",
+"accept"
+],
+[
+"i-lead",
+"this essay contends with that",
+"revise"
+],
+[
+"i-lead",
+"this essay contents that",
+"revise"
+],
+[
+"i-lead",
+"this essay will consider whether",
+"revise"
+],
+[
+"a-open",
+"a key dimension of this issue is its relationship to",
+"accept"
+],
+[
+"a-open",
+"a fundamental dimension of this issue are its relationship to",
+"revise"
+],
+[
+"a-open",
+"a fundamentally dimension of this issue is its relationship to",
+"revise"
+],
+[
+"a-open",
+"a fundamental dimension of this issue is it's relationship to",
+"revise"
+],
+[
+"a-mlead",
+"this dynamic operates mainly by",
+"accept"
+],
+[
+"a-mlead",
+"this works primarily by",
+"accept"
+],
+[
+"a-mlead",
+"this dynamic operates primary by",
+"revise"
+],
+[
+"a-mlead",
+"this dynamics operates primarily by",
+"revise"
+],
+[
+"a-mlead",
+"this dynamic operates primarily on",
+"revise"
+],
+[
+"a-elead",
+"which in turn leads to",
+"accept"
+],
+[
+"a-elead",
+"which has led to",
+"accept"
+],
+[
+"a-elead",
+"what leads to",
+"revise"
+],
+[
+"a-elead",
+"which lead to",
+"revise"
+],
+[
+"a-elead",
+"which leads into",
+"revise"
+],
+[
+"a-nlead",
+"however",
+"accept"
+],
+[
+"a-nlead",
+"still",
+"accept"
+],
+[
+"a-nlead",
+"thus",
+"revise"
+],
+[
+"a-nlead",
+"likewise",
+"revise"
+],
+[
+"a-nlead",
+"namely",
+"revise"
+],
+[
+"a-vac",
+"viewing this element in isolation overlooks critical context",
+"accept"
+],
+[
+"a-vac",
+"viewing this element in the vacuum overlooks critical context",
+"revise"
+],
+[
+"a-vac",
+"viewing this element in a vacuum overlook critical context",
+"revise"
+],
+[
+"a-vac",
+"viewing this element in a vacuum oversees critical context",
+"revise"
+],
+[
+"a-indeed",
+"in fact",
+"accept"
+],
+[
+"a-indeed",
+"however",
+"revise"
+],
+[
+"a-indeed",
+"besides",
+"revise"
+],
+[
+"a-indeed",
+"otherwise",
+"revise"
+],
+[
+"b-open",
+"equally important is the phenomenon's relationship to",
+"accept"
+],
+[
+"b-open",
+"equally significant are the phenomenon's relationship to",
+"revise"
+],
+[
+"b-open",
+"equally significantly is the phenomenon's relationship to",
+"revise"
+],
+[
+"b-open",
+"equally significant is the phenomenons' relationship to",
+"revise"
+],
+[
+"b-mlead",
+"this dimension operates through",
+"accept"
+],
+[
+"b-mlead",
+"this works through",
+"accept"
+],
+[
+"b-mlead",
+"this dimension functions though",
+"revise"
+],
+[
+"b-mlead",
+"this dimension function through",
+"revise"
+],
+[
+"b-mlead",
+"this dimension functions via of",
+"revise"
+],
+[
+"b-elead",
+"as shown by",
+"accept"
+],
+[
+"b-elead",
+"as illustrated by",
+"accept"
+],
+[
+"b-elead",
+"as evident by",
+"revise"
+],
+[
+"b-elead",
+"as evidenced from",
+"revise"
+],
+[
+"b-elead",
+"as evidencing by",
+"revise"
+],
+[
+"b-nlead",
+"however",
+"accept"
+],
+[
+"b-nlead",
+"even so",
+"accept"
+],
+[
+"b-nlead",
+"accordingly",
+"revise"
+],
+[
+"b-nlead",
+"similarly",
+"revise"
+],
+[
+"b-nlead",
+"in other words",
+"revise"
+],
+[
+"b-temper",
+"a consideration that qualifies any uncritical endorsement of this view",
+"accept"
+],
+[
+"b-temper",
+"a consideration who tempers any uncritical endorsement of this view",
+"revise"
+],
+[
+"b-temper",
+"a consideration that tempers any uncritical endorsement to this view",
+"revise"
+],
+[
+"b-temper",
+"a consideration that tempers any uncritical endorsement of this view and refutes it entirely",
+"revise"
+],
+[
+"t-parts",
+"three: both views and my opinion",
+"accept"
+],
+[
+"t-parts",
+"3, the two views and my own opinion",
+"accept"
+],
+[
+"t-parts",
+"two views, my opinion implied",
+"revise"
+],
+[
+"t-parts",
+"one: my opinion",
+"revise"
+],
+[
+"t-parts",
+"both views and a list of green habits",
+"revise"
+],
+[
+"t-core",
+"the most effective scale of action against climate change",
+"accept"
+],
+[
+"t-core",
+"whether personal or state action works better against climate change",
+"accept"
+],
+[
+"t-core",
+"governments must act on climate change",
+"revise"
+],
+[
+"t-core",
+"reducing every form of environmental harm worldwide",
+"revise"
+],
+[
+"t-core",
+"the reluctance of governments to impose costs on electorates",
+"revise"
+],
+[
+"t-core",
+"pollution",
+"not-accept"
+],
+[
+"t-facetA",
+"the importance of personal lifestyle change in cutting emissions",
+"accept"
+],
+[
+"t-facetA",
+"the primacy of individual behaviour in reducing carbon emissions",
+"accept"
+],
+[
+"t-facetA",
+"the sufficiency of household action in eliminating emissions",
+"revise"
+],
+[
+"t-facetA",
+"measuring each household's emissions",
+"revise"
+],
+[
+"t-facetA",
+"the speed at which personal habits change",
+"revise"
+],
+[
+"t-facetB",
+"the need for binding government regulation and system-wide reform",
+"accept"
+],
+[
+"t-facetB",
+"the necessity of state regulation and structural reform",
+"accept"
+],
+[
+"t-facetB",
+"a levy so that polluting costs more",
+"revise"
+],
+[
+"t-facetB",
+"the capacity of the state to compel compliance",
+"revise"
+],
+[
+"t-facetB",
+"the scale of investment needed to rebuild energy systems",
+"revise"
+],
+[
+"t-position",
+"governments must lead through binding rules, while personal change builds the public support those rules need",
+"accept"
+],
+[
+"t-position",
+"structural regulation must carry the decisive share, with individual action supplying its mandate",
+"accept"
+],
+[
+"t-position",
+"personal restraint alone will deliver the reduction we need",
+"revise"
+],
+[
+"t-position",
+"governments should regulate firms while leaving household consumption wholly unlegislated",
+"revise"
+],
+[
+"t-position",
+"policy should rely on incentive rather than prohibition",
+"revise"
+],
+[
+"t-position",
+"both sides have a point",
+"not-accept"
+],
+[
+"t-limits",
+"people cannot change the transport systems they live in, and big laws collapse without public support",
+"accept"
+],
+[
+"t-limits",
+"personal choices are constrained by infrastructure, and regulation needs public consent",
+"accept"
+],
+[
+"t-limits",
+"personal choices achieve nothing and regulation always fails",
+"revise"
+],
+[
+"t-limits",
+"solar panels are costly and electric cars have a short range",
+"revise"
+],
+[
+"t-limits",
+"consumer demand shifts markets and carbon pricing cuts emissions",
+"revise"
+],
+[
+"t-example",
+"a concrete, recognisable case",
+"accept"
+],
+[
+"t-example",
+"a clearly hypothetical person",
+"accept"
+],
+[
+"t-example",
+"a global emissions figure",
+"revise"
+],
+[
+"t-example",
+"a quotation from a climate scientist",
+"revise"
+],
+[
+"t-example",
+"my family's recycling routine",
+"revise"
+],
+[
+"i-core",
+"the level at which action against climate change works best",
+"accept"
+],
+[
+"i-core",
+"the level which intervention against climate change is most effective",
+"revise"
+],
+[
+"i-core",
+"the level at which intervention against climate change are most effective",
+"revise"
+],
+[
+"i-core",
+"the level at which intervention against climate change is most effectively",
+"revise"
+],
+[
+"i-core",
+"climate change",
+"not-accept"
+],
+[
+"i-sideA",
+"the role of individual behavioural change",
+"accept"
+],
+[
+"i-sideA",
+"the impact of household choices",
+"accept"
+],
+[
+"i-sideA",
+"the omnipotence of personal lifestyle choices",
+"revise"
+],
+[
+"i-sideA",
+"the power of personalised lifestyle choices",
+"revise"
+],
+[
+"i-sideA",
+"the power of personally lifestyle choices",
+"revise"
+],
+[
+"i-sideA",
+"green energy",
+"not-accept"
+],
+[
+"i-sideB",
+"the significance of government action and corporate regulation",
+"accept"
+],
+[
+"i-sideB",
+"the significance of binding laws for states and companies",
+"accept"
+],
+[
+"i-sideB",
+"the significance of binding state and corporal rules",
+"revise"
+],
+[
+"i-sideB",
+"the significance of loosening state and corporate rules",
+"revise"
+],
+[
+"i-sideB",
+"the significance of state rules as the only possible solution",
+"revise"
+],
+[
+"i-pos",
+"governments must lead through binding rules, while personal change builds the public support those rules need",
+"accept"
+],
+[
+"i-pos",
+"structural regulation must make the decisive share, with individual action supplying its mandate",
+"revise"
+],
+[
+"i-pos",
+"structural regulation must carry the decisive share, with individual action supplies its mandate",
+"revise"
+],
+[
+"i-pos",
+"structural regulation must carry the decisive share, with individual action supplying their mandate",
+"revise"
+],
+[
+"i-pos",
+"climate change is a serious problem",
+"not-accept"
+],
+[
+"a-facet",
+"the importance of personal lifestyle change in cutting emissions",
+"accept"
+],
+[
+"a-facet",
+"the primacy of individual behaviour in the reduction of carbon emissions",
+"accept"
+],
+[
+"a-facet",
+"the primary of individual behavioural change in the reduction of emissions",
+"revise"
+],
+[
+"a-facet",
+"the primacy of individual behavioural change on the reduction of emissions",
+"revise"
+],
+[
+"a-facet",
+"the proven primacy of individual behavioural change in the reduction of emissions",
+"revise"
+],
+[
+"a-mech",
+"adding up millions of household purchases until firms change what they supply and green habits become normal",
+"accept"
+],
+[
+"a-mech",
+"aggregating consumer demand so that producers redirect supply",
+"accept"
+],
+[
+"a-mech",
+"making plant-based ranges and domestic solar ordinary consumer choices",
+"revise"
+],
+[
+"a-mech",
+"requiring every household to forgo flying",
+"revise"
+],
+[
+"a-mech",
+"establishing social norms that make conspicuous consumption disreputable",
+"revise"
+],
+[
+"a-mech",
+"aggregate household demand so that supply changes",
+"revise"
+],
+[
+"a-ex",
+"plant-based foods and rooftop solar panels that consumer demand has made ordinary",
+"accept"
+],
+[
+"a-ex",
+"the spread of electric cars and heat pumps as shoppers demanded them",
+"accept"
+],
+[
+"a-ex",
+"the elimination of fossil fuels through consumer boycotts",
+"revise"
+],
+[
+"a-ex",
+"households sorting recycling into separate bins",
+"revise"
+],
+[
+"a-ex",
+"a carbon tax that made petrol dearer",
+"revise"
+],
+[
+"a-nu",
+"personal emissions depend mostly on transport and energy systems that people cannot change",
+"accept"
+],
+[
+"a-nu",
+"individual footprints are largely shaped by infrastructure beyond personal control",
+"accept"
+],
+[
+"a-nu",
+"households that adopt green habits encourage their neighbours to follow",
+"revise"
+],
+[
+"a-nu",
+"voluntary restraint has never reduced emissions in any country",
+"revise"
+],
+[
+"a-nu",
+"recycling rules vary so much that few households know which bin to use",
+"revise"
+],
+[
+"a-nu",
+"individual footprints are entirely determined by infrastructure that the individual cannot control",
+"revise"
+],
+[
+"a-who",
+"an environmentally conscious commuter",
+"accept"
+],
+[
+"a-who",
+"a committed commuter",
+"accept"
+],
+[
+"a-who",
+"a conscious commuter",
+"revise"
+],
+[
+"a-who",
+"a conscientious commuters",
+"revise"
+],
+[
+"a-who",
+"every conscientious commuter in the world",
+"revise"
+],
+[
+"a-case",
+"still has to drive to work if no train serves the town",
+"accept"
+],
+[
+"a-case",
+"must still drive to work where no rail service exist",
+"revise"
+],
+[
+"a-case",
+"must still to drive to work where no rail service exists",
+"revise"
+],
+[
+"a-case",
+"must still drive to work where no rail service exists, so personal effort is pointless",
+"revise"
+],
+[
+"b-facet",
+"the need for binding government regulation and system-wide reform",
+"accept"
+],
+[
+"b-facet",
+"the necessity of statutory regulation and structural reform",
+"accept"
+],
+[
+"b-facet",
+"the necessity of statuary regulation and of structural reform",
+"revise"
+],
+[
+"b-facet",
+"the necessary of statutory regulation and of structural reform",
+"revise"
+],
+[
+"b-facet",
+"the necessity of voluntary regulation and of structural reform",
+"revise"
+],
+[
+"b-mech",
+"making pollution costly and rebuilding energy supply so that the clean option becomes the default",
+"accept"
+],
+[
+"b-mech",
+"taxing carbon and rebuilding energy systems so that the clean choice becomes normal",
+"accept"
+],
+[
+"b-mech",
+"compelling every corporation on the planet to stop emitting",
+"revise"
+],
+[
+"b-mech",
+"prohibiting the sale of polluting boilers and vehicles",
+"revise"
+],
+[
+"b-mech",
+"directing public revenue towards technologies not yet commercially viable",
+"revise"
+],
+[
+"b-mech",
+"reprice emissions and rebuild energy systems",
+"revise"
+],
+[
+"b-ex",
+"carbon taxes, cleaner electricity grids and efficiency rules that have reduced national emissions",
+"accept"
+],
+[
+"b-ex",
+"carbon pricing and efficiency standards for cars and appliances",
+"accept"
+],
+[
+"b-ex",
+"municipal recycling schemes run by councils",
+"revise"
+],
+[
+"b-ex",
+"a celebrity campaign urging viewers to switch off lights",
+"revise"
+],
+[
+"b-ex",
+"the promise of a future treaty",
+"revise"
+],
+[
+"b-nu",
+"laws this large cannot last without the public support that visible personal effort builds",
+"accept"
+],
+[
+"b-nu",
+"such sweeping regulation is fragile without public consent",
+"accept"
+],
+[
+"b-nu",
+"no government has ever legislated without the consent of its electorate",
+"revise"
+],
+[
+"b-nu",
+"governments legislate only once an issue is electorally profitable",
+"revise"
+],
+[
+"b-nu",
+"only statutory limits can compel the largest emitters",
+"revise"
+],
+[
+"b-ref",
+"such policies",
+"accept"
+],
+[
+"b-ref",
+"these measures",
+"accept"
+],
+[
+"b-ref",
+"such a measures",
+"revise"
+],
+[
+"b-ref",
+"such measure",
+"revise"
+],
+[
+"b-ref",
+"the such measures",
+"revise"
+],
+[
+"b-if",
+"if seen as unfair",
+"accept"
+],
+[
+"b-if",
+"if regarded as unjust",
+"accept"
+],
+[
+"b-if",
+"if perceiving as unjust",
+"revise"
+],
+[
+"b-if",
+"unless perceived as unjust",
+"revise"
+],
+[
+"b-if",
+"if perceived as unjust by absolutely everyone",
+"revise"
+],
+[
+"b-res",
+"might not survive the next election",
+"accept"
+],
+[
+"b-res",
+"may not survive to a change of government",
+"revise"
+],
+[
+"b-res",
+"will certainly not survive a change of government",
+"revise"
+],
+[
+"b-res",
+"may not be survived a change of government",
+"revise"
+],
+[
+"c-open",
+"to summarize",
+"accept"
+],
+[
+"c-open",
+"in summary",
+"accept"
+],
+[
+"c-open",
+"to summarise up",
+"revise"
+],
+[
+"c-open",
+"in summarise",
+"revise"
+],
+[
+"c-open",
+"as a summary",
+"revise"
+],
+[
+"c-eval",
+"an isolated evaluation of action against climate change",
+"accept"
+],
+[
+"c-eval",
+"an isolated assessment of climate policy",
+"accept"
+],
+[
+"c-eval",
+"an isolating evaluation of climate action",
+"revise"
+],
+[
+"c-eval",
+"a isolated evaluation of climate action",
+"revise"
+],
+[
+"c-eval",
+"an isolated evaluation of every environmental problem",
+"revise"
+],
+[
+"c-ignore",
+"inevitably ignores the broader realities of the issue",
+"accept"
+],
+[
+"c-ignore",
+"systematically ignore the broader realities of the issue",
+"revise"
+],
+[
+"c-ignore",
+"systematic ignores the broader realities of the issue",
+"revise"
+],
+[
+"c-ignore",
+"systematically ignores the broader realities of the issue, as all experts agree",
+"revise"
+],
+[
+"c-lead",
+"for this reason",
+"accept"
+],
+[
+"c-lead",
+"it is for this reason why",
+"revise"
+],
+[
+"c-lead",
+"it is by this reason that",
+"revise"
+],
+[
+"c-lead",
+"this is for this reason that",
+"revise"
+],
+[
+"c-pos",
+"regulation must do most of the work, while individual action builds its public support",
+"accept"
+],
+[
+"c-pos",
+"governments should lead with strong laws, while citizens keep the public on their side",
+"accept"
+],
+[
+"c-pos",
+"structural regulation must carry the decisive share",
+"revise"
+],
+[
+"c-pos",
+"the state must lead alone, since personal effort is irrelevant",
+"revise"
+],
+[
+"c-pos",
+"the state might perhaps consider leading in some limited areas",
+"revise"
+],
+[
+"c-rat",
+"emissions depend on the systems around people more than on their good intentions",
+"accept"
+],
+[
+"c-rat",
+"carbon output is shaped by infrastructure rather than by intention",
+"accept"
+],
+[
+"c-rat",
+"consumer choice determines the fortunes of every industry",
+"revise"
+],
+[
+"c-rat",
+"the scale of the problem exceeds what voluntary action could plausibly achieve",
+"revise"
+],
+[
+"c-rat",
+"responsibility should rest with those who decide what the majority may choose",
+"revise"
+]
+]

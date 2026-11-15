@@ -1,0 +1,1227 @@
+[
+[
+"t-type",
+"discuss both views and give my own opinion",
+"accept"
+],
+[
+"t-type",
+"discussion",
+"accept"
+],
+[
+"t-type",
+"to what extent do you agree",
+"revise"
+],
+[
+"t-type",
+"advantages outweigh disadvantages",
+"revise"
+],
+[
+"t-type",
+"a two-part question",
+"revise"
+],
+[
+"t-trap",
+"giving my opinion only in the conclusion",
+"accept"
+],
+[
+"t-trap",
+"discussing only one view",
+"accept"
+],
+[
+"t-trap",
+"forgetting to propose a solution",
+"revise"
+],
+[
+"t-trap",
+"not saying which side carries more weight",
+"revise"
+],
+[
+"t-trap",
+"running out of time",
+"not-accept"
+],
+[
+"t-budget",
+"about 50, 95, 95 and 45 words",
+"accept"
+],
+[
+"t-budget",
+"50 / 95 / 95 / 45",
+"accept"
+],
+[
+"t-budget",
+"about 285 words in all",
+"accept"
+],
+[
+"t-budget",
+"100, 60, 60, 100",
+"revise"
+],
+[
+"t-budget",
+"70 each",
+"revise"
+],
+[
+"t-paras",
+"four paragraphs, position in the introduction",
+"accept"
+],
+[
+"t-paras",
+"intro with my position, body A, body B, conclusion",
+"accept"
+],
+[
+"t-paras",
+"introduction, two bodies, my opinion only in the conclusion",
+"revise"
+],
+[
+"t-paras",
+"five paragraphs",
+"revise"
+],
+[
+"t-paras",
+"introduction, one body, conclusion",
+"revise"
+],
+[
+"i-open",
+"the ongoing debate surrounding",
+"accept"
+],
+[
+"i-open",
+"the current discourse surrounding",
+"accept"
+],
+[
+"i-open",
+"the ongoing discourse surrounding about",
+"revise"
+],
+[
+"i-open",
+"the ongoing discourse surrounds",
+"revise"
+],
+[
+"i-open",
+"the never-ending discourse surrounding",
+"revise"
+],
+[
+"i-implic",
+"often highlights its multifaceted implications",
+"accept"
+],
+[
+"i-implic",
+"frequently highlight its multifaceted implications",
+"revise"
+],
+[
+"i-implic",
+"frequently highlights its multifaced implications",
+"revise"
+],
+[
+"i-implic",
+"frequently highlights its many-sided multifaceted implications",
+"revise"
+],
+[
+"i-while",
+"although considerable attention is paid to",
+"accept"
+],
+[
+"i-while",
+"while much attention is given to",
+"accept"
+],
+[
+"i-while",
+"while considerable attention is made to",
+"revise"
+],
+[
+"i-while",
+"despite considerable attention is paid to",
+"revise"
+],
+[
+"i-while",
+"while considerable attention is payed to",
+"revise"
+],
+[
+"i-ignore",
+"is equally hard to ignore",
+"accept"
+],
+[
+"i-ignore",
+"are equally difficult to ignore",
+"revise"
+],
+[
+"i-ignore",
+"is equally difficult to be ignored",
+"revise"
+],
+[
+"i-ignore",
+"is equally difficult for ignoring",
+"revise"
+],
+[
+"i-lead",
+"this essay argues that",
+"accept"
+],
+[
+"i-lead",
+"this essay maintains that",
+"accept"
+],
+[
+"i-lead",
+"this essay contends with that",
+"revise"
+],
+[
+"i-lead",
+"this essay contents that",
+"revise"
+],
+[
+"i-lead",
+"this essay will consider whether",
+"revise"
+],
+[
+"b-open",
+"equally important is the phenomenon's relationship to",
+"accept"
+],
+[
+"b-open",
+"equally significant are the phenomenon's relationship to",
+"revise"
+],
+[
+"b-open",
+"equally significantly is the phenomenon's relationship to",
+"revise"
+],
+[
+"b-open",
+"equally significant is the phenomenons' relationship to",
+"revise"
+],
+[
+"b-mlead",
+"this dimension operates through",
+"accept"
+],
+[
+"b-mlead",
+"this works through",
+"accept"
+],
+[
+"b-mlead",
+"this dimension functions though",
+"revise"
+],
+[
+"b-mlead",
+"this dimension function through",
+"revise"
+],
+[
+"b-mlead",
+"this dimension functions via of",
+"revise"
+],
+[
+"b-elead",
+"as shown by",
+"accept"
+],
+[
+"b-elead",
+"as illustrated by",
+"accept"
+],
+[
+"b-elead",
+"as evident by",
+"revise"
+],
+[
+"b-elead",
+"as evidenced from",
+"revise"
+],
+[
+"b-elead",
+"as evidencing by",
+"revise"
+],
+[
+"b-nlead",
+"however",
+"accept"
+],
+[
+"b-nlead",
+"even so",
+"accept"
+],
+[
+"b-nlead",
+"accordingly",
+"revise"
+],
+[
+"b-nlead",
+"similarly",
+"revise"
+],
+[
+"b-nlead",
+"in other words",
+"revise"
+],
+[
+"b-temper",
+"a consideration that qualifies any uncritical endorsement of this view",
+"accept"
+],
+[
+"b-temper",
+"a consideration who tempers any uncritical endorsement of this view",
+"revise"
+],
+[
+"b-temper",
+"a consideration that tempers any uncritical endorsement to this view",
+"revise"
+],
+[
+"b-temper",
+"a consideration that tempers any uncritical endorsement of this view and refutes it entirely",
+"revise"
+],
+[
+"c-open",
+"in the final analysis",
+"accept"
+],
+[
+"c-open",
+"on balance",
+"accept"
+],
+[
+"c-open",
+"eventually",
+"revise"
+],
+[
+"c-open",
+"lastly",
+"revise"
+],
+[
+"c-open",
+"ultimate",
+"revise"
+],
+[
+"c-narrow",
+"represents an unduly narrow perspective",
+"accept"
+],
+[
+"c-narrow",
+"represent a dangerously narrow perspective",
+"revise"
+],
+[
+"c-narrow",
+"represents a dangerous narrow perspective",
+"revise"
+],
+[
+"c-narrow",
+"represents a dangerously narrow perspective, as everyone agrees",
+"revise"
+],
+[
+"c-lead",
+"the evidence considered here suggests that",
+"accept"
+],
+[
+"c-lead",
+"the evidence considered here proves beyond doubt that",
+"revise"
+],
+[
+"c-lead",
+"the evidences considered here support the view that",
+"revise"
+],
+[
+"c-lead",
+"the evidence considering here supports the view that",
+"revise"
+],
+[
+"t-parts",
+"three: both views and my opinion",
+"accept"
+],
+[
+"t-parts",
+"3, the two views and my own opinion",
+"accept"
+],
+[
+"t-parts",
+"two views, opinion implied",
+"revise"
+],
+[
+"t-parts",
+"one: my opinion",
+"revise"
+],
+[
+"t-parts",
+"both views and a design for a building",
+"revise"
+],
+[
+"t-core",
+"the rules that should guide new buildings in historic city areas",
+"accept"
+],
+[
+"t-core",
+"how new buildings in old cities should be designed",
+"accept"
+],
+[
+"t-core",
+"new buildings should be traditional",
+"revise"
+],
+[
+"t-core",
+"the protection of ancient monuments across Europe",
+"revise"
+],
+[
+"t-core",
+"the influence of planning authorities on a city",
+"revise"
+],
+[
+"t-core",
+"architecture",
+"not-accept"
+],
+[
+"t-facetA",
+"the duty of new buildings to blend in with older streets",
+"accept"
+],
+[
+"t-facetA",
+"the need for new development to fit its historic surroundings",
+"accept"
+],
+[
+"t-facetA",
+"the obligation upon every new building to imitate an older style",
+"revise"
+],
+[
+"t-facetA",
+"the economic value of historic quarters for tourism",
+"revise"
+],
+[
+"t-facetA",
+"the attachment residents feel to their district",
+"revise"
+],
+[
+"t-facetB",
+"the promotion of clearly modern architecture",
+"accept"
+],
+[
+"t-facetB",
+"support for bold contemporary design",
+"accept"
+],
+[
+"t-facetB",
+"the removal of all aesthetic regulation",
+"revise"
+],
+[
+"t-facetB",
+"the commercial advantage of a modern landmark",
+"revise"
+],
+[
+"t-facetB",
+"the freedom of the architect from the planning committee",
+"revise"
+],
+[
+"t-position",
+"cities should control height and materials but leave the style to the architect",
+"accept"
+],
+[
+"t-position",
+"planning should govern scale and material while leaving stylistic expression free",
+"accept"
+],
+[
+"t-position",
+"every new building should match the style of those already standing beside it",
+"revise"
+],
+[
+"t-position",
+"each district should decide by consultation",
+"revise"
+],
+[
+"t-position",
+"conservation rules should bind in historic quarters and nowhere else",
+"revise"
+],
+[
+"t-position",
+"it depends on the city",
+"not-accept"
+],
+[
+"t-limits",
+"close copying makes fake streets, and buildings that ignore their setting harm it together",
+"accept"
+],
+[
+"t-limits",
+"imitation produces pastiche, and novelty can clash with the street",
+"accept"
+],
+[
+"t-limits",
+"traditional styles are always dull and modern buildings always clash",
+"revise"
+],
+[
+"t-limits",
+"stone is expensive and glass towers waste energy",
+"revise"
+],
+[
+"t-limits",
+"codes keep streets coherent and landmarks express their era",
+"revise"
+],
+[
+"t-example",
+"a concrete, recognisable case",
+"accept"
+],
+[
+"t-example",
+"a clearly hypothetical building",
+"accept"
+],
+[
+"t-example",
+"a visitor figure from a report",
+"revise"
+],
+[
+"t-example",
+"a famous architect's remark",
+"revise"
+],
+[
+"t-example",
+"my favourite holiday",
+"revise"
+],
+[
+"i-core",
+"the rules that should guide new building in historic cities",
+"accept"
+],
+[
+"i-core",
+"the principals that should govern new construction in historic urban settings",
+"revise"
+],
+[
+"i-core",
+"the principles that should governing new construction in historic urban settings",
+"revise"
+],
+[
+"i-core",
+"the principles that should govern new construction in historical urban settings",
+"revise"
+],
+[
+"i-core",
+"old buildings",
+"not-accept"
+],
+[
+"i-sideA",
+"the case for new buildings that fit their historic setting",
+"accept"
+],
+[
+"i-sideA",
+"the value of traditional styles that match older streets",
+"accept"
+],
+[
+"i-sideA",
+"the appeal of traditional styles that blends in",
+"revise"
+],
+[
+"i-sideA",
+"the appeal of traditionalist styles that blend in",
+"revise"
+],
+[
+"i-sideA",
+"the duty of every street to look exactly as it did a century ago",
+"revise"
+],
+[
+"i-sideA",
+"glass towers",
+"not-accept"
+],
+[
+"i-sideB",
+"the significance of bold, modern architecture",
+"accept"
+],
+[
+"i-sideB",
+"the significance of innovative contemporary buildings",
+"accept"
+],
+[
+"i-sideB",
+"the significance of bold contemporarily design",
+"revise"
+],
+[
+"i-sideB",
+"the significance of boldly temporary design",
+"revise"
+],
+[
+"i-sideB",
+"the significance of modern design in every street without exception",
+"revise"
+],
+[
+"i-pos",
+"cities should control height and materials but leave the style to the architect",
+"accept"
+],
+[
+"i-pos",
+"planning should govern scale and material while leaving stylistic expression freely",
+"revise"
+],
+[
+"i-pos",
+"planning should govern scale and material while leave stylistic expression free",
+"revise"
+],
+[
+"i-pos",
+"planning should govern scale and material while leaving stylish expression free",
+"revise"
+],
+[
+"i-pos",
+"both styles have merits",
+"not-accept"
+],
+[
+"a-open",
+"the main justification often cited within this context is",
+"accept"
+],
+[
+"a-open",
+"the primary justification often sited within this context is",
+"revise"
+],
+[
+"a-open",
+"the primary justification often cited within this context are",
+"revise"
+],
+[
+"a-open",
+"the primarily justification often cited within this context is",
+"revise"
+],
+[
+"a-facet",
+"the duty of new buildings to blend in with the older streets around them",
+"accept"
+],
+[
+"a-facet",
+"the obligation of new development to fit its historic context",
+"accept"
+],
+[
+"a-facet",
+"the obligation of new development to harmonise its historic surroundings",
+"revise"
+],
+[
+"a-facet",
+"the obligation of new development to harmony with its historic surroundings",
+"revise"
+],
+[
+"a-facet",
+"the obligation of every new building in the country to copy an older style",
+"revise"
+],
+[
+"a-mlead",
+"the argument relies on",
+"accept"
+],
+[
+"a-mlead",
+"this argument rests upon",
+"accept"
+],
+[
+"a-mlead",
+"the argument rests in",
+"revise"
+],
+[
+"a-mlead",
+"the argument rest on",
+"revise"
+],
+[
+"a-mlead",
+"the argument is resting on",
+"revise"
+],
+[
+"a-mech",
+"keeping the materials, height and spacing of a street so that it still reads as a whole",
+"accept"
+],
+[
+"a-mech",
+"preserving the scale and rhythm of a street so that its character survives",
+"accept"
+],
+[
+"a-mech",
+"enforcing conservation-area codes on height and frontage",
+"revise"
+],
+[
+"a-mech",
+"restricting the height of new buildings so that rooflines survive",
+"revise"
+],
+[
+"a-mech",
+"obliging developers to use stone quarried in the region",
+"revise"
+],
+[
+"a-mech",
+"maintain the material and scale of a street",
+"revise"
+],
+[
+"a-elead",
+"this is illustrated by",
+"accept"
+],
+[
+"a-elead",
+"the point is exemplified by",
+"accept"
+],
+[
+"a-elead",
+"the point is illustrating by",
+"revise"
+],
+[
+"a-elead",
+"the point is illustrated from",
+"revise"
+],
+[
+"a-elead",
+"the point illustrated by",
+"revise"
+],
+[
+"a-ex",
+"conservation rules that control the height, frontage and outside materials of new buildings",
+"accept"
+],
+[
+"a-ex",
+"planning codes that limit height and require local materials",
+"accept"
+],
+[
+"a-ex",
+"entire historic city centres closed to all new construction",
+"revise"
+],
+[
+"a-ex",
+"restrictions on advertising and shopfronts",
+"revise"
+],
+[
+"a-ex",
+"new quarters designed wholly in the vernacular idiom",
+"revise"
+],
+[
+"a-nlead",
+"nevertheless",
+"accept"
+],
+[
+"a-nlead",
+"yet",
+"accept"
+],
+[
+"a-nlead",
+"therefore",
+"revise"
+],
+[
+"a-nlead",
+"in addition",
+"revise"
+],
+[
+"a-nlead",
+"for instance",
+"revise"
+],
+[
+"a-fail",
+"this approach does not account for",
+"accept"
+],
+[
+"a-fail",
+"this view fails to account for",
+"accept"
+],
+[
+"a-fail",
+"this approach fails accounting for",
+"revise"
+],
+[
+"a-fail",
+"this approach fails to account to",
+"revise"
+],
+[
+"a-fail",
+"this approach completely fails to account for",
+"revise"
+],
+[
+"a-nu",
+"the fake streets that close copying creates, because admired areas grew from many periods",
+"accept"
+],
+[
+"a-nu",
+"the pastiche that strict imitation produces, as admired quarters grew through successive styles",
+"accept"
+],
+[
+"a-nu",
+"the beauty that strict imitation preserves",
+"revise"
+],
+[
+"a-nu",
+"the fact that no modern building has ever been accepted in a historic quarter",
+"revise"
+],
+[
+"a-nu",
+"the pastiche that imitation produces, which proves conservation rules worthless",
+"revise"
+],
+[
+"a-nu",
+"the pastiche that strict imitation produces, since every admired quarter accumulated successive styles",
+"revise"
+],
+[
+"a-who",
+"a modern office dressed up as an old townhouse",
+"accept"
+],
+[
+"a-who",
+"a new office disguising as a merchant's house",
+"revise"
+],
+[
+"a-who",
+"a new office disguised as a merchants house",
+"revise"
+],
+[
+"a-who",
+"a new office disguised like a merchant's house",
+"revise"
+],
+[
+"a-case",
+"can look like a film set",
+"accept"
+],
+[
+"a-case",
+"may resemble a stage set",
+"accept"
+],
+[
+"a-case",
+"can resemble to a film set",
+"revise"
+],
+[
+"a-case",
+"can resembles a film set",
+"revise"
+],
+[
+"a-case",
+"will invariably resemble a film set",
+"revise"
+],
+[
+"b-facet",
+"the promotion of clearly modern architecture",
+"accept"
+],
+[
+"b-facet",
+"the encouragement of bold contemporary design",
+"accept"
+],
+[
+"b-facet",
+"the encouragement of unambiguously temporary architectural expression",
+"revise"
+],
+[
+"b-facet",
+"the encouragement of unambiguously contemporary architect expression",
+"revise"
+],
+[
+"b-facet",
+"the enforcement of unambiguously contemporary architectural expression",
+"revise"
+],
+[
+"b-mech",
+"letting each generation show its own skills and values in the buildings it leaves",
+"accept"
+],
+[
+"b-mech",
+"allowing every period to express its technology and priorities in the city",
+"accept"
+],
+[
+"b-mech",
+"inserting modern civic buildings into historic centres",
+"revise"
+],
+[
+"b-mech",
+"exploiting structural methods that let towers rise on small sites",
+"revise"
+],
+[
+"b-mech",
+"permitting buildings to be planned around how people live and work today",
+"revise"
+],
+[
+"b-mech",
+"allow each generation to register its priorities",
+"revise"
+],
+[
+"b-ex",
+"boldly modern public buildings placed inside old city centres",
+"accept"
+],
+[
+"b-ex",
+"a contemporary museum set among medieval streets",
+"accept"
+],
+[
+"b-ex",
+"replica facades rebuilt in the style of the streets they replaced",
+"revise"
+],
+[
+"b-ex",
+"glass towers on vacant land in out-of-town business parks",
+"revise"
+],
+[
+"b-ex",
+"cities in which every new structure must be modern",
+"revise"
+],
+[
+"b-ref",
+"this practice",
+"accept"
+],
+[
+"b-ref",
+"this approach",
+"accept"
+],
+[
+"b-ref",
+"do so",
+"revise"
+],
+[
+"b-ref",
+"doing such",
+"revise"
+],
+[
+"b-ref",
+"doing it so",
+"revise"
+],
+[
+"b-dev",
+"keeps an old centre from becoming a museum",
+"accept"
+],
+[
+"b-dev",
+"prevents an old centre to harden into a museum",
+"revise"
+],
+[
+"b-dev",
+"prevent an old centre from hardening into a museum",
+"revise"
+],
+[
+"b-dev",
+"prevents every old centre in the world from hardening into a museum",
+"revise"
+],
+[
+"b-nu",
+"buildings that ignore their setting may impress alone but harm the street together",
+"accept"
+],
+[
+"b-nu",
+"landmarks indifferent to their context can clash when grouped together",
+"accept"
+],
+[
+"b-nu",
+"flat roofs and glazing suit warm climates better",
+"revise"
+],
+[
+"b-nu",
+"the majority of the world's cities have no historic fabric worth protecting",
+"revise"
+],
+[
+"b-nu",
+"residents are rarely consulted before a landmark is imposed upon them",
+"revise"
+],
+[
+"b-tow",
+"several glass towers, each in its own shape",
+"accept"
+],
+[
+"b-tow",
+"several glass towers, each compete for attention",
+"revise"
+],
+[
+"b-tow",
+"several glass towers, each competing for attentions",
+"revise"
+],
+[
+"b-tow",
+"several glass tower, each competing for attention",
+"revise"
+],
+[
+"b-crowd",
+"can crowd a quiet old square",
+"accept"
+],
+[
+"b-crowd",
+"can overwhelming a quiet historic square",
+"revise"
+],
+[
+"b-crowd",
+"can overwhelm a quite historic square",
+"revise"
+],
+[
+"b-crowd",
+"will inevitably destroy every historic square",
+"revise"
+],
+[
+"c-lens",
+"viewing new buildings in historic settings exclusively through a singular lens",
+"accept"
+],
+[
+"c-lens",
+"viewing architecture in old cities exclusively through a singular lens",
+"accept"
+],
+[
+"c-lens",
+"viewing new construction in historic cities exclusive through a singular lens",
+"revise"
+],
+[
+"c-lens",
+"viewing new construction in historic cities exclusively from a singular lens",
+"revise"
+],
+[
+"c-lens",
+"viewing new construction in historic cities exclusively through a singular lense",
+"revise"
+],
+[
+"c-pos",
+"councils should regulate scale and materials while giving architects freedom of style",
+"accept"
+],
+[
+"c-pos",
+"cities should limit height and materials but let architects choose the design",
+"accept"
+],
+[
+"c-pos",
+"planning should govern scale and material",
+"revise"
+],
+[
+"c-pos",
+"cities should dictate every detail of style as well as height",
+"revise"
+],
+[
+"c-pos",
+"cities might possibly consider some limits on height",
+"revise"
+],
+[
+"c-rat",
+"a city is valuable when people can read the different periods in its buildings",
+"accept"
+],
+[
+"c-rat",
+"the worth of a city lies in visible layers from successive eras",
+"accept"
+],
+[
+"c-rat",
+"the character of a historic quarter is irreplaceable once disrupted",
+"revise"
+],
+[
+"c-rat",
+"imitation of an older style is never capable of producing a building of merit",
+"revise"
+],
+[
+"c-rat",
+"every generation is entitled to leave its own mark on the city",
+"revise"
+]
+]
