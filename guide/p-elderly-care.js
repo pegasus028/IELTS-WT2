@@ -362,7 +362,7 @@
               { re: 'can sees', hint: 'After "can" use the base form.' }],
             hint: 'Pronoun + modal + verb + "this" + an adverb + a preposition.', hint2: 'Open My Spellbook: the third sentence of your template Body A line.' },
           { id: 'a-ex', label: 'Example', tag: 'tr-no-example', v: 'exA', post: '.',
-            ask: 'Variable 4. Which example shows Facet A working: the cost of long care for older people shared by everyone?',
+            ask: 'Variable 4. Which example shows Facet A working, with everyone sharing the cost of long care for older people?',
             askFree: 'Variable 4. Write Example A: a real scheme a reader can picture, where everyone pays towards care for older people.',
             ok: 'national care insurance paid for by contributions from everyone, as in Japan',
             wrong: [

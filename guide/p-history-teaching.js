@@ -76,7 +76,7 @@
               { re: 'teachers? (are )?trained|assessed', hint: 'Teacher training is not the issue. Name the issue that holds both views.' },
               { re: '\\bhours\\b|timetable', hint: 'The prompt is not about how many hours. Name the issue that holds both views.' },
               { re: 'compulsory after|after the age', hint: 'That is a different question. Name the issue that holds both views.' }],
-            hint: 'A Core Topic is one noun phrase that holds both views: the history of one country and the history of the world.', hint2: 'Start with a noun for how wide something is ("the range"), then of what, and for whom.', ai: true },
+            hint: 'A Core Topic is one noun phrase that holds both views: the history of one country and the history of the world.', hint2: 'Start with a noun that means "how wide something is", then say of what, and for whom.', ai: true },
           { id: 't-facetA', label: 'Facet A', tag: 'tr-partial', v: 'facetA',
             ask: 'Variable 2. Which is the first view, the one for national history?',
             askFree: 'Variable 2. Write Facet A: the first view, the one for national history, as a noun phrase.',
@@ -595,7 +595,7 @@
               { re: 'worth to', hint: 'After "worth" use the -ing form.' }],
             hint: 'A relative clause that points back at the whole idea.', hint2: 'Open My Spellbook: the end of your template Body B line. After "worth" comes an -ing verb.' },
           { id: 'b-ref', label: 'Reference', tag: 'cc-reference',
-            ask: 'The last sentence points back at the shallow course without repeating it. Which start is right?',
+            ask: 'The last sentence points back at the problem in your limit without repeating it. Which start is right?',
             askFree: 'Start the last sentence of Body B with two words that point back at the problem in your limit.',
             ok: 'This problem',
             wrong: [

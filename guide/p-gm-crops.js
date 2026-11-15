@@ -437,7 +437,7 @@
             hint: 'One family a reader can picture, and what happens to them.', hint2: 'Subject: one family with no money. Verb: one that means "remains". Then an adjective.', ai: true },
           { id: 'a-full', label: 'Time clause', tag: 'gra-concession', post: '.',
             ask: 'Now the second half of that sentence. Which one is right?',
-            askFree: 'Finish the sentence: in spite of what is the family hungry?',
+            askFree: 'Finish the sentence: show that the family stays hungry even though there is food around them.',
             ok: 'even when the markets are full',
             wrong: [
               ['even the markets are full', 'A word is missing after "even": without it, the two halves are not joined.'],
