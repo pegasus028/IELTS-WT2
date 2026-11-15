@@ -89,7 +89,7 @@
             reject: [{ re: 'all scientific|all research|stop until', hint: 'Too wide: the prompt is about space spending only.' },
               { re: '\\b(every|closed for good|close every)\\b', hint: 'Too absolute: the first view wants the money used elsewhere, not every agency closed.' },
               { re: 'own country|inside (their|the) country|abroad', hint: 'The prompt compares space and Earth, not home and abroad.' }],
-            hint: 'The first sentence of the prompt says where the money should go instead. Make it a noun phrase.', hint2: 'Start with "the case for" + an -ing verb: what should happen to space budgets?', ai: true },
+            hint: 'The first sentence of the prompt says where the money should go instead. Make it a noun phrase.', hint2: 'Start with a noun for an argument, then an -ing verb: what should happen to space budgets?', ai: true },
           { id: 't-facetB', label: 'Facet B', tag: 'tr-partial', v: 'facetB',
             ask: 'Variable 6. Which is the second view, the one in favour of space research?',
             askFree: 'Variable 6. Write Facet B: the second view, the one in favour of space research, as a noun phrase.',
@@ -317,7 +317,7 @@
             ok: 'It works by',
             wrong: [
               ['Also, it works by', 'This sentence does not add a new point. It explains how the first point works.'],
-              ['It is work by', '"Work" here is the verb of the sentence, so it needs its present simple form, not "is".'],
+              ['It is work by', '"Is work" is not a verb form. Use the present simple of "work".'],
               ['It works on', 'Check the preposition: the next piece is an -ing verb that says how.']
             ],
             shape: 'three words', expect: 'It works by (also accepted: this works by)',
@@ -500,7 +500,7 @@
               { re: 'no other industry', hint: 'Skills nobody else can use never reach everyday life.' },
               { re: 'investors?|profit', hint: 'That is about profit. Say how research produces useful technology.' },
               { re: '^(force|push|drive|create|make|produce)\\b', hint: 'After "It operates through" use the -ing form.' }],
-            hint: 'Say what hard conditions in space make engineers do, and where the result goes later.', hint2: 'Start with an -ing verb like "forcing"; then what is forced, and where it ends up.', ai: true },
+            hint: 'Say what hard conditions in space make engineers do, and where the result goes later.', hint2: 'Start with an -ing verb like "pushing"; then what is pushed, and where it ends up.', ai: true },
           { id: 'b-elead', label: 'Example frame', tag: 'lr-precision', pre: ', ',
             ask: 'Your template adds the example in the same sentence. Which words are correct?',
             askFree: 'Write your template words that add the example to the same sentence (after a comma).',
@@ -664,7 +664,7 @@
             ok: 'Taking pressing problems on Earth together with useful new technology',
             wrong: [
               ['Taking pressing problems on Earth together with national pride', 'The second side is technology, not pride.'],
-              ['To take pressing problems on Earth together with useful new technology', 'This form gives a purpose and leaves the sentence without a clear subject: use the -ing form.'],
+              ['To take pressing problems on Earth together with useful new technology', 'The "to" form sounds like a purpose here and breaks the sentence: use the -ing form.'],
               ['Taking pressing problems on Earth together useful new technology', 'A word is missing between "together" and the second side.']
             ],
             shape: 'Taking + Facet A + together with + Facet B', expect: 'Taking pressing problems on Earth together with useful new technology (also accepted: weighing urgent needs on Earth against new technology)',

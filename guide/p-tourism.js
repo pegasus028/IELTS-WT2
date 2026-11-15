@@ -191,7 +191,7 @@
             wrong: [
               ['Since the dawn of time, the question of', 'A memorised opener that every examiner knows: it adds nothing. Start straight away.'],
               ['The question for', 'After "the question" the usual preposition here is a different one. Read your template line again.'],
-              ['A question of', 'This is a question everyone knows about, so the article is different.']
+              ['A question of', 'This is one particular question, the one in the prompt, so the article is different.']
             ],
             shape: 'three words', expect: 'The question of (also accepted: the issue of, the debate about)',
             accept: [['^the (question|issue) of$|^the debate (about|over|on)$']],
@@ -206,13 +206,13 @@
             wrong: [
               ['the affects of foreign tourism on local economies and the environment', 'Check the spelling of the first noun: one of this pair is usually a verb.'],
               ['foreign tourism affects local economies and the environment', 'This is a clause with a verb. After "of" you need a noun phrase.'],
-              ['the effects of foreign tourism in local economies and the environment', 'Check the preposition after "effects": an effect falls on something.']
+              ['the effects of foreign tourism in local economies and the environment', 'Check the preposition after "tourism": which one normally goes with "the effects of"?']
             ],
             shape: 'your Core Topic (a noun phrase)', expect: 'the effects of foreign tourism on local economies and the environment (also accepted: the impact of international tourism on local economies and the environment)',
             accept: [['^(the )?(effects?|impacts?|influence) of (foreign |international |global )?(tourism|travel) on (the )?local (economies|economy|communities)( and| ,)( on)? (the )?(environment|natural environment|nature|cultures?)( and (the )?(environment|nature|cultures?))?$']],
             reject: [{ re: '\\baffects?\\b', hint: 'Check the spelling: here you need the noun, not the verb.' },
               { re: '^(foreign|international) tourism\\b', hint: 'After "of" you need a noun phrase, not a clause.' },
-              { re: '\\b(effects?|impacts?) of (foreign |international )?tourism in\\b', hint: 'Check the preposition after the noun: an effect falls on something.' }],
+              { re: '\\b(effects?|impacts?) of (foreign |international )?tourism in\\b', hint: 'Check the preposition after the noun: which one goes with "effects"?' }],
             hint: 'Your Core Topic from the plan, starting with a noun, in small letters.', hint2: 'Noun + "of" + the kind of tourism + a preposition + what it changes.' },
           { id: 'i-matters', label: 'Verb', tag: 'gra-agreement', post: '.',
             ask: 'The sentence needs its verb. The subject is "The question". Which ending is right?',
@@ -532,7 +532,7 @@
               { re: 'airports?|aircraft', hint: 'That is building. Show harm to culture and nature.' }],
             hint: 'An example shows harm a visitor could photograph: one natural, one cultural.', hint2: 'Think of the sea floor near a busy beach, and an old street full of shops for visitors.', ai: true },
           { id: 'b-dev', label: 'Development', tag: 'gra-word-form', post: '.',
-            ask: 'One sentence shows the idea in a picture. Which one is right?',
+            ask: 'One sentence shows the idea with one tradition. Which one is right?',
             askFree: 'Write one sentence that shows what can happen to one local tradition.',
             ok: 'A harvest dance may become a nightly show for hotel guests',
             wrong: [

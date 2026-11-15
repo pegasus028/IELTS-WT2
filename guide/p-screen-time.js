@@ -109,16 +109,16 @@
           { id: 't-absolute', label: 'Two extreme views', tag: 'tr-generalised',
             ask: 'One group restricts screens "firmly"; the other says devices "should not be limited". What should your position do with these two extremes?',
             askFree: 'Both views are extreme. Write in one sentence what your position does with them.',
-            ok: 'Copy neither extreme: guide how screens are used instead',
+            ok: 'Follow neither extreme: guide how screens are used instead',
             wrong: [
               ['Choose "should not be limited", because devices are essential', 'This copies one extreme. It cannot answer the passive watching you will admit in Body B.'],
               ['Choose "firmly restrict", because health comes first', 'This copies the other extreme. It cannot answer the friends and skills a child loses, from Body A.'],
-              ['Copy both: restrict screens firmly and never limit them', 'The two extremes cancel each other: a screen cannot be firmly limited and never limited.']
+              ['Follow both: restrict screens firmly and never limit them', 'The two extremes cancel each other: a screen cannot be firmly limited and never limited.']
             ],
-            shape: 'one sentence: what you do with the two extremes', expect: 'Copy neither extreme: guide how screens are used instead (also accepted: avoid both absolutes; focus on what children do on screens, not only how long)',
+            shape: 'one sentence: what you do with the two extremes', expect: 'Follow neither extreme: guide how screens are used instead (also accepted: avoid both absolutes; focus on what children do on screens, not only how long)',
             accept: [['\\b(neither|not|avoid|instead|rather|middle|between|guide|guiding|balance|both)\\b'], ['extreme|absolute|view|side|screens?|use|content|guid|how']],
             reject: [{ re: '^choose|should not be limited, because|firmly restrict, because', hint: 'Choosing one extreme cannot answer its own limit.' },
-              { re: '^copy both|never limit them', hint: 'The two extremes cancel each other.' }],
+              { re: '^(copy|follow) both|never limit them', hint: 'The two extremes cancel each other.' }],
             hint: 'Each view has a limit you will admit. Can either extreme view survive its own limit?', hint2: 'Think about what children do on a screen, not only how many hours they spend.', ai: true },
           { id: 't-position', label: 'Your position', tag: 'tr-no-position', v: 'position',
             ask: 'Variable 10. Which position answers the prompt and covers both limits?',
