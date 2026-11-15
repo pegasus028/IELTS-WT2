@@ -606,6 +606,8 @@
   }
   /* 15 Nov 2026: four guidance levels. Old stored values keep working: 'guided' is Low; 'skeleton' is Low with slot labels only.
      A revision always runs at Low (the step-by-step guide has no revise mode). */
+  /* The Scriptorium's CEFR level (15 Nov 2026): B1, B2 or C1; by default C1 on the Band 8 track, otherwise B2. Saved on the progress object. */
+  function scrCefr() { var c = S.p && S.p.scrCefr; return c === 'B1' || c === 'B2' || c === 'C1' ? c : (tier() === 'C1' ? 'C1' : 'B2'); }
   function lowFor(m) { return m === 'exam' || m === 'skeleton' ? m : 'low'; }
   function levelOf(m) { return m === 'guided' || !m ? 'low' : m; }
   var UIM = { high: 'High guidance', medium: 'Medium guidance', low: 'Low guidance', guided: 'Low guidance', skeleton: 'Low guidance (slot labels)', exam: 'Exam mode' };
@@ -1275,8 +1277,14 @@
     html += '<div class="modechoice levels" role="radiogroup" aria-label="Guidance level">' + [['high', 'High guidance', 'every decision is a multiple-choice question; no clock'], ['medium', 'Medium guidance', 'the same questions, you write the answers; no clock'], ['low', 'Low guidance', 'the matrix, your frames and four boxes; 40 minutes'], ['exam', 'Exam mode', 'one page, no help, 40 minutes']].map(function (m) {
       return '<label><input type="radio" name="uim" value="' + m[0] + '"' + (lvl === m[0] ? ' checked' : '') + '> <span><b>' + m[1] + '</b><small>' + m[2] + '</small></span></label>';
     }).join('') + '</div>';
+    /* 15 Nov 2026 (T.Chris): the CEFR level of the step-by-step questions, their options and the essay they build */
+    var cefr = scrCefr();
+    html += '<p class="tiny" style="margin:0 0 4px"><b>Your level</b> (the questions, the options and the finished essay are written for it)</p>' +
+      '<div class="modechoice levels cefr" role="radiogroup" aria-label="CEFR level">' + [['B1', 'Band 4.0–5.0'], ['B2', 'Band 5.5–6.5'], ['C1', 'Band 7.0–8.0']].map(function (c) {
+        return '<label><input type="radio" name="cefr" value="' + c[0] + '"' + (cefr === c[0] ? ' checked' : '') + '> <span><b>' + c[0] + '</b><small>' + c[1] + '</small></span></label>';
+      }).join('') + '</div>';
     html += '<p class="tiny modechoice-sub' + (lvl === 'low' ? '' : ' hidden') + '" id="w-skel-row"><label><input type="checkbox" id="w-skel"' + (cur === 'skeleton' ? ' checked' : '') + '> Low guidance with slot labels only (your own frames, no spellbook text)</label></p>';
-    var gdIds = GD ? practicePrompts().filter(function (q) { return GD.has(q.id); }).map(function (q) { return q.id; }) : [];
+    var gdIds = GD ? practicePrompts().filter(function (q) { return GD.has(q.id, cefr) || GD.has(q.id); }).map(function (q) { return q.id; }) : [];
     if (lvl === 'high' || lvl === 'medium') html += '<p class="tiny" id="w-gd-note">' + (gdIds.length ? 'High and Medium guidance are ready for the prompts marked <span class="pill gd-pill">step by step</span>. Any other prompt opens at Low guidance.' : 'High and Medium guidance are not ready for any prompt yet, so a prompt opens at Low guidance.') + '</p>';
     function gdPill(id) { return gdIds.indexOf(id) >= 0 ? '<span class="pill gd-pill">step by step</span>' : ''; }
     var filt = '<div class="filters" id="f-type">' + types.map(function (t) { return '<button data-t="' + t + '"' + (S.filters.type === t ? ' class="on"' : '') + '>' + (t === 'all' ? 'All types' : esc(typeName(t))) + '</button>'; }).join('') + '</div>';
@@ -1302,6 +1310,7 @@
     $('#w-live').addEventListener('click', function () { show('live'); });
     $('#view-writer').querySelectorAll('input[name=uim]').forEach(function (r) { r.addEventListener('change', function () { var sk = $('#w-skel'); S.uiMode = r.value === 'low' && sk && sk.checked ? 'skeleton' : r.value; paintWriter(); }); });
     var skb = $('#w-skel'); if (skb) skb.addEventListener('change', function () { S.uiMode = skb.checked ? 'skeleton' : 'low'; });
+    $('#view-writer').querySelectorAll('input[name=cefr]').forEach(function (r) { r.addEventListener('change', function () { S.p.scrCefr = r.value; api.save(S.p); }); });
     $('#f-type').querySelectorAll('button').forEach(function (b) { b.addEventListener('click', function () { S.filters.type = b.dataset.t; paintWriter(); }); });
     $('#f-domain').querySelectorAll('button').forEach(function (b) { b.addEventListener('click', function () { S.filters.domain = b.dataset.d; paintWriter(); }); });
     $('#view-writer').querySelectorAll('[data-p]').forEach(function (b) { b.addEventListener('click', function () { startWrite({ promptId: b.dataset.p, uiMode: S.uiMode, minutes: 40, kind: 'practice' }); }); });
@@ -1322,18 +1331,23 @@
     /* High / Medium (15 Nov 2026): the prompt's script is fetched the first time (guide/<id>.js). A prompt without one,
        a mock, or a revision opens at Low guidance with a short note. */
     var GD = window.Guide, stepwise = cfg.uiMode === 'high' || cfg.uiMode === 'medium';
+    cfg.cefr = cfg.cefr || scrCefr();
     if (stepwise && (cfg.kind === 'mock' || cfg.revisionOf)) { cfg.uiMode = 'low'; stepwise = false; }
-    if (stepwise && GD && GD.has(cfg.promptId) && !GD.ready(cfg.promptId)) {
-      if (!cfg.gdTried) { cfg.gdTried = 1; show('write'); host.innerHTML = '<div class="card empty">Opening the step-by-step guide…</div>'; GD.load(cfg.promptId, function () { if (!host.classList.contains('hidden')) startWrite(cfg); }); return; }
+    /* the script at her level; while one is missing, the B2 script stands in (with a note) */
+    if (stepwise && GD && !GD.has(cfg.promptId, cfg.cefr) && GD.has(cfg.promptId) && cfg.cefr !== 'B2') {
+      toast('The ' + cfg.cefr + ' version of this prompt is not ready yet, so it opens at B2.', 5000); cfg.cefr = 'B2';
+    }
+    if (stepwise && GD && GD.has(cfg.promptId, cfg.cefr) && !GD.ready(cfg.promptId, cfg.cefr)) {
+      if (!cfg.gdTried) { cfg.gdTried = 1; show('write'); host.innerHTML = '<div class="card empty">Opening the step-by-step guide…</div>'; GD.load(cfg.promptId, cfg.cefr, function () { if (!host.classList.contains('hidden')) startWrite(cfg); }); return; }
       toast('The step-by-step guide did not load (check the connection), so this prompt opens at Low guidance.', 6000);
       cfg.uiMode = 'low'; stepwise = false;
     }
-    if (stepwise && !(GD && GD.ready(cfg.promptId))) {
+    if (stepwise && !(GD && GD.ready(cfg.promptId, cfg.cefr))) {
       toast((cfg.uiMode === 'high' ? 'High' : 'Medium') + ' guidance is not ready for this prompt yet, so it opens at Low guidance.', 6000);
       cfg.uiMode = 'low'; stepwise = false;
     }
     show('write');
-    S.write = W.mount(host, { prompt: cfg.promptId, mode: cfg.uiMode, minutes: cfg.minutes, tier: tier(), level: explainLevel(), studentId: S.p.studentId, share: myShare(), faultTags: topFaultTags(),
+    S.write = W.mount(host, { prompt: cfg.promptId, mode: cfg.uiMode, cefr: cfg.cefr, minutes: cfg.minutes, tier: cfg.uiMode === 'low' || cfg.uiMode === 'skeleton' ? (cfg.cefr === 'C1' ? 'C1' : 'B2') : tier(), level: explainLevel(), studentId: S.p.studentId, share: myShare(), faultTags: topFaultTags(),
       /* revision (19 Oct 2026, contract with writer.js): the essay it revises, its weak Ward row (row id), her text and her keys */
       revisionOf: cfg.revisionOf || '', reviseRow: cfg.reviseRow || '', reviseText: cfg.reviseText || null, reviseVars: cfg.reviseVars || null,
       check: stepwise && cfg.uiMode === 'medium' && api.guideCheck ? function (payload) { payload.studentId = S.p.studentId; return api.guideCheck(payload); } : null,

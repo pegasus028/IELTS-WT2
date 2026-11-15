@@ -30,25 +30,25 @@
       name: 'Band 7 track', cefr: 'B2', blurb: 'Plain frames, four moves per paragraph. The B2 Essay Engineering spellbook.',
       paragraphs: [
         { key: 'intro', name: 'Introduction', target: 50, frames: [
-          { id: 'b2-u-i', name: 'Universal Spine', text: 'The question of {core} matters to many people today. The first key point is {facetA}, and the second is {facetB}. This essay looks at both and argues that {position}.' },
+          { id: 'b2-u-i', name: 'Universal template', text: 'The question of {core} matters to many people today. The first key point is {facetA}, and the second is {facetB}. This essay looks at both and argues that {position}.' },
           { id: 'b2-i1', name: 'Standard', text: 'People often discuss the topic of {core} because it has many different effects. While many people focus on {facetA}, it is also important to consider {facetB}. To fully understand this issue, we need to look at both sides carefully. Personally, I believe that {position}.' },
           { id: 'b2-i2', name: 'Question first', text: 'The question of {core} is one that many people feel strongly about. Some point to {facetA}, while others are more concerned with {facetB}. This essay looks at both sides before arguing that {position}.' },
           { id: 'b2-i3', name: 'Plain', text: 'In recent years, {core} has become an important debate. On one side there is {facetA}; on the other there is {facetB}. In my view, {position}, and this essay explains why.' }
         ] },
         { key: 'bodyA', name: 'Body A', target: 95, frames: [
-          { id: 'b2-u-a', name: 'Universal Spine', text: 'The first key point is {facetA}. It works by {mechA}. We can see this clearly in {exA}. However, {nuanceA}, so this point has its limits.' },
+          { id: 'b2-u-a', name: 'Universal template', text: 'The first key point is {facetA}. It works by {mechA}. We can see this clearly in {exA}. However, {nuanceA}, so this point has its limits.' },
           { id: 'b2-a1', name: 'Standard', text: 'One important part of this issue is {facetA}. This idea works by {mechA}. We can see this happening in the real world in {exA}. However, looking only at this side misses an important point; in reality, {nuanceA}, which shows that this is not a perfect solution.' },
           { id: 'b2-a2', name: 'Cause first', text: 'The first side of the debate is {facetA}. It works by {mechA}. A clear example is {exA}. Even so, {nuanceA}, so this argument has its limits.' },
           { id: 'b2-a3', name: 'Example first', text: 'Consider {exA}. This shows the importance of {facetA}, which works by {mechA}. It would be a mistake, though, to stop here: {nuanceA}.' }
         ] },
         { key: 'bodyB', name: 'Body B', target: 95, frames: [
-          { id: 'b2-u-b', name: 'Universal Spine', text: 'The second key point is {facetB}. It operates through {mechB}, and the effect is visible in {exB}. Even so, {nuanceB}, which is worth remembering.' },
+          { id: 'b2-u-b', name: 'Universal template', text: 'The second key point is {facetB}. It operates through {mechB}, and the effect is visible in {exB}. Even so, {nuanceB}, which is worth remembering.' },
           { id: 'b2-b1', name: 'Standard', text: 'Another very important part of the debate is {facetB}. This side is based on {mechB}, which usually leads to results like {exB}. Still, we must also be careful with this view. Even though it has a big impact, we must remember that {nuanceB}.' },
           { id: 'b2-b2', name: 'Contrast', text: 'On the other side of the argument is {facetB}. Supporters point to {mechB}; a good illustration of this is {exB}. Yet {nuanceB}, which means this view cannot be accepted without question.' },
           { id: 'b2-b3', name: 'Equally', text: 'Just as important is {facetB}. It works through {mechB}, and we see this in {exB}. At the same time, {nuanceB}, so the picture is more complicated than it first appears.' }
         ] },
         { key: 'conclusion', name: 'Conclusion', target: 45, frames: [
-          { id: 'b2-u-c', name: 'Universal Spine', text: 'In conclusion, {position}. Taking {facetA} together with {facetB}, this is the most reasonable view, because {rationale}.' },
+          { id: 'b2-u-c', name: 'Universal template', text: 'In conclusion, {position}. Taking {facetA} together with {facetB}, this is the most reasonable view, because {rationale}.' },
           { id: 'b2-c1', name: 'Standard', text: 'To sum up, simply looking at {core} from one side is not enough to show the whole picture. A better way to look at it is that {position}. This view makes the most sense because {rationale}.' },
           { id: 'b2-c2', name: 'Verdict', text: 'In conclusion, both sides of {core} have real strengths and real limits. My own position is that {position}, mainly because {rationale}.' },
           { id: 'b2-c3', name: 'Plain', text: 'Overall, {core} cannot be judged from one side alone. The most reasonable position is that {position}, since {rationale}.' }

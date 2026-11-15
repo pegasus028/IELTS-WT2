@@ -61,7 +61,8 @@ var argv = process.argv.slice(2), SHOW = argv.indexOf('--essay') >= 0, WRITE_IND
 var ONLY = argv.filter(function (a) { return a.indexOf('--') !== 0; });
 if (!fs.existsSync(GDIR)) fs.mkdirSync(GDIR);
 if (!fs.existsSync(CDIR)) fs.mkdirSync(CDIR);
-var files = fs.readdirSync(GDIR).filter(function (f) { return /^p-[a-z0-9-]+\.js$/.test(f); }).sort();
+/* 15 Nov 2026: three levels per prompt: guide/<id>.js (B2), guide/<id>.b1.js, guide/<id>.c1.js */
+var files = fs.readdirSync(GDIR).filter(function (f) { return /^p-[a-z0-9-]+(\.(b1|c1))?\.js$/.test(f); }).sort();
 
 if (WRITE_INDEX) {
   var out = '/* Prompts with a High / Medium guidance script (guide/<promptId>.js). Rebuilt by: node tools/guide-test.js --index */\n' +
@@ -112,7 +113,7 @@ var mockIds = (C.MOCK_PROMPTS || []).map(function (m) { return m.id; });
 var todo = files.filter(function (f) { return !ONLY.length || ONLY.some(function (o) { return f.indexOf(o) >= 0; }); });
 
 todo.forEach(function (f) {
-  var pid = f.replace(/\.js$/, ''), src = fs.readFileSync(path.join(GDIR, f), 'utf8');
+  var key = f.replace(/\.js$/, ''), pid = key.split('.')[0], cefr = (key.split('.')[1] || 'b2').toUpperCase(), src = fs.readFileSync(path.join(GDIR, f), 'utf8');
   /* 0 */
   var bare = strip(src);
   ok(!/=>/.test(bare), pid + ': arrow function (not ES5)');
@@ -123,14 +124,16 @@ todo.forEach(function (f) {
   var before = Object.keys(ctx.GUIDE_SCRIPTS || {});
   try { vm.runInContext(src, ctx, { filename: 'guide/' + f }); } catch (e) { ok(false, pid + ': the file does not run: ' + e.message); return; }
   var added = Object.keys(ctx.GUIDE_SCRIPTS || {}).filter(function (k) { return before.indexOf(k) < 0; });
-  ok(added.length === 1 && added[0] === pid, pid + ': the file must register GUIDE_SCRIPTS["' + pid + '"] and nothing else (found ' + added.join(', ') + ')');
-  ok((ctx.GUIDE_INDEX || []).indexOf(pid) >= 0, pid + ': not in guide-index.js (run node tools/guide-test.js --index)');
-  var sc = ctx.GUIDE_SCRIPTS[pid]; if (!sc) return;
+  ok(added.length === 1 && added[0] === key, key + ': the file must register GUIDE_SCRIPTS["' + key + '"] and nothing else (found ' + added.join(', ') + ')');
+  ok((ctx.GUIDE_INDEX || []).indexOf(key) >= 0, key + ': not in guide-index.js (run node tools/guide-test.js --index)');
+  var sc = ctx.GUIDE_SCRIPTS[key]; if (!sc) return;
   var p = PR.get(pid), flat = G.steps(sc);
-  console.log(pid + ' · ' + flat.length + ' steps');
+  console.log(key + ' · ' + flat.length + ' steps');
   ok(!!p, pid + ': the prompt exists in the practice bank'); if (!p) return;
   var tier = sc.tier || 'B2', vt = (p.vars || {})[tier] || {};
-  ok(tier === 'B2' || tier === 'C1', pid + ': tier is B2 or C1');
+  ok(tier === cefr, key + ': tier must be ' + cefr + ' for this file (found ' + tier + ')');
+  ok(Object.keys(vt).length === 11, key + ': the prompt has no vars.' + tier);
+  pid = key;
 
   /* 1 */
   ok(sc.promptId === pid && sc.version >= 1, pid + ': promptId and version');
@@ -174,7 +177,14 @@ todo.forEach(function (f) {
     /* 3 */
     var lens = all.map(function (t) { return t.length; });
     if (lens[0] > Math.max.apply(null, lens.slice(1))) longest++;
-    var order = G.options(st); ok(order.length === 4 && order.filter(function (o) { return o.ok; }).length === 1, tag + 'options(): four, one right');
+    var order = G.options(st, sc); ok(order.length === 4 && order.filter(function (o) { return o.ok; }).length === 1, tag + 'options(): four, one right');
+    /* "template", never "Spine", in anything a student reads (T.Chris, 15 Nov 2026) */
+    var seen = [st.label, st.ask, st.askFree, st.shape, st.expect, st.hint, st.hint2, x.section.title, x.section.note].concat((st.wrong || []).map(function (w) { return w[1]; }), (st.reject || []).map(function (r) { return r.hint; }));
+    seen.forEach(function (t) { ok(!/spine/i.test(t || ''), tag + 'says "Spine" (use "template"): ' + t); });
+    if (tier === 'B1') {
+      ok(words(st.ask) <= 22, tag + 'B1: the question has ' + words(st.ask) + ' words (keep it to 22)');
+      [st.hint, st.hint2].concat((st.wrong || []).map(function (w) { return w[1]; })).forEach(function (h) { ok(words(h || '') <= 30, tag + 'B1: a hint of ' + words(h || '') + ' words (keep it to 30): ' + h); });
+    }
     order.forEach(function (o, i) { if (o.ok) pos[i]++; });
     readW += words(st.ask) + all.reduce(function (n, t) { return n + words(t); }, 0) + (x.first && x.section.note ? words(x.section.note) : 0);
     /* 5 */
@@ -192,7 +202,7 @@ todo.forEach(function (f) {
   var tt = flat.filter(function (x) { return x.step.id === 't-type'; })[0];
   if (tt) ok(TYPE_WORD[p.type] && TYPE_WORD[p.type].test(tt.step.ok), pid + ': t-type answers "' + tt.step.ok + '" but the prompt is ' + p.type);
   ok(longest <= flat.length / 3, pid + ': the right option is the longest in ' + longest + ' of ' + flat.length + ' steps (max a third)');
-  ok(Math.min.apply(null, pos) >= flat.length / 9, pid + ': positions of the right option ' + pos.join(' / '));
+  ok(Math.max.apply(null, pos) - Math.min.apply(null, pos) <= 1, pid + ': positions of the right option are not balanced: ' + pos.join(' / '));
   /* every variable of the tier is in the essay, in meaning */
   VARS.forEach(function (k) {
     var vs = flat.filter(function (x) { return x.step.v === k && x.section.pane != null; }), want = vt[k] && vt[k].ok;
@@ -206,7 +216,7 @@ todo.forEach(function (f) {
   ok(n >= 260 && n <= 290, pid + ': ' + n + ' words (260–290)');
   ok(!/\s[,.;:]|,,|\.\.|  |,\.|[a-z]\.[A-Za-z]/.test(es.text), pid + ': broken joins in the essay');
   es.panes.forEach(function (t, i) { ok(/^[A-Z]/.test(t) && /\.$/.test(t), pid + ': paragraph ' + (i + 1) + ' starts with a capital and ends with a full stop'); W.sentences(t).forEach(function (s) { ok(/^[A-Z]/.test(s), pid + ': sentence starts with a capital: ' + s.slice(0, 40)); }); });
-  var pre = W.preflight(es.text, p, { share: tier === 'C1' ? 0.3 : 0.4, practice: true });
+  var pre = W.preflight(es.text, p, { share: tier === 'C1' ? 0.3 : tier === 'B1' ? 0.5 : 0.4, practice: true });
   pre.rows.forEach(function (r) { ok(r.status === 'ok', pid + ': ward ' + r.id + ' is ' + r.status + ' (' + r.label + ')'); });
   var p1 = W.sentences(es.panes[0]), th = W.checkThesis(p1[p1.length - 1], {});
   ok(th.ok, pid + ': the thesis (last sentence of paragraph 1) fails Writer.checkThesis: ' + th.notes.join(' '));
@@ -215,16 +225,23 @@ todo.forEach(function (f) {
   ok(run < 8, pid + ': ' + run + ' words in a row copied from the prompt (keep under 8)');
   var facts = sc.facts || [];
   (es.text.match(/\d[\d,.]*/g) || []).forEach(function (num) { ok(facts.some(function (fc) { return String(fc.text || fc).indexOf(num) >= 0; }), pid + ': the figure ' + num + ' is in the essay: check it and list it in facts[] with its source, or make the example hypothetical'); });
-  if (sc.spine === 'b2-u' || sc.spine === 'c1-u') {
-    var paras = T.paragraphs(sc.spine === 'c1-u' ? 'C1' : 'B2', p.type), fid = sc.spine;
+  /* the template the essay follows, word for word around its slots: frames:[intro, bodyA, bodyB, conclusion] ids from
+     template.js, or spine:'b2-u' for the B2 Universal template (b2-u-i / -a / -b / -c) */
+  var fids = sc.frames || (sc.spine === 'b2-u' ? ['b2-u-i', 'b2-u-a', 'b2-u-b', 'b2-u-c'] : null);
+  ok(!!fids && fids.length === 4, pid + ': name the template lines the essay follows (frames: [4 ids] or spine: \'b2-u\')');
+  if (fids && fids.length === 4) {
+    var allFr = {}; ['B2', 'C1'].forEach(function (tr) { T.paragraphs(tr, p.type).forEach(function (pg) { pg.frames.forEach(function (x) { allFr[x.id] = x; }); }); });
     ['i', 'a', 'b', 'c'].forEach(function (suf, i) {
-      var fr = null; paras.forEach(function (pg) { pg.frames.forEach(function (x) { if (x.id === fid + '-' + suf) fr = x; }); });
-      ok(!!fr, pid + ': Spine line ' + fid + '-' + suf + ' not found in template.js'); if (!fr) return;
+      var fid = fids[i], fr = allFr[fid];
+      ok(!!fr, pid + ': template line ' + fid + ' not found in template.js'); if (!fr) return;
       var segs = fr.text.split(/\{\w+\}/).map(function (x) { return norm(x).replace(/^[,.;:]\s*/, '').replace(/[,.;:]\s*$/, ''); }).filter(function (x) { return x.length >= 3; }), at = 0, pt = norm(es.panes[i]);
-      segs.forEach(function (sg) { var k = pt.indexOf(sg, at); ok(k >= 0, pid + ': paragraph ' + (i + 1) + ' does not follow its Spine line (' + fid + '-' + suf + '): missing "' + sg + '" in order'); if (k >= 0) at = k + sg.length; });
+      segs.forEach(function (sg) { var k = pt.indexOf(sg, at); ok(k >= 0, pid + ': paragraph ' + (i + 1) + ' does not follow its template line (' + fid + '): missing "' + sg + '" in order'); if (k >= 0) at = k + sg.length; });
     });
   }
   var est = Math.round((readW / 150 * 60 + flat.length * 12 + flat.length / 3 * 25) / 60);
+  /* level measure (printed): words of 9+ letters in the essay, words per question */
+  var ew = norm(es.text).replace(/[^a-z' ]/g, ' ').split(/\s+/).filter(Boolean), longW = Math.round(100 * ew.filter(function (w) { return w.length >= 9; }).length / ew.length), askW = Math.round(flat.reduce(function (n, x) { return n + words(x.step.ask); }, 0) / flat.length);
+  if (SHOW) console.log('[' + tier + '] long words (9+ letters) ' + longW + '% of the essay · ' + askW + ' words per question');
   if (SHOW) console.log('\n' + es.text + '\n\n(' + n + ' words · ' + es.panes.map(words).join(' / ') + ' · template share ' + Math.round((pre.ratio || 0) * 100) + '% · right option longest in ' + longest + ' steps · positions ' + pos.join(' / ') + ' · ' + nAi + ' ai steps · est. High run ' + est + ' min)\n');
   ok(est <= 40, pid + ': the estimated High run is ' + est + ' minutes (aim 25–35, max 40)');
 

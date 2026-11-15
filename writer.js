@@ -962,9 +962,9 @@
   function mount(host, cfg) {
     var p = promptOf(cfg.prompt);
     /* High and Medium guidance: the step-by-step guide, when this prompt's script is loaded (student.js loads it first) */
-    if ((cfg.mode === 'high' || cfg.mode === 'medium') && global.Guide && global.Guide.ready(p.id)) {
+    if ((cfg.mode === 'high' || cfg.mode === 'medium') && global.Guide && (global.Guide.ready(p.id, cfg.cefr) || global.Guide.ready(p.id))) {
       LAST = blankMeta(cfg);
-      return global.Guide.mount(host, { prompt: p.id, level: cfg.mode, tier: cfg.tier, studentId: cfg.studentId, check: cfg.check, onSubmit: cfg.onSubmit, onQuit: cfg.onQuit, onResume: cfg.onResume });
+      return global.Guide.mount(host, { prompt: p.id, level: cfg.mode, cefr: cfg.cefr, tier: cfg.tier, studentId: cfg.studentId, check: cfg.check, onSubmit: cfg.onSubmit, onQuit: cfg.onQuit, onResume: cfg.onResume });
     }
     /* Low guidance is the old Guided mode (stored 'guided' and teacher assignments that name it still open); 'skeleton' still runs */
     var mode = cfg.mode === 'skeleton' || cfg.mode === 'exam' ? cfg.mode : 'guided', guided = mode === 'guided', skeleton = mode === 'skeleton', exam = mode === 'exam';

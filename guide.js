@@ -14,16 +14,21 @@
            "revise" verdict shows a hint; she edits and commits again, or keeps
            her answer unchanged (an override).
 
-   Guide.has(promptId)            → is there a script for this prompt?
-   Guide.ready(promptId)          → is it loaded?   Guide.load(promptId, done)
-   Guide.script(promptId)         → the script
+   Levels (15 Nov 2026, T.Chris): every prompt has a script at B1, B2 and C1. B2 lives in guide/<id>.js (key <id>),
+   B1 and C1 in guide/<id>.b1.js and guide/<id>.c1.js (keys <id>.b1, <id>.c1). cefr defaults to 'B2'.
+   Guide.has(promptId, cefr)      → is there a script for this prompt at this level?
+   Guide.ready(promptId, cefr)    → is it loaded?   Guide.load(promptId, cefr, done)
+   Guide.script(promptId, cefr)   → the script
    Guide.steps(script)            → flat [{ step, section, first, n, of }] in order
    Guide.essay(script, answers)   → { panes:[4], text }   answers = { stepId: text }
    Guide.key(script)              → { stepId: the right option } (tests, High)
-   Guide.options(step)            → the four options in a fixed shuffled order
+   Guide.options(step, script)    → the four options; the right one's place is balanced over the script (each of the four
+                                    places holds it equally often, ±1), the wrong ones in a fixed shuffled order
    Guide.localCheck(step, entry, script) → { verdict:'accept'|'revise'|'unsure', hint }
    Guide.mount(host, cfg)         → { stop, text }
-        cfg = { prompt, level:'high'|'medium', tier, studentId, check(payload)→Promise, onSubmit(res), onQuit(info), onResume(i, n) }
+        cfg = { prompt, level:'high'|'medium', cefr:'B1'|'B2'|'C1', tier, studentId, check(payload)→Promise, onSubmit(res), onQuit(info), onResume(i, n) }
+   Layout (15 Nov 2026): a floating bar at the top with the prompt, the clock and the running count of wrong answers;
+   the construction pane on the left (your plan, then the essay as it is built); the question beside the part being built.
    ES5 only (old iPads).
    =========================================================================== */
 (function (global) {
@@ -34,22 +39,27 @@
   /* A script lives in guide/<promptId>.js and is fetched the first time it is needed, so the app's start
      does not slow down. guide-index.js lists the prompts that have one. has() = there is a script; ready() = it is loaded. */
   function index() { return global.GUIDE_INDEX || []; }
-  function ready(id) { return !!(id && scripts()[id]); }
+  var CEFRS = ['B1', 'B2', 'C1'];
+  function lvl(c) { c = String(c || 'B2').toUpperCase(); return CEFRS.indexOf(c) >= 0 ? c : 'B2'; }
+  function keyOf(id, cefr) { var c = lvl(cefr); return c === 'B2' ? id : id + '.' + c.toLowerCase(); }
+  function ready(id, cefr) { return !!(id && scripts()[keyOf(id, cefr)]); }
   /* Mock prompts never get a script (CONTENT.MOCK_PROMPTS stay unseen until the mock). */
   function isMock(id) { var m = (global.CONTENT && global.CONTENT.MOCK_PROMPTS) || []; for (var i = 0; i < m.length; i++) if (m[i] && m[i].id === id) return true; return false; }
-  function has(id) { return !isMock(id) && (ready(id) || index().indexOf(id) >= 0); }
+  function has(id, cefr) { return !isMock(id) && (ready(id, cefr) || index().indexOf(keyOf(id, cefr)) >= 0); }
   var loading = {};
-  function load(id, done) {
-    if (ready(id)) { done(true); return; }
-    if (!has(id) || !global.document) { done(false); return; }
-    if (loading[id]) { loading[id].push(done); return; }
-    loading[id] = [done];
-    var s = global.document.createElement('script'), fin = function (ok) { var q = loading[id] || []; delete loading[id]; q.forEach(function (f) { try { f(ok && ready(id)); } catch (e) {} }); };
-    s.src = 'guide/' + id + '.js?v=' + (global.GUIDE_VERSION || '1'); s.async = true;
+  function load(id, cefr, done) {
+    if (typeof cefr === 'function') { done = cefr; cefr = 'B2'; }
+    var k = keyOf(id, cefr);
+    if (ready(id, cefr)) { done(true); return; }
+    if (!has(id, cefr) || !global.document) { done(false); return; }
+    if (loading[k]) { loading[k].push(done); return; }
+    loading[k] = [done];
+    var s = global.document.createElement('script'), fin = function (ok) { var q = loading[k] || []; delete loading[k]; q.forEach(function (f) { try { f(ok && ready(id, cefr)); } catch (e) {} }); };
+    s.src = 'guide/' + k + '.js?v=' + (global.GUIDE_VERSION || '1'); s.async = true;
     s.onload = function () { fin(true); }; s.onerror = function () { fin(false); };
     global.document.head.appendChild(s);
   }
-  function script(id) { return isMock(id) ? null : scripts()[id] || null; }
+  function script(id, cefr) { return isMock(id) ? null : scripts()[keyOf(id, cefr)] || null; }
   function hashStr(x) { var h = 7; x = String(x); for (var i = 0; i < x.length; i++) h = (h * 31 + x.charCodeAt(i)) % 1000003; return h; }
   function mmss(s) { var m = Math.floor(s / 60), x = s % 60; return m + ':' + (x < 10 ? '0' : '') + x; }
   function wordsOf(t) { var m = String(t || '').trim().match(/[A-Za-z0-9][A-Za-z0-9'’.,%$-]*/g); return m ? m.length : 0; }
@@ -63,11 +73,31 @@
   }
   function key(sc) { var k = {}; steps(sc).forEach(function (x) { k[x.step.id] = x.step.ok; }); return k; }
 
-  /* The four options in an order that is fixed for the step (so a reload does not move them) and spread over the positions. */
-  function options(st) {
-    var opts = [{ t: st.ok, ok: true }].concat((st.wrong || []).map(function (w) { return { t: w[0], hint: w[1] }; }));
-    var h = hashStr(st.id + '·order'), out = [];
-    while (opts.length) { var i = h % opts.length; out.push(opts.splice(i, 1)[0]); h = Math.floor(h / 4) + hashStr(st.id + out.length); }
+  /* Where the right option sits, step by step: blocks of four steps each use the four places once, in an order fixed by
+     the script (so a reload does not move them), so every place holds the right answer equally often (±1) and the same
+     place is never right more than twice in a row. */
+  var posCache = {};
+  function placeOf(st, sc) {
+    if (!sc) return null;
+    var k = (sc.promptId || '') + '·' + (sc.tier || '') + '·' + (sc.version || 1), m = posCache[k];
+    if (!m) {
+      m = posCache[k] = {}; var fl = steps(sc), perms = [], prev = -1;
+      for (var b = 0; b * 4 < fl.length; b++) {
+        var pool = [0, 1, 2, 3], perm = [], h = hashStr(k + '·block' + b);
+        while (pool.length) { perm.push(pool.splice(h % pool.length, 1)[0]); h = Math.floor(h / 3) + 7; }
+        if (perm[0] === prev) perm.push(perm.shift());
+        prev = perm[3]; perms = perms.concat(perm);
+      }
+      fl.forEach(function (x, i) { m[x.step.id] = perms[i]; });
+    }
+    return m[st.id] == null ? null : m[st.id];
+  }
+  function options(st, sc) {
+    var wrongs = (st.wrong || []).map(function (w) { return { t: w[0], hint: w[1] }; }), h = hashStr(st.id + '·order'), out = [];
+    while (wrongs.length) { out.push(wrongs.splice(h % wrongs.length, 1)[0]); h = Math.floor(h / 3) + hashStr(st.id + out.length); }
+    var at = placeOf(st, sc);
+    if (at == null) at = hashStr(st.id + '·right') % 4;
+    out.splice(at, 0, { t: st.ok, ok: true });
     return out;
   }
 
@@ -149,48 +179,76 @@
   var PANE_EMPTY = ['Your introduction appears here.', 'Your first body paragraph appears here.', 'Your second body paragraph appears here.', 'Your conclusion appears here.'];
 
   function mount(host, cfg) {
-    var W = global.Writer, PR = global.Prompts, p = typeof cfg.prompt === 'string' ? PR.get(cfg.prompt) : cfg.prompt, sc = script(p.id), level = cfg.level === 'medium' ? 'medium' : 'high';
+    var W = global.Writer, PR = global.Prompts, p = typeof cfg.prompt === 'string' ? PR.get(cfg.prompt) : cfg.prompt, level = cfg.level === 'medium' ? 'medium' : 'high';
+    var cefr = lvl(cfg.cefr), sc = script(p.id, cefr);
+    if (!sc) { cefr = 'B2'; sc = script(p.id, 'B2'); }
     var flat = steps(sc), high = level === 'high', tier = sc.tier || cfg.tier || 'B2';
-    var saveKey = 'pc.guide.v1.' + String(cfg.studentId || 'me').toLowerCase() + '.' + p.id + '.' + level;
-    var state = { i: 0, answers: {}, tries: {}, hints: {}, over: {}, ai: {}, off: {}, t0: Date.now(), carried: 0, done: false, tick: null, busy: false, last: null, polished: false, lastHint: {}, lastEntry: {}, draft: {} };
+    var saveKey = 'pc.guide.v1.' + String(cfg.studentId || 'me').toLowerCase() + '.' + p.id + '.' + level + (cefr === 'B2' ? '' : '.' + cefr);
+    var state = { i: 0, answers: {}, tries: {}, hints: {}, over: {}, ai: {}, off: {}, t0: Date.now(), carried: 0, done: false, tick: null, busy: false, last: null, polished: false, lastHint: {}, lastEntry: {}, draft: {}, wrong: 0 };
 
     /* a run that was left half-way (a reload, a closed tab) comes back */
     try {
       var sv = JSON.parse(global.localStorage.getItem(saveKey) || 'null');
       if (sv && sv.version === (sc.version || 1) && sv.i > 0 && sv.i <= flat.length) {
-        state.i = sv.i; state.answers = sv.answers || {}; state.tries = sv.tries || {}; state.hints = sv.hints || {}; state.over = sv.over || {}; state.ai = sv.ai || {}; state.off = sv.off || {}; state.lastHint = sv.lastHint || {}; state.polishText = sv.polish || null; state.carried = sv.seconds || 0; state.resumed = true;
+        state.i = sv.i; state.answers = sv.answers || {}; state.tries = sv.tries || {}; state.hints = sv.hints || {}; state.over = sv.over || {}; state.ai = sv.ai || {}; state.off = sv.off || {}; state.lastHint = sv.lastHint || {}; state.polishText = sv.polish || null; state.carried = sv.seconds || 0; state.wrong = sv.wrong || 0; state.resumed = true;
       }
     } catch (e) {}
     function seconds() { return state.carried + Math.round((Date.now() - state.t0) / 1000); }
     function persist() {
-      try { global.localStorage.setItem(saveKey, JSON.stringify({ version: sc.version || 1, i: state.i, answers: state.answers, tries: state.tries, hints: state.hints, over: state.over, ai: state.ai, off: state.off, lastHint: state.lastHint, polish: state.polished ? paneTexts() : null, seconds: seconds() })); } catch (e) {}
+      try { global.localStorage.setItem(saveKey, JSON.stringify({ version: sc.version || 1, i: state.i, answers: state.answers, tries: state.tries, hints: state.hints, over: state.over, ai: state.ai, off: state.off, lastHint: state.lastHint, polish: state.polished ? paneTexts() : null, seconds: seconds(), wrong: state.wrong })); } catch (e) {}
     }
     function forget() { try { global.localStorage.removeItem(saveKey); } catch (e) {} }
 
+    /* Three panes (T.Chris, 15 Nov 2026): the prompt floats at the top with the clock and the wrong-answer count; the plan
+       and the essay are built on the left; the question sits on the right, beside the part it builds (on a phone, under it). */
+    var TN = { DISCUSS: 'Discuss both views', OPINION: 'Agree or disagree', ADVANTAGE: 'Advantages and disadvantages', PROBLEM: 'Problem and solution', TWOPART: 'Two-part question' };
+    var BAND = { B1: 'Band 4.0–5.0', B2: 'Band 5.5–6.5', C1: 'Band 7.0–8.0' };
     host.innerHTML = '<div class="wr gd gd-' + level + '">' +
-      '<div class="wr-top">' +
-        '<button class="btn ghost sm" id="wr-quit" aria-label="Leave">✕</button>' +
-        '<div class="wr-phases" id="gd-secs">' + sc.sections.map(function (s, i) { return '<span data-s="' + i + '">' + esc(s.title.split(' · ')[0]) + '</span>'; }).join('') + '</div>' +
-        '<span class="wr-words" id="wr-words">0 words</span>' +
-        '<span class="wr-clock" id="wr-clock" title="Time spent. No time limit at this level.">0:00</span>' +
-      '</div>' +
-      '<div class="gd-bar" aria-hidden="true"><i id="gd-bar"></i></div>' +
-      '<div class="wr-grid">' +
-        '<div class="wr-left gd-left">' + PR.card(p, { demand: true }) +
-          '<div class="card gd-triage" id="gd-triage"><div class="wr-boxh"><b>Your plan</b><span class="tiny">not counted as words</span></div><ul id="gd-tlist"></ul></div></div>' +
-        '<div class="wr-right">' +
-          '<p class="tiny gd-lead"><b>' + LEVEL_NAME[level] + '.</b> ' + (high
-            ? 'One decision at a time. Each right choice writes the next piece of your essay in the boxes below. A wrong choice is greyed out and you get a hint, then you choose again.'
-            : 'One decision at a time, in your own words. Press Commit and your answer is checked. If the check asks you to look again, you can change your answer or keep it as it is.') + ' No clock: take the time you need.</p>' +
-          '<div class="card gd-q" id="gd-q" aria-live="polite"></div>' +
-          [0, 1, 2, 3].map(function (i) {
-            return '<div class="wr-box gd-pane" id="gd-box' + i + '"><div class="wr-boxh"><b>' + PANE_NAME[i] + '</b><span class="tiny">~' + PANE_TARGET[i] + ' words · <i id="gd-w' + i + '">0</i></span></div><div class="gd-text" id="gd-p' + i + '"></div></div>';
-          }).join('') +
-          '<div id="wr-panel"></div>' +
+      '<div class="gd-top" id="gd-top">' +
+        '<div class="gd-topbar">' +
+          '<button class="btn ghost sm" id="wr-quit" aria-label="Leave">✕</button>' +
+          '<div class="wr-phases" id="gd-secs">' + sc.sections.map(function (s, i) { return '<span data-s="' + i + '">' + esc(s.title.split(' · ')[0]) + '</span>'; }).join('') + '</div>' +
+          '<span class="wr-words" id="wr-words">0 words</span>' +
+          '<span class="wr-clock" id="wr-clock" title="Time spent. No time limit at this level.">0:00</span>' +
+          '<span class="gd-wrong" id="gd-wrong" title="Wrong answers so far">✗ <b id="gd-wrong-n">0</b> wrong</span>' +
         '</div>' +
-      '</div></div>';
-
+        '<div class="gd-prompt" id="gd-prompt"><p class="gd-pmeta"><b>' + esc(LEVEL_NAME[level]) + '</b> · ' + esc(cefr) + ' (' + BAND[cefr] + ') · ' + esc(TN[p.type] || p.type) + '</p>' +
+          '<p class="gd-ptext" id="gd-ptext">' + esc(p.text) + '</p><button type="button" class="linky gd-pmore" id="gd-pmore" aria-expanded="false">Show the whole prompt</button></div>' +
+        '<div class="gd-bar" aria-hidden="true"><i id="gd-bar"></i></div>' +
+      '</div>' +
+      '<p class="tiny gd-lead">' + (high
+        ? 'One decision at a time. Each right choice writes the next piece of your plan or essay on the left. A wrong choice is greyed out and you get a hint, then you choose again.'
+        : 'One decision at a time, in your own words. Press Commit and your answer is checked. If the check asks you to look again, you can change your answer or keep it as it is.') + '</p>' +
+      '<div class="gd-grid" id="gd-grid">' +
+        '<div class="gd-cell gd-plan card" id="gd-triage" style="--row:1;--ord:10"><div class="wr-boxh"><b>Your plan</b><span class="tiny">not counted as words</span></div><ul id="gd-tlist"></ul></div>' +
+        '<div class="gd-cell gd-essayh" style="--row:2;--ord:15"><b>Your essay</b><span class="tiny" id="gd-essay-w"></span></div>' +
+        [0, 1, 2, 3].map(function (i) {
+          return '<div class="gd-cell wr-box gd-pane" id="gd-box' + i + '" style="--row:' + (i + 3) + ';--ord:' + (20 + i * 10) + '"><div class="wr-boxh"><b>' + PANE_NAME[i] + '</b><span class="tiny">~' + PANE_TARGET[i] + ' words · <i id="gd-w' + i + '">0</i></span></div><div class="gd-text" id="gd-p' + i + '"></div></div>';
+        }).join('') +
+        '<div class="card gd-q" id="gd-q" aria-live="polite"></div>' +
+      '</div>' +
+      '<div id="wr-panel"></div>' +
+    '</div>';
+    /* the question goes beside (desktop) or under (phone) the part it builds */
+    function placeQ() {
+      var x = flat[state.i], pane = state.done ? 3 : (x && x.section.pane != null ? x.section.pane : -1);
+      var row = pane < 0 ? 1 : pane + 3, ord = pane < 0 ? 11 : 21 + pane * 10;
+      q.style.setProperty('--row', row); q.style.setProperty('--ord', ord);
+    }
+    /* the app's own header bar is sticky too: the prompt bar sticks just below it */
+    function stickTop() {
+      try {
+        var hb = global.document.querySelector('header.bar'), cs = hb && global.getComputedStyle(hb), t = 0;
+        if (cs && (cs.position === 'sticky' || cs.position === 'fixed')) t = (parseFloat(cs.top) || 0) + hb.offsetHeight;
+        host.querySelector('#gd-top').style.top = t + 'px';
+      } catch (e) {}
+    }
+    stickTop(); global.addEventListener('resize', stickTop);
+    var pm = host.querySelector('#gd-pmore');
+    pm.addEventListener('click', function () { var on = host.querySelector('#gd-prompt').classList.toggle('open'); pm.setAttribute('aria-expanded', on ? 'true' : 'false'); pm.textContent = on ? 'Show less' : 'Show the whole prompt'; });
+    function bumpWrong() { state.wrong++; var n = host.querySelector('#gd-wrong-n'); if (n) n.textContent = state.wrong; host.querySelector('#gd-wrong').classList.add('some'); }
     var q = host.querySelector('#gd-q');
+    if (state.wrong) { host.querySelector('#gd-wrong-n').textContent = state.wrong; host.querySelector('#gd-wrong').classList.add('some'); }
 
     function paneTexts() {
       if (state.polished) return [0, 1, 2, 3].map(function (i) { var ta = host.querySelector('#gd-ta' + i); return ta ? ta.value.trim() : ''; });
@@ -212,13 +270,15 @@
       /* the plan: the triage answers */
       var tl = host.querySelector('#gd-tlist'), rows = [];
       flat.forEach(function (x) { if (x.section.pane == null && state.answers[x.step.id] != null) rows.push('<li><span>' + esc(x.step.label) + '</span><b>' + esc(state.answers[x.step.id]) + '</b></li>'); });
-      tl.innerHTML = rows.join('') || '<li class="gd-empty">The type, its parts, the trap and your two sides appear here.</li>';
+      tl.innerHTML = rows.join('') || '<li class="gd-empty">The type, its parts, the trap and your two sides appear here as you answer.</li>';
+      host.querySelector('#gd-triage').classList.toggle('on', !state.done && !!flat[state.i] && flat[state.i].section.pane == null);
       paintCount();
     }
     function paintCount() {
       var ps = paneTexts();
       ps.forEach(function (t, i) { var w = host.querySelector('#gd-w' + i); if (w) w.textContent = wordsOf(t); });
       host.querySelector('#wr-words').textContent = wordsOf(ps.join(' ')) + ' words';
+      host.querySelector('#gd-essay-w').textContent = wordsOf(ps.join(' ')) + ' words so far';
       host.querySelector('#gd-bar').style.width = Math.round(100 * Math.min(state.i, flat.length) / flat.length) + '%';
       var cur = state.done ? sc.sections.length : sc.sections.indexOf((flat[state.i] || {}).section);
       Array.prototype.forEach.call(host.querySelectorAll('#gd-secs span'), function (s, i) { s.classList.toggle('on', i === cur); s.classList.toggle('past', i < cur); });
@@ -234,13 +294,14 @@
 
     function paintStep() {
       var x = flat[state.i];
+      placeQ();
       if (!x) { finishCard(); return; }
       var st = x.step, off = state.off[st.id] || {};
       var h = '<p class="kicker">' + esc(x.section.title) + ' · step ' + x.n + ' of ' + x.of + ' · ' + esc(st.label) + '</p>' +
         (x.first && x.section.note ? '<p class="gd-note">' + esc(x.section.note) + '</p>' : '') +
         contextLine(x) + '<h3 class="gd-ask">' + esc(high ? st.ask : (st.askFree || st.ask)) + '</h3>';
       if (high) {
-        h += '<div class="gd-opts" role="group" aria-label="Choose one">' + options(st).map(function (o, i) {
+        h += '<div class="gd-opts" role="group" aria-label="Choose one">' + options(st, sc).map(function (o, i) {
           return '<button type="button" class="gd-opt' + (off[o.t] ? ' off' : '') + '" data-o="' + i + '"' + (off[o.t] ? ' disabled aria-disabled="true"' : '') + '>' + esc(o.t) + '</button>';
         }).join('') + '</div>';
       } else {
@@ -275,8 +336,8 @@
       paintStep();
       /* keep the question in view: on a phone the panes sit below it */
       try {
-        if (global.innerWidth < 860) q.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        else if (global.scrollY > 0 && q.getBoundingClientRect().top < 0) q.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        var top = host.querySelector('#gd-top').getBoundingClientRect().bottom, r = q.getBoundingClientRect();
+        if (r.top < top + 8 || r.top > global.innerHeight * 0.6) global.scrollBy({ top: r.top - top - 12, behavior: 'smooth' });
       } catch (e) {}
       var fo = q.querySelector(high ? '.gd-opt:not([disabled])' : '#gd-in'); if (fo && high) { try { fo.focus({ preventScroll: true }); } catch (e2) {} }
     }
@@ -286,13 +347,13 @@
       var b = ev.target && ev.target.closest ? ev.target.closest('button') : null; if (!b || state.busy) return;
       var x = flat[state.i]; if (!x) return; var st = x.step;
       if (b.getAttribute('data-o') != null && high) {
-        var o = options(st)[parseInt(b.getAttribute('data-o'), 10)]; if (!o) return;
+        var o = options(st, sc)[parseInt(b.getAttribute('data-o'), 10)]; if (!o) return;
         state.tries[st.id] = (state.tries[st.id] || 0) + 1;
         if (o.ok) {
           b.classList.add('right'); state.busy = true;
           setTimeout(function () { state.busy = false; accept(st, st.ok, 'choice'); }, 380);
         } else {
-          (state.off[st.id] = state.off[st.id] || {})[o.t] = 1; state.hints[st.id] = (state.hints[st.id] || 0) + 1;
+          (state.off[st.id] = state.off[st.id] || {})[o.t] = 1; state.hints[st.id] = (state.hints[st.id] || 0) + 1; bumpWrong();
           b.classList.add('off'); b.disabled = true; b.setAttribute('aria-disabled', 'true');
           showHint(st, o.hint || 'Not this one. Read the prompt again.');
           persist();
@@ -320,7 +381,7 @@
       state.tries[st.id] = (state.tries[st.id] || 0) + 1;
       var lc = localCheck(st, entry, sc), nth = state.tries[st.id];
       function revise(hint, note) {
-        state.hints[st.id] = (state.hints[st.id] || 0) + 1; state.lastEntry[st.id] = entry;
+        state.hints[st.id] = (state.hints[st.id] || 0) + 1; state.lastEntry[st.id] = entry; bumpWrong();
         showHint(st, hint || st.hint || NOT_YET, true, note); persist();
       }
       if (lc.verdict === 'revise') { revise(nth >= 3 && st.hint2 ? st.hint2 : lc.hint); return; }
@@ -361,11 +422,11 @@
         if ((state.tries[id] || 0) <= 1 && !state.over[id] && !state.hints[id]) first++;
         else if (x.step.tag) missTags[x.step.tag] = (missTags[x.step.tag] || 0) + 1;
       });
-      return { level: level, steps: flat.length, firstTry: first, overrides: over, overridden: Object.keys(state.over), missTags: missTags, version: sc.version || 1,
+      return { level: level, cefr: cefr, wrong: state.wrong, steps: flat.length, firstTry: first, overrides: over, overridden: Object.keys(state.over), missTags: missTags, version: sc.version || 1,
         tries: state.tries, ai: state.ai };
     }
     function finishCard() {
-      state.done = true; state.last = null;
+      state.done = true; state.last = null; placeQ();
       var t = tally();
       /* Medium: the four panes open for a last polish */
       if (!high && !state.polished) {
@@ -380,14 +441,14 @@
       paintPanes();
       Array.prototype.forEach.call(host.querySelectorAll('.gd-pane'), function (b) { b.classList.remove('on'); });
       q.innerHTML = '<p class="kicker">' + LEVEL_NAME[level] + ' · finished</p><h3 class="gd-ask">Your essay is built.</h3>' +
-        '<p class="gd-note"><b>' + t.firstTry + ' of ' + t.steps + '</b> decisions right the first time' + (t.overrides ? ', and you kept your own answer ' + t.overrides + ' time' + (t.overrides > 1 ? 's' : '') : '') + '.</p>' +
+        '<p class="gd-note"><b>' + t.firstTry + ' of ' + t.steps + '</b> decisions right the first time, <b>' + t.wrong + '</b> wrong answer' + (t.wrong === 1 ? '' : 's') + ' in all' + (t.overrides ? ', and you kept your own answer ' + t.overrides + ' time' + (t.overrides > 1 ? 's' : '') : '') + '.</p>' +
         (high ? '<p class="tiny">Read the four paragraphs as one essay. Find your position at the end of the introduction and again, in new words, in the conclusion. In each body paragraph, find the idea, how it works, the example and the limit.</p>'
           : '<p class="tiny">The four paragraphs are yours to polish now: read them aloud once, fix any join that sounds wrong, then run the Wards.</p>') +
         '<button type="button" class="btn primary wide" id="gd-wards">The Ten Wards →</button>';
       q.querySelector('#gd-wards').addEventListener('click', wards);
       persist();
     }
-    function wardOpts() { return { share: tier === 'C1' ? 0.3 : 0.4, practice: true }; }
+    function wardOpts() { return { share: tier === 'C1' ? 0.3 : tier === 'B1' ? 0.5 : 0.4, practice: true }; }
     function wards() {
       var t = text(), pre = W.preflight(t, p, wardOpts()), pn = host.querySelector('#wr-panel');
       pn.innerHTML = '<div class="card preflight"><div class="pf-h"><b>The Ten Wards</b><span class="pill ' + (pre.bad ? 'bad' : pre.warn ? 'gold' : 'good') + '">' + esc(pre.summary) + '</span></div>' +
@@ -414,7 +475,7 @@
       var c = host.querySelector('#wr-clock'); if (!c) { clearInterval(state.tick); return; }
       c.textContent = mmss(seconds());
     }, 1000);
-    function stop() { clearInterval(state.tick); }
+    function stop() { clearInterval(state.tick); global.removeEventListener('resize', stickTop); }
     host.querySelector('#wr-quit').addEventListener('click', function () {
       state.quit = true; persist(); stop();
       if (cfg.onQuit) cfg.onQuit(state.i > 0 && !state.sent ? { saved: true, step: state.i, of: flat.length } : null);
@@ -426,5 +487,5 @@
     return { stop: stop, text: text, restart: function () { forget(); } };
   }
 
-  global.Guide = { has: has, ready: ready, load: load, script: script, steps: steps, key: key, options: options, essay: essay, soFar: soFar, tidy: tidy, localCheck: localCheck, leaks: leaks, mount: mount, LEVEL_NAME: LEVEL_NAME, PANE_NAME: PANE_NAME, PANE_TARGET: PANE_TARGET };
+  global.Guide = { has: has, ready: ready, load: load, script: script, keyOf: keyOf, CEFRS: CEFRS, steps: steps, key: key, options: options, placeOf: placeOf, essay: essay, soFar: soFar, tidy: tidy, localCheck: localCheck, leaks: leaks, mount: mount, LEVEL_NAME: LEVEL_NAME, PANE_NAME: PANE_NAME, PANE_TARGET: PANE_TARGET };
 })(typeof window !== 'undefined' ? window : this);
