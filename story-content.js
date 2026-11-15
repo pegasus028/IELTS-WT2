@@ -76,7 +76,7 @@
             img: 'story/ch1-05.webp',
             alt: 'A tall brass lantern on a stand glowing in four bands of colour: navy, teal, plum and crimson.',
             event: 'sorting',
-            text: "A brass lantern stands on a tall stand at the front. It glows in four bands of colour: navy, teal, plum and crimson. 'The Sorting Lantern asks twelve questions,' Penhallow says. 'It finds your strongest [[criterion|a standard used to judge something|เกณฑ์]]. Compass for direction. Bridge for order. Lexicon for the right word. Loom for control. Every house is a strength, and nobody is only one.' Juno squeezes your hand. 'Go on. It doesn't bite. Probably.' You walk up to the light."
+            text: "A brass lantern stands on a tall stand at the front. It glows in four bands of colour: navy, teal, plum and crimson. 'Stand before the Sorting Lantern and choose your house,' Penhallow says. 'Each house is one [[criterion|a standard used to judge something|เกณฑ์]]. Compass for direction. Bridge for order. Lexicon for the right word. Loom for control. Every house is a strength, and nobody is only one.' Juno squeezes your hand. 'Go on. It doesn't bite. Probably.' You walk up to the light."
           },
           {
             img: 'story/ch1-06.webp',
@@ -85,7 +85,7 @@
           }
         ],
         missions: [
-          { kind: 'event', event: 'sorting', label: 'Stand before the Sorting Lantern', note: 'Twelve questions. The Lantern finds your strongest key and your house.' },
+          { kind: 'event', event: 'sorting', label: 'Stand before the Sorting Lantern', note: 'No questions. Choose your house: Compass, Bridge, Lexicon or Loom.' },
           { kind: 'sub', id: 'm00s1' }, { kind: 'sub', id: 'm00s2' }, { kind: 'sub', id: 'm00s3' },
           { kind: 'check', id: 'm00l1' },
           { kind: 'sub', id: 'm01s1' }, { kind: 'sub', id: 'm01s2' }, { kind: 'sub', id: 'm01s3' },

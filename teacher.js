@@ -83,7 +83,7 @@
     var who = a.studentId ? 'for ' + a.studentId : a.cohort && a.cohort !== 'all' ? 'for the whole ' + a.cohort + ' cohort' : 'for everyone';
     if (a.kind === 'challenge') return 'House challenge · ' + who + ' · ' + (a.title || metricName(a.metric)) + ' (' + metricName(a.metric) + ') · ' + (a.from || '') + ' to ' + (a.to || '');
     if (a.kind === 'coreset') return 'Five prompts · ' + who + ' · ' + (a.prompts || []).map(function (id) { return (PR.get(id) || {}).title || id; }).join(', ');
-    if (a.kind === 'resort') return 'Re-sort · ' + who + ' · she meets the Sorting Lantern again on her next visit';
+    if (a.kind === 'resort') return 'Re-sort · ' + who + ' · she chooses her house again on her next visit';
     var n = Number(a.chapter) || 0;
     return 'Chapter unlock · up to chapter ' + n + (chapterTitle(n) ? ' (' + chapterTitle(n) + ')' : '') + ' · ' + who;
   }
@@ -459,9 +459,9 @@
       var defN = Math.min(NCH, Math.max(chN + 1, unl + 1, ordered + 1, 2));
       h += '<details class="disc" open><summary>Quillmoor story<span class="count">' + (sto.house ? esc((houseOf(sto.house) || {}).name || sto.house) + ' · ' : 'unsorted · ') + (chN ? 'chapter ' + chN : 'not started') + ' · ' + (Number(sto.hp) || 0) + ' house pts</span></summary><div class="disc-body" style="padding-top:10px">' +
         '<p class="tiny" style="margin-bottom:8px">' + houseChip(sto.house) + ' &nbsp;' + (chN ? 'Chapter ' + chN + ': ' + esc(chapterTitle(chN)) : 'Has not opened the story yet') + (unl > chN ? ' · unlocked up to chapter ' + unl : '') +
-        (srt.TR != null ? ' · Sorting: TR ' + srt.TR + ' · CC ' + srt.CC + ' · LR ' + srt.LR + ' · GRA ' + srt.GRA : '') + ((sto.keepsakes || []).length ? ' · keepsakes: ' + esc(sto.keepsakes.join(', ')) : '') + '</p>' +
+        (srt.TR != null ? ' · Sorting: TR ' + srt.TR + ' · CC ' + srt.CC + ' · LR ' + srt.LR + ' · GRA ' + srt.GRA : srt.chosen ? ' · chose her own house' : '') + ((sto.keepsakes || []).length ? ' · keepsakes: ' + esc(sto.keepsakes.join(', ')) : '') + '</p>' +
         '<div class="story-acts"><select id="d-unl-n">' + [1, 2, 3, 4, 5, 6, 7].map(function (n) { return '<option value="' + n + '"' + (n === defN ? ' selected' : '') + '>' + n + ' · ' + esc(chapterTitle(n)) + '</option>'; }).join('') + '</select>' +
-        '<button class="btn sm" id="d-unl">Unlock up to chapter ' + defN + '</button><button class="btn sm ghost" id="d-resort" title="She meets the Sorting Lantern again on her next visit">Re-sort</button></div>' +
+        '<button class="btn sm" id="d-unl">Unlock up to chapter ' + defN + '</button><button class="btn sm ghost" id="d-resort" title="She chooses her house again on her next visit">Re-sort</button></div>' +
         (myOrders.length ? '<div style="margin-top:8px">' + myOrders.map(function (a) { return '<div class="assignrow order"><div class="grow tiny">' + esc(orderLabel(a)) + ' · set ' + esc(String(a.ts || '').slice(0, 10)) + '</div><button class="btn sm ghost" data-orm="' + esc(a.id) + '">Remove</button></div>'; }).join('') + '</div>' : '') +
         '<p class="tiny" style="margin-top:8px">Unlocks open chapters early; they never lock one. Her progress still decides which gates she has passed.</p></div></details>';
       /* Your five (E4): her five prompts, her steps on each, and the selects to change them */

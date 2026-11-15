@@ -184,33 +184,12 @@ if (STORY) {
 
 /* ---------------------------------------------------------- the Sorting */
 if (haveSorting) {
-  if (!SORTING || !Array.isArray(SORTING.items)) err('sorting.js must define window.SORTING.items');
+  /* Since 15 Nov 2026 the student chooses her house: no question bank. */
+  if (!SORTING) err('sorting.js must define window.SORTING');
   else {
-    var items = SORTING.items, perCrit = { TR: 0, CC: 0, LR: 0, GRA: 0 }, pos = [0, 0, 0, 0], longest = 0, ids = {};
-    if (items.length !== 12) err('sorting: expected 12 items, found ' + items.length);
-    if (!SORTING.intro) warn('sorting: no intro'); if (!SORTING.tieLine) warn('sorting: no tieLine');
-    items.forEach(function (it, i) {
-      var w = 'sorting item ' + (it.id || i + 1);
-      if (!it.id || ids[it.id]) err(w + ': missing or duplicate id'); ids[it.id] = 1;
-      if (!perCrit.hasOwnProperty(it.crit)) err(w + ': bad crit ' + it.crit); else perCrit[it.crit]++;
-      if (!/^(B1|B2)$/.test(it.cefr || '')) warn(w + ': cefr should be B1 or B2');
-      if (!it.stem) err(w + ': no stem');
-      if (!Array.isArray(it.options) || it.options.length !== 4) err(w + ': needs 4 options');
-      else {
-        var seen = {}; it.options.forEach(function (o) { if (seen[o]) err(w + ': duplicate option "' + o + '"'); seen[o] = 1; });
-        if (typeof it.answer !== 'number' || it.answer < 0 || it.answer > 3) err(w + ': answer must be 0..3');
-        else {
-          pos[it.answer]++;
-          var lens = it.options.map(function (o) { return String(o).length; }), max = Math.max.apply(null, lens);
-          if (lens[it.answer] === max && lens.filter(function (l) { return l === max; }).length === 1) longest++;
-        }
-      }
-      if (!it.why) err(w + ': no why'); else if (String(it.why).split(/\s+/).length > 35) warn(w + ': why over 35 words');
-      if (/\b(option|answer) [a-d]\b/i.test(String(it.why))) err(w + ': why refers to an option letter');
-    });
-    Object.keys(perCrit).forEach(function (k) { if (perCrit[k] !== 3) err('sorting: ' + k + ' has ' + perCrit[k] + ' items (need 3)'); });
-    pos.forEach(function (n, k) { if (n !== 3) err('sorting: answer position ' + 'ABCD'[k] + ' is the key ' + n + ' times (need 3)'); });
-    if (longest > 4) warn('sorting: key is the single longest option in ' + longest + ' of 12 items (aim ~3)');
+    if (!SORTING.intro) err('sorting: no intro');
+    if (SORTING.items && SORTING.items.length) warn('sorting: items are no longer used by story.js');
+    (STORY && STORY.houses || []).forEach(function (h) { if (!SORTING.results || !SORTING.results[h.id]) warn('sorting: no result line for ' + h.id); });
   }
 }
 
@@ -231,5 +210,5 @@ SCAN.forEach(function (f) {
 /* -------------------------------------------------------------- report */
 warnings.forEach(function (w) { console.log('warn  ' + w); });
 errors.forEach(function (e) { console.log('ERROR ' + e); });
-console.log((errors.length ? 'FAILED: ' : 'OK: ') + errors.length + ' errors, ' + warnings.length + ' warnings' + (STORY ? ' · ' + (STORY.chapters || []).length + ' chapters' : '') + (haveSorting && SORTING ? ' · ' + (SORTING.items || []).length + ' sorting items' : ' · sorting.js not checked'));
+console.log((errors.length ? 'FAILED: ' : 'OK: ') + errors.length + ' errors, ' + warnings.length + ' warnings' + (STORY ? ' · ' + (STORY.chapters || []).length + ' chapters' : '') + (haveSorting && SORTING ? ' · sorting: house choice' : ' · sorting.js not checked'));
 process.exit(errors.length ? 1 : 0);

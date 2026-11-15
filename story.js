@@ -161,14 +161,14 @@
 
   /* ------------------------------------------------- time estimate
      Rough minutes per chapter, so a tutee and her teacher can plan the week:
-     a lesson (sub) about 7 minutes, an examiner's gate 9, the Sorting 10,
+     a lesson (sub) about 7 minutes, an examiner's gate 9, an event 10 (choosing a house 2),
      a room visit 20, a full essay 45 (the three mocks 135), reading 1.5 a page. */
   function estimateMinutes(ch) {
     var min = (ch.pages || []).length * 1.5 + 2;
     (ch.missions || []).forEach(function (m) {
       if (m.kind === 'sub') min += 7;
       else if (m.kind === 'check') min += 9;
-      else if (m.kind === 'event') min += 10;
+      else if (m.kind === 'event') min += m.event === 'sorting' ? 2 : 10;
       else if (m.kind === 'view') min += m.view === 'lab' ? 40 : 20;
       else if (m.kind === 'writing') min += /three/i.test(m.label || '') ? 135 : ch.n === 2 ? 10 : 45;
     });
@@ -1043,78 +1043,42 @@
     var tc = $('#tour-claim', el); if (tc) tc.addEventListener('click', function () { if (hasKeepsake(pr, 'token')) return back(); award({ id: 'token', name: 'Tournament token', desc: 'Proof that your own words come under a clock.' }, 50, back); });
   }
 
-  /* ======================================================== THE SORTING */
+  /* ======================================================== THE SORTING
+     Since 15 Nov 2026 there are no Sorting questions: she stands before the
+     Lantern and chooses her own house. Older sortings (with TR/CC/LR/GRA
+     tallies from the twelve questions) still show their bars and challenge. */
   function openSorting(chN, backPage) {
     var pr = p(), s = ensure(pr);
     st.sortBack = { ch: chN, page: backPage };
-    st.sort = { i: 0, answers: [], tally: { TR: 0, CC: 0, LR: 0, GRA: 0 }, t0: 0, items: [], stage: s.house ? 'result' : 'intro', tie: null };
-    var so = SORT();
-    if (so && so.items) st.sort.items = so.items.slice();
+    st.sort = { stage: s.house ? 'result' : 'choose' };
     st.screen = 'sorting';
     host.show('story');
   }
   function paintSorting(el) {
-    var pr = p(), s = ensure(pr), so = SORT(), S_ = st.sort, ch = chapterN(st.sortBack.ch) || chapterN(1);
+    var pr = p(), s = ensure(pr), so = SORT() || {}, S_ = st.sort, ch = chapterN(st.sortBack.ch) || chapterN(1);
     function back() { st.screen = st.sortBack.page == null ? 'chapter' : 'page'; st.ch = ch.n; if (st.sortBack.page != null) { st.page = st.sortBack.page; } resume(); }
-    var html = '<div class="story-top"><button class="btn ghost sm" id="st-back">← Chapter ' + ch.n + '</button><span class="story-crumb">The Sorting Lantern</span><span class="story-right">' + (S_.stage === 'item' ? (S_.i + 1) + ' / ' + S_.items.length : '') + '</span></div>';
-    if (!so || !so.items || !so.items.length) {
-      html += '<div class="card sorting"><div class="lantern-wrap">' + lanternSvg({}) + '</div><p class="sort-line">The Lantern is being polished. Come back when the brass is bright.</p></div>';
-      el.innerHTML = html; wireBack(el, back); return;
-    }
-    var n = S_.items.length, glow = {};
-    CRITS.forEach(function (k) { glow[k] = Math.min(1, 0.15 + 0.85 * S_.i / n); });
-    if (S_.stage === 'intro') {
-      html += '<div class="card sorting"><div class="lantern-wrap">' + lanternSvg(glow) + '</div><div class="story-text">' + renderText(so.intro || '') + '</div><p class="tiny">Twelve questions. The Lantern shows no marks, only light. It finds your strongest key: direction, order, the right word, or control.</p><button class="btn primary wide" id="sort-go">Walk up to the light →</button></div>';
+    var html = '<div class="story-top"><button class="btn ghost sm" id="st-back">← Chapter ' + ch.n + '</button><span class="story-crumb">The Sorting Lantern</span><span class="story-right"></span></div>';
+    if (S_.stage === 'choose') {
+      html += '<div class="card sorting"><div class="lantern-wrap">' + lanternSvg({ TR: 1, CC: 1, LR: 1, GRA: 1 }) + '</div><div class="story-text">' + renderText(so.intro || 'The Lantern glows in four colours. Choose the house you want to join.') + '</div><div class="tie-pick">' + STORY().houses.map(function (h) { return '<button class="btn wide tie" data-house="' + h.id + '" data-crit="' + h.crit + '">' + crestSvg(h.id, 26) + '<span><b>' + esc(h.name) + '</b> · ' + esc(h.critName) + ' · ' + esc(h.values) + '</span></button>'; }).join('') + '</div></div>';
       el.innerHTML = html; wireBack(el, back); wireWords(el);
-      $('#sort-go', el).addEventListener('click', function () { S_.stage = 'item'; S_.i = 0; S_.t0 = Date.now(); resume(); });
-      return;
-    }
-    if (S_.stage === 'item') {
-      var it = S_.items[S_.i];
-      html += '<div class="card sorting"><div class="lantern-wrap small">' + lanternSvg(glow) + '</div><div class="qcard"><p class="kicker">Question ' + (S_.i + 1) + '</p><p class="stem">' + esc(it.stem) + '</p><div class="opts">' + it.options.map(function (o, k) {
-        return '<button class="opt" data-k="' + k + '"><span class="opt-k">' + 'ABCD'.charAt(k) + '</span><span class="opt-t">' + esc(o) + '</span></button>';
-      }).join('') + '</div></div></div>';
-      el.innerHTML = html; wireBack(el, back);
-      var locked = false;
-      $$('.opt', el).forEach(function (b) { b.addEventListener('click', function () {
-        if (locked) return; locked = true;
-        var k = Number(b.dataset.k), ms = Date.now() - S_.t0, correct = k === it.answer;
-        $$('.opt', el).forEach(function (o) { o.disabled = true; }); b.classList.add('sel');
-        S_.answers.push({ id: it.id, crit: it.crit, k: k, correct: correct, ms: ms });
-        if (correct) S_.tally[it.crit]++;
-        try { if (global.API && global.API.enqueue) global.API.enqueue([{ ts: nowIso(), studentId: pr.studentId, itemId: 'sort-' + it.id, topic: 'sorting', level: '', type: 'choose', tag: 'sort-' + it.crit, cefr: it.cefr || '', correct: correct ? 1 : 0, ms: ms, hinted: 0, fast: 0, mode: 'sorting', given: String(it.options[k]).slice(0, 200), expected: String(it.options[it.answer]).slice(0, 200) }]); } catch (e) {}
-        var lantern = $('.lantern-wrap', el); if (lantern) lantern.classList.add('pulse');
-        setTimeout(function () { S_.i++; S_.t0 = Date.now(); if (S_.i >= n) finishSorting(); else resume(); }, reducedMotion() ? 120 : 420);
-      }); });
-      return;
-    }
-    if (S_.stage === 'tie') {
-      html += '<div class="card sorting"><div class="lantern-wrap">' + lanternSvg({ TR: 1, CC: 1, LR: 1, GRA: 1 }) + '</div><div class="story-text">' + renderText(so.tieLine || 'The Lantern glows in two colours at once. It is yours to choose.') + '</div><div class="tie-pick">' + S_.tie.map(function (k) { var h = STORY().houses.filter(function (x) { return x.crit === k; })[0]; return '<button class="btn wide tie" data-house="' + h.id + '" data-crit="' + k + '">' + crestSvg(h.id, 26) + '<span><b>' + esc(h.name) + '</b> · ' + esc(h.values) + '</span></button>'; }).join('') + '</div></div>';
-      el.innerHTML = html; wireBack(el, back);
-      $$('.tie', el).forEach(function (b) { b.addEventListener('click', function () { settleHouse(b.dataset.crit); }); });
+      $$('.tie', el).forEach(function (b) { b.addEventListener('click', function () { $$('.tie', el).forEach(function (o) { o.disabled = true; }); settleHouse(b.dataset.crit); }); });
       return;
     }
     /* result */
-    var h = house(pr), weak = weakestCrit(pr), wh = weak ? STORY().houses.filter(function (x) { return x.crit === weak; })[0] : null;
-    var t = s.sort || {};
+    var h = house(pr), t = s.sort || {}, scored = t.TR != null;
+    var weak = scored ? weakestCrit(pr) : null, wh = weak ? STORY().houses.filter(function (x) { return x.crit === weak; })[0] : null;
     html += '<div class="card sorting result"><div class="lantern-wrap">' + lanternSvg({ TR: 1, CC: 1, LR: 1, GRA: 1 }, h ? h.crit : null) + '</div>' +
       '<p class="kicker">' + esc(h && so.results && so.results[h.id] ? so.results[h.id] : 'The Lantern glows ' + (h ? h.name.toLowerCase() : '')) + '</p><h2 class="house-name">' + (h ? crestSvg(h.id, 44) + ' ' + esc(h.name) : '') + '</h2>' +
       (h ? '<p class="house-motto">' + esc(h.motto) + '</p><div class="story-text">' + sayBtn(h.welcome) + '<p>' + esc(h.welcome) + '</p><p class="tiny">' + esc(h.head) + ', head of ' + esc(h.name) + '</p></div>' : '') +
-      '<div class="sort-bars">' + CRITS.map(function (k) { var hh = STORY().houses.filter(function (x) { return x.crit === k; })[0]; var v = Number(t[k]) || 0; return '<div class="sort-bar"><span>' + esc(hh ? hh.name : k) + ' · ' + v + ' of 3</span><span class="sort-track"><i style="--w:' + Math.round(100 * v / 3) + '%;background:' + (hh ? hh.main : '') + '"></i></span></div>'; }).join('') + '</div>' +
+      (scored ? '<div class="sort-bars">' + CRITS.map(function (k) { var hh = STORY().houses.filter(function (x) { return x.crit === k; })[0]; var v = Number(t[k]) || 0; return '<div class="sort-bar"><span>' + esc(hh ? hh.name : k) + ' · ' + v + ' of 3</span><span class="sort-track"><i style="--w:' + Math.round(100 * v / 3) + '%;background:' + (hh ? hh.main : '') + '"></i></span></div>'; }).join('') + '</div>' : '') +
       (wh ? '<div class="challenge"><p class="kicker">Your challenge</p><p>' + esc(wh.challengeLine) + '</p></div>' : '') +
       '<button class="btn primary wide" id="sort-done">Continue the story →</button></div>';
     el.innerHTML = html; wireBack(el, back);
     $('#sort-done', el).addEventListener('click', back);
   }
-  function finishSorting() {
-    var S_ = st.sort, best = -1, top = [];
-    CRITS.forEach(function (k) { var v = S_.tally[k]; if (v > best) { best = v; top = [k]; } else if (v === best) top.push(k); });
-    if (top.length > 1) { S_.tie = top; S_.stage = 'tie'; resume(); return; }
-    settleHouse(top[0]);
-  }
   function settleHouse(crit) {
     var pr = p(), s = ensure(pr), S_ = st.sort, h = STORY().houses.filter(function (x) { return x.crit === crit; })[0];
-    s.sort = { TR: S_.tally.TR, CC: S_.tally.CC, LR: S_.tally.LR, GRA: S_.tally.GRA, at: nowIso(), answers: S_.answers.map(function (a) { return a.id + ':' + a.k; }).join(' ') };
+    s.sort = { chosen: 1, at: nowIso() };
     s.house = h ? h.id : null;
     pr.xp = (pr.xp || 0) + SORT_XP;
     applyHouseAttr(pr);
