@@ -23,7 +23,7 @@
             askFree: 'Read the last two sentences of the prompt. Write the question type in a few words.',
             ok: 'Two direct questions to answer one by one',
             wrong: [
-              ['Discuss both views and give your opinion', 'That type gives two views of other people and asks you to discuss them. This prompt gives no views: count the question marks.'],
+              ['Discuss both views and give your opinion', 'That type gives two views that other people hold and asks you to discuss them. This prompt gives no views: count the question marks.'],
               ['To what extent do you agree or disagree', 'That type gives one statement and asks how far you agree. Here each of the last two sentences ends with a question mark.'],
               ['Do the advantages outweigh the disadvantages', 'Look for the words "advantages" or "outweigh" in the last sentences. They are not there: count the questions instead.']
             ],
@@ -408,7 +408,7 @@
               { re: '\\bon$', hint: 'Check the preposition at the end.' }],
             hint: 'Pronoun + modal + verb + "this" + an adverb + a preposition.', hint2: 'Open My Spellbook: the third sentence of your template Body A line.' },
           { id: 'a-ex', label: 'Example', tag: 'tr-no-example', v: 'exA', post: '.',
-            ask: 'Variable 4. Which example shows Facet A, students a reader can picture?',
+            ask: 'Variable 4. Which example shows Facet A with students a reader can picture?',
             askFree: 'Variable 4. Write Example A: students a reader can picture, paying for extra marks before the entrance exam.',
             ok: 'students who go to three tutoring sessions a week in the year before the entrance exam',
             wrong: [
@@ -538,7 +538,7 @@
               { re: '^which', hint: 'Start this part with "and".' }],
             hint: 'A short linking part: the result of the idea can be seen somewhere.', hint2: 'Open My Spellbook: the middle of the second sentence of your template Body B line.' },
           { id: 'b-ex', label: 'Example', tag: 'tr-no-example', v: 'exB', post: '.',
-            ask: 'Variable 8. Which example shows Facet B, the gap a reader can picture?',
+            ask: 'Variable 8. Which example lets a reader picture the gap in Facet B?',
             askFree: 'Variable 8. Write Example B: a kind of university where a reader can see the gap between rich and poor families.',
             ok: 'top universities where students from rich city families are heavily over-represented',
             wrong: [
@@ -597,7 +597,7 @@
             reject: [{ re: '^(because of this|therefore|so|as a result|thus)$', hint: 'That shows a result. The next sentence goes against the idea.' },
               { re: '^(in other words|that is)$', hint: 'That repeats the idea. The next sentence goes against it.' },
               { re: '^(similarly|likewise|also|moreover|in addition)$', hint: 'That adds a similar point. The next sentence goes against it.' }],
-            hint: 'Name the relation first: the next sentence goes against the harm idea.', hint2: 'Your template uses a two-word linker of contrast here.' },
+            hint: 'Name the relation first: the next sentence goes against the idea that tutoring only does harm.', hint2: 'Your template uses a two-word linker of contrast here.' },
           { id: 'b-nu', label: 'Limit', tag: 'tr-no-nuance', v: 'nuanceB', post: ',',
             ask: 'Variable 9. Which limit of Facet B keeps your position standing?',
             askFree: 'Variable 9. Write Nuance B: one clause that shows when tutoring helps a student.',

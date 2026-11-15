@@ -53,7 +53,7 @@
             askFree: 'What is the most common trap with this type? Write it in one sentence.',
             ok: 'Giving only one cause or one measure, or a measure that answers no cause',
             wrong: [
-              ['Keeping my opinion for the conclusion instead of paragraph one', 'That matters in every essay, but this type has its own trap. Think about what each question asks for, and how many.'],
+              ['Keeping my opinion for the conclusion instead of putting it in paragraph one', 'That matters in every essay, but this type has its own trap. Think about what each question asks for, and how many.'],
               ['Not saying which side outweighs the other side', 'That is the trap of an advantages / disadvantages prompt, which asks for a verdict on outweighing.'],
               ['Writing about only one of the two views', 'That is the trap of a Discuss prompt. This prompt has no views to discuss.']
             ],
@@ -63,8 +63,8 @@
               { re: 'both views|two views|one view|one side', hint: 'This prompt has no views. Think about what the two questions ask for.' }],
             hint: 'Think about the plurals in the two questions, and about how a measure must fit a cause.', hint2: 'What goes wrong if a measure in Body B has nothing to do with any cause in Body A?', ai: true },
           { id: 't-core', label: 'Core Topic', tag: 'lr-nominal', v: 'core',
-            ask: 'Variable 1. Which noun phrase covers the whole situation, the graduates and the employers both?',
-            askFree: 'Variable 1. Write the Core Topic: one noun phrase that covers the whole situation, the graduates and the employers both.',
+            ask: 'Variable 1. Which noun phrase covers the whole situation, both the graduates and the employers?',
+            askFree: 'Variable 1. Write the Core Topic: one noun phrase that covers the whole situation, both the graduates and the employers.',
             ok: 'The gap between the qualifications of graduates and the jobs on offer.',
             wrong: [
               ['The rise in unemployment across the whole of the national economy in recent years.', 'Too wide: the prompt is about university graduates and jobs in their field, not everyone without work.'],

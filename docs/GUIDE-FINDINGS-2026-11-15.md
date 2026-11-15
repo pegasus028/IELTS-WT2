@@ -49,3 +49,6 @@ Things noticed while building the High / Medium guidance on `p-cars-city`. None 
 - p-cashless B1 `exA`: "show a scan code instead of a cash box" ("a scan code" is unusual; B2 has "a code to scan").
 - p-rural-youth B1 `mechB`: "city housing, transport and schools overflow" ("transport overflows" is odd).
 - p-rural-youth B1 `nuanceB`: "money that migrants send home and skills some bring back" reads better as "the money … the skills".
+- p-online-scams B1 `position` near-miss 1: "spend far more officers and money" (wrong collocation that is not the planned error; the script uses "put … into").
+- p-youth-unemployment B1 `exA`: a "too many …" phrase cannot follow "We can see this clearly in"; the script rewords it.
+- The B1 sets for p-online-scams and p-youth-unemployment carry many long words (compulsory, recognition, placements, vacancies) for Band 4–5.
