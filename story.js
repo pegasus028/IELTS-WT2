@@ -84,9 +84,12 @@
   }
   /* An essay handed to the examiners: a submitted report, or a LevelUp hand-off.
      With kind 'mock', only the mock examinations count (B6). */
+  /* 15 Nov 2026: an essay built at High guidance (multiple choice, the app's text) is not her essay: it does not
+     count for gates, missions, house points or challenges (docs/GUIDANCE-LEVELS.md). */
+  function ownReports(pr) { return (pr.reports || []).filter(function (r) { return r.mode !== 'high' && r.uiMode !== 'high'; }); }
   function essaysSent(pr, kind) {
-    if (kind) return (pr.reports || []).filter(function (r) { return r.kind === kind; }).length;
-    var n = (pr.reports || []).length;
+    if (kind) return ownReports(pr).filter(function (r) { return r.kind === kind; }).length;
+    var n = ownReports(pr).length;
     var s = ensure(pr);
     return Math.max(n, (s && s.handoffs) || 0);
   }
@@ -209,7 +212,7 @@
   function writingMissionDone(pr, m) {
     var s = ensure(pr);
     var need = /three/i.test(m.label || '') ? 3 : 1;
-    var sent = /mock/i.test(m.label || '') ? essaysSent(pr, 'mock') : (pr.reports || []).length;
+    var sent = /mock/i.test(m.label || '') ? essaysSent(pr, 'mock') : ownReports(pr).length;
     return s.visited[m._key] === 'done' || sent >= need;
   }
   function eventDone(pr, ev) {
@@ -247,7 +250,7 @@
       } catch (e) {}
     }
     var need = tourWords(pr);
-    if (!done['tour-essay'] && (pr.reports || []).some(function (r) { return r.ts > started && (r.words || 0) >= need; })) done['tour-essay'] = nowIso();
+    if (!done['tour-essay'] && ownReports(pr).some(function (r) { return r.ts > started && (r.words || 0) >= need; })) done['tour-essay'] = nowIso();
     return Object.keys(done).length;
   }
 
@@ -455,7 +458,7 @@
   function challengeScore(pr, row) {
     var s = ensure(pr), c = s.challenge;
     if (!c || c.id !== row.id) { c = s.challenge = { id: row.id, score: 0, base: { xp: pr.xp || 0, reclaimed: pr.reclaimed || 0 }, at: nowIso() }; }
-    var reps = (pr.reports || []).filter(function (r) { return r.kind !== 'mock' && inWindow(r.ts, row); }), v = 0;
+    var reps = ownReports(pr).filter(function (r) { return r.kind !== 'mock' && inWindow(r.ts, row); }), v = 0;
     switch (row.metric) {
       case 'essays': v = reps.filter(function (r) { return !r.revisionOf; }).length; break;
       case 'revisions': v = reps.filter(function (r) { return !!r.revisionOf; }).length; break;

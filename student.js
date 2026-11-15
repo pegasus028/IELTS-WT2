@@ -369,7 +369,7 @@
   }
   function weekKey(iso) { var d = new Date(iso + 'T00:00:00Z'), day = (d.getUTCDay() + 6) % 7; d.setUTCDate(d.getUTCDate() - day); return d.toISOString().slice(0, 10); }
   function weeklyExam(p) {
-    var thisWeek = weekKey(E.today()), sent = (p.reports || []).filter(function (r) { return r.ts && weekKey(String(r.ts).slice(0, 10)) === thisWeek; }).length;
+    var thisWeek = weekKey(E.today()), sent = (p.reports || []).filter(function (r) { return r.ts && !builtByApp(r) && weekKey(String(r.ts).slice(0, 10)) === thisWeek; }).length;
     var written = {}; (p.reports || []).forEach(function (r) { written[r.promptId] = 1; });
     var pool = practicePrompts().filter(function (pr) { return !written[pr.id]; });
     if (!pool.length) pool = practicePrompts();

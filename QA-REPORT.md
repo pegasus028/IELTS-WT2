@@ -1,5 +1,25 @@
 # Position Control / Quillmoor Academy — QA report
 
+## Scriptorium guidance levels: High, Medium, Low, Exam — 15 November 2026 (Claude Opus 5.5)
+
+Requested by T.Chris: the four guidance levels of the Task 1 app (IELTS-WT1, 12–13 Nov 2026) in the Task 2 Scriptorium, tested on one prompt first. Fable 5.2 was not available (usage limit), so Opus 5.5 built and self-reviewed everything; Fable's independent review is set out in `docs/HANDOVER-FABLE-REVIEW.md` for after the weekly reset (Tue 17 Nov).
+
+**Built.**
+- *Engine* `guide.js` (ported from Task 1): High = multiple choice with one right answer, a wrong option greyed out and struck through with its own hint; Medium = free text with Commit, rule check (capitals → known slip → rules) and the AI check where the rules cannot judge, "keep my answer as it is", a 12-second fallback to the rules, panes editable at the end. A run is kept on the device until sent (`pc.guide.v1.*`); scripts load on demand (`guide/<id>.js`, `guide-index.js`). Task 2 changes: the prompt card and "Your plan" on the left, four panes (Introduction, Body A, Body B, Conclusion; 50 / 95 / 95 / 45), a larger box for clause-sized answers, no clock (time is recorded), mock prompts refused.
+- *Levels* (`student.js`, `writer.js`, `guide.css`): four radios; Skeleton is a "slot labels only" tick under Low; stored `guided` / `skeleton` values and old teacher assignments still open; a prompt without a script, a mock and a revision open at Low with a short note; "step by step" pills on prompts that have a script. Low = the old Guided mode plus six introduction notes in the Introduction box (type, parts, Core Topic in new words, the two sides, position, lead-in), saved with the plan; the Type note says whether the type is right.
+- *High essays* (`engine.js`, `story.js`, `student.js`, `teacher.js`): half merits (75 / 30) instead of the own-share rule's 0; no own-share, band or badge bonuses; not counted for chapter gates, missions, the term-project essay step, house points, the weekly challenge or the weekly examination; no LevelUp hand-off, revision or owl; the result offers "Write it at Medium guidance". The Staff Room labels them "built at High".
+- *Backend* `lab.guideCheck` in Lab.gs (outside the lock): its own model chain (`GUIDE_MODELS`), budget (`GUIDE_DAILY_BUDGET` 1500 / `GUIDE_STUDENT_CAP` 200), six-hour cache, fenced material, tool-use verdict, leak guard. `APP_VERSION` / `EXPECTED_BACKEND` 20261115.
+- *Test script* `guide/p-cars-city.js`: 45 steps (11 triage, 7 introduction, 10 Body A, 11 Body B, 6 conclusion), 25 with the AI check; on your B2 Universal Spine starter lines with the prompt's B2 variables; 287 words (60 / 85 / 96 / 46), template share 23%, every Ward green, thesis and body checkers pass, longest run from the prompt 5 words; estimated High run 30 minutes. 235 Medium cases.
+- *Standard and tests*: `docs/GUIDANCE-LEVELS.md` (contract), `docs/GUIDE-AUTHORING-T2.md` (standard for the other 36), `tools/guide-test.js` (2,606 checks on the test script: shape, leaks, option balance, the essay against every acceptance check, the Spine word for word, duel agreement, the cases, joins, run time), `tools/guide-smoke.py` (browser: High wrong-first then right on all 45 steps with a reload half-way, Medium with a stubbed AI including a leaking hint and a 12-second hang, Low notes, fallbacks, 390 px), new checks in `tools/gs-test.js`.
+
+**Self-review changes.** Eleven second hints quoted the Spine line with one gap ("It … by"): replaced by a pointer to My Spellbook. A hint used "her" for a worker: made neutral. The restated position started "city leaders should", which the position Ward does not recognise: now "cities should". Two rule steps had unanchored patterns: anchored.
+
+**Tests.** All ten existing suites, guide-test, smoke.py (0 console errors) and guide-smoke.py (0 console errors), on scratch copies.
+
+**For T.Chris.** See `docs/GUIDE-FINDINGS-2026-11-15.md` (five points on the Spine wording, which every High essay now uses, one on the prompt, one on the position Ward). Decisions taken on your behalf, easy to change: Skeleton as a tick under Low; High essays do not count for gates or house points (you said "half merits"; this is my recommendation for the rest); the six introduction notes.
+
+---
+
 ## Streamlining rooms 3 onwards — 10 November 2026 (Claude Fable 5.2)
 
 Requested by T.Chris: audit the app and streamline the process, without changing the first and second rooms (Map Room, Classes). Only `student.js` (room painters for the Duelling Hall, Scriptorium, My Spellbook and Report Card), its `?v=` in index.html and `tools/smoke.py` changed. `paintPlan`, `paintMap`, `goNext`, story.js, the lesson player, all content files, ids, `pc.*`/`qm.*` keys, API actions and Code.gs are untouched; no redeploy is needed.
