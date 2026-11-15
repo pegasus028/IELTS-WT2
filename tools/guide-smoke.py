@@ -133,7 +133,8 @@ with sync_playwright() as p:
     page.fill('#wr-i-core', 'the taxing of unhealthy fast food')
     page.click('#wr-quit'); page.wait_for_timeout(300)
 
-    step('A prompt without a script, at High, opens at Low; a mock opens at Exam; an old "guided" assignment opens at Low')
+    step('A prompt without a script (one taken out of the index), at High, opens at Low; a mock opens at Exam; an old "guided" assignment opens at Low')
+    page.evaluate("window.GUIDE_INDEX = window.GUIDE_INDEX.filter(function(x){return x!=='p-fast-food-tax'}); if (window.GUIDE_SCRIPTS) delete window.GUIDE_SCRIPTS['p-fast-food-tax']")  # every prompt has a script now: take one away
     open_prompt(page, 'high', 'p-fast-food-tax')
     assert page.locator('#wr-v-core').count() == 1 and page.locator('#gd-q').count() == 0
     page.click('#wr-quit'); page.wait_for_timeout(300)

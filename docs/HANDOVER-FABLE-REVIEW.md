@@ -29,8 +29,8 @@ He asked: "do everything yourself, push to GitHub asap, and produce a handover d
 | Engine port, levels, Low notes, High-essay rules, backend action | on main |
 | `docs/GUIDANCE-LEVELS.md`, `docs/GUIDE-AUTHORING-T2.md`, `tools/guide-test.js`, `tools/guide-smoke.py`, gs-test additions | on main |
 | Test script `guide/p-cars-city.js` + `tools/guide-cases/p-cars-city.json` | on main; **waiting for T.Chris's review** |
-| Apps Script redeploy (Version for `APP_VERSION 20261115`) | see the QA-REPORT top section and the chat; if `ping` from the live page does not report 20261115, redeploy (apps-script-deploy skill). Until then the Medium AI check falls back to the rules and the Staff Room shows the version banner |
-| Other 36 scripts | not started (after his review) |
+| Apps Script redeploy | done: Version 16, 15 Nov 2026 18:05; `ping` from the live page reports 20261115 |
+| Other 36 scripts | **all written and on main the same evening** (T.Chris asked for High on every prompt). Writers were Opus 5.5; each script was reviewed by the coordinating Opus chat, not by Fable. Review them as in §3 A, starting with T.Chris's five (`p-fast-food-tax`, `p-cctv-everywhere`, `p-free-transport`, `p-youth-unemployment`, `p-rural-youth`), then the type adaptations (Opinion extent steps, Problem second cause / measure, Two-part verdict). The writers' doubts are summarised per prompt in `docs/GUIDE-FINDINGS-2026-11-15.md` |
 
 ## 3. What to review, in order of risk
 
