@@ -226,7 +226,7 @@
             ok: 'The question of', pre: '',
             wrong: [
               ['Nowadays, in this modern era, the question of', 'Every examiner has read "nowadays, in this modern era" thousands of times: it is a cliché, and it adds nothing.'],
-              ['The question about', 'After "the question" the usual preposition here is a different one. Read your template line again.'],
+              ['The question about', 'After "the question", your template uses a different preposition. Read your template line again.'],
               ['Question of', 'A singular noun at the start of a sentence needs an article.']
             ],
             shape: 'three words', expect: 'The question of (also accepted: the issue of, the problem of)',
@@ -354,14 +354,14 @@
             wrong: [
               ['For example, it works by', 'An example comes later. This sentence explains how the cause works.'],
               ['It is working by', 'A general truth uses the present simple, not the present continuous.'],
-              ['It works because', 'After "because" you need a full clause, but the next piece starts with an -ing verb.']
+              ['It works because', 'After "because" you need a full clause, but the next part starts with an -ing verb.']
             ],
             shape: 'three words', expect: 'It works by (also accepted: this works by)',
             accept: [['^(it|this) works by$']],
             reject: [{ re: 'example', hint: 'This is not the example yet: it explains how the cause works.' },
               { re: 'is working', hint: 'A general truth: use the present simple.' },
-              { re: 'because', hint: 'The next piece starts with an -ing verb, so "because" does not fit.' }],
-            hint: 'Pronoun + verb + preposition; the next piece is an -ing verb.', hint2: 'Open My Spellbook: the second sentence of your template Body A line.' },
+              { re: 'because', hint: 'The next part starts with an -ing verb, so "because" does not fit.' }],
+            hint: 'Pronoun + verb + preposition; the next part is an -ing verb.', hint2: 'Open My Spellbook: the second sentence of your template Body A line.' },
           { id: 'a-mech', label: 'Mechanism', tag: 'tr-generalised', v: 'mechA', post: '.',
             ask: 'Variable 3. How does the main cause work? Choose the mechanism.',
             askFree: 'Variable 3. Write Mechanism A: how concrete on the ground leads to floods, starting with an -ing verb.',
@@ -421,7 +421,7 @@
             shape: 'one linker of contrast', expect: 'However (also accepted: even so, yet, nevertheless, that said)',
             accept: [['^(however|even so|yet|nevertheless|nonetheless|that said)$']],
             reject: [{ re: '^(therefore|thus|so|as a result|consequently)$', hint: 'That shows a result. The next sentence limits the first point.' },
-              { re: '^(moreover|furthermore|in addition|also|besides)$', hint: 'That only adds a point. Your template ends this sentence with "so this point has its limits": it needs a contrast.' },
+              { re: '^(moreover|furthermore|in addition|also|besides)$', hint: 'That only adds a point. The next sentence needs a contrast.' },
               { re: '^(for example|for instance)$', hint: 'Your example is already given.' },
               { re: '^(in other words|that is)$', hint: 'That says the same idea again. The next sentence limits it.' },
               { re: '^but$', hint: 'In formal writing, start the sentence with a linker of contrast followed by a comma.' }],

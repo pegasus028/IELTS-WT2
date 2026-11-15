@@ -128,7 +128,7 @@
             askFree: 'Variable 10. Write your position as one clause: which side outweighs, and on what condition?',
             ok: 'the advantages outweigh the disadvantages, as long as footage is kept only briefly and access to it is tightly controlled',
             wrong: [
-              ['cameras bring both safety and risk in equal measure, and each community must weigh them for itself according to its own particular situation', 'This sits on the fence: "equal measure" gives no verdict on which side is heavier.'],
+              ['cameras bring both safety and risk in equal measure, and each community must weigh them for itself', 'This sits on the fence: "equal measure" gives no verdict on which side is heavier.'],
               ['the disadvantages outweigh the advantages, because privacy once lost cannot be recovered', 'This takes the critics\' side completely. Your plan found that the privacy danger can be managed, so it does not have to win.'],
               ['cameras should be removed from schools and streets and used only inside banks and shops', 'This is a policy, not a verdict: it does not say which side is heavier.']
             ],
@@ -192,7 +192,7 @@
             ok: 'The question of', pre: '',
             wrong: [
               ['Nowadays, in this modern era, the question of', 'Every examiner has read "nowadays, in this modern era" thousands of times: it is a cliché, and it adds nothing.'],
-              ['The question about', 'After "the question" the usual preposition here is a different one. Read your template line again.'],
+              ['The question about', 'After "the question", your template uses a different preposition. Read your template line again.'],
               ['Question of', 'A singular noun at the start of a sentence needs an article.']
             ],
             shape: 'three words', expect: 'The question of (also accepted: the issue of, the debate about)',
@@ -319,14 +319,14 @@
             wrong: [
               ['For example, it works by', 'An example comes later. This sentence explains how the idea works.'],
               ['It is working by', 'A general truth uses the present simple, not the present continuous.'],
-              ['It works because', 'After "because" you need a full clause, but the next piece starts with an -ing verb.']
+              ['It works because', 'After "because" you need a full clause, but the next part starts with an -ing verb.']
             ],
             shape: 'three words', expect: 'It works by (also accepted: this works by)',
             accept: [['^(it|this) works by$']],
             reject: [{ re: 'example', hint: 'This is not the example yet: it explains how the idea works.' },
               { re: 'is working', hint: 'A general truth: use the present simple.' },
-              { re: 'because', hint: 'The next piece starts with an -ing verb, so "because" does not fit.' }],
-            hint: 'Pronoun + verb + preposition; the next piece is an -ing verb.', hint2: 'Open My Spellbook: the second sentence of your template Body A line.' },
+              { re: 'because', hint: 'The next part starts with an -ing verb, so "because" does not fit.' }],
+            hint: 'Pronoun + verb + preposition; the next part is an -ing verb.', hint2: 'Open My Spellbook: the second sentence of your template Body A line.' },
           { id: 'a-mech', label: 'Mechanism', tag: 'tr-generalised', v: 'mechA', post: '.',
             ask: 'Variable 3. How do cameras prevent crime? Choose the mechanism.',
             askFree: 'Variable 3. Write Mechanism A: how cameras prevent crime, starting with an -ing verb.',
@@ -535,7 +535,7 @@
             hint: 'An example shows the mechanism really happening: recordings getting out.', hint2: 'Think of a news story about private videos ending up on the internet.', ai: true },
           { id: 'b-2lead', label: 'Subject', tag: 'gra-word-form',
             ask: 'The next sentence adds a second disadvantage. Which subject is right?',
-            askFree: 'Start the next sentence with two words that name the activity behind the cameras, as its subject.',
+            askFree: 'Start the next sentence with two words that name what the cameras do all day, as its subject.',
             ok: 'Constant filming',
             wrong: [
               ['Constant filmings', 'Filming as an activity is uncountable, so it takes no plural -s.'],
