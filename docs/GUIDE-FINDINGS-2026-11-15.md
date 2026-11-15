@@ -62,3 +62,5 @@ Things noticed while building the High / Medium guidance on `p-cars-city`. None 
 - p-cashless C1 `rationale` adds "transparency", which no paragraph develops (a new idea in the conclusion); `position` (B2 and C1) "the excluded are helped to join" is vague (join what?).
 - p-rural-youth C1 `facetB` joins two subjects with "and", so the template's "{facetB} is the decisive factor" gets a plural subject.
 - template.js `c1-twopart-bodyB` / `c1-twopart-conclusion` assume Facet B decides question 2; they read wrongly for a two-part prompt whose verdict is positive with a condition (cashless uses the Standard lines there). `c1-twopart-bodyA` "This follows from {mechA}" needs a noun phrase, but most C1 mechanism variables are "-ing" phrases.
+- p-children-tv B1 and B2 `facetA`: "well made programmes" needs a hyphen before a noun ("well-made"). p-free-transport B1 `exA` "former walkers" is a slightly odd phrase.
+- General: most B1 variable sets are B2 wording with a few words swapped, so B1 essays sit at 4–9% long words rather than ~5%.

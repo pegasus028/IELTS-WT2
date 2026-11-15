@@ -141,7 +141,7 @@
             hint: 'Think of a worker for whom the price of a ticket really matters.', hint2: 'For whom is the fare a real problem every day?', ai: true },
           { id: 't-extent', label: 'How far', tag: 'tr-partial',
             ask: 'You have two reasons against the claim and one part you accept. How far do you agree?',
-            askFree: 'Write how far you agree with the claim, with one extent word.',
+            askFree: 'Write how far you agree or disagree with the claim, with one extent word.',
             ok: 'I largely disagree, but accept one part of it',
             wrong: [
               ['I completely disagree with every part of it', 'Too absolute: your plan accepts one part, about commuters on low incomes.'],
@@ -623,7 +623,7 @@
             hint: 'Two words that tell the reader the essay is closing.', hint2: 'A preposition and a noun.' },
           { id: 'c-extent', label: 'How far again', tag: 'gra-word-form', post: ':',
             ask: 'Say again how far you agree, in new words. Which one is right?',
-            askFree: 'Say again, in new words, how far you agree with the claim (subject + extent word + verb).',
+            askFree: 'Say again, in new words, how far you disagree with the claim (subject + extent word + verb).',
             ok: 'I largely disagree',
             wrong: [
               ['I disagree', 'The prompt asks "to what extent": say how far again here, not only which side.'],
