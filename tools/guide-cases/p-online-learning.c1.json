@@ -1,0 +1,1312 @@
+[
+[
+"t-budget",
+"50 / 95 / 95 / 45",
+"accept"
+],
+[
+"t-budget",
+"about 285 words in all",
+"accept"
+],
+[
+"t-budget",
+"100, 60, 60 and 100",
+"revise"
+],
+[
+"t-budget",
+"four paragraphs",
+"not-accept"
+],
+[
+"c-open",
+"to conclude",
+"accept"
+],
+[
+"c-open",
+"In conclusion",
+"accept"
+],
+[
+"c-open",
+"in a nutshell",
+"revise"
+],
+[
+"c-open",
+"conclusively",
+"revise"
+],
+[
+"c-open",
+"as a conclusion",
+"revise"
+],
+[
+"c-open",
+"finally",
+"not-accept"
+],
+[
+"t-paras",
+"four paragraphs, verdict in the introduction",
+"accept"
+],
+[
+"t-paras",
+"introduction with my verdict, two bodies, conclusion",
+"accept"
+],
+[
+"t-paras",
+"introduction, advantages, disadvantages, conclusion with my verdict",
+"revise"
+],
+[
+"t-paras",
+"three paragraphs",
+"revise"
+],
+[
+"t-paras",
+"introduction, one body, conclusion",
+"revise"
+],
+[
+"i-open",
+"the rise of",
+"accept"
+],
+[
+"i-open",
+"The emergence of",
+"accept"
+],
+[
+"i-open",
+"the emergency of",
+"revise"
+],
+[
+"i-open",
+"the emerging of",
+"revise"
+],
+[
+"i-open",
+"since the dawn of time, the emergence of",
+"revise"
+],
+[
+"i-open",
+"emerge",
+"not-accept"
+],
+[
+"i-gen",
+"has brought both considerable benefits and genuine costs",
+"accept"
+],
+[
+"i-gen",
+"have generated both considerable benefits and genuine costs",
+"revise"
+],
+[
+"i-gen",
+"has generated both considerable benefits as well as genuine costs",
+"revise"
+],
+[
+"i-gen",
+"has generated both considerable benefits and genuine coasts",
+"revise"
+],
+[
+"i-gen",
+"is good and bad",
+"not-accept"
+],
+[
+"i-advA",
+"its main advantage lies in",
+"accept"
+],
+[
+"i-advA",
+"its principle advantage lies in",
+"revise"
+],
+[
+"i-advA",
+"its principal advantage lays in",
+"revise"
+],
+[
+"i-advA",
+"it's principal advantage lies in",
+"revise"
+],
+[
+"i-advA",
+"the good thing is",
+"not-accept"
+],
+[
+"i-whereas",
+"while its most serious drawback is",
+"accept"
+],
+[
+"i-whereas",
+"whereby its most significant drawback is",
+"revise"
+],
+[
+"i-whereas",
+"therefore its most significant drawback is",
+"revise"
+],
+[
+"i-whereas",
+"whereas its most significant drawbacks is",
+"revise"
+],
+[
+"i-whereas",
+"and",
+"not-accept"
+],
+[
+"i-verdict",
+"on the whole",
+"accept"
+],
+[
+"i-verdict",
+"On balance",
+"accept"
+],
+[
+"i-verdict",
+"on the balance",
+"revise"
+],
+[
+"i-verdict",
+"in balance",
+"revise"
+],
+[
+"i-verdict",
+"on the other hand",
+"revise"
+],
+[
+"i-verdict",
+"so",
+"not-accept"
+],
+[
+"i-lead",
+"this essay contends that",
+"accept"
+],
+[
+"i-lead",
+"this essay will explore whether",
+"revise"
+],
+[
+"i-lead",
+"this essay purports that",
+"revise"
+],
+[
+"i-lead",
+"it is argued in this essay by me that",
+"revise"
+],
+[
+"i-lead",
+"i think",
+"not-accept"
+],
+[
+"b-mlead",
+"the difficulty arises from",
+"accept"
+],
+[
+"b-mlead",
+"the difficulty steams from",
+"revise"
+],
+[
+"b-mlead",
+"the difficulty stems of",
+"revise"
+],
+[
+"b-mlead",
+"the difficulty stem from",
+"revise"
+],
+[
+"b-mlead",
+"because",
+"not-accept"
+],
+[
+"b-elead",
+"as can be seen in",
+"accept"
+],
+[
+"b-elead",
+"as it is evident in",
+"revise"
+],
+[
+"b-elead",
+"as is evidence in",
+"revise"
+],
+[
+"b-elead",
+"as is evident on",
+"revise"
+],
+[
+"b-elead",
+"for example",
+"not-accept"
+],
+[
+"b-nlead",
+"it must be acknowledged, however, that",
+"accept"
+],
+[
+"b-nlead",
+"It should be noted, however, that",
+"accept"
+],
+[
+"b-nlead",
+"it should be noted, therefore, that",
+"revise"
+],
+[
+"b-nlead",
+"it should be noticed, however, that",
+"revise"
+],
+[
+"b-nlead",
+"it should note, however, that",
+"revise"
+],
+[
+"b-nlead",
+"however",
+"not-accept"
+],
+[
+"b-close",
+"which means the harm is neither inevitable nor beyond control",
+"accept"
+],
+[
+"b-close",
+"which means the cost is neither inevitable or unmanageable",
+"revise"
+],
+[
+"b-close",
+"which means the cost is both inevitable and unmanageable",
+"revise"
+],
+[
+"b-close",
+"that means the cost is neither inevitable nor unmanageable",
+"revise"
+],
+[
+"b-close",
+"so it is fine",
+"not-accept"
+],
+[
+"c-weigh",
+"is set against",
+"accept"
+],
+[
+"c-weigh",
+"are weighed against",
+"revise"
+],
+[
+"c-weigh",
+"is weighted against",
+"revise"
+],
+[
+"c-weigh",
+"is weighed with",
+"revise"
+],
+[
+"c-weigh",
+"and",
+"not-accept"
+],
+[
+"c-lead",
+"this verdict rests on the fact that",
+"accept"
+],
+[
+"c-lead",
+"this judgement rests in the fact that",
+"revise"
+],
+[
+"c-lead",
+"this judgement rests on the fact which",
+"revise"
+],
+[
+"c-lead",
+"this judgement rest on the fact that",
+"revise"
+],
+[
+"c-lead",
+"because",
+"not-accept"
+],
+[
+"t-type",
+"advantages and disadvantages",
+"accept"
+],
+[
+"t-type",
+"outweigh",
+"accept"
+],
+[
+"t-type",
+"Do the advantages outweigh the disadvantages",
+"accept"
+],
+[
+"t-type",
+"to what extent do you agree",
+"revise"
+],
+[
+"t-type",
+"discuss both views",
+"revise"
+],
+[
+"t-type",
+"problem and solution",
+"revise"
+],
+[
+"t-parts",
+"three: the advantages, the disadvantages and my verdict",
+"accept"
+],
+[
+"t-parts",
+"3",
+"accept"
+],
+[
+"t-parts",
+"two: the advantages and the disadvantages",
+"revise"
+],
+[
+"t-parts",
+"one: the advantages of studying at home",
+"revise"
+],
+[
+"t-parts",
+"the advantages, the disadvantages and a solution",
+"revise"
+],
+[
+"t-trap",
+"sitting on the fence",
+"accept"
+],
+[
+"t-trap",
+"saying the two sides are equal",
+"accept"
+],
+[
+"t-trap",
+"giving the verdict only in the conclusion",
+"accept"
+],
+[
+"t-trap",
+"forgetting a solution",
+"revise"
+],
+[
+"t-trap",
+"answering only one of the two questions",
+"revise"
+],
+[
+"t-trap",
+"not saying how far I agree",
+"revise"
+],
+[
+"t-trap",
+"bad spelling",
+"not-accept"
+],
+[
+"t-scope",
+"teenagers at secondary school",
+"accept"
+],
+[
+"t-scope",
+"high school students who learn online",
+"accept"
+],
+[
+"t-scope",
+"university students on online degrees",
+"revise"
+],
+[
+"t-scope",
+"adults retraining in the evening",
+"revise"
+],
+[
+"t-scope",
+"learners of every age",
+"revise"
+],
+[
+"t-scope",
+"everyone",
+"not-accept"
+],
+[
+"t-core",
+"the move of secondary teaching from the classroom to the internet",
+"accept"
+],
+[
+"t-core",
+"online lessons for secondary school students",
+"accept"
+],
+[
+"t-core",
+"secondary schools should teach online",
+"revise"
+],
+[
+"t-core",
+"the integration of technology into every aspect of education",
+"revise"
+],
+[
+"t-core",
+"the growth of online degree programmes for adults",
+"revise"
+],
+[
+"t-core",
+"the declining attention span of adolescents",
+"revise"
+],
+[
+"t-core",
+"technology",
+"not-accept"
+],
+[
+"t-facetA",
+"the freedom to learn from any place and at any speed",
+"accept"
+],
+[
+"t-facetA",
+"flexible access to lessons from home",
+"accept"
+],
+[
+"t-facetA",
+"the elimination of every cost once a school no longer needs a building",
+"revise"
+],
+[
+"t-facetA",
+"the loss of daily contact with classmates",
+"revise"
+],
+[
+"t-facetA",
+"the novelty of learning through video",
+"revise"
+],
+[
+"t-facetA",
+"cheap",
+"not-accept"
+],
+[
+"t-facetB",
+"the loss of the social contact and discipline of a classroom",
+"accept"
+],
+[
+"t-facetB",
+"the erosion of classroom structure",
+"accept"
+],
+[
+"t-facetB",
+"the loss of close friendships formed only in a classroom",
+"revise"
+],
+[
+"t-facetB",
+"the increase in study time at home",
+"revise"
+],
+[
+"t-facetB",
+"the cost of the devices families must buy",
+"revise"
+],
+[
+"t-facetB",
+"boring",
+"not-accept"
+],
+[
+"t-limits",
+"students postpone lessons they can watch later, and small live classes bring back interaction",
+"accept"
+],
+[
+"t-limits",
+"online lessons never work, and a classroom is always superior",
+"revise"
+],
+[
+"t-limits",
+"laptops are expensive and teachers need training",
+"revise"
+],
+[
+"t-limits",
+"students can learn anywhere and they miss their classmates",
+"revise"
+],
+[
+"t-limits",
+"nothing",
+"not-accept"
+],
+[
+"t-position",
+"for most teenagers the drawbacks are greater, so online lessons should support the classroom, not replace it",
+"accept"
+],
+[
+"t-position",
+"the advantages clearly outweigh the disadvantages, since flexibility matters more than tradition",
+"revise"
+],
+[
+"t-position",
+"online and classroom learning each have their own strengths, and the balance depends entirely on the student",
+"revise"
+],
+[
+"t-position",
+"secondary schools should abandon online teaching altogether",
+"revise"
+],
+[
+"t-position",
+"online lessons are good",
+"not-accept"
+],
+[
+"t-example",
+"something real and specific",
+"accept"
+],
+[
+"t-example",
+"a student in a distant province",
+"accept"
+],
+[
+"t-example",
+"a statistic from research",
+"revise"
+],
+[
+"t-example",
+"a famous quotation",
+"revise"
+],
+[
+"t-example",
+"an extended anecdote about my own online classes",
+"revise"
+],
+[
+"i-core",
+"online teaching for secondary students",
+"accept"
+],
+[
+"i-core",
+"the shift of secondary school instruction from the classroom to online delivery",
+"accept"
+],
+[
+"i-core",
+"online instructions for secondary school students",
+"revise"
+],
+[
+"i-core",
+"online instructing for secondary school students",
+"revise"
+],
+[
+"i-core",
+"online instruction for secondary schools students",
+"revise"
+],
+[
+"i-core",
+"computers",
+"not-accept"
+],
+[
+"i-sideA",
+"the freedom to learn anywhere",
+"accept"
+],
+[
+"i-sideA",
+"flexibility of time and place",
+"accept"
+],
+[
+"i-sideA",
+"flexible excess to lessons",
+"revise"
+],
+[
+"i-sideA",
+"flexibly access to lessons",
+"revise"
+],
+[
+"i-sideA",
+"the loss of daily contact",
+"revise"
+],
+[
+"i-sideA",
+"cheap",
+"not-accept"
+],
+[
+"i-sideB",
+"the loss of classroom discipline and contact",
+"accept"
+],
+[
+"i-sideB",
+"the weakening of the classroom's structure",
+"accept"
+],
+[
+"i-sideB",
+"the eruption of classroom structure",
+"revise"
+],
+[
+"i-sideB",
+"the reinforcement of classroom structure",
+"revise"
+],
+[
+"i-sideB",
+"the erosion from classroom structure",
+"revise"
+],
+[
+"i-sideB",
+"boredom",
+"not-accept"
+],
+[
+"i-pos",
+"for most teenagers the drawbacks are greater, so online lessons should support the classroom, not replace it",
+"accept"
+],
+[
+"i-pos",
+"the disadvantages outweigh the advantages for most secondary students, so online lessons should supplant rather than replace the classroom",
+"revise"
+],
+[
+"i-pos",
+"the disadvantages may arguably outweigh the advantages, so online lessons should perhaps supplement the classroom",
+"revise"
+],
+[
+"i-pos",
+"the disadvantages outweighs the advantages, so online lessons should supplement the classroom",
+"revise"
+],
+[
+"i-pos",
+"the advantages clearly outweigh the disadvantages, so schools should go online",
+"revise"
+],
+[
+"i-pos",
+"online lessons are modern",
+"not-accept"
+],
+[
+"a-facet",
+"The primary justification often cited within this context is the freedom to learn from any place and at any speed",
+"accept"
+],
+[
+"a-facet",
+"The primary justification often cited within this context is the flexibility of access to instruction regardless location and pace",
+"revise"
+],
+[
+"a-facet",
+"The primary justification often cited within this context is the flexibility of access to instruction irregardless of location and pace",
+"revise"
+],
+[
+"a-facet",
+"The primary justification often cited within this context is the flexibility of access to instruction regardless of location and pace, which no one disputes",
+"revise"
+],
+[
+"a-facet",
+"The primary justification often cited within this context is money",
+"not-accept"
+],
+[
+"a-mlead",
+"the argument depends on",
+"accept"
+],
+[
+"a-mlead",
+"the argument wrests on",
+"revise"
+],
+[
+"a-mlead",
+"the argument rests in",
+"revise"
+],
+[
+"a-mlead",
+"the argument rest on",
+"revise"
+],
+[
+"a-mlead",
+"because",
+"not-accept"
+],
+[
+"a-mech",
+"letting students pause, replay and follow a lesson from anywhere with a connection",
+"accept"
+],
+[
+"a-mech",
+"eliminating the daily journey between home and school for every student in the country",
+"revise"
+],
+[
+"a-mech",
+"following the same specialist courses in a remote province as in the capital",
+"revise"
+],
+[
+"a-mech",
+"recording every lesson so that schools can inspect their teachers",
+"revise"
+],
+[
+"a-mech",
+"allow a lesson to be paused and replayed from home",
+"revise"
+],
+[
+"a-mech",
+"using computers",
+"not-accept"
+],
+[
+"a-elead",
+"this is illustrated by",
+"accept"
+],
+[
+"a-elead",
+"the point is illustrating by",
+"revise"
+],
+[
+"a-elead",
+"the point are illustrated by",
+"revise"
+],
+[
+"a-elead",
+"the point is illustrated of",
+"revise"
+],
+[
+"a-elead",
+"for example",
+"not-accept"
+],
+[
+"a-ex",
+"pupils in distant villages taking the same advanced courses as city students",
+"accept"
+],
+[
+"a-ex",
+"students in the capital who attend both regular classes and online tutoring",
+"revise"
+],
+[
+"a-ex",
+"teachers who upload their notes to a shared folder",
+"revise"
+],
+[
+"a-ex",
+"the rapid growth of educational video channels",
+"revise"
+],
+[
+"a-ex",
+"YouTube",
+"not-accept"
+],
+[
+"a-nlead",
+"nevertheless",
+"accept"
+],
+[
+"a-nlead",
+"However",
+"accept"
+],
+[
+"a-nlead",
+"moreover",
+"revise"
+],
+[
+"a-nlead",
+"therefore",
+"revise"
+],
+[
+"a-nlead",
+"despite",
+"revise"
+],
+[
+"a-nlead",
+"and",
+"not-accept"
+],
+[
+"a-fail",
+"this view fails to account for",
+"accept"
+],
+[
+"a-fail",
+"this approach fails to take account for",
+"revise"
+],
+[
+"a-fail",
+"this approach fails accounting for",
+"revise"
+],
+[
+"a-fail",
+"this approach fails to account",
+"revise"
+],
+[
+"a-fail",
+"this is bad",
+"not-accept"
+],
+[
+"a-nu",
+"how easily students put off lessons they can watch later",
+"accept"
+],
+[
+"a-nu",
+"how worthless flexibility becomes unless every student owns a laptop",
+"revise"
+],
+[
+"a-nu",
+"how difficult it is to make video lessons for practical subjects such as chemistry",
+"revise"
+],
+[
+"a-nu",
+"how many thousands of viewers the most popular online teachers attract",
+"revise"
+],
+[
+"a-nu",
+"how easy a lesson that can be watched at any time is postponed",
+"revise"
+],
+[
+"a-nu",
+"the internet is slow",
+"not-accept"
+],
+[
+"b-facet",
+"Set against this is the loss of the social contact and discipline of a classroom",
+"accept"
+],
+[
+"b-facet",
+"Set against this are the erosion of the social and disciplinary structure that a classroom provides",
+"revise"
+],
+[
+"b-facet",
+"Set against this is the erosion of the social and disciplinary structure that a classroom provide",
+"revise"
+],
+[
+"b-facet",
+"Set against this is the erosion of the social and disciplined structure that a classroom provides",
+"revise"
+],
+[
+"b-facet",
+"Set against this is the price",
+"not-accept"
+],
+[
+"b-mech",
+"taking away the teacher who spots confusion at once and the classmates who keep a student motivated",
+"accept"
+],
+[
+"b-mech",
+"leaving students free to open games and messaging apps",
+"revise"
+],
+[
+"b-mech",
+"producing the widespread loss of learning reported during school closure",
+"revise"
+],
+[
+"b-mech",
+"reducing the number of hours of instruction each week",
+"revise"
+],
+[
+"b-mech",
+"remove the teacher and the peers",
+"revise"
+],
+[
+"b-mech",
+"making students lazy",
+"not-accept"
+],
+[
+"b-ex",
+"the learning and motivation students lost while schools were closed",
+"accept"
+],
+[
+"b-ex",
+"the improved examination results of some students who studied online",
+"revise"
+],
+[
+"b-ex",
+"schools that install cameras in every classroom",
+"revise"
+],
+[
+"b-ex",
+"parents who struggle to supervise several children",
+"revise"
+],
+[
+"b-ex",
+"bad grades",
+"not-accept"
+],
+[
+"b-nu",
+"small live classes can bring back much of the contact of a classroom",
+"accept"
+],
+[
+"b-nu",
+"no online lesson, however well produced, can ever replicate a real classroom",
+"revise"
+],
+[
+"b-nu",
+"teachers who move online are rarely trained to teach through a camera",
+"revise"
+],
+[
+"b-nu",
+"students who lose motivation at home often fall behind",
+"revise"
+],
+[
+"b-nu",
+"live sessions with small groups can restores much of the interaction",
+"revise"
+],
+[
+"b-nu",
+"computers are fast",
+"not-accept"
+],
+[
+"b-dev",
+"those sessions work only because they rebuild the classroom online",
+"accept"
+],
+[
+"b-dev",
+"such sessions, though, succeed precisely by replacing the classroom",
+"revise"
+],
+[
+"b-dev",
+"such sessions, though, succeed precisely by recreation the classroom",
+"revise"
+],
+[
+"b-dev",
+"such sessions, though, always succeed perfectly by recreating the classroom",
+"revise"
+],
+[
+"b-dev",
+"online is good",
+"not-accept"
+],
+[
+"c-takeA",
+"once flexibility",
+"accept"
+],
+[
+"c-takeA",
+"once flexible access",
+"accept"
+],
+[
+"c-takeA",
+"once flexible excess",
+"revise"
+],
+[
+"c-takeA",
+"once flexibly access",
+"revise"
+],
+[
+"c-takeA",
+"once inflexible access",
+"revise"
+],
+[
+"c-takeA",
+"once",
+"not-accept"
+],
+[
+"c-takeB",
+"the loss of classroom structure",
+"accept"
+],
+[
+"c-takeB",
+"the eruption of classroom structure",
+"revise"
+],
+[
+"c-takeB",
+"the reinforcement of classroom structure",
+"revise"
+],
+[
+"c-takeB",
+"the erosion from classroom structure",
+"revise"
+],
+[
+"c-takeB",
+"boredom",
+"not-accept"
+],
+[
+"c-pos",
+"for most teenagers the drawbacks are greater",
+"accept"
+],
+[
+"c-pos",
+"the gains exceed the losses for most students",
+"revise"
+],
+[
+"c-pos",
+"the losses exceed the gains for every student without exception",
+"revise"
+],
+[
+"c-pos",
+"the losses excess the gains for most students",
+"revise"
+],
+[
+"c-pos",
+"online is bad",
+"not-accept"
+],
+[
+"c-link",
+"and so",
+"accept"
+],
+[
+"c-link",
+"so",
+"accept"
+],
+[
+"c-link",
+"although",
+"revise"
+],
+[
+"c-link",
+"because",
+"revise"
+],
+[
+"c-link",
+"unless",
+"revise"
+],
+[
+"c-link",
+"but",
+"not-accept"
+],
+[
+"c-use",
+"online lessons should add to the classroom rather than replace it",
+"accept"
+],
+[
+"c-use",
+"online lessons should supplant, not support, the classroom",
+"revise"
+],
+[
+"c-use",
+"online lessons should support, not supplant the classroom",
+"revise"
+],
+[
+"c-use",
+"online lessons should support, not supplement, the classroom",
+"revise"
+],
+[
+"c-use",
+"online lessons are good",
+"not-accept"
+],
+[
+"c-rat",
+"teenagers need structure and human contact in order to learn, and flexibility cannot replace them",
+"accept"
+],
+[
+"c-rat",
+"teenagers are far too easily distracted to be trusted with a screen at home",
+"revise"
+],
+[
+"c-rat",
+"video lessons can be produced once and reused at little cost",
+"revise"
+],
+[
+"c-rat",
+"the internet is now fast enough to carry high-quality video",
+"revise"
+],
+[
+"c-rat",
+"school is important",
+"not-accept"
+]
+]

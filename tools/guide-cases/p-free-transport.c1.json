@@ -1,0 +1,1402 @@
+[
+[
+"t-budget",
+"50 / 95 / 95 / 45",
+"accept"
+],
+[
+"t-budget",
+"about 285 words in all",
+"accept"
+],
+[
+"t-budget",
+"100, 60, 60 and 100",
+"revise"
+],
+[
+"t-budget",
+"four paragraphs",
+"not-accept"
+],
+[
+"t-paras",
+"four paragraphs, position in the introduction",
+"accept"
+],
+[
+"t-paras",
+"introduction with my extent of agreement, two bodies, conclusion",
+"accept"
+],
+[
+"t-paras",
+"introduction, body A, body B, conclusion with my extent of agreement",
+"revise"
+],
+[
+"t-paras",
+"three paragraphs",
+"revise"
+],
+[
+"t-paras",
+"intro, body a, body b, body c",
+"revise"
+],
+[
+"i-open",
+"The proposition that",
+"accept"
+],
+[
+"i-open",
+"the claim that",
+"accept"
+],
+[
+"i-open",
+"the preposition that",
+"revise"
+],
+[
+"i-open",
+"In this day and age, the proposition that",
+"revise"
+],
+[
+"i-open",
+"the proposition which",
+"revise"
+],
+[
+"i-open",
+"proposition",
+"not-accept"
+],
+[
+"i-desir",
+"is desirable has gained currency",
+"accept"
+],
+[
+"i-desir",
+"is desirable has won considerable currency",
+"revise"
+],
+[
+"i-desir",
+"is desirable has gained considerable currencies",
+"revise"
+],
+[
+"i-desir",
+"is desirable has gained considerable currency among everyone",
+"revise"
+],
+[
+"i-desir",
+"is good",
+"not-accept"
+],
+[
+"i-lead",
+"this essay contends that",
+"accept"
+],
+[
+"i-lead",
+"This essay argues that",
+"accept"
+],
+[
+"i-lead",
+"this essay will explore both sides of whether",
+"revise"
+],
+[
+"i-lead",
+"this essay purports that",
+"revise"
+],
+[
+"i-lead",
+"it is argued in this essay by me that",
+"revise"
+],
+[
+"i-lead",
+"i think",
+"not-accept"
+],
+[
+"i-grounds",
+"by virtue of",
+"accept"
+],
+[
+"i-grounds",
+"on the grounds of",
+"accept"
+],
+[
+"i-grounds",
+"on the ground of",
+"revise"
+],
+[
+"i-grounds",
+"in the grounds of",
+"revise"
+],
+[
+"i-grounds",
+"on the grounds that",
+"revise"
+],
+[
+"i-grounds",
+"for",
+"not-accept"
+],
+[
+"i-decis",
+"and, more importantly",
+"accept"
+],
+[
+"i-decis",
+"and more decisively",
+"accept"
+],
+[
+"i-decis",
+"and, more decisive",
+"revise"
+],
+[
+"i-decis",
+"but, more decisively",
+"revise"
+],
+[
+"i-decis",
+"and, most decisively",
+"revise"
+],
+[
+"i-decis",
+"also",
+"not-accept"
+],
+[
+"a-mlead",
+"its strength derives from",
+"accept"
+],
+[
+"a-mlead",
+"its force derives in",
+"revise"
+],
+[
+"a-mlead",
+"its forces derive from",
+"revise"
+],
+[
+"a-mlead",
+"as a result, its force derives from",
+"revise"
+],
+[
+"a-mlead",
+"it is",
+"not-accept"
+],
+[
+"a-elead",
+"a pattern clearly visible in",
+"accept"
+],
+[
+"a-elead",
+"a dynamic clear visible in",
+"revise"
+],
+[
+"a-elead",
+"a dynamic clearly visible at",
+"revise"
+],
+[
+"a-elead",
+"a dynamics clearly visible in",
+"revise"
+],
+[
+"a-elead",
+"for example",
+"not-accept"
+],
+[
+"a-nlead",
+"although it is true that",
+"accept"
+],
+[
+"a-nlead",
+"admittedly",
+"accept"
+],
+[
+"a-nlead",
+"despite it is true that",
+"revise"
+],
+[
+"a-nlead",
+"while it is truth that",
+"revise"
+],
+[
+"a-nlead",
+"therefore, it is true that",
+"revise"
+],
+[
+"a-nlead",
+"but",
+"not-accept"
+],
+[
+"a-lim",
+"this qualifies rather than undermines the argument",
+"accept"
+],
+[
+"a-lim",
+"this qualification limits rather than negates the argument",
+"accept"
+],
+[
+"a-lim",
+"this qualification negates rather than limits the argument",
+"revise"
+],
+[
+"a-lim",
+"this qualification limits rather than negate the argument",
+"revise"
+],
+[
+"a-lim",
+"this qualification kind of limits the argument",
+"revise"
+],
+[
+"a-lim",
+"this is wrong",
+"not-accept"
+],
+[
+"b-open",
+"a second and arguably stronger consideration is",
+"accept"
+],
+[
+"b-open",
+"A second, arguably stronger, consideration is",
+"accept"
+],
+[
+"b-open",
+"a second, undeniably stronger, consideration is",
+"revise"
+],
+[
+"b-open",
+"a second, arguable stronger, consideration is",
+"revise"
+],
+[
+"b-open",
+"secondly, arguably stronger, consideration is",
+"revise"
+],
+[
+"b-open",
+"another point",
+"not-accept"
+],
+[
+"b-mlead",
+"this works by",
+"accept"
+],
+[
+"b-mlead",
+"this operates on",
+"revise"
+],
+[
+"b-mlead",
+"this is operated by",
+"revise"
+],
+[
+"b-mlead",
+"this operates by means",
+"revise"
+],
+[
+"b-mlead",
+"so",
+"not-accept"
+],
+[
+"b-prod",
+"thereby producing",
+"accept"
+],
+[
+"b-prod",
+"subsequent producing",
+"revise"
+],
+[
+"b-prod",
+"subsequently produced",
+"revise"
+],
+[
+"b-prod",
+"previously producing",
+"revise"
+],
+[
+"b-prod",
+"and",
+"not-accept"
+],
+[
+"b-nlead",
+"not even the fact that",
+"accept"
+],
+[
+"b-nlead",
+"even not the fact that",
+"revise"
+],
+[
+"b-nlead",
+"not only the fact that",
+"revise"
+],
+[
+"b-nlead",
+"not even the fact which",
+"revise"
+],
+[
+"b-nlead",
+"however",
+"not-accept"
+],
+[
+"b-under",
+"seriously weakens its force",
+"accept"
+],
+[
+"b-under",
+"substantially undermine its weight",
+"revise"
+],
+[
+"b-under",
+"substantially underlines its weight",
+"revise"
+],
+[
+"b-under",
+"substantially undermines it's weight",
+"revise"
+],
+[
+"b-under",
+"is wrong",
+"not-accept"
+],
+[
+"c-open",
+"to conclude",
+"accept"
+],
+[
+"c-open",
+"In conclusion",
+"accept"
+],
+[
+"c-open",
+"in a nutshell",
+"revise"
+],
+[
+"c-open",
+"conclusively",
+"revise"
+],
+[
+"c-open",
+"as a conclusion",
+"revise"
+],
+[
+"c-open",
+"finally",
+"not-accept"
+],
+[
+"c-take",
+"taken as a whole",
+"accept"
+],
+[
+"c-take",
+"taking together",
+"revise"
+],
+[
+"c-take",
+"taken altogether",
+"revise"
+],
+[
+"c-take",
+"took together",
+"revise"
+],
+[
+"c-take",
+"together",
+"not-accept"
+],
+[
+"c-view",
+"make this the most defensible reading",
+"accept"
+],
+[
+"c-view",
+"makes this the only defensible reading",
+"revise"
+],
+[
+"c-view",
+"make this the only defensive reading",
+"revise"
+],
+[
+"c-view",
+"make this the only defensible reading in every country on earth",
+"revise"
+],
+[
+"c-view",
+"is good",
+"not-accept"
+],
+[
+"c-because",
+"since",
+"accept"
+],
+[
+"c-because",
+"as",
+"accept"
+],
+[
+"c-because",
+"although",
+"revise"
+],
+[
+"c-because",
+"therefore",
+"revise"
+],
+[
+"c-because",
+"because of",
+"revise"
+],
+[
+"t-type",
+"to what extent",
+"accept"
+],
+[
+"t-type",
+"agree or disagree",
+"accept"
+],
+[
+"t-type",
+"opinion",
+"accept"
+],
+[
+"t-type",
+"problem and solution",
+"revise"
+],
+[
+"t-type",
+"advantages and disadvantages",
+"revise"
+],
+[
+"t-type",
+"discuss both views",
+"revise"
+],
+[
+"t-parts",
+"one: how far I agree that free transport is the best solution",
+"accept"
+],
+[
+"t-parts",
+"1 claim and the extent of my agreement",
+"accept"
+],
+[
+"t-parts",
+"two: congestion and pollution",
+"revise"
+],
+[
+"t-parts",
+"the benefits and drawbacks of free buses",
+"revise"
+],
+[
+"t-parts",
+"the causes of congestion",
+"revise"
+],
+[
+"t-trap",
+"not saying how far I agree",
+"accept"
+],
+[
+"t-trap",
+"a thesis with no extent word",
+"accept"
+],
+[
+"t-trap",
+"failing to propose further measures",
+"revise"
+],
+[
+"t-trap",
+"not saying which side outweighs",
+"revise"
+],
+[
+"t-trap",
+"describing pollution in detail",
+"revise"
+],
+[
+"t-trap",
+"bad grammar",
+"not-accept"
+],
+[
+"t-absolute",
+"the best solution, completely free",
+"accept"
+],
+[
+"t-absolute",
+"best and all",
+"accept"
+],
+[
+"t-absolute",
+"growing problems, many large cities",
+"revise"
+],
+[
+"t-absolute",
+"some people argue",
+"revise"
+],
+[
+"t-absolute",
+"buses and trains, taxation",
+"revise"
+],
+[
+"t-absolute",
+"traffic",
+"not-accept"
+],
+[
+"t-core",
+"free buses and trains paid for by taxes",
+"accept"
+],
+[
+"t-core",
+"tax-funded free public transport",
+"accept"
+],
+[
+"t-core",
+"governments should make buses free",
+"revise"
+],
+[
+"t-core",
+"the reduction of congestion and pollution",
+"revise"
+],
+[
+"t-core",
+"the privatisation of bus networks",
+"revise"
+],
+[
+"t-core",
+"congestion charges for drivers",
+"revise"
+],
+[
+"t-core",
+"traffic",
+"not-accept"
+],
+[
+"t-facetA",
+"the weak effect of a free ticket on regular drivers",
+"accept"
+],
+[
+"t-facetA",
+"the limited influence of fares on motorists",
+"accept"
+],
+[
+"t-facetA",
+"the inability of any government to afford it",
+"revise"
+],
+[
+"t-facetA",
+"the relief free travel offers households on low incomes",
+"revise"
+],
+[
+"t-facetA",
+"the overcrowding of buses in the morning peak",
+"revise"
+],
+[
+"t-facetA",
+"pollution",
+"not-accept"
+],
+[
+"t-facetB",
+"the use of public money to remove fares instead of improving the service",
+"accept"
+],
+[
+"t-facetB",
+"the overall cost of running a network",
+"revise"
+],
+[
+"t-facetB",
+"the environmental benefit of moving commuters",
+"revise"
+],
+[
+"t-facetB",
+"the reluctance of taxpayers who never use the bus",
+"revise"
+],
+[
+"t-facetB",
+"fares",
+"not-accept"
+],
+[
+"t-accept",
+"the fare matters to poorer workers",
+"accept"
+],
+[
+"t-accept",
+"free travel helps those who cannot afford a ticket",
+"accept"
+],
+[
+"t-accept",
+"free travel would eliminate congestion in every large city",
+"revise"
+],
+[
+"t-accept",
+"affluent drivers would gladly pay more tax",
+"revise"
+],
+[
+"t-accept",
+"public transport is already free in most cities",
+"revise"
+],
+[
+"t-accept",
+"nothing",
+"not-accept"
+],
+[
+"t-extent",
+"I mostly disagree",
+"accept"
+],
+[
+"t-extent",
+"I disagree to a large extent",
+"accept"
+],
+[
+"t-extent",
+"I disagree categorically",
+"revise"
+],
+[
+"t-extent",
+"I largely agree",
+"revise"
+],
+[
+"t-extent",
+"I disagree",
+"revise"
+],
+[
+"t-position",
+"governments should keep tickets cheap and spend the money on more frequent services",
+"accept"
+],
+[
+"t-position",
+"governments should make transport free for students and pensioners",
+"revise"
+],
+[
+"t-position",
+"governments should make every bus and train free",
+"revise"
+],
+[
+"t-position",
+"public transport should be run as a business",
+"revise"
+],
+[
+"t-position",
+"it depends",
+"not-accept"
+],
+[
+"t-example",
+"something real and specific",
+"accept"
+],
+[
+"t-example",
+"one commuter on the way to work",
+"accept"
+],
+[
+"t-example",
+"a statistic such as 70% of drivers",
+"revise"
+],
+[
+"t-example",
+"a quotation from a leader",
+"revise"
+],
+[
+"t-example",
+"an extended anecdote about my bus journey",
+"revise"
+],
+[
+"i-core",
+"the provision of fare-free public transport funded through general taxation",
+"accept"
+],
+[
+"i-core",
+"free public transport paid for by taxes",
+"accept"
+],
+[
+"i-core",
+"fare-free public transport funding through general taxation",
+"revise"
+],
+[
+"i-core",
+"public transport is fare-free and funded through taxation",
+"revise"
+],
+[
+"i-core",
+"fare-free public transports funded through general taxation",
+"revise"
+],
+[
+"i-core",
+"free buses",
+"not-accept"
+],
+[
+"i-pos",
+"governments should keep fares low and spend on more frequent services rather than make travel free",
+"accept"
+],
+[
+"i-pos",
+"governments might wish to consider subsidising fares rather than abolishing them",
+"revise"
+],
+[
+"i-pos",
+"governments should subsidise fares and invest on frequency and coverage rather than abolish fares entirely",
+"revise"
+],
+[
+"i-pos",
+"governments should abolish fares entirely and invest in frequency as well",
+"revise"
+],
+[
+"i-pos",
+"governments should subsidises fares and invest in frequency rather than abolish them",
+"revise"
+],
+[
+"i-pos",
+"governments should build roads",
+"not-accept"
+],
+[
+"i-sideA",
+"the limited influence of price",
+"accept"
+],
+[
+"i-sideA",
+"the small effect of a free ticket on drivers",
+"accept"
+],
+[
+"i-sideA",
+"the strong pull of price",
+"revise"
+],
+[
+"i-sideA",
+"the weak push of price",
+"revise"
+],
+[
+"i-sideA",
+"the unaffordability of free transport",
+"revise"
+],
+[
+"i-sideA",
+"traffic jams",
+"not-accept"
+],
+[
+"i-sideB",
+"the better use of public money",
+"accept"
+],
+[
+"i-sideB",
+"the money lost to the service",
+"accept"
+],
+[
+"i-sideB",
+"the chance cost of free travel",
+"revise"
+],
+[
+"i-sideB",
+"the environmental cost of free travel",
+"revise"
+],
+[
+"i-sideB",
+"the total cost of running the network",
+"revise"
+],
+[
+"i-sideB",
+"pollution",
+"not-accept"
+],
+[
+"a-facet",
+"The first justification concerns the weak effect of price alone on regular drivers",
+"accept"
+],
+[
+"a-facet",
+"The first justification concerns about the limited influence of price alone on the choices of habitual car users",
+"revise"
+],
+[
+"a-facet",
+"The first justification concerns the negligible influence of price alone on the choices of habitual car users",
+"revise"
+],
+[
+"a-facet",
+"The first justification concerns the limited influence of price alone for the choices of habitual car users",
+"revise"
+],
+[
+"a-facet",
+"The first justification concerns pollution",
+"not-accept"
+],
+[
+"a-mech",
+"drawing in people who used to walk or cycle while drivers, who care more about time, stay in their cars",
+"accept"
+],
+[
+"a-mech",
+"persuading motorists that a bus journey is cheaper than the petrol they burn",
+"revise"
+],
+[
+"a-mech",
+"increasing the number of passengers so sharply that the network cannot cope",
+"revise"
+],
+[
+"a-mech",
+"making car ownership less attractive by raising the cost of parking and fuel",
+"revise"
+],
+[
+"a-mech",
+"attract passengers who already walk while drivers stay in their cars",
+"revise"
+],
+[
+"a-mech",
+"making buses free",
+"not-accept"
+],
+[
+"a-ex",
+"cities whose free buses filled with people who used to walk, while the roads stayed just as busy",
+"accept"
+],
+[
+"a-ex",
+"cities where car use fell sharply within months of fares being abolished",
+"revise"
+],
+[
+"a-ex",
+"towns that provide free travel to pensioners and schoolchildren only",
+"revise"
+],
+[
+"a-ex",
+"the rising cost of petrol and parking in most city centres",
+"revise"
+],
+[
+"a-ex",
+"London",
+"not-accept"
+],
+[
+"a-dev",
+"free fares therefore fill seats but leave the roads as busy as before",
+"accept"
+],
+[
+"a-dev",
+"Abolition thus fills buses without emptying roads",
+"accept"
+],
+[
+"a-dev",
+"abolition thus fills buses by emptying roads",
+"revise"
+],
+[
+"a-dev",
+"abolition thus fills buses without emptying roads, as research shows",
+"revise"
+],
+[
+"a-dev",
+"abolition thus fill buses without emptying roads",
+"revise"
+],
+[
+"a-dev",
+"buses are nice",
+"not-accept"
+],
+[
+"a-nu",
+"the fare is a real obstacle for poorer workers, and free travel removes it",
+"accept"
+],
+[
+"a-nu",
+"buses that are free attract passengers with no particular destination",
+"revise"
+],
+[
+"a-nu",
+"free travel has never persuaded a single motorist to leave the car at home",
+"revise"
+],
+[
+"a-nu",
+"car ownership continues to rise in developing economies",
+"revise"
+],
+[
+"a-nu",
+"buses are slow",
+"not-accept"
+],
+[
+"b-facet",
+"the use of public money to abolish fares instead of improving the service",
+"accept"
+],
+[
+"b-facet",
+"the diversion of public funds from service quality for the abolition of the fare",
+"revise"
+],
+[
+"b-facet",
+"the diversification of public funds from service quality to the abolition of the fare",
+"revise"
+],
+[
+"b-facet",
+"the diversion of public funds from service quality to the abolition of the fare, which is an outrage",
+"revise"
+],
+[
+"b-facet",
+"money",
+"not-accept"
+],
+[
+"b-mech",
+"using the money to replace ticket income instead of on the routes and services that pull drivers out of their cars",
+"accept"
+],
+[
+"b-mech",
+"raising ridership sharply through new lines and shorter waiting times",
+"revise"
+],
+[
+"b-mech",
+"obliging taxpayers who never set foot on a bus to pay for the journeys of others",
+"revise"
+],
+[
+"b-mech",
+"running the growing deficits that operators report each year",
+"revise"
+],
+[
+"b-mech",
+"spend the budget on replacing fare revenue rather than on routes",
+"revise"
+],
+[
+"b-mech",
+"making buses free",
+"not-accept"
+],
+[
+"b-result",
+"a stagnant service",
+"accept"
+],
+[
+"b-result",
+"a service that stands still",
+"accept"
+],
+[
+"b-result",
+"a thriving service",
+"revise"
+],
+[
+"b-result",
+"an inevitable collapse of the entire network",
+"revise"
+],
+[
+"b-result",
+"a stagnate service",
+"revise"
+],
+[
+"b-result",
+"bad",
+"not-accept"
+],
+[
+"b-ex",
+"bus and rail networks that gained riders once routes were added and waits were cut",
+"accept"
+],
+[
+"b-ex",
+"transit networks that were forced to cut evening and weekend services after their fare revenue fell away",
+"revise"
+],
+[
+"b-ex",
+"taxpayers who object to funding a service they never use",
+"revise"
+],
+[
+"b-ex",
+"bus companies that raise fares each year to cover fuel costs",
+"revise"
+],
+[
+"b-ex",
+"Tokyo",
+"not-accept"
+],
+[
+"b-show",
+"for example, show what the same money can achieve",
+"accept"
+],
+[
+"b-show",
+"for instance, illustrates what the same expenditure achieves",
+"revise"
+],
+[
+"b-show",
+"for instance, prove beyond doubt what the same expenditure achieves",
+"revise"
+],
+[
+"b-show",
+"however, illustrate what the same expenditure achieves",
+"revise"
+],
+[
+"b-show",
+"for instance",
+"not-accept"
+],
+[
+"b-nu",
+"a wealthy city might be able to pay for free fares and better services at once",
+"accept"
+],
+[
+"b-nu",
+"no city has ever managed to improve its services while abolishing fares",
+"revise"
+],
+[
+"b-nu",
+"new rail lines take many years to plan and construct",
+"revise"
+],
+[
+"b-nu",
+"passengers judge a service mainly by its punctuality",
+"revise"
+],
+[
+"b-nu",
+"a city with a large budget could funds both free fares and improved services",
+"revise"
+],
+[
+"b-nu",
+"cities are big",
+"not-accept"
+],
+[
+"c-extent",
+"I largely disagree with the proposal",
+"accept"
+],
+[
+"c-extent",
+"I mostly reject the claim",
+"accept"
+],
+[
+"c-extent",
+"I reject the proposition",
+"revise"
+],
+[
+"c-extent",
+"I utterly reject the proposition",
+"revise"
+],
+[
+"c-extent",
+"I largely object the proposition",
+"revise"
+],
+[
+"c-extent",
+"no",
+"not-accept"
+],
+[
+"c-pos",
+"fares should be kept low, not abolished",
+"accept"
+],
+[
+"c-pos",
+"fares should be reduced rather than removed",
+"accept"
+],
+[
+"c-pos",
+"fares should be kept affordable, not abolishing",
+"revise"
+],
+[
+"c-pos",
+"fares should be abolished, not kept affordable",
+"revise"
+],
+[
+"c-pos",
+"fares should be kept affordable, not abolished, as every expert agrees",
+"revise"
+],
+[
+"c-pos",
+"buses should be clean",
+"not-accept"
+],
+[
+"c-takeA",
+"the limited influence of price",
+"accept"
+],
+[
+"c-takeA",
+"the weak pulling of price",
+"revise"
+],
+[
+"c-takeA",
+"the strong pull of price",
+"revise"
+],
+[
+"c-takeA",
+"the rising cost of petrol",
+"revise"
+],
+[
+"c-takeA",
+"traffic",
+"not-accept"
+],
+[
+"c-takeB",
+"and the better use of public money",
+"accept"
+],
+[
+"c-takeB",
+"and the chance cost of free travel",
+"revise"
+],
+[
+"c-takeB",
+"and the environmental cost of free travel",
+"revise"
+],
+[
+"c-takeB",
+"and the opportunities cost of free travel",
+"revise"
+],
+[
+"c-takeB",
+"and pollution",
+"not-accept"
+],
+[
+"c-rat",
+"drivers switch for speed and reliability, not for a lower price",
+"accept"
+],
+[
+"c-rat",
+"taxation is a fairer way of funding public services than charging users",
+"revise"
+],
+[
+"c-rat",
+"free services are always treated with less respect by their users",
+"revise"
+],
+[
+"c-rat",
+"cleaner air benefits every resident of a city",
+"revise"
+],
+[
+"c-rat",
+"buses are good",
+"not-accept"
+]
+]
