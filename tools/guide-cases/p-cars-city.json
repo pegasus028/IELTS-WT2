@@ -14,6 +14,7 @@
 ["t-trap", "forgetting a solution", "revise"],
 ["t-trap", "not saying which outweighs", "revise"],
 ["t-trap", "using bad grammar", "not-accept"],
+["t-trap", "writing about only one side", "accept"],
 ["t-core", "the regulation of private cars in city centres", "accept"],
 ["t-core", "control of private car use in city centres", "accept"],
 ["t-core", "governments should ban cars", "revise"],

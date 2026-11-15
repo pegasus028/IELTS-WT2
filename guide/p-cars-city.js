@@ -54,7 +54,7 @@
               ['Answering only one of the two direct questions', 'That is the trap of a two-part prompt. This prompt has no direct questions.']
             ],
             shape: 'one sentence: the mistake', expect: 'Keeping my opinion for the conclusion instead of giving it in paragraph one (also accepted: writing about only one view; "this essay will discuss both views" with no position)',
-            accept: [['opinion|position|view'], ['conclusion|introduction|paragraph (one|1)|first paragraph|end|late|only one|one view|one side|both']],
+            accept: [['opinion|position|view|side'], ['conclusion|introduction|paragraph (one|1)|first paragraph|end|late|only one|one view|one side|both']],
             reject: [{ re: 'solution', hint: 'This prompt does not ask for a solution. Think about where your opinion goes.' },
               { re: 'outweigh', hint: 'Outweighing belongs to the advantages / disadvantages type.' }],
             hint: 'Think of the sentence "This essay will discuss both views." What is missing from it?', hint2: 'Where in the essay does the examiner first want to see your opinion?', ai: true },
