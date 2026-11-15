@@ -216,7 +216,7 @@ todo.forEach(function (f) {
   ok(n >= 260 && n <= 290, pid + ': ' + n + ' words (260–290)');
   ok(!/\s[,.;:]|,,|\.\.|  |,\.|[a-z]\.[A-Za-z]/.test(es.text), pid + ': broken joins in the essay');
   es.panes.forEach(function (t, i) { ok(/^[A-Z]/.test(t) && /\.$/.test(t), pid + ': paragraph ' + (i + 1) + ' starts with a capital and ends with a full stop'); W.sentences(t).forEach(function (s) { ok(/^[A-Z]/.test(s), pid + ': sentence starts with a capital: ' + s.slice(0, 40)); }); });
-  var pre = W.preflight(es.text, p, { share: tier === 'C1' ? 0.3 : tier === 'B1' ? 0.5 : 0.4, practice: true });
+  var pre = W.preflight(es.text, p, { share: tier === 'B1' ? 0.5 : 0.4, practice: true });
   pre.rows.forEach(function (r) { ok(r.status === 'ok', pid + ': ward ' + r.id + ' is ' + r.status + ' (' + r.label + ')'); });
   var p1 = W.sentences(es.panes[0]), th = W.checkThesis(p1[p1.length - 1], {});
   ok(th.ok, pid + ': the thesis (last sentence of paragraph 1) fails Writer.checkThesis: ' + th.notes.join(' '));
@@ -234,6 +234,8 @@ todo.forEach(function (f) {
     ['i', 'a', 'b', 'c'].forEach(function (suf, i) {
       var fid = fids[i], fr = allFr[fid];
       ok(!!fr, pid + ': template line ' + fid + ' not found in template.js'); if (!fr) return;
+      var lvlIds = T.paragraphs(tier === 'C1' ? 'C1' : 'B2', p.type)[i].frames.map(function (x) { return x.id; });
+      ok(tier === 'C1' ? lvlIds.indexOf(fid) >= 0 && !/^b2-/.test(fid) : /^b2-u-/.test(fid), pid + ': paragraph ' + (i + 1) + ' at ' + tier + ' must follow ' + (tier === 'C1' ? 'a C1 template line for this paragraph and type (' + lvlIds.join(', ') + ')' : 'the B2 Universal template (spine: \'b2-u\')') + ', not ' + fid);
       var segs = fr.text.split(/\{\w+\}/).map(function (x) { return norm(x).replace(/^[,.;:]\s*/, '').replace(/[,.;:]\s*$/, ''); }).filter(function (x) { return x.length >= 3; }), at = 0, pt = norm(es.panes[i]);
       segs.forEach(function (sg) { var k = pt.indexOf(sg, at); ok(k >= 0, pid + ': paragraph ' + (i + 1) + ' does not follow its template line (' + fid + '): missing "' + sg + '" in order'); if (k >= 0) at = k + sg.length; });
     });

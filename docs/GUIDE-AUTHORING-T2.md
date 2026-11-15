@@ -109,11 +109,13 @@ For each prompt: the step count, the word count, the estimated High run, the pri
 
 The Scriptorium asks the student for her level under the guidance level: **B1 (Band 4.0–5.0), B2 (Band 5.5–6.5), C1 (Band 7.0–8.0)**. "The wording of the questions and the options presented for all prompts should be appropriate to the CEFR level selected", and "the finished essay should be CEFR level appropriate". So every prompt has three scripts:
 
-| Level | File and key | `tier` | Variables | Template lines (`frames`) | Ward share |
+| Level | File and key | `tier` | Variables | Template lines (`frames`) | Ward share (practice) |
 |---|---|---|---|---|---|
 | B1 | `guide/<id>.b1.js`, `GUIDE_SCRIPTS['<id>.b1']`, cases `tools/guide-cases/<id>.b1.json` | `'B1'` | `vars.B1` (prompts-levels.js, the Duelling Hall's B1 set) | `spine: 'b2-u'` (B1 writers use the B2 template, as the method says) | 50% |
 | B2 | `guide/<id>.js`, `GUIDE_SCRIPTS['<id>']` (the existing scripts) | `'B2'` | `vars.B2` | `spine: 'b2-u'` | 40% |
-| C1 | `guide/<id>.c1.js`, `GUIDE_SCRIPTS['<id>.c1']`, cases `tools/guide-cases/<id>.c1.json` | `'C1'` | `vars.C1` | DISCUSS: `frames: ['c1-i1', 'c1-a1', 'c1-b1', 'c1-c1']` (the C1 "Standard"); other types: the C1 playbook for the type, e.g. `frames: ['c1-opinion-intro', 'c1-opinion-bodyA', 'c1-opinion-bodyB', 'c1-opinion-conclusion']` (also advantage, problem, twopart) | 30% |
+| C1 | `guide/<id>.c1.js`, `GUIDE_SCRIPTS['<id>.c1']`, cases `tools/guide-cases/<id>.c1.json` | `'C1'` | `vars.C1` | DISCUSS: `frames: ['c1-i1', 'c1-a1', 'c1-b1', 'c1-c1']` (the C1 "Standard"); other types: the C1 playbook for the type, e.g. `frames: ['c1-opinion-intro', 'c1-opinion-bodyA', 'c1-opinion-bodyB', 'c1-opinion-conclusion']` (also advantage, problem, twopart) | 40% |
+
+**Why 40% at C1, not 30%:** the C1 template lines are longer than the B2 ones (the shortest C1 Discuss set is 107 template words, 37% of a 290-word essay), so a High or Medium essay that keeps them word for word cannot reach 30%. These essays are practice, so the Ward uses the 40% practice limit; the 30% exam target still applies to the student's own timed essays. Choose, for each paragraph, the C1 line that reads most naturally for the prompt and keeps the share low (frame words: c1-i1 29, c1-i2 35, c1-i3 32, c1-a1 33, c1-a2 41, c1-a3 29, c1-b1 29, c1-b2 27, c1-b3 40, c1-c1/c2/c3 22; the type playbook lines are listed by `Template.paragraphs('C1', type)`). Mixing the Standard lines and the type's playbook lines is allowed: `frames` is any four ids, one per paragraph, from that paragraph's C1 list for the prompt's type.
 
 Start each B1 and C1 script from the prompt's B2 script: same sections, same kind of steps, ideally the same step ids, the same type adaptations (Opinion extent, Problem second cause and measure, Two-part verdict and point of view). Then change three things:
 

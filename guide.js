@@ -448,7 +448,7 @@
       q.querySelector('#gd-wards').addEventListener('click', wards);
       persist();
     }
-    function wardOpts() { return { share: tier === 'C1' ? 0.3 : tier === 'B1' ? 0.5 : 0.4, practice: true }; }
+    function wardOpts() { return { share: tier === 'B1' ? 0.5 : 0.4, practice: true }; }
     function wards() {
       var t = text(), pre = W.preflight(t, p, wardOpts()), pn = host.querySelector('#wr-panel');
       pn.innerHTML = '<div class="card preflight"><div class="pf-h"><b>The Ten Wards</b><span class="pill ' + (pre.bad ? 'bad' : pre.warn ? 'gold' : 'good') + '">' + esc(pre.summary) + '</span></div>' +
