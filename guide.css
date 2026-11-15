@@ -1,0 +1,60 @@
+/* Quillmoor Scriptorium · High and Medium guidance (guide.js), 15 Nov 2026. Ported from IELTS-WT1 writer.css. */
+.gd-bar{height:4px;background:var(--rule-soft);border-radius:99px;margin:0 0 12px;overflow:hidden}
+.gd-bar i{display:block;height:100%;width:0;background:var(--gold);border-radius:99px;transition:width .3s ease}
+.gd #gd-secs span{white-space:nowrap}
+.gd .wr-top{flex-wrap:wrap}
+.gd-q{padding:14px 16px 12px;border-color:var(--gold)}
+.gd-q .kicker{margin:0 0 6px}
+.gd-note{margin:0 0 10px;font-size:.88rem;line-height:1.5;color:var(--ink-2)}
+.gd-ctx{margin:0 0 10px;padding:8px 11px;background:var(--surface-2);border-left:3px solid var(--rule);border-radius:var(--r-s);font-family:var(--f-display);font-size:.98rem;line-height:1.5;overflow-wrap:anywhere}
+.gd-ctx .tiny{display:block;font-family:var(--f-mono);margin-bottom:2px}
+.gd-gap{display:inline-block;min-width:3.2em;margin:0 1px;padding:0 8px;border-bottom:2px solid var(--gold);color:var(--gold);font-family:var(--f-mono);font-size:.78rem;text-align:center}
+.gd-ask{font-size:1.08rem;line-height:1.4;margin:0 0 12px}
+.gd-opts{display:flex;flex-direction:column;gap:8px}
+.gd-opt{min-height:46px;text-align:left;padding:10px 14px;border-radius:var(--r-m);border:1px solid var(--rule);background:var(--surface);color:var(--ink);font:inherit;font-size:.95rem;line-height:1.4;cursor:pointer;overflow-wrap:anywhere}
+.gd-opt:hover{border-color:var(--brass);background:var(--gold-soft)}
+.gd-opt:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.gd-opt.off{opacity:.45;text-decoration:line-through;cursor:not-allowed;background:var(--surface-2)}
+.gd-opt.off:hover{border-color:var(--rule);background:var(--surface-2)}
+.gd-opt.right{border-color:var(--ok);background:var(--ok-soft,rgba(46,125,50,.12));font-weight:700}
+.gd-shape{margin:0 0 6px}
+.gd-free{display:flex;gap:8px;flex-wrap:wrap}
+.gd-free input{flex:1 1 220px;min-width:0;min-height:46px;padding:10px 12px;border-radius:var(--r-m);border:1px solid var(--rule);background:var(--ground);color:var(--ink);font:inherit;font-size:1rem}
+.gd-free input:focus{outline:2px solid var(--accent-line);outline-offset:1px}
+.gd-free .btn{min-height:46px}
+.gd-hint{margin-top:12px;padding:10px 12px;border-radius:var(--r-s);background:var(--gold-soft);border-left:3px solid var(--gold);font-size:.9rem;line-height:1.5;display:flex;flex-direction:column;gap:4px}
+.gd-hint.hidden{display:none}
+.gd-hint b{font-family:var(--f-mono);font-size:11.5px;color:var(--gold)}
+.gd-hint em{font-style:normal;color:var(--ink-3)}
+.gd-keep{margin-top:4px}
+.gd-keep .linky,.gd-foot .linky{display:inline;min-height:0;padding:0;background:none;border:0;color:var(--accent);font:inherit;font-weight:700;text-decoration:underline;cursor:pointer}
+.gd-foot{margin:12px 0 0}
+.gd-lead{margin:0 0 10px}
+.gd-triage{padding:10px 14px;margin-bottom:10px}
+.gd-triage ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px}
+.gd-triage li{display:flex;gap:10px;font-size:.88rem;line-height:1.4}
+.gd-triage li span{flex:0 0 84px;font-family:var(--f-mono);font-size:11.5px;color:var(--ink-3);padding-top:2px}
+.gd-triage li b{font-weight:600;overflow-wrap:anywhere}
+.gd-empty{color:var(--ink-3);font-style:italic;font-size:.88rem}
+.gd-pane.on{border-color:var(--gold);box-shadow:0 0 0 2px var(--gold-soft)}
+.gd-text{min-height:2.6em;font-family:var(--f-display);font-size:1.02rem;line-height:1.6;overflow-wrap:anywhere}
+.gd-new{background:var(--gold-soft);color:inherit;border-radius:3px;padding:1px 0;animation:gdnew 1.6s ease-out 1}
+@keyframes gdnew{from{box-shadow:0 0 0 3px var(--gold-soft)}to{box-shadow:0 0 0 0 transparent}}
+@media (prefers-reduced-motion:reduce){.gd-new{animation:none}.gd-bar i{transition:none}}
+.gd-ta{width:100%;padding:10px 12px;border-radius:var(--r-s);border:1px solid var(--rule);background:var(--ground);color:var(--ink);font:inherit;font-size:1rem;line-height:1.6}
+@media (min-width:860px){.gd-left{max-height:calc(100vh - var(--ribbon-h, 56px) - 76px);overflow:auto}.gd-left .gd-triage{margin-top:12px}}
+.gd-q{margin:0 0 12px}
+.gd-foot .linky,.gd-keep .linky{min-height:44px;padding:10px 4px}
+.gd #wr-quit{min-width:44px;min-height:44px}
+.pill.gd-pill{border-color:var(--accent-line);background:var(--accent-soft);color:var(--accent)}
+.gd-free textarea{flex:1 1 100%;min-width:0;padding:10px 12px;border-radius:var(--r-m);border:1px solid var(--rule);background:var(--ground);color:var(--ink);font:inherit;font-size:1rem;line-height:1.5;resize:vertical}
+.gd-free textarea:focus{outline:2px solid var(--accent-line);outline-offset:1px}
+.gd-left .prompt-card{margin-bottom:10px}
+.modechoice.levels{display:flex;flex-wrap:wrap;gap:8px 14px;margin:0 0 14px}
+.modechoice.levels label{display:flex;gap:8px;align-items:flex-start;flex:1 1 200px;min-height:44px;cursor:pointer}
+.modechoice.levels label span{display:flex;flex-direction:column;gap:2px;line-height:1.3}
+.modechoice.levels small{color:var(--ink-3);font-size:.78rem}
+.modechoice.levels label input{margin-top:3px}
+.modechoice-sub{margin:-6px 0 14px}
+.wr-intro{margin:8px 0 10px;padding:8px 10px;border:1px dashed var(--rule);border-radius:var(--r-s)}
+.wr-box.wr-locked .wr-intro select{pointer-events:auto;opacity:1}

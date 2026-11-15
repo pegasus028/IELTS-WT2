@@ -72,7 +72,7 @@ var SHEETS = {
 /* WP1 (19 Oct 2026): the build this file belongs to. ping and doGet report it, and the Staff Room
    shows a banner when the live deployment is older than the front end expects. Change it with every
    release that touches this file (and the Staff Room's EXPECTED_BACKEND in teacher.js). */
-var APP_VERSION = '20261031';
+var APP_VERSION = '20261115';
 
 function doGet() { return out({ ok: true, app: 'Quillmoor Academy', sheet: SpreadsheetApp.getActive().getName(), version: APP_VERSION }); }
 

@@ -1061,10 +1061,12 @@
     p.reports.push(summary);
     if (p.reports.length > 40) p.reports = p.reports.slice(-40);
     var passing = summary.bad === 0 && rep.words >= 250;
+    /* a High-guidance essay is the app's text: it does not count towards the type and on-time tallies (badges) */
+    if (rep.uiMode === 'high') passing = false;
     if (passing && prompt.type) p.types[prompt.type] = (p.types[prompt.type] || 0) + 1;
     if (passing && rep.uiMode === 'exam') p.examPassed = (p.examPassed || 0) + 1;
-    if (summary.bad === 0 && summary.warn === 0) p.preflightPerfect = (p.preflightPerfect || 0) + 1;
-    if (rep.seconds <= 2400 && rep.words >= 250) p.onTime = (p.onTime || 0) + 1;
+    if (rep.uiMode !== 'high' && summary.bad === 0 && summary.warn === 0) p.preflightPerfect = (p.preflightPerfect || 0) + 1;
+    if (rep.uiMode !== 'high' && rep.seconds <= 2400 && rep.words >= 250) p.onTime = (p.onTime || 0) + 1;
     if (rep.kind === 'mock') { if (!p.mocks) p.mocks = {}; p.mocks[rep.mockId || rep.promptId] = { best: passing ? 1 : 0.5, at: summary.ts }; }
     /* Oct 2026: an essay outranks taps. A full essay (250+ words) earns 150 merits, a short one 60; a mock 250.
        WP11b (19 Oct 2026): merits for the writing, not the count — see essayMerits. */
@@ -1081,6 +1083,9 @@
   var XP_IMPROVE = 50, XP_REVISE = 80, OWN_MIN = 0.3;
   function essayMerits(rep, prior) {
     if (rep.kind === 'mock') return { xp: XP_MOCK, why: 'mock' };
+    /* 15 Nov 2026 (T.Chris's Task 1 decision, carried over): an essay built at High guidance is the app's text,
+       so the own-share rule cannot apply; it earns half the base (75 full, 30 short) and no own-share bonus. */
+    if (rep.uiMode === 'high') return { xp: Math.round((rep.words >= 250 ? XP_ESSAY : XP_ESSAY_SHORT) / 2), why: 'high' };
     var own = typeof rep.ownShare === 'number' ? rep.ownShare : null;
     if (own != null && own < OWN_MIN) return { xp: 0, why: 'frame' };
     if (rep.revisionOf) {
@@ -1101,7 +1106,7 @@
       if (bands.overall >= (p.bestBand || 0) + 0.5 && p.bestBand) p.bandUp = true;
       /* a marked essay at or above her track's target band (7 on the B2 track, 8 on C1) earns 200 merits, once per essay
          (not for an essay that was mostly frame, WP11b) */
-      var target = p.tier === 'C1' ? 8 : 7, frameOnly = hit.meritWhy === 'frame';
+      var target = p.tier === 'C1' ? 8 : 7, frameOnly = hit.meritWhy === 'frame' || hit.meritWhy === 'high' || hit.mode === 'high';
       if (bands.overall >= target && !hit.targetXp && !frameOnly) { hit.targetXp = 1; p.xp = (p.xp || 0) + XP_BAND_TARGET; }
       /* WP11b: +50 once when the band beats her best earlier band for this question type, or the original's band for a revision */
       if (hit.kind !== 'mock' && !frameOnly && !hit.bandXp) {

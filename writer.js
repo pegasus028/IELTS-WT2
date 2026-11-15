@@ -8,8 +8,9 @@
    Writer.checkThesis(text, item)               → { ok, notes[] }        (module items)
    Writer.checkBody(text, item)                 → { ok, notes[] }
    Writer.checkRewrite(text, item)              → { ok, notes[] }
-   Writer.mount(host, { prompt, mode:'guided'|'skeleton'|'exam', tier, minutes, studentId, onSubmit, onQuit,
-                        revisionOf, reviseRow, reviseText, reviseVars })   revise mode when revisionOf + reviseText
+   Writer.mount(host, { prompt, mode:'high'|'medium'|'low'|'exam' (old: 'guided' = 'low'; 'skeleton' still runs), tier, minutes, studentId, onSubmit, onQuit,
+                        check, onResume, revisionOf, reviseRow, reviseText, reviseVars })   revise mode when revisionOf + reviseText
+                                                'high' / 'medium' go to Guide.mount (guide.js) when the prompt's script is loaded
    Writer.lastMeta()                            → { ownShare, ownSentences, fillUsed, landTaps, landAgree, revisionOf, reviseRow }
    Writer.markingPrompt(prompt, text, pre)      → the text a teacher can paste into an AI marker
    Writer.shapeCheck(key, value, promptText, type) → { ok, soft, tip, fix }   (matrix box shapes)
@@ -928,9 +929,45 @@
       yes: 'Yes — that\'s an example.', no: 'Not quite: an example names something real, like a place, a school or a rule. Try again.', none: 'The app cannot find an example either. Add one: "For example, in Bangkok, …".' }
   };
 
+  /* Low guidance (15 Nov 2026): six notes for the introduction, in the Introduction box, before she writes it.
+     Notes only: saved with the plan, nothing is checked or copied into the essay. */
+  var LEAD_INS = {
+    DISCUSS: ['This essay argues that …', 'Having weighed both views, I believe that …'],
+    OPINION: ['I largely agree: …', 'I partly agree: …', 'I disagree: …'],
+    ADVANTAGE: ['This essay argues that the advantages outweigh …', 'This essay argues that the disadvantages outweigh …'],
+    PROBLEM: ['This essay argues that the first step must be …'],
+    TWOPART: ['This essay argues that this is largely a positive development …', 'This essay argues that this is largely a negative development …']
+  };
+  var INTRO_NOTES = [
+    { id: 'type', label: 'Type', opts: ['DISCUSS', 'OPINION', 'ADVANTAGE', 'PROBLEM', 'TWOPART'] },
+    { id: 'parts', label: 'Parts', ph: 'how many parts the instruction has, and any plurals (views, causes, measures)' },
+    { id: 'core', label: 'Core Topic, new words', ph: 'the topic as one noun phrase, not the prompt\'s words' },
+    { id: 'sides', label: 'Two sides', ph: 'how sentence 2 names your Facet A and Facet B' },
+    { id: 'position', label: 'Position', ph: 'your verdict from box 10: one clause, with its stance word' },
+    { id: 'lead', label: 'Lead-in', lead: true }
+  ];
+  function introNotes(type) {
+    var tn = function (t) { return (C.TYPES[t] || {}).name || t; };
+    var leads = (LEAD_INS[type] || []).concat(Object.keys(LEAD_INS).filter(function (k) { return k !== type; }).reduce(function (a, k) { return a.concat(LEAD_INS[k]); }, []));
+    var seen = {}; leads = leads.filter(function (x) { if (seen[x]) return false; seen[x] = 1; return true; });
+    return '<div class="wr-intro" id="wr-intro"><p class="tiny"><b>Introduction notes.</b> Six parts, in your own words, before you write this paragraph. Never eight words in a row from the prompt. Your position ends the paragraph.</p>' +
+      INTRO_NOTES.map(function (n) {
+        var ctl = n.opts ? '<select id="wr-i-' + n.id + '"><option value="">Choose…</option>' + n.opts.map(function (o) { return '<option value="' + o + '">' + esc(tn(o)) + '</option>'; }).join('') + '</select>'
+          : n.lead ? '<select id="wr-i-' + n.id + '"><option value="">Choose one that fits your type…</option>' + leads.map(function (o) { return '<option>' + esc(o) + '</option>'; }).join('') + '</select>'
+          : '<input id="wr-i-' + n.id + '" autocomplete="off" placeholder="' + esc(n.ph) + '">';
+        return '<div class="wr-planrow"><label for="wr-i-' + n.id + '">' + esc(n.label) + '</label>' + ctl + '</div>';
+      }).join('') + '<p class="tiny wr-intro-check" id="wr-intro-check" aria-live="polite"></p></div>';
+  }
+
   function mount(host, cfg) {
     var p = promptOf(cfg.prompt);
-    var mode = cfg.mode || 'guided', guided = mode === 'guided', skeleton = mode === 'skeleton', exam = mode === 'exam';
+    /* High and Medium guidance: the step-by-step guide, when this prompt's script is loaded (student.js loads it first) */
+    if ((cfg.mode === 'high' || cfg.mode === 'medium') && global.Guide && global.Guide.ready(p.id)) {
+      LAST = blankMeta(cfg);
+      return global.Guide.mount(host, { prompt: p.id, level: cfg.mode, tier: cfg.tier, studentId: cfg.studentId, check: cfg.check, onSubmit: cfg.onSubmit, onQuit: cfg.onQuit, onResume: cfg.onResume });
+    }
+    /* Low guidance is the old Guided mode (stored 'guided' and teacher assignments that name it still open); 'skeleton' still runs */
+    var mode = cfg.mode === 'skeleton' || cfg.mode === 'exam' ? cfg.mode : 'guided', guided = mode === 'guided', skeleton = mode === 'skeleton', exam = mode === 'exam';
     var tier = cfg.tier || 'B2', type = p.type || 'DISCUSS';
     /* guided mode is practice (60%); skeleton and exam use the chosen share or the track default */
     var share = guided ? 0.6 : (SHARES.indexOf(Number(cfg.share)) >= 0 ? Number(cfg.share) : tier === 'C1' ? 0.3 : 0.4);
@@ -1007,6 +1044,7 @@
                 return '<div class="wr-box' + (revise && old.target === i ? ' wr-revise-target' : '') + '" data-para="' + pg.key + '"><div class="wr-boxh"><b>' + esc(pg.name) + '</b><span class="tiny">~' + pg.target + ' words · <i id="wr-w' + i + '">0</i></span>' +
                   (guided ? '<select class="wr-frame-pick" data-pick="' + pg.key + '">' + pg.frames.map(function (f) { return '<option value="' + f.id + '"' + (f.id === fr.id ? ' selected' : '') + '>' + esc(f.name) + '</option>'; }).join('') + '</select><button class="linky" data-card="' + i + '">frame</button>' : '') + '</div>' +
                   (guided ? '<div class="wr-card hidden" id="wr-card' + i + '"><b>Frame · edit it into your own words</b><textarea class="wr-frame" data-frame="' + pg.key + '" rows="4" spellcheck="false">' + esc(frameText(pg)) + '</textarea><p class="tiny">Slots: ' + T.tokens(frameText(pg)).map(function (k) { return '{' + esc(labels[k] || k) + '}'; }).join(' · ') + '</p></div>' : '') +
+                  (guided && pg.key === 'intro' && !revise ? introNotes(type) : '') +
                   (skeleton ? '<p class="tiny wr-skel">' + pg.slots.map(function (k) { return '[' + esc(labels[k] || k) + ']'; }).join(' → ') + '</p>' : '') +
                   (revise && old.target === i ? '<p class="wr-revise-note" id="wr-revise-note">' + reviseNoteHtml() + '</p>' : '') +
                   '<textarea id="wr-t' + i + '" rows="' + (i === 0 || i === 3 ? 4 : 6) + '" spellcheck="false" placeholder="' + esc(pg.name) + ' …"></textarea>' +
@@ -1400,13 +1438,28 @@
       if (cfg.onSubmit) cfg.onSubmit({ promptId: p.id, mode: mode, tier: tier, text: t, words: words(t), seconds: secs, timedOut: !!timedOut,
         preflight: pre, revision: state.revision, firstText: state.firstText || (revise ? old.text : ''), firstPreflight: state.firstPre || (revise ? old.pre : null),
         meta: lastMeta(), revisionOf: LAST.revisionOf, reviseRow: LAST.reviseRow,
-        plan: exam ? { landing: state.landTicks, calibration: calibration(pre), share: share } : { vars: state.vars, choice: state.choice, custom: state.custom, planWards: state.planTicks, planOpenedAt: state.planOpenedAt, planHow: state.planHow || null, landing: state.landTicks, calibration: calibration(pre), share: share, shapeHelp: state.helped, ownWords: own } });
+        plan: exam ? { landing: state.landTicks, calibration: calibration(pre), share: share } : { vars: state.vars, intro: introValues(), choice: state.choice, custom: state.custom, planWards: state.planTicks, planOpenedAt: state.planOpenedAt, planHow: state.planHow || null, landing: state.landTicks, calibration: calibration(pre), share: share, shapeHelp: state.helped, ownWords: own } });
       /* how well her own ticks match the Wards: agreements over the lines the app can judge */
       function calibration(pre0) {
         var auto = landingAuto(pre0), keys = Object.keys(auto); if (!keys.length) return null;
         var agree = keys.filter(function (k) { return !!state.landTicks[k] === !!auto[k]; }).length;
         return { agree: agree, of: keys.length };
       }
+    }
+    function introValues() {
+      var o = {}; INTRO_NOTES.forEach(function (n) { var el = host.querySelector('#wr-i-' + n.id); if (el && el.value.trim()) o[n.id] = el.value.trim(); });
+      return o;
+    }
+    /* the Type note is the one the app can judge: the type named from the instruction sentence */
+    var itype = host.querySelector('#wr-i-type');
+    if (itype) itype.addEventListener('change', function () {
+      var el = host.querySelector('#wr-intro-check'); if (!el) return;
+      el.textContent = !itype.value ? '' : itype.value === type ? '✓ That is the type: now circle its parts and plurals.' : 'Read the instruction sentence again (the last sentence of the prompt): it decides the type.';
+    });
+    var ipos = host.querySelector('#wr-i-position'), vpos = host.querySelector('#wr-v-position');
+    if (ipos && vpos) {
+      if (vpos.value && !ipos.value) ipos.value = vpos.value;
+      vpos.addEventListener('change', function () { if (!ipos.value.trim()) ipos.value = vpos.value; });
     }
     if (revise) { countW(); paintMeters(); paintRevise(); paintShare(); }
     return { stop: stop, text: text, meta: lastMeta, revise: revise ? { target: old.target, row: cfg.reviseRow || '' } : null };
@@ -1416,7 +1469,7 @@
   /* Shared with lab.js: does this text mention any word of the list (or a word that means the same)? */
   function mentions(t, list) { return hasAny(canon(read(t).text), list, false); }
   global.Writer = { preflight: preflight, checkThesis: checkThesis, checkBody: checkBody, checkRewrite: checkRewrite, markingPrompt: markingPrompt, mount: mount, plain: plain, read: read, mentions: mentions, words: words, sentences: sentences, paragraphs: paragraphs,
-    shapeCheck: shapeCheck, shapeExamples: shapeExamples, nextStep: nextStep, planWards: planWards, lastMeta: lastMeta,
+    shapeCheck: shapeCheck, shapeExamples: shapeExamples, nextStep: nextStep, planWards: planWards, lastMeta: lastMeta, INTRO_NOTES: INTRO_NOTES, LEAD_INS: LEAD_INS,
     _own: { test: ownTest, content: ownContent, stem: ownStem, frameSent: frameSent }, _tap: { position: sentPosition, example: sentExample }, _reviseTarget: reviseTarget,
     LEX: { POSITION: POSITION, MECH: MECH, EXAMPLE: EXAMPLE, NUANCE: NUANCE, LINKER_HEAD: LINKER_HEAD, REFERENCE: REFERENCE, CLICHE: CLICHE } };
 })(window);

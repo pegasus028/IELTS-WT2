@@ -18,7 +18,7 @@
   var S = {
     p: null, sessItems: 0, sessCorrect: 0,
     run: null, write: null, simple: false, sysOpen: null, mapPainted: false, returnTo: 'map', celebrateTimer: null,
-    filters: { type: 'all', domain: 'all' }, uiMode: 'guided', reports: null, assignments: [], modelOpen: null, modelMode: 'read', tplType: 'DISCUSS'
+    filters: { type: 'all', domain: 'all' }, uiMode: 'low', reports: null, assignments: [], modelOpen: null, modelMode: 'read', tplType: 'DISCUSS'
   };
   /* Where "back" goes after a lesson or a gate: the Classes, the Map Room or the chapter page. */
   /* After a lesson opened from the Classes list, the way back is the map (T.Chris, Oct 2026). */
@@ -604,13 +604,19 @@
     var s = sc[best], why = s.why ? s.why.label : 'no Ward points at it: add one more developed sentence with your own reason or example';
     return { key: best, why: why, ward: s.why ? s.why.id : '', practice: practice, red: Number(pre.bad) > 0, base: { key: best, score: s.score, frame: s.frame, own: s.own, words: 0 } };
   }
+  /* 15 Nov 2026: four guidance levels. Old stored values keep working: 'guided' is Low; 'skeleton' is Low with slot labels only.
+     A revision always runs at Low (the step-by-step guide has no revise mode). */
+  function lowFor(m) { return m === 'exam' || m === 'skeleton' ? m : 'low'; }
+  function levelOf(m) { return m === 'guided' || !m ? 'low' : m; }
+  var UIM = { high: 'High guidance', medium: 'Medium guidance', low: 'Low guidance', guided: 'Low guidance', skeleton: 'Low guidance (slot labels)', exam: 'Exam mode' };
+  function builtByApp(r) { return !!r && (r.uiMode === 'high' || r.mode === 'high'); }
   function paraWords(text, key) { var ps = W.paragraphs(text || ''); return W.words(ps[PARA_KEYS.indexOf(key)] || ''); }
   /* reviseRow is the weak paragraph's worst Ward row id (writer.js finds the paragraph from it; '' = any paragraph);
      reviseBox is the paragraph (box key) this console judges the improvement on. */
   function reviseCfg(rep, res, kind) {
     var wk = weakestRow(res), text = String(res.text || rep.text || '');
     wk.base.words = paraWords(text, wk.key);
-    return { promptId: rep.promptId, uiMode: rep.uiMode || S.uiMode, minutes: 40, kind: 'practice', revisionOf: rep.id, reviseRow: wk.ward,
+    return { promptId: rep.promptId, uiMode: lowFor(rep.uiMode || S.uiMode), minutes: 40, kind: 'practice', revisionOf: rep.id, reviseRow: wk.ward,
       reviseText: text, reviseVars: (res.plan && res.plan.vars) || null, reviseBox: wk.key, reviseWhy: wk.why, reviseBase: wk.base, reviseFrom: kind || 'result', revisePractice: !!wk.practice, reviseRed: !!wk.red };
   }
   /* The weak row improved: fewer Ward points against that paragraph, or its frame share fell by 10 points.
@@ -630,6 +636,7 @@
     var M = P.MERITS || { essay: 150, short: 60, improve: 50, revise: 80 }, why = sum && sum.meritWhy, xp = (sum && sum.merits) || 0;
     var row = PARA_NAME[rep.reviseBox] || 'paragraph', own = typeof rep.ownShare === 'number' ? Math.round(rep.ownShare * 100) : null;
     if (why === 'mock') return '+' + xp + ' merits for a mock examination.';
+    if (why === 'high') return '+' + xp + ' merits: half merits for an essay built at High guidance. Write the same prompt at Medium guidance, in your own words, for full merits.';
     if (why === 'frame') return 'No merits for this essay. Write more in your own words to earn merits: ' + (own != null ? own + '% of it is yours, and merits start at ' + Math.round(OWN_MIN * 100) + '%.' : 'most of it is still the frame.');
     if (why === 'revise-up') return '+' + xp + ' merits: your ' + row + ' is stronger than before. A better band from the examiners adds ' + M.improve + ' more.';
     if (why === 'revise-same') return rep.revisePractice
@@ -1262,20 +1269,27 @@
     var p = S.p, done = {};
     (p.reports || []).forEach(function (r) { done[r.promptId] = (done[r.promptId] || 0) + 1; });
     var types = ['all'].concat(Object.keys(C.TYPES)), domains = ['all'].concat(Object.keys(C.DOMAINS));
-    var html = '<div class="sect-h"><div><h2>Scriptorium</h2><p>Forty minutes, one prompt, four paragraphs. Guided mode shows the frames and the eleven keys; Skeleton shows the slot labels only; Exam is a blank page and the clock. After you submit, the essay goes to T.Chris. If you want, one tap also gets an AI band estimate in LevelUp.</p></div></div>';
+    var GD = window.Guide, cur = S.uiMode === 'guided' ? 'low' : S.uiMode, lvl = cur === 'skeleton' ? 'low' : cur;
+    var html = '<div class="sect-h"><div><h2>Scriptorium</h2><p>One prompt, four paragraphs. Choose how much help you want. High guidance builds the essay with you one decision at a time; Medium asks the same questions and you write the answers; Low gives you the matrix, your spellbook frames and the boxes; Exam is a blank page and forty minutes. After you submit, the essay goes to T.Chris.</p></div></div>';
     html += roomNext('scr');
-    html += '<div class="modechoice">' + T.FADE.map(function (f) { return '<label><input type="radio" name="uim" value="' + f.id + '"' + (S.uiMode === f.id ? ' checked' : '') + '> ' + esc(f.name) + ' — ' + esc(f.blurb) + '</label>'; }).join('') + '</div>';
+    html += '<div class="modechoice levels" role="radiogroup" aria-label="Guidance level">' + [['high', 'High guidance', 'every decision is a multiple-choice question; no clock'], ['medium', 'Medium guidance', 'the same questions, you write the answers; no clock'], ['low', 'Low guidance', 'the matrix, your frames and four boxes; 40 minutes'], ['exam', 'Exam mode', 'one page, no help, 40 minutes']].map(function (m) {
+      return '<label><input type="radio" name="uim" value="' + m[0] + '"' + (lvl === m[0] ? ' checked' : '') + '> <span><b>' + m[1] + '</b><small>' + m[2] + '</small></span></label>';
+    }).join('') + '</div>';
+    html += '<p class="tiny modechoice-sub' + (lvl === 'low' ? '' : ' hidden') + '" id="w-skel-row"><label><input type="checkbox" id="w-skel"' + (cur === 'skeleton' ? ' checked' : '') + '> Low guidance with slot labels only (your own frames, no spellbook text)</label></p>';
+    var gdIds = GD ? practicePrompts().filter(function (q) { return GD.has(q.id); }).map(function (q) { return q.id; }) : [];
+    if (lvl === 'high' || lvl === 'medium') html += '<p class="tiny" id="w-gd-note">' + (gdIds.length ? 'High and Medium guidance are ready for the prompts marked <span class="pill gd-pill">step by step</span>. Any other prompt opens at Low guidance.' : 'High and Medium guidance are not ready for any prompt yet, so a prompt opens at Low guidance.') + '</p>';
+    function gdPill(id) { return gdIds.indexOf(id) >= 0 ? '<span class="pill gd-pill">step by step</span>' : ''; }
     var filt = '<div class="filters" id="f-type">' + types.map(function (t) { return '<button data-t="' + t + '"' + (S.filters.type === t ? ' class="on"' : '') + '>' + (t === 'all' ? 'All types' : esc(typeName(t))) + '</button>'; }).join('') + '</div>';
     filt += '<div class="filters" id="f-domain">' + domains.map(function (d) { return '<button data-d="' + d + '"' + (S.filters.domain === d ? ' class="on"' : '') + '>' + (d === 'all' ? 'All domains' : esc(C.DOMAINS[d])) + '</button>'; }).join('') + '</div>';
     /* E4: her five first (always shown, in order), then every other prompt as extra practice (the filters apply there) */
     var cp = coreProgress(p), coreIdx = {}; cp.ids.forEach(function (id, i) { coreIdx[id] = i; });
     var fiveHtml = coreHead(cp, 'w') + '<div class="promptgrid" id="w-five">' + cp.ids.map(function (id, i) {
-      var pr = PR.get(id); return pr ? coreCard(pr, i, cp, 'data-p="' + pr.id + '"', done[pr.id] ? '<span class="pill good">written ' + done[pr.id] + '×</span>' : '') : '';
+      var pr = PR.get(id); return pr ? coreCard(pr, i, cp, 'data-p="' + pr.id + '"', (done[pr.id] ? '<span class="pill good">written ' + done[pr.id] + '×</span>' : '') + gdPill(pr.id)) : '';
     }).join('') + '</div>';
     html += fiveHtml;
     var list = practicePrompts().filter(function (pr) { return coreIdx[pr.id] == null && (S.filters.type === 'all' || pr.type === S.filters.type) && (S.filters.domain === 'all' || pr.domain === S.filters.domain); });
     html += fold('w-extra-fold', 'Extra practice <span class="tiny">' + (practicePrompts().length - cp.ids.length) + ' more prompts, all open; your five come first</span>', filt + '<div class="promptgrid" id="w-extra">' + list.map(function (pr) {
-      return '<button class="pcard' + (done[pr.id] ? ' done' : '') + '" data-p="' + pr.id + '"><span class="pcard-t">' + esc(pr.title) + '</span><span class="pcard-m"><span class="pill gold">' + esc(typeName(pr.type)) + '</span><span class="pill">' + esc(PR.domainName(pr.domain)) + '</span>' + (done[pr.id] ? '<span class="pill good">written ' + done[pr.id] + '×</span>' : '') + '</span><span class="pcard-r">' + esc(pr.text) + '</span></button>';
+      return '<button class="pcard' + (done[pr.id] ? ' done' : '') + '" data-p="' + pr.id + '"><span class="pcard-t">' + esc(pr.title) + '</span><span class="pcard-m"><span class="pill gold">' + esc(typeName(pr.type)) + '</span><span class="pill">' + esc(PR.domainName(pr.domain)) + '</span>' + (done[pr.id] ? '<span class="pill good">written ' + done[pr.id] + '×</span>' : '') + gdPill(pr.id) + '</span><span class="pcard-r">' + esc(pr.text) + '</span></button>';
     }).join('') + '</div>');
     html += '<p style="margin:14px 0"><button class="btn sm" id="w-live">Join the Assembly (class game) →</button></p>';
     html += '<div class="sect-h" style="margin-top:26px"><div><h2>Mock examinations</h2><p>Exam mode, forty minutes, marked by your teacher. Sit one when every class you need is passed.</p></div></div>';
@@ -1286,7 +1300,8 @@
     $('#view-writer').innerHTML = html;
     wireFolds($('#view-writer')); wireRoomNext($('#view-writer'));
     $('#w-live').addEventListener('click', function () { show('live'); });
-    $('#view-writer').querySelectorAll('input[name=uim]').forEach(function (r) { r.addEventListener('change', function () { S.uiMode = r.value; }); });
+    $('#view-writer').querySelectorAll('input[name=uim]').forEach(function (r) { r.addEventListener('change', function () { var sk = $('#w-skel'); S.uiMode = r.value === 'low' && sk && sk.checked ? 'skeleton' : r.value; paintWriter(); }); });
+    var skb = $('#w-skel'); if (skb) skb.addEventListener('change', function () { S.uiMode = skb.checked ? 'skeleton' : 'low'; });
     $('#f-type').querySelectorAll('button').forEach(function (b) { b.addEventListener('click', function () { S.filters.type = b.dataset.t; paintWriter(); }); });
     $('#f-domain').querySelectorAll('button').forEach(function (b) { b.addEventListener('click', function () { S.filters.domain = b.dataset.d; paintWriter(); }); });
     $('#view-writer').querySelectorAll('[data-p]').forEach(function (b) { b.addEventListener('click', function () { startWrite({ promptId: b.dataset.p, uiMode: S.uiMode, minutes: 40, kind: 'practice' }); }); });
@@ -1299,15 +1314,31 @@
   function startAssignment(id) {
     var a = (S.assignments || []).filter(function (x) { return x.id === id; })[0];
     if (!a) return;
-    startWrite({ promptId: a.promptId, uiMode: a.uiMode || 'guided', minutes: a.timed === false ? 90 : (a.minutes || 40), kind: 'assignment', assignmentId: a.id });
+    startWrite({ promptId: a.promptId, uiMode: levelOf(a.uiMode), minutes: a.timed === false ? 90 : (a.minutes || 40), kind: 'assignment', assignmentId: a.id });
   }
   function startWrite(cfg) {
     var host = $('#view-write');
+    cfg.uiMode = levelOf(cfg.uiMode);
+    /* High / Medium (15 Nov 2026): the prompt's script is fetched the first time (guide/<id>.js). A prompt without one,
+       a mock, or a revision opens at Low guidance with a short note. */
+    var GD = window.Guide, stepwise = cfg.uiMode === 'high' || cfg.uiMode === 'medium';
+    if (stepwise && (cfg.kind === 'mock' || cfg.revisionOf)) { cfg.uiMode = 'low'; stepwise = false; }
+    if (stepwise && GD && GD.has(cfg.promptId) && !GD.ready(cfg.promptId)) {
+      if (!cfg.gdTried) { cfg.gdTried = 1; show('write'); host.innerHTML = '<div class="card empty">Opening the step-by-step guide…</div>'; GD.load(cfg.promptId, function () { if (!host.classList.contains('hidden')) startWrite(cfg); }); return; }
+      toast('The step-by-step guide did not load (check the connection), so this prompt opens at Low guidance.', 6000);
+      cfg.uiMode = 'low'; stepwise = false;
+    }
+    if (stepwise && !(GD && GD.ready(cfg.promptId))) {
+      toast((cfg.uiMode === 'high' ? 'High' : 'Medium') + ' guidance is not ready for this prompt yet, so it opens at Low guidance.', 6000);
+      cfg.uiMode = 'low'; stepwise = false;
+    }
     show('write');
     S.write = W.mount(host, { prompt: cfg.promptId, mode: cfg.uiMode, minutes: cfg.minutes, tier: tier(), level: explainLevel(), studentId: S.p.studentId, share: myShare(), faultTags: topFaultTags(),
       /* revision (19 Oct 2026, contract with writer.js): the essay it revises, its weak Ward row (row id), her text and her keys */
       revisionOf: cfg.revisionOf || '', reviseRow: cfg.reviseRow || '', reviseText: cfg.reviseText || null, reviseVars: cfg.reviseVars || null,
-      onQuit: function () { S.write = null; show('writer'); },
+      check: stepwise && cfg.uiMode === 'medium' && api.guideCheck ? function (payload) { payload.studentId = S.p.studentId; return api.guideCheck(payload); } : null,
+      onResume: function (i, n) { toast('Welcome back: you are at step ' + (i + 1) + ' of ' + n + '. Your answers so far are kept.', 4000); },
+      onQuit: function (info) { S.write = null; if (info && info.saved) toast('Saved on this device at step ' + info.step + ' of ' + info.of + '. Open the same prompt at the same level to go on.', 5000); show('writer'); },
       onSubmit: function (res) { S.write = null; submitReport(cfg, res); } });
   }
   /* Hand the essay to LevelUp English. Same origin (pegasus028.github.io), so
@@ -1356,7 +1387,8 @@
     paintHeader(); sync();
     /* Revision (19 Oct 2026): every essay but a mock can be revised on its weakest row.
        WP14 (20 Oct 2026): with no red rows the revision is optional ("revise for practice, or move on"). */
-    var revCfg = cfg.kind === 'mock' ? null : reviseCfg(rep, res, 'result');
+    var byApp = cfg.uiMode === 'high';
+    var revCfg = cfg.kind === 'mock' || byApp ? null : reviseCfg(rep, res, 'result');
     var mustRevise = !!(revCfg && revCfg.reviseRed);
     /* Streamlining (10 Nov 2026): with no red rows, one tap goes straight to the next of her five. */
     var nx5 = mustRevise || cfg.kind === 'mock' ? null : coreNext(p), nextFiveBtn = '';
@@ -1364,7 +1396,7 @@
     else nx5 = null;
     var projNews = (ST && cfg.kind !== 'mock' && coreIds().indexOf(cfg.promptId) >= 0) ? ST.projectNewsroomHtml(cfg.promptId) : '';
     var html = '<div class="play"><div class="card result"><div class="score-ring" style="--p:' + (res.preflight.bad ? 40 : res.preflight.warn ? 75 : 100) + '"><i>' + res.words + '<small style="font-size:.9rem">w</small></i></div>' +
-      '<h3>' + (res.timedOut ? 'Time. The owl has taken the essay' : 'The owl has taken the essay') + '</h3><p>' + esc(res.preflight.summary) + ' Written in ' + mmss(res.seconds) + '. ' + (cfg.kind === 'mock' ? 'T.Chris will mark this one.' : 'It has gone to T.Chris: he already has your essay, so you do not need to send it again. If you want, you can also get an AI band estimate and an upgraded version in LevelUp.') + '</p>' +
+      '<h3>' + (res.timedOut ? 'Time. The owl has taken the essay' : 'The owl has taken the essay') + '</h3><p>' + esc(res.preflight.summary) + ' Written in ' + mmss(res.seconds) + '. ' + (cfg.kind === 'mock' ? 'T.Chris will mark this one.' : byApp ? 'This essay was built from your choices at High guidance, so it goes to T.Chris but not to the examiners for a band. Next, write the same prompt at Medium guidance, in your own words.' : 'It has gone to T.Chris: he already has your essay, so you do not need to send it again. If you want, you can also get an AI band estimate and an upgraded version in LevelUp.') + '</p>' +
       '<div class="misslist">' + res.preflight.rows.filter(function (r) { return r.status !== 'ok'; }).map(function (r) { var ns = W.nextStep ? W.nextStep(r, res.preflight, explainLevel()) : null; return '<div class="miss"><b>' + esc(r.label) + '</b>' + esc(r.note) + (ns ? '<span class="miss-next"><span class="miss-next-h">Next time:</span> ' + esc(ns.text) + (ns.sub ? ' <button class="linky" data-miss-sub="' + esc(ns.sub) + '">' + esc(ns.link) + ' →</button>' : '') + '</span>' : '') + '</div>'; }).join('') + '</div>' +
       '<p class="merit-note' + (rep.merits ? '' : ' none') + '" id="w-merits">' + esc(meritNote(sum, rep)) + '</p>' +
       (revCfg ? '<div class="card" id="w-revise-card" data-revise="' + (mustRevise ? 'weak' : 'practice') + '" style="padding:12px 14px;margin:0 auto 12px;max-width:34rem;text-align:left"><p class="kicker">' + (mustRevise ? 'Next: make it stronger' : 'No red rows') + '</p><p style="margin:0 0 8px">' + (mustRevise
@@ -1373,16 +1405,17 @@
           ? 'For practice, <b>' + esc(PARA_NAME[revCfg.reviseBox] || revCfg.reviseBox) + '</b> is the shorter body paragraph: one more developed sentence there earns the revision merits.'
           : 'For practice, the Wards point at <b>' + esc(PARA_NAME[revCfg.reviseBox] || revCfg.reviseBox) + '</b> (amber): ' + esc(revCfg.reviseWhy) + '. Make that paragraph stronger and the revision earns its merits.')) +
         '</p><button class="btn' + (mustRevise ? ' primary' : '') + '" id="w-revise">' + (mustRevise ? 'Revise your weakest row' : 'Revise for practice') + '</button>' + (mustRevise ? '' : ' <button class="btn primary" id="w-moveon">Move on</button>' + nextFiveBtn) + '</div>' : '') +
-      (cfg.kind !== 'mock' && res.text ? '<p style="margin:0 auto 12px;max-width:34rem"><button class="btn sm" id="w-owl">Send a body paragraph by owl to a housemate</button> <span class="tiny">She tags its mechanism, example and nuance. No names.</span></p>' : '') +
+      (cfg.kind !== 'mock' && !byApp && res.text ? '<p style="margin:0 auto 12px;max-width:34rem"><button class="btn sm" id="w-owl">Send a body paragraph by owl to a housemate</button> <span class="tiny">She tags its mechanism, example and nuance. No names.</span></p>' : '') +
       projNews +
-      '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn' + (revCfg ? '' : ' primary') + '" id="w-levelup">Get an AI band estimate (LevelUp)</button><button class="btn" id="w-copy">Copy essay</button><button class="btn" id="w-record">See my report card</button><button class="btn ghost" id="w-another">Write another</button></div></div></div>';
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center">' + (byApp ? '<button class="btn primary" id="w-medium">Write it at Medium guidance →</button>' : '<button class="btn' + (revCfg ? '' : ' primary') + '" id="w-levelup">Get an AI band estimate (LevelUp)</button>') + '<button class="btn" id="w-copy">Copy essay</button><button class="btn" id="w-record">See my report card</button><button class="btn ghost" id="w-another">Write another</button></div></div></div>';
     $('#view-write').innerHTML = html;
     if (revCfg) $('#w-revise').addEventListener('click', function () { startWrite(revCfg); });
     var mo = $('#w-moveon'); if (mo) mo.addEventListener('click', function () { S.returnTo = 'plan'; show('plan'); });
     var wn = $('#w-next'); if (wn) wn.addEventListener('click', function () { goNext(nx5); });
     var ow = $('#w-owl'); if (ow) ow.addEventListener('click', function () { owlSendModal(rep, res.text); });
     if (projNews && ST) { ST.wireWords($('#view-write')); ST.wireArt($('#view-write')); ST.wireProject($('#view-write'), function () { S.returnTo = 'plan'; show('plan'); }); }
-    $('#w-levelup').addEventListener('click', function () { handoff(pr, res.text, rep); });
+    var wl = $('#w-levelup'); if (wl) wl.addEventListener('click', function () { handoff(pr, res.text, rep); });
+    var wmd = $('#w-medium'); if (wmd) wmd.addEventListener('click', function () { S.uiMode = 'medium'; startWrite({ promptId: cfg.promptId, uiMode: 'medium', minutes: 40, kind: 'practice' }); });
     $('#view-write').querySelectorAll('[data-miss-sub]').forEach(function (b) { b.addEventListener('click', function () { S.returnTo = 'write'; openSub(b.dataset.missSub); }); });
     $('#w-copy').addEventListener('click', function () { try { navigator.clipboard.writeText(res.text); toast('Essay copied.'); } catch (e) { prompt('Copy your essay', res.text); } });
     $('#w-record').addEventListener('click', function () { show('record'); });
@@ -1637,7 +1670,7 @@
           var bands = bandsOf(rp), pr = PR.get(rp.promptId) || {};
           var revs = reps.filter(function (x) { return x.revisionOf === rp.id; }).length, orig = rp.revisionOf ? reps.filter(function (x) { return x.id === rp.revisionOf; })[0] : null;
           var link = rp.revisionOf ? ' · revision of the essay of ' + (orig ? String(orig.ts).slice(0, 10) : 'an earlier essay') + (rp.reviseBox ? ' (' + (PARA_NAME[rp.reviseBox] || rp.reviseBox) + ')' : '') : revs ? ' · revised ' + revs + '×' : '';
-          return '<button class="rep" data-r="' + esc(rp.id) + '"' + (rp.revisionOf ? ' data-rev-of="' + esc(rp.revisionOf) + '" style="margin-left:18px"' : '') + '><span class="rep-t"><span class="rep-n">' + (rp.revisionOf ? '↳ ' : '') + esc(pr.title || rp.promptId) + '</span><span class="rep-s">' + esc(String(rp.ts).slice(0, 10) + ' · ' + typeName(rp.type) + ' · ' + rp.words + ' words · ' + mmss(rp.seconds || 0) + ' · ' + (rp.uiMode || '') + ' · ' + (rp.kind || 'practice') + (rp.preflight ? ' · ' + rp.preflight.bad + ' red' : '') + link + (frameOnly(rp) ? ' · mostly frame' : '')) + '</span></span><span class="rep-b">' + (bands ? fmtBand(bands.overall) : (rp.status === 'submitted' ? '…' : '—')) + '</span></button>';
+          return '<button class="rep" data-r="' + esc(rp.id) + '"' + (rp.revisionOf ? ' data-rev-of="' + esc(rp.revisionOf) + '" style="margin-left:18px"' : '') + '><span class="rep-t"><span class="rep-n">' + (rp.revisionOf ? '↳ ' : '') + esc(pr.title || rp.promptId) + '</span><span class="rep-s">' + esc(String(rp.ts).slice(0, 10) + ' · ' + typeName(rp.type) + ' · ' + rp.words + ' words · ' + mmss(rp.seconds || 0) + ' · ' + (UIM[rp.uiMode] || rp.uiMode || '') + ' · ' + (rp.kind || 'practice') + (rp.preflight ? ' · ' + rp.preflight.bad + ' red' : '') + link + (builtByApp(rp) ? ' · built from your choices' : frameOnly(rp) ? ' · mostly frame' : '')) + '</span></span><span class="rep-b">' + (bands ? fmtBand(bands.overall) : (rp.status === 'submitted' ? '…' : '—')) + '</span></button>';
         }).join('');
       host.querySelectorAll('[data-r]').forEach(function (b) { b.addEventListener('click', function () { openReport(b.dataset.r); }); });
     });
@@ -1652,7 +1685,7 @@
     var links = (rp.revisionOf ? '<p class="tiny" id="rp-revof">A revision of ' + (orig ? '<button class="linky rev-link" data-rlink="' + esc(orig.id) + '">your essay of ' + esc(String(orig.ts).slice(0, 10)) + ' →</button>' : 'an earlier essay') + (rp.reviseBox ? ' · the paragraph you revised: ' + esc(PARA_NAME[rp.reviseBox] || rp.reviseBox) : '') + '</p>' : '') +
       (later.length ? '<p class="tiny" id="rp-revised">Revised: ' + later.map(function (x) { return '<button class="linky rev-link" data-rlink="' + esc(x.id) + '">' + esc(String(x.ts).slice(0, 10)) + (x.reviseBox ? ' (' + esc(PARA_NAME[x.reviseBox] || x.reviseBox) + ')' : '') + ' →</button>'; }).join(' ') + '</p>' : '');
     var html = '<div class="play"><div class="play-top"><button class="btn ghost sm" id="rp-back">← Report Card</button><span style="flex:1"></span><span class="qcount">' + esc(String(rp.ts).slice(0, 10)) + '</span></div>' + links + PR.card(pr, { compact: true }) +
-      (rp.kind !== 'mock' && rp.text && rp.preflight && Number(rp.preflight.bad) > 0 ? '<p style="margin:10px 0"><button class="btn primary" id="rp-revise-top">Revise your weakest row →</button> <span class="tiny">' + rp.preflight.bad + ' red row' + (Number(rp.preflight.bad) === 1 ? '' : 's') + ' on this essay.</span></p>' : '') +
+      (rp.kind !== 'mock' && rp.uiMode !== 'high' && rp.text && rp.preflight && Number(rp.preflight.bad) > 0 ? '<p style="margin:10px 0"><button class="btn primary" id="rp-revise-top">Revise your weakest row →</button> <span class="tiny">' + rp.preflight.bad + ' red row' + (Number(rp.preflight.bad) === 1 ? '' : 's') + ' on this essay.</span></p>' : '') +
       '<div class="model">' + W.paragraphs(rp.text).map(function (t) { return '<div class="mpara">' + esc(t) + '</div>'; }).join('') + '</div>';
     if (mark) {
       var b = mark.bands;
@@ -1663,16 +1696,16 @@
     } else {
       html += '<div class="card preflight"><div class="pf-h"><b>The Ten Wards at submission</b><span class="pill ' + (rp.preflight && rp.preflight.bad ? 'bad' : 'good') + '">' + (rp.preflight ? rp.preflight.bad + ' red · ' + rp.preflight.warn + ' amber' : '') + '</span></div>' + ((rp.preflight && rp.preflight.rows) || []).filter(function (r) { return r.status !== 'ok'; }).map(function (r) { return '<div class="pf-row ' + r.status + '"><span class="pf-dot"></span><div><b>' + esc(r.label) + '</b></div></div>'; }).join('') + '<p class="tiny" style="margin-top:8px">T.Chris has not released a mark for this essay yet.</p></div>';
     }
-    var canRev = rp.kind !== 'mock' && rp.text, redRows = !!(rp.preflight && Number(rp.preflight.bad) > 0);
+    var byApp = builtByApp(rp), canRev = rp.kind !== 'mock' && rp.text && !byApp, redRows = !!(rp.preflight && Number(rp.preflight.bad) > 0);
     html += (canRev && !redRows ? '<p class="tiny" id="rp-norev">This essay has no red rows: revise it for practice, or move on.</p>' : '') +
-      '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">' + (canRev ? '<button class="btn' + (redRows ? ' primary' : '') + '" id="rp-revise">' + (redRows ? 'Revise your weakest row' : 'Revise for practice') + '</button>' : '') + '<button class="btn' + (canRev && redRows ? '' : ' primary') + '" id="rp-levelup">Send to the examiners →</button><button class="btn" id="rp-copy">Copy essay</button>' + (canRev ? '<button class="btn" id="rp-owl">Send a paragraph by owl</button>' : '') + '</div></div>';
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">' + (canRev ? '<button class="btn' + (redRows ? ' primary' : '') + '" id="rp-revise">' + (redRows ? 'Revise your weakest row' : 'Revise for practice') + '</button>' : '') + (byApp ? '<span class="tiny">Built at High guidance: this essay is for T.Chris, not for the examiners.</span>' : '<button class="btn' + (canRev && redRows ? '' : ' primary') + '" id="rp-levelup">Send to the examiners →</button>') + '<button class="btn" id="rp-copy">Copy essay</button>' + (canRev ? '<button class="btn" id="rp-owl">Send a paragraph by owl</button>' : '') + '</div></div>';
     $('#view-record').innerHTML = html;
     $('#view-record').querySelectorAll('[data-rlink]').forEach(function (b) { b.addEventListener('click', function () { openReport(b.dataset.rlink); }); });
     if (canRev) $('#rp-revise').addEventListener('click', function () { startWrite(reviseCfg(rp, rp, 'record')); });
     var rvt = $('#rp-revise-top'); if (rvt) rvt.addEventListener('click', function () { startWrite(reviseCfg(rp, rp, 'record')); });
     var rpo = $('#rp-owl'); if (rpo) rpo.addEventListener('click', function () { owlSendModal(rp, rp.text); });
     $('#rp-back').addEventListener('click', paintRecord);
-    $('#rp-levelup').addEventListener('click', function () { handoff(pr, rp.text, rp); });
+    var rpl = $('#rp-levelup'); if (rpl) rpl.addEventListener('click', function () { handoff(pr, rp.text, rp); });
     $('#rp-copy').addEventListener('click', function () { try { navigator.clipboard.writeText(rp.text); toast('Essay copied.'); } catch (e) { prompt('Copy your essay', rp.text); } });
     window.scrollTo({ top: 0 });
   }
@@ -1897,7 +1930,7 @@
           })();
         $('#bc-back').addEventListener('click', function () { show('bootcamp'); });
         $('#bc-again').addEventListener('click', function () { startBootcamp(res.promptId, forceFull); });
-        $('#bc-write').addEventListener('click', function () { startWrite({ promptId: res.promptId, uiMode: S.uiMode || 'guided', minutes: 40, kind: 'practice' }); });
+        $('#bc-write').addEventListener('click', function () { startWrite({ promptId: res.promptId, uiMode: S.uiMode || 'low', minutes: 40, kind: 'practice' }); });
         if (earned.length) S.celebrateTimer = setTimeout(function () { celebrate(earned[0], earned.slice(1)); }, 600);
       } });
   }

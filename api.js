@@ -339,6 +339,12 @@
       setOutbox(outbox().concat(rows));
     },
     pendingCount: function () { return outbox().length; },
+    /* Scriptorium Medium guidance (15 Nov 2026, docs/GUIDANCE-LEVELS.md): one AI check of one step (Lab.gs lab.guideCheck).
+       Any failure answers { ok:false } and the app's own rule check decides, so an old deployment still works. */
+    guideCheck: function (payload) {
+      if (!state.url || state.mode !== 'cloud' || !state.token) return Promise.resolve({ ok: false, error: 'offline' });
+      return post('lab.guideCheck', payload || {}).then(function (r) { return r || { ok: false }; }, function () { return { ok: false, error: 'network' }; });
+    },
     save: function (progress) {
       var rows = outbox();
       var n = rows.length;
