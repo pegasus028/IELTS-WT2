@@ -65,3 +65,8 @@ Fix what is clearly wrong in the test script and the cases (re-run `node tools/g
 ## 5. After T.Chris's OK: the other 36 prompts
 
 The plan from the original handover (§6, steps 6–7) still applies: Opus writers, 3–4 prompts each, each given `docs/GUIDE-AUTHORING-T2.md`, the model script, the prompt's checked type / parts / plurals, and a test command scoped to its own prompts (`node tools/guide-test.js --index ; node tools/guide-test.js <its ids> --essay`); a Fable reviewer per batch, handed the writer's own doubts plus anything in the printed essays. New findings go to `docs/GUIDE-FINDINGS-2026-11-15.md`.
+
+
+## 6. Update, 15 Nov 2026 evening: all 37 B2 scripts live, B1/C1 levels and the three-pane layout
+
+T.Chris asked for High guidance to be all multiple choice (done, 37 B2 scripts), then for B1/B2/C1 levels with level-appropriate questions, options and essays, a three-pane layout, a wrong-answer count, evenly placed right answers, natural wording, and "template" instead of "Spine". See docs/GUIDANCE-LEVELS.md (last section) and docs/GUIDE-AUTHORING-T2.md §12. Review priorities for Fable: (1) read a sample of B1 and C1 essays as an examiner: is the B1 essay really Band 4–5 language without being wrong, the C1 essay Band 7–8 without being ornate? (2) the C1 template lines in `template.js` themselves ("Not even the fact that … substantially undermines its weight", "the phenomenon's relationship to …") read stiffly; they are T.Chris's, so suggest, don't change; (3) the C1 40% practice share decision.

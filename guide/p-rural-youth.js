@@ -22,7 +22,7 @@
             askFree: 'Read the last two sentences of the prompt. Write the question type in a few words.',
             ok: 'Two direct questions to answer one by one',
             wrong: [
-              ['Discuss both views and give your opinion', 'That type gives two views of other people and asks you to discuss them. This prompt gives no views: count the question marks.'],
+              ['Discuss both views and give your opinion', 'That type gives two views that other people hold and asks you to discuss them. This prompt gives no views: count the question marks.'],
               ['To what extent do you agree or disagree', 'That type gives one statement and asks how far you agree. Here each of the last two sentences ends with a question mark.'],
               ['Problem and solution', 'A problem prompt asks what can be done. Nothing here asks for a solution: read the two questions again.']
             ],
@@ -34,8 +34,8 @@
               { re: '\\b(advantage|disadvantage|outweigh)', hint: 'The word "outweigh" is not there. Count the questions the prompt asks.' }],
             hint: 'The type is decided by the instruction sentences only: here the last two sentences.', hint2: 'How many question marks are there at the end of the prompt?' },
           { id: 't-parts', label: 'Parts', tag: 'tr-partial',
-            ask: 'How many parts must your essay answer, and is any of them plural?',
-            askFree: 'How many parts must your essay answer? Name them, and say which one is plural.',
+            ask: 'How many parts must your essay answer, and does any part ask for a plural?',
+            askFree: 'How many parts must your essay answer? Name them, and say which one asks for a plural.',
             ok: 'Two: the reasons (more than one), then positive or negative',
             wrong: [
               ['One: is it positive or negative for the country?', 'That is only the second question. Count the question marks again.'],
@@ -53,7 +53,7 @@
             askFree: 'What is the most common trap with this type? Write it in one sentence.',
             ok: 'Answering only one question, or mixing both in one paragraph',
             wrong: [
-              ['Not saying which side outweighs the other side', 'That is the trap of an advantages / disadvantages prompt, which asks for a verdict on outweighing.'],
+              ['Not saying which side outweighs the other', 'That is the trap of an advantages / disadvantages prompt, which asks for a verdict on outweighing.'],
               ['Forgetting to give a solution for each cause', 'That is the trap of a problem / solution prompt, and this prompt does not ask for solutions.'],
               ['Discussing only one of the two given views', 'That is the trap of a discuss prompt. This prompt gives no views: it asks questions.']
             ],
@@ -323,7 +323,7 @@
               { re: 'negatively development', hint: 'Use the adjective before the noun.' },
               { re: 'for (the )?(young people|migrants|them)\\b', hint: 'Question 2 asks about the whole country.' },
               { re: '\\bis a positive development|\\bis positive\\b', hint: 'Look at your plan: which answer did you choose for question 2?' }],
-            hint: 'The direct answer to question 2 from your plan, with a word that says "for the whole picture".', hint2: '"the movement" + a singular verb + an article + an adjective + a noun.', ai: true },
+            hint: 'The direct answer to question 2 from your plan, with one word that means "taking everything into account".', hint2: '"the movement" + a singular verb + an article + an adjective + a noun.', ai: true },
           { id: 'i-pos', label: 'What should change', tag: 'gra-word-form', v: 'position', pre: ', ', post: '.',
             ask: 'Now the second half of your position. Which version is correct English?',
             askFree: 'Finish your position: what governments should do, starting with "and".',
@@ -408,7 +408,7 @@
               { re: '\\bon$', hint: 'Check the preposition at the end.' }],
             hint: 'Pronoun + modal + verb + "this" + an adverb + a preposition.', hint2: 'Open My Spellbook: the third sentence of your template Body A line.' },
           { id: 'a-ex', label: 'Example', tag: 'tr-no-example', v: 'exA', post: '.',
-            ask: 'Variable 4. Which example shows Facet A, a place a reader can picture?',
+            ask: 'Variable 4. Which example shows Facet A in a place a reader can picture?',
             askFree: 'Variable 4. Write Example A: a kind of city a reader can picture, where study and good jobs are gathered.',
             ok: "capital cities that hold most of a country's universities, head offices and hospitals",
             wrong: [
@@ -460,7 +460,7 @@
             ok: 'so this point has its limits',
             wrong: [
               ['so this point is completely wrong', 'That gives up Facet A. A limit makes the point smaller, not wrong.'],
-              ['because this point has its limits', 'The limit is the cause, not the result: check the linker.'],
+              ['because this point has its limits', 'The limit leads to this ending, so the linker must show a result, not a reason.'],
               ['so this point have its limits', 'One point: check the verb.']
             ],
             shape: 'so + this point + verb + its limits', expect: 'so this point has its limits (also accepted: so this reason has its limits)',
@@ -537,7 +537,7 @@
               { re: '^which', hint: 'Start this part with "and".' }],
             hint: 'A short linking part: the result of the idea can be seen somewhere.', hint2: 'Open My Spellbook: the middle of the second sentence of your template Body B line.' },
           { id: 'b-ex', label: 'Example', tag: 'tr-no-example', v: 'exB', post: '.',
-            ask: 'Variable 8. Which example shows Facet B, in both places at once?',
+            ask: 'Variable 8. Which example shows Facet B in both places at once?',
             askFree: 'Variable 8. Write Example B: something a reader can picture that shows the harm in a small town and in the capital.',
             ok: 'provincial towns where the school has closed while the capital builds more and more tower blocks',
             wrong: [

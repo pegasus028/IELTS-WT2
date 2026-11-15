@@ -75,7 +75,7 @@ if (WRITE_INDEX) {
 var store = {};
 var ctx = { console: console, localStorage: { getItem: function (k) { return store[k] || null; }, setItem: function (k, v) { store[k] = String(v); }, removeItem: function (k) { delete store[k]; } } };
 ctx.window = ctx; vm.createContext(ctx);
-['content.js', 'prompts.js', 'prompts-2.js', 'template.js', 'lab-content.js', 'models.js', 'prompts-mock.js', 'writer.js', 'guide-index.js', 'guide.js'].forEach(function (f) {
+['content.js', 'prompts.js', 'prompts-2.js', 'prompts-levels.js', 'template.js', 'lab-content.js', 'models.js', 'prompts-mock.js', 'writer.js', 'guide-index.js', 'guide.js'].forEach(function (f) {
   vm.runInContext(fs.readFileSync(path.join(ROOT, f), 'utf8'), ctx, { filename: f });
 });
 var G = ctx.Guide, W = ctx.Writer, C = ctx.CONTENT, PR = ctx.Prompts, T = ctx.Template;
@@ -136,7 +136,7 @@ todo.forEach(function (f) {
   pid = key;
 
   /* 1 */
-  ok(sc.promptId === pid && sc.version >= 1, pid + ': promptId and version');
+  ok(sc.promptId === p.id && sc.version >= 1, pid + ': promptId must be ' + p.id + ' and version ≥ 1');
   ok(sc.sections.map(function (s) { return s.id; }).join() === SECTIONS, pid + ': five sections in order (' + SECTIONS + ')');
   ok(sc.sections.map(function (s) { return String(s.pane); }).join() === 'null,0,1,2,3', pid + ': panes null,0,1,2,3');
   sc.sections.forEach(function (s) { ok(s.title && s.note && s.steps && s.steps.length >= 5, pid + ' ' + s.id + ': title, note and at least five steps'); });

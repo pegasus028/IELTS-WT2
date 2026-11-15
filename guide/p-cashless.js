@@ -24,7 +24,7 @@
             askFree: 'Read the last two sentences of the prompt. Write the question type in a few words.',
             ok: 'Two direct questions to answer one by one',
             wrong: [
-              ['Discuss both views and give your opinion', 'That type gives two views of other people and asks you to discuss them. This prompt gives no views: count the question marks.'],
+              ['Discuss both views and give your opinion', 'That type gives two views that other people hold and asks you to discuss them. This prompt gives no views: count the question marks.'],
               ['To what extent do you agree or disagree', 'That type gives one statement and asks how far you agree. Here each of the last two sentences ends with a question mark.'],
               ['Do the advantages outweigh the disadvantages', 'Look for the words "advantages" or "outweigh" in the last sentences. They are not there: count the questions instead.']
             ],
@@ -37,7 +37,7 @@
             hint: 'The type is decided by the instruction sentences only: here the last two sentences.', hint2: 'How many question marks are there at the end of the prompt?' },
           { id: 't-parts', label: 'Parts', tag: 'tr-partial',
             ask: 'How many parts must your essay answer, and what do the words "so quickly" add to question 1?',
-            askFree: 'How many parts must your essay answer? Name them, and say what "so quickly" asks your reasons to explain.',
+            askFree: 'How many parts must your essay answer? Name them, and say what your reasons must explain, given the words "so quickly".',
             ok: 'Two: why it happened so fast (two reasons or more), then positive or negative',
             wrong: [
               ['One: is it a positive or a negative development?', 'That is only the second question. Count the question marks again.'],
@@ -409,7 +409,7 @@
               { re: '\\bon$', hint: 'Check the preposition at the end.' }],
             hint: 'Pronoun + modal + verb + "this" + an adverb + a preposition.', hint2: 'Open My Spellbook: the third sentence of your template Body A line.' },
           { id: 'a-ex', label: 'Example', tag: 'tr-no-example', v: 'exA', post: '.',
-            ask: 'Variable 4. Which example shows Facet A, sellers a reader can picture?',
+            ask: 'Variable 4. Which example shows Facet A with sellers a reader can picture?',
             askFree: 'Variable 4. Write Example A: small sellers a reader can picture, who take payment by phone.',
             ok: 'street food stalls and motorcycle taxis that show a code to scan instead of keeping a cash box',
             wrong: [
@@ -461,7 +461,7 @@
             ok: 'so this point has its limits',
             wrong: [
               ['so this point is completely wrong', 'That gives up Facet A. A limit makes the point smaller, not wrong.'],
-              ['because this point has its limits', 'The limit is the cause, not the result: check the linker.'],
+              ['because this point has its limits', 'The limit leads to this ending, so the linker must show a result, not a reason.'],
               ['so this point have its limits', 'One point: check the verb.']
             ],
             shape: 'so + this point + verb + its limits', expect: 'so this point has its limits (also accepted: so this reason has its limits)',
@@ -536,7 +536,7 @@
               { re: 'spend more|afford', hint: 'That is a different harm. Say how people are shut out.' },
               { re: '\\bdata\\b|advertisers|recording', hint: 'That is about privacy. Say how people are shut out.' },
               { re: '^(make|force|require|tie)\\b', hint: 'After "It operates through" use the -ing form.' }],
-            hint: 'A mechanism says what every purchase now needs, and who is least likely to have it.', hint2: 'Start with an -ing verb like "making"; then the three things a phone payment needs; then which two groups lack them.', ai: true },
+            hint: 'A mechanism says what every purchase now needs, and who is least likely to have it.', hint2: 'Start with an -ing verb; then the three things every purchase now depends on; then the two groups that lack them.', ai: true },
           { id: 'b-elead', label: 'Example frame', tag: 'lr-spelling', pre: ', ',
             ask: 'Your template adds the example in the same sentence. Which words are correct?',
             askFree: 'Write your template words that add the example to the same sentence (after a comma).',
@@ -553,7 +553,7 @@
               { re: '^which', hint: 'Start this part with "and".' }],
             hint: 'A short linking part: the result of the idea can be seen somewhere.', hint2: 'Open My Spellbook: the middle of the second sentence of your template Body B line.' },
           { id: 'b-ex', label: 'Example', tag: 'tr-no-example', v: 'exB', post: '.',
-            ask: 'Variable 8. Which example shows Facet B, people a reader can picture?',
+            ask: 'Variable 8. Which example shows Facet B with people a reader can picture?',
             askFree: 'Variable 8. Write Example B: people a reader can picture who cannot pay because the machine takes no cash.',
             ok: 'elderly customers who cannot buy a bus ticket from a machine that takes only cards',
             wrong: [

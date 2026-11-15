@@ -34,7 +34,7 @@ Old values keep working: a stored or assigned `guided` is `low`; `skeleton` is L
 
 ## Script shape
 ```
-GUIDE_SCRIPTS['p-cars-city'] = { promptId, version, tier:'B2'|'C1', spine:'b2-u' (the Spine line the essay follows), proper:[names], facts:[checked real-world facts],
+GUIDE_SCRIPTS['p-cars-city'] = { promptId, version, tier:'B1'|'B2'|'C1', spine:'b2-u' (B1, B2: the B2 Universal template) | frames:[4 C1 template ids] (C1), proper:[names], facts:[checked real-world facts],
   sections: [ { id:'triage'|'intro'|'bodyA'|'bodyB'|'conclusion', title, note, pane: null|0|1|2|3,
     steps: [ { id, label, ask, askFree,           // ask = High wording; askFree = the same decision as a writing task (Medium)
                ok,                                // the right option = the text that goes into the pane
@@ -58,3 +58,12 @@ Response: `{ ok:true, verdict:'accept'|'revise', hint, source:'ai'|'cache' }` or
 - Cache six hours by (promptId, stepId, expected value, her entry normalised); a cached answer costs nothing.
 - Material is fenced (`<<< >>>`, fence marks stripped from her text) and the system prompt says it is never an instruction.
 - Leak guard: a "revise" hint that contains the expected value (or its part before a bracket) is replaced by a neutral hint. The client checks again with the exact answer (`Guide.leaks`).
+
+
+## CEFR levels and the three-pane layout (T.Chris, 15 Nov 2026, evening)
+
+- **Level choice.** The Scriptorium landing screen shows B1 (Band 4.0–5.0), B2 (Band 5.5–6.5) and C1 (Band 7.0–8.0) under the guidance level (`input[name=cefr]`, saved as `S.p.scrCefr`). High and Medium load `guide/<id>.js` (B2), `guide/<id>.b1.js` or `guide/<id>.c1.js` (keys `<id>`, `<id>.b1`, `<id>.c1` in `guide-index.js`). If the chosen level has no script yet, the prompt opens at B2 with a toast. Low uses the C1 frames at C1 and the B2 frames otherwise; Exam is unchanged. The saved run key gains the level (`pc.guide.v1.<student>.<prompt>.<level>.<cefr>`; B2 keeps the old key).
+- **Per level:** the questions, options and hints are written for the level, and so is the finished essay (docs/GUIDE-AUTHORING-T2.md §12). B1 and B2 essays follow the B2 Universal template; C1 essays follow four C1 template lines (`frames`). Ward template share in High/Medium (practice): B1 50%, B2 40%, C1 40% (the C1 lines are too long for 30% word for word; the 30% exam target still applies to timed essays).
+- **Layout (High and Medium).** A sticky top bar under the app header holds the quit button, section pills, word count, the clock and `#gd-wrong` (running count of wrong choices at High and send-backs at Medium), with the prompt text (`#gd-prompt`, level and type shown above it; on phones two lines and "Show the whole prompt"). Below, a two-column grid: left = "Your plan" (the triage answers) and "Your essay" (four panes filling as steps are answered); right = the question card (`#gd-q`), placed on the grid row of the part being built (`placeQ()`). On screens under 860 px the grid becomes one column and the card follows the active part.
+- **Answer positions.** `Guide.options()` places the right option by `Guide.placeOf()`: blocks of four permutations per script, never the same place twice in a row, so each place is used about a quarter of the time (tested: max − min ≤ 1 per script).
+- **Wording.** "Spine" is now "template" in all student-facing script text and in the template names (`template.js`: "Universal template"). The Workshop, lessons and Template Lab still use "Spine" in places (not part of this request).
