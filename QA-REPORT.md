@@ -1,5 +1,14 @@
 # Position Control / Quillmoor Academy — QA report
 
+## 15 Nov 2026 (evening): B1 / B2 / C1 levels, three-pane layout, all 111 guidance scripts
+
+- **Levels.** Scriptorium landing screen: B1 (Band 4.0–5.0), B2 (5.5–6.5), C1 (7.0–8.0) under the guidance level. Every practice prompt has three High/Medium scripts: `guide/<id>.b1.js`, `guide/<id>.js`, `guide/<id>.c1.js` (111 in all), each with its own question wording, wrong options and level-appropriate finished essay (260–290 words, every Ward green). B1 and B2 follow the B2 Universal template; C1 follows four C1 template lines per prompt (Standard or the type playbook, `frames`). Practice template share: B1 50%, B2 and C1 40% (the C1 lines are too long for 30% word for word).
+- **Layout.** Prompt text merged into a sticky bar with the clock and a running count of wrong choices; plan and essay on the left; the question with its four options on the right, beside the part being built (stacked on phones).
+- **Answer positions** spread evenly over the four places in every script (tested: max − min ≤ 1).
+- **Wording.** "Spine" → "template" in every script and in the template names; the B1 writers reviewed all 37 B2 scripts for natural English (about 80 small wording fixes, including three hints that gave away the answer's first words and a "must must" typo).
+- **Tests.** guide-test 388,331 checks · 111 scripts (now loads prompts-levels.js; checks each level's tier, variables, template lines, B1 question and hint length, balanced positions, no "Spine"); guide-smoke-all runs any level (`<id>.b1`, `<id>.c1`); all other suites green.
+- **Bank and template findings** (not fixed, for T.Chris): docs/GUIDE-FINDINGS-2026-11-15.md, last section. Main themes: many B1 Duelling Hall sets are nearly the B2 wording; several C1 sets are over-ornate; `template.js` `c1-a3` has a capital "The" after a semicolon; some C1 playbook lines assume one verdict direction.
+
 ## Scriptorium guidance levels: High, Medium, Low, Exam — 15 November 2026 (Claude Opus 5.5)
 
 Requested by T.Chris: the four guidance levels of the Task 1 app (IELTS-WT1, 12–13 Nov 2026) in the Task 2 Scriptorium, tested on one prompt first. Fable 5.2 was not available (usage limit), so Opus 5.5 built and self-reviewed everything; Fable's independent review is set out in `docs/HANDOVER-FABLE-REVIEW.md` for after the weekly reset (Tue 17 Nov).

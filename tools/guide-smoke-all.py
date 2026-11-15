@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Every script in guide-index.js, in the browser at High guidance (15 Nov 2026). Usage: python3 tools/guide-smoke-all.py [promptId ...]
+"""Every script in guide-index.js, in the browser at High guidance (15 Nov 2026). Usage: python3 tools/guide-smoke-all.py [key ...]  (key = promptId for B2, promptId.b1 / promptId.c1 for B1 / C1)
 For each prompt: open it from the Scriptorium at High; the step-by-step guide loads on demand; answer every step with its
 right option (the first wrong option on every fourth step first: it greys out and its hint does not contain the answer);
 the four panes equal Guide.essay; the Ten Wards are all green; the run is not sent (nothing is written). Fails on any page
@@ -31,13 +31,15 @@ with sync_playwright() as p:
     page.wait_for_selector('#screen-app:not(.hidden)', timeout=8000)
     page.evaluate("window.Story.unlockAll(window.PCHost.p); window.PCHost.paintHeader()")
     ids = sys.argv[1:] or page.evaluate('window.GUIDE_INDEX')
-    for pid in ids:
+    for key in ids:
+        pid, _, lv = key.partition('.'); cefr = (lv or 'b2').upper()
         page.evaluate("window.PCHost.show('writer')"); page.wait_for_timeout(200)
-        page.check('input[name=uim][value=high]'); page.wait_for_timeout(150)
+        page.check('input[name=uim][value=high]'); page.wait_for_timeout(100)
+        page.check('input[name=cefr][value=%s]' % cefr); page.wait_for_timeout(150)
         assert page.locator('[data-p="%s"] .gd-pill' % pid).count() == 1, (pid, 'no step-by-step pill')
         page.evaluate("document.querySelector('[data-p=\"%s\"]').click()" % pid)
         page.wait_for_selector('#gd-q .gd-opt', timeout=8000)
-        steps = page.evaluate("window.Guide.steps(window.Guide.script('%s')).map(function(x){return {id:x.step.id, ok:x.step.ok, w:x.step.wrong[0][0]}})" % pid)
+        steps = page.evaluate("window.Guide.steps(window.Guide.script('%s', '%s')).map(function(x){return {id:x.step.id, ok:x.step.ok, w:x.step.wrong[0][0]}})" % (pid, cefr))
         for i, s in enumerate(steps):
             def click(t):
                 n = page.evaluate("(function(t){var b=Array.prototype.filter.call(document.querySelectorAll('#gd-q .gd-opt'),function(x){return x.textContent===t&&!x.disabled})[0];if(b){b.click();return 1}return 0})(%s)" % json.dumps(t))
@@ -46,13 +48,14 @@ with sync_playwright() as p:
                 click(s['w']); page.wait_for_timeout(40)
                 h = page.inner_text('#gd-hint'); assert s['ok'].lower() not in h.lower(), (pid, s['id'], h)
             click(s['ok']); page.wait_for_timeout(430)
-        want = page.evaluate("window.Guide.essay(window.Guide.script('%s'), window.Guide.key(window.Guide.script('%s'))).panes" % (pid, pid))
+        want = page.evaluate("(function(sc){return window.Guide.essay(sc, window.Guide.key(sc)).panes})(window.Guide.script('%s', '%s'))" % (pid, cefr))
+        meta = page.inner_text('#gd-prompt .gd-pmeta'); assert cefr in meta, (key, 'opened at the wrong level', meta)
         got = [page.inner_text('#gd-p%d' % i) for i in range(4)]
         assert got == want, (pid, got, want)
         page.click('#gd-wards'); page.wait_for_timeout(250)
         rows = page.evaluate("Array.from(document.querySelectorAll('#wr-panel .pf-row')).map(function(r){return r.className})")
         assert rows and all(r.endswith(' ok') for r in rows), (pid, rows)
-        print('·', pid, len(steps), 'steps, panes = essay, every Ward green')
+        print('·', key, len(steps), 'steps, panes = essay, every Ward green')
         page.click('#wr-quit'); page.wait_for_timeout(250)
         page.evaluate("Object.keys(localStorage).filter(function(k){return k.indexOf('pc.guide.')===0}).forEach(function(k){localStorage.removeItem(k)})")
     print('console errors:', len(errors))
