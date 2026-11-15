@@ -54,13 +54,13 @@
           { id: 't-trap', label: 'The trap', tag: 'tr-partial',
             ask: 'What is the most common trap with this type?',
             askFree: 'What is the most common trap with this type? Write it in one sentence.',
-            ok: 'Saying I agree or disagree without saying how far, or which part',
+            ok: 'Taking a side without saying how far I agree, or which part',
             wrong: [
               ['Forgetting to suggest a solution for each of the health problems', 'That is the trap of a problem / solution prompt. Here the solution is given, and you judge it.'],
               ['Not saying which side outweighs the other side', 'That is the trap of an advantages / disadvantages prompt, which asks for a verdict on outweighing.'],
               ['Answering only one of the two direct questions', 'That is the trap of a two-part prompt. This prompt has only one question.']
             ],
-            shape: 'one sentence: the mistake', expect: 'Saying I agree or disagree without saying how far, or which part (also accepted: no extent word; writing "partly agree" without naming the two parts)',
+            shape: 'one sentence: the mistake', expect: 'Taking a side without saying how far I agree, or which part (also accepted: no extent word; writing "partly agree" without naming the two parts)',
             accept: [['extent|how far|degree|which part|partly|largely|both parts|how much'], ['\\b(no|not|without|forget\\w*|miss\\w*|never|only)\\b']],
             reject: [{ re: 'solution', hint: 'The solution is given in the prompt. Think about how far you agree with it.' },
               { re: 'outweigh', hint: 'Outweighing belongs to the advantages / disadvantages type.' },
@@ -404,7 +404,7 @@
             wrong: [
               ['Do so', 'This is an order to the reader. The subject of a sentence needs the -ing form here.'],
               ['Doing such', '"Such" needs a noun after it. The fixed phrase that points back at an action ends with a different word.'],
-              ['For doing so', 'A sentence cannot start its subject with "for": the phrase itself is the subject here.']
+              ['For doing so', 'The phrase itself is the subject here, so it cannot start with "for".']
             ],
             shape: 'a reference phrase (two words)', expect: 'Doing so (also accepted: doing this, this, this step)',
             accept: [['^(doing so|doing this|this|this step|such a step|removing them|taking them away)$']],

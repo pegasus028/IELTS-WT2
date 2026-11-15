@@ -51,13 +51,13 @@
           { id: 't-trap', label: 'The trap', tag: 'tr-partial',
             ask: 'What is the most common trap with this type?',
             askFree: 'What is the most common trap with this type? Write it in one sentence.',
-            ok: 'Taking a side with no word for how far, or no part named',
+            ok: 'Taking a side without saying how far I agree, or which part',
             wrong: [
               ['Forgetting to suggest a solution for each of the problems', 'That is the trap of a problem / solution prompt. This prompt gives a view for you to judge.'],
               ['Not saying which side outweighs the other side', 'That is the trap of an advantages / disadvantages prompt, which asks for a verdict on outweighing.'],
               ['Answering only one of the two direct questions', 'That is the trap of a two-part prompt. This prompt has only one question.']
             ],
-            shape: 'one sentence: the mistake', expect: 'Taking a side with no word for how far, or no part named (also accepted: not saying how far I agree; writing "partly agree" without naming the two parts)',
+            shape: 'one sentence: the mistake', expect: 'Taking a side without saying how far I agree, or which part (also accepted: not saying how far I agree; writing "partly agree" without naming the two parts)',
             accept: [['extent|how far|degree|which part|partly|largely|both parts|how much|part named'], ['\\b(no|not|without|forget\\w*|miss\\w*|never|only)\\b']],
             reject: [{ re: 'solution', hint: 'Nothing here asks for a solution. Think about how far you agree with the view.' },
               { re: 'outweigh', hint: 'Outweighing belongs to the advantages / disadvantages type.' },
@@ -241,7 +241,7 @@
             ok: 'the replacement of printed textbooks with tablets and laptops in secondary schools',
             wrong: [
               ['the replace of printed textbooks with tablets and laptops in secondary schools', 'After "the" you need a noun, but "replace" is a verb.'],
-              ['the replacement of printed textbook with tablets and laptops in secondary schools', 'Check the noun after "printed": you mean all the books, and one book would need an article.'],
+              ['the replacement of printed textbook with tablets and laptops in secondary schools', 'Check the noun after "printed": you mean all the books, not one book (and one book would need an article).'],
               ['secondary schools should replace printed textbooks with tablets and laptops', 'A clause with "should" cannot follow "of": you need a noun phrase.']
             ],
             shape: 'your Core Topic (a noun phrase)', expect: 'the replacement of printed textbooks with tablets and laptops in secondary schools (also accepted: the replacement of paper textbooks with screens in secondary schools)',
@@ -379,7 +379,7 @@
               { re: 'because', hint: 'The next piece starts with an -ing verb, so a linker of reason does not fit.' }],
             hint: 'Pronoun + verb + preposition; the next piece is an -ing verb.', hint2: 'Open My Spellbook: the second sentence of your template Body A line.' },
           { id: 'a-mech', label: 'Mechanism', tag: 'tr-generalised', v: 'mechA', post: '.',
-            ask: 'Variable 3. How does Facet A work: what does a page take away that a screen brings? Choose the mechanism.',
+            ask: 'Variable 3. How does Facet A work: what does a printed page leave out that a screen brings in? Choose the mechanism.',
             askFree: 'Variable 3. Write Mechanism A: what a printed page takes away from the reader\'s view, starting with an -ing verb.',
             ok: 'removing the messages and links that break a reader\'s attention',
             wrong: [

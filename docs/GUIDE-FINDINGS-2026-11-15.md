@@ -57,3 +57,5 @@ Things noticed while building the High / Medium guidance on `p-cars-city`. None 
 - template.js `c1-a3`: "The argument rests on {mechA}; The point is illustrated by {exA}." (capital "The" after a semicolon).
 - C1 Standard template lines carry many long words (29 of 101 words have 9+ letters: discourse, multifaceted, considerable, significance …), so C1 essays sit at 22–27% long words.
 - p-child-advertising C1 `rationale` stacks a second reason ("since …") inside the c1-c1 "because" clause; p-animal-testing C1 `rationale` "minimises suffering to the least quantity current science requires" is awkward; p-newspapers C1 "a digitised information ecology", "imposing editorial finitude" are over-ornate; p-animal-testing C1 `exB` "animal batteries" is test jargon.
+- p-open-university B1 `nuanceA` "strict selection keeps inequality" (B2: "keeps inequality in place"); B2 `mechA` near-miss "every class size stays comfortably small" is unnatural.
+- p-tablets-textbooks B1 `mechA` repeats "concentration" from Facet A; B1 `facetB` "the unequal access and unreliable equipment of a classroom" is a little awkward.

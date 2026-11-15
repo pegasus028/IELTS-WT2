@@ -355,7 +355,7 @@
             ok: 'The first key point is the need to keep high academic standards on the most demanding university degree courses',
             wrong: [
               ['The first key point is the need to keep high academic standard on the most demanding university degree courses', 'Check the noun after "academic": with no article, it must be plural.'],
-              ['The first key point is the need of keep high academic standards on the most demanding university degree courses', 'Check the word after "need": a verb follows, so the word before it is different.'],
+              ['The first key point is the need of keep high academic standards on the most demanding university degree courses', 'Check the small word after "need": "of" cannot come before a verb like "keep".'],
               ['The first key point is the need to keep high academic standards on the most demand university degree courses', 'After "the most" you need an adjective. Check the form of that word.']
             ],
             shape: 'Template words + Facet A', expect: 'The first key point is the need to keep high academic standards on the most demanding university degree courses (also accepted: … the need to keep standards high on the hardest degree courses)',

@@ -52,13 +52,13 @@
           { id: 't-trap', label: 'The trap', tag: 'tr-partial',
             ask: 'What is the most common trap with this type?',
             askFree: 'What is the most common trap with this type? Write it in one sentence.',
-            ok: 'Giving a side without saying how far I agree, or which part',
+            ok: 'Taking a side without saying how far I agree, or which part',
             wrong: [
               ['Forgetting to suggest a solution for each of the problems', 'That is the trap of a problem / solution prompt. This prompt gives a statement for you to judge.'],
               ['Not saying which side outweighs the other side', 'That is the trap of an advantages / disadvantages prompt, which asks for a verdict on outweighing.'],
               ['Answering only one of the two direct questions', 'That is the trap of a two-part prompt. This prompt has only one question.']
             ],
-            shape: 'one sentence: the mistake', expect: 'Giving a side without saying how far I agree, or which part (also accepted: no extent word; writing "partly agree" without naming the two parts)',
+            shape: 'one sentence: the mistake', expect: 'Taking a side without saying how far I agree, or which part (also accepted: no extent word; writing "partly agree" without naming the two parts)',
             accept: [['extent|how far|degree|which part|partly|largely|both parts|how much'], ['\\b(no|not|without|forget\\w*|miss\\w*|never|only)\\b']],
             reject: [{ re: 'solution', hint: 'Nothing here asks for a solution. Think about how far you agree with the statement.' },
               { re: 'outweigh', hint: 'Outweighing belongs to the advantages / disadvantages type.' },
@@ -240,7 +240,7 @@
             ok: 'the teaching of a foreign language to children from the earliest school years',
             wrong: [
               ['the teach of a foreign language to children from the earliest school years', 'After "the" you need a noun, but "teach" is a verb.'],
-              ['the teaching of a foreign language to child from the earliest school years', 'Check the noun after "to": you mean all young pupils, not one, and one would need an article.'],
+              ['the teaching of a foreign language to child from the earliest school years', 'Check the noun after "to": you mean all young pupils, not one child (and one child would need an article).'],
               ['all children should study a foreign language from the earliest school years', 'A clause with "should" cannot follow "of": you need a noun phrase.']
             ],
             shape: 'your Core Topic (a noun phrase)', expect: 'the teaching of a foreign language to children from the earliest school years (also accepted: the teaching of foreign languages to children from the first school years)',
