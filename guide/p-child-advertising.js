@@ -80,7 +80,7 @@
               { re: 'pocket money', hint: 'Pocket money is not the issue. Name the issue that holds both views.' }],
             hint: 'A Core Topic is one noun phrase that holds both views: the ban and the lessons.', hint2: 'Start with a noun for what a government makes, then say about what, and aimed at whom.', ai: true },
           { id: 't-facetA', label: 'Facet A', tag: 'tr-partial', v: 'facetA',
-            ask: 'Variable 2. Which is the first view, the one for a ban?',
+            ask: 'Variable 2. Which noun phrase gives the first view, the one for a ban?',
             askFree: 'Variable 2. Write Facet A: the first view, the one for a ban, as a noun phrase.',
             ok: 'The argument for banning every kind of advertising that targets young people.',
             wrong: [
@@ -95,7 +95,7 @@
               { re: 'parents? (to )?(control|decide)|watch at home', hint: 'That is about parents at home. Read the first sentence of the prompt again.' }],
             hint: 'The first sentence of the prompt names what some people want to do with advertising. Make it a noun phrase.', hint2: 'Start with "the argument for" or "the case for", then an -ing verb.', ai: true },
           { id: 't-facetB', label: 'Facet B', tag: 'tr-partial', v: 'facetB',
-            ask: 'Variable 6. Which is the second view, the one against a ban?',
+            ask: 'Variable 6. Which noun phrase gives the second view, the one against a ban?',
             askFree: 'Variable 6. Write Facet B: the second view, the one against a ban, as a noun phrase.',
             ok: 'The value of advertising in teaching young people how the marketplace works.',
             wrong: [
@@ -158,13 +158,13 @@
           { id: 't-example', label: 'Kind of example', tag: 'tr-no-example',
             ask: 'What kind of example belongs in your body paragraphs?',
             askFree: 'What kind of example belongs in your body paragraphs? Write it in a few words.',
-            ok: 'A rule, a place or a person a reader can picture',
+            ok: 'A rule, a place or a person that a reader can picture',
             wrong: [
               ['A statistic from research, such as 60% of parents', 'A figure you cannot check reads as invented. The examiner does not need numbers.'],
               ['A famous slogan from a television advert', 'A slogan is an advert\'s words, not an example of the idea working.'],
               ['A story about my own shopping that takes a whole paragraph', 'A short personal case is fine, but a whole paragraph of story leaves no room for the idea.']
             ],
-            shape: 'the kind of example', expect: 'A rule, a place or a person a reader can picture (also accepted: something real and concrete; a clearly hypothetical case)',
+            shape: 'the kind of example', expect: 'A rule, a place or a person that a reader can picture (also accepted: something real and concrete; a clearly hypothetical case)',
             accept: [['rule|place|person|policy|law|lesson|real|concrete|picture|hypothetical|specific']],
             reject: [{ re: 'statistic|research|\\d+ ?%|figure|number', hint: 'Do not invent figures or research.' },
               { re: 'slogan|quot', hint: 'A slogan or a quotation is not an example of the idea working.' },
@@ -431,7 +431,7 @@
             wrong: [
               ['so this point is no longer true', 'That gives up Facet A and your position. A limit makes the point smaller, not false.'],
               ['although this point has its limits', 'The limit leads to this, so the relation is result, not contrast.'],
-              ['so this point has limit', 'The noun needs a word before it and a plural here.']
+              ['so this point has limit', 'Here the noun needs a word before it, and it must be plural.']
             ],
             shape: 'so + this point + verb + its limits', expect: 'so this point has its limits (also accepted: so this idea has its limits)',
             accept: [['^so (this|the) (point|idea|argument|view) has (its|some) limits$']],
@@ -666,13 +666,13 @@
           { id: 'c-take', label: 'Both sides', tag: 'gra-participle', post: ',',
             ask: 'Your template brings the two sides together. Which version is right?',
             askFree: 'Write your template\'s words that bring the two sides together, with Facet A and Facet B in a few words.',
-            ok: 'Taking protection together with market learning',
+            ok: 'Taking protection together with learning about the market',
             wrong: [
               ['Taking protection together with company profits', 'The second side is what children learn, not what companies earn.'],
-              ['Taken protection together with market learning', 'This needs the -ing form: the writer is the one doing the taking.'],
-              ['Taking protection together market learning', 'A word is missing between "together" and the second side.']
+              ['Taken protection together with learning about the market', 'This needs the -ing form: the writer is the one doing the taking.'],
+              ['Taking protection together learning about the market', 'A word is missing between "together" and the second side.']
             ],
-            shape: 'Taking + Facet A + together with + Facet B', expect: 'Taking protection together with market learning (also accepted: weighing protection against learning about the market)',
+            shape: 'Taking + Facet A + together with + Facet B', expect: 'Taking protection together with learning about the market (also accepted: weighing protection against learning about the market)',
             accept: [['^(taking|weighing|considering|balancing)\\b'], ['protect|\\bban|safety|shield'], ['(together with|against|and) (market|learning|lessons|choices|education|the market|teaching)']],
             reject: [{ re: 'profit|money|companies', hint: 'The second side is what children learn.' },
               { re: '^(taken|take)\\b', hint: 'Use the -ing form.' },

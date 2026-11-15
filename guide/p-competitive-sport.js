@@ -77,7 +77,7 @@
               { re: '\\bcoach', hint: 'Coaches are not the issue. Name the issue that holds both views.' }],
             hint: 'A Core Topic is one noun phrase that holds both views: what competition gives children and what it costs them.', hint2: 'Start with a noun for the part something plays ("the place", "the role"), then say of what, and in whose sport.', ai: true },
           { id: 't-facetA', label: 'Facet A', tag: 'tr-partial', v: 'facetA',
-            ask: 'Variable 2. Which is the first view, the one for competition?',
+            ask: 'Variable 2. Which noun phrase gives the first view, the one for competition?',
             askFree: 'Variable 2. Write Facet A: the first view, the one for competition, as a noun phrase.',
             ok: 'The way organised competition teaches children discipline and how to recover from defeat.',
             wrong: [
@@ -92,7 +92,7 @@
               { re: 'talent|clubs?\\b|scouts?|professional', hint: 'Clubs and talent are not in the prompt. What does competition teach?' }],
             hint: 'The first sentence of the prompt names two things competition teaches. Make them a noun phrase.', hint2: 'One is about self-control; the other is about getting up again after losing.', ai: true },
           { id: 't-facetB', label: 'Facet B', tag: 'tr-partial', v: 'facetB',
-            ask: 'Variable 6. Which is the second view, the one against competition?',
+            ask: 'Variable 6. Which noun phrase gives the second view, the one against competition?',
             askFree: 'Variable 6. Write Facet B: the second view, the one against competition, as a noun phrase.',
             ok: 'The mental strain that early competitive pressure places on very young children.',
             wrong: [
@@ -140,13 +140,13 @@
           { id: 't-example', label: 'Kind of example', tag: 'tr-no-example',
             ask: 'What kind of example belongs in your body paragraphs?',
             askFree: 'What kind of example belongs in your body paragraphs? Write it in a few words.',
-            ok: 'A rule, a place or a person a reader can picture',
+            ok: 'A rule, a place or a person that a reader can picture',
             wrong: [
               ['A statistic from research, such as 70% of young players', 'A figure you cannot check reads as invented. The examiner does not need numbers.'],
               ['A famous quotation from a sports star', 'A quotation is someone else\'s words, not an example of the idea working.'],
               ['A story about my own team that takes a whole paragraph', 'A short personal case is fine, but a whole paragraph of story leaves no room for the idea.']
             ],
-            shape: 'the kind of example', expect: 'A rule, a place or a person a reader can picture (also accepted: something real and concrete; a clearly hypothetical case)',
+            shape: 'the kind of example', expect: 'A rule, a place or a person that a reader can picture (also accepted: something real and concrete; a clearly hypothetical case)',
             accept: [['rule|place|person|policy|school|team|league|real|concrete|picture|hypothetical|specific']],
             reject: [{ re: 'statistic|research|\\d+ ?%|figure|number', hint: 'Do not invent figures or research.' },
               { re: 'quot', hint: 'A quotation is not an example of the idea working.' },

@@ -140,13 +140,13 @@
           { id: 't-example', label: 'Kind of example', tag: 'tr-no-example',
             ask: 'What kind of example belongs in your body paragraphs?',
             askFree: 'What kind of example belongs in your body paragraphs? Write it in a few words.',
-            ok: 'A medicine, a test or a person a reader can picture',
+            ok: 'A medicine, a test or a person that a reader can picture',
             wrong: [
               ['A statistic about how many animals die each year', 'A figure you cannot check reads as invented. The examiner does not need numbers.'],
               ['A famous quotation from an animal charity', 'A quotation is someone else\'s words, not an example of the idea working.'],
               ['A story about my pet that fills a whole paragraph', 'A pet is not a laboratory animal, and a whole paragraph of story leaves no room for the idea.']
             ],
-            shape: 'the kind of example', expect: 'A medicine, a test or a person a reader can picture (also accepted: something real and concrete; a clearly hypothetical case)',
+            shape: 'the kind of example', expect: 'A medicine, a test or a person that a reader can picture (also accepted: something real and concrete; a clearly hypothetical case)',
             accept: [['medicine|vaccine|drug|test|person|patient|real|concrete|picture|hypothetical|specific']],
             reject: [{ re: 'statistic|research shows|\\d+ ?%|figure|number|how many', hint: 'Do not invent figures or research.' },
               { re: 'quot', hint: 'A quotation is not an example of the idea working.' },

@@ -77,7 +77,7 @@
               { re: '\\bspeed\\b|travels', hint: 'That is one part of the online side. Name the issue that holds both views.' }],
             hint: 'A Core Topic is one noun phrase that holds both views: print disappearing and print staying.', hint2: 'Start with a noun for what will happen later, then name print and the digital world.', ai: true },
           { id: 't-facetA', label: 'Facet A', tag: 'tr-partial', v: 'facetA',
-            ask: 'Variable 2. Which is the first view, the one that print will be replaced?',
+            ask: 'Variable 2. Which noun phrase gives the first view, that print will be replaced?',
             askFree: 'Variable 2. Write Facet A: the first view, that print will be replaced, as a noun phrase.',
             ok: 'The replacement of the printed paper by news that is delivered online.',
             wrong: [
@@ -92,7 +92,7 @@
               { re: 'social media|political', hint: 'Too narrow: the first view is about all online news.' }],
             hint: 'The first sentence of the prompt says what will happen to printed papers. Make it a noun phrase.', hint2: 'Turn the verb "replaced" into a noun, then say by what.', ai: true },
           { id: 't-facetB', label: 'Facet B', tag: 'tr-partial', v: 'facetB',
-            ask: 'Variable 6. Which is the second view, the one that print will stay?',
+            ask: 'Variable 6. Which noun phrase gives the second view, that print will stay?',
             askFree: 'Variable 6. Write Facet B: the second view, that print will stay, as a noun phrase.',
             ok: 'The lasting value of the printed edition to readers and to society.',
             wrong: [
@@ -140,13 +140,13 @@
           { id: 't-example', label: 'Kind of example', tag: 'tr-no-example',
             ask: 'What kind of example belongs in your body paragraphs?',
             askFree: 'What kind of example belongs in your body paragraphs? Write it in a few words.',
-            ok: 'A paper, a town or a reader a reader can picture',
+            ok: 'A paper, a town or a person that a reader can picture',
             wrong: [
               ['A statistic about how many papers close each year', 'A figure you cannot check reads as invented. The examiner does not need numbers.'],
               ['A famous headline from a historic newspaper', 'A headline is someone else\'s words, not an example of the idea working.'],
               ['The full history of printing from its beginning', 'A history fills the paragraph and leaves no room for the idea.']
             ],
-            shape: 'the kind of example', expect: 'A paper, a town or a reader a reader can picture (also accepted: something real and concrete; a clearly hypothetical case)',
+            shape: 'the kind of example', expect: 'A paper, a town or a person that a reader can picture (also accepted: something real and concrete; a clearly hypothetical case)',
             accept: [['paper|town|reader|family|edition|real|concrete|picture|hypothetical|specific']],
             reject: [{ re: 'statistic|research|\\d+ ?%|figure|number|how many', hint: 'Do not invent figures or research.' },
               { re: 'headline|quot', hint: 'A headline is not an example of the idea working.' },
